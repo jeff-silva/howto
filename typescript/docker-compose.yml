@@ -1,0 +1,9 @@
+services:
+  nuxt3:
+    image: node:18.16.0
+    working_dir: /app
+    command: bash -c "yarn install && yarn dev"
+    ports:
+      - 3000:3000
+    volumes:
+      - ./nuxt3:/app
