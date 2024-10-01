@@ -1,0 +1,10 @@
+services:
+  # docker run -it --rm -v "$(pwd)":/app -w /app node bash -c "npm install -g @angular/cli && ng new angular"
+  angular:
+    image: node:18.16.0
+    working_dir: /app
+    command: bash -c "yarn install && yarn start"
+    ports:
+      - 4200:4200
+    volumes:
+      - ./angular:/app
