@@ -25,7 +25,6 @@ export default (options = {}) => {
         this.error = null;
         this.busy = true;
         try {
-          // AIzaSyDC8YYFnmcybRwCPqtkfFrCDWojw-4Nbx4
           const genAI = new GoogleGenerativeAI(app.access.token);
 
           const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
