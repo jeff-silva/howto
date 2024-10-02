@@ -1,19 +1,26 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-const app = useApp();
 
 export default (options = {}) => {
-  options = {
-    model: "gemini-1.5-flash",
-    appendHistory: false,
-    context: "",
-    ...options,
+  const app = useApp();
+
+  const optionsDefault = (merge = {}) => {
+    return {
+      token: app.access.token,
+      model: "gemini-1.5-flash",
+      appendHistory: false,
+      context: "",
+      prompt: "",
+      ...merge,
+    };
   };
+
+  options = optionsDefault(options);
 
   return reactive({
     options,
     busy: false,
     error: null,
-    prompt: "",
+    prompt: options.prompt,
     response: {
       candidates: [],
       usageMetadata: {
@@ -33,6 +40,25 @@ export default (options = {}) => {
       this.options.context = context;
     },
 
+    async getResponse(prompt, options = {}) {
+      options = optionsDefault(options);
+
+      const genAI = new GoogleGenerativeAI(app.access.token);
+      const model = genAI.getGenerativeModel({ model: this.options.model });
+
+      const history = this.history.map((text) => text).join("\n");
+      const result = await model.generateContent(
+        [options.context, history, prompt].filter((v) => !!v).join("\n---\n")
+      );
+
+      if (this.options.appendHistory) {
+        this.history.push(this.prompt);
+        this.history.push(result.response.text());
+      }
+
+      return result;
+    },
+
     submit() {
       return new Promise(async (resolve, reject) => {
         if (!this.prompt) {
@@ -44,23 +70,8 @@ export default (options = {}) => {
         this.busy = true;
 
         try {
-          const genAI = new GoogleGenerativeAI(app.access.token);
-
-          const model = genAI.getGenerativeModel({ model: options.model });
-
-          const history = this.history.map((text) => text).join("\n");
-          const result = await model.generateContent(
-            [this.options.context, history, this.prompt]
-              .filter((v) => !!v)
-              .join("\n---\n")
-          );
-
-          if (options.appendHistory) {
-            this.history.push(this.prompt);
-            this.history.push(result.response.text());
-          }
-
-          resolve((this.response = result.response));
+          this.response = await this.getResponse(this.prompt, this.options);
+          resolve(this.response);
         } catch (err) {
           this.error = err.message;
         }

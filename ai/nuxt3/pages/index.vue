@@ -23,19 +23,28 @@
           </template>
         </v-text-field>
 
+        <v-select
+          label="Tema"
+          v-model="game.theme"
+          :hide-details="true"
+          :items="[
+            'Personagens de desenho animado',
+            'Personagens de série',
+            'Prato culinário',
+          ]"
+          @update:modelValue="game.init()"
+        />
+
         <v-text-field
           label="Pergunta"
-          v-model="ai.prompt"
+          v-model="game.quest"
           :hide-details="true"
-          @keyup.enter="
-            ai.submit();
-            ai.prompt = '';
-          "
+          @keyup.enter="game.guess()"
         >
           <template #append-inner>
             <v-btn
-              @click="ai.submit()"
-              :loading="ai.busy"
+              @click="game.guess()"
+              :loading="game.aiGuess.busy"
               color="primary"
             >
               Responder
@@ -43,40 +52,26 @@
           </template>
         </v-text-field>
 
-        <v-fade-transition>
+        <!-- <v-fade-transition>
           <v-alert
             type="error"
             v-if="ai.error"
           >
             <div v-html="ai.error"></div>
           </v-alert>
-        </v-fade-transition>
+        </v-fade-transition> -->
 
-        <v-card v-if="ai.response.candidates.length">
+        <v-card v-if="game.response">
           <v-card-text>
-            <template v-for="o in ai.response.candidates">
-              <template v-for="oo in o.content.parts">
-                <div
-                  class="ai-response"
-                  v-html="marked.parse(oo.text)"
-                ></div>
-              </template>
-            </template>
+            <div
+              class="ai-response"
+              v-html="marked.parse(game.response)"
+            ></div>
           </v-card-text>
         </v-card>
 
-        <v-fade-transition>
-          <v-alert
-            type="error"
-            v-if="rules.viewCharacter"
-            class="mb-4"
-          >
-            O personagem é {{ rules.character.name }}
-          </v-alert>
-        </v-fade-transition>
-
         <div class="d-flex justify-end ga-3">
-          <v-btn
+          <!-- <v-btn
             text="Desisto"
             color="error"
             @click="rules.viewCharacter = !rules.viewCharacter"
@@ -85,9 +80,15 @@
             text="Mudar personagem"
             color="warning"
             @click="rules.characterChange()"
+          /> -->
+          <v-btn
+            text="Tentar outro"
+            :loading="game.aiInit.busy"
+            @click="game.init()"
           />
         </div>
 
+        <!-- <pre>game: {{ game }}</pre> -->
         <!-- <pre>rules: {{ rules }}</pre> -->
         <!-- <pre>ai: {{ ai }}</pre> -->
       </div>
@@ -102,6 +103,89 @@ const app = useApp();
 
 const ai = useAi({
   appendHistory: false,
+});
+
+const game = reactive({
+  theme: null,
+  character: null,
+  quest: "",
+  try: 0,
+  response: "",
+
+  init() {
+    this.quest = "";
+    this.try = 0;
+    // this.character = "Mickey Mouse";
+    this.aiInit.prompt = `Para um jogo estilo Akinator, preciso que
+      você me dê apenas o nome limpo (mais nada) de um ${this.theme}
+      aleatório.
+
+      Varie entre os anos 80 e hoje.
+
+      Personagens secundários e terciários são bem vindos.
+
+      Filmes também são muito bem vindos.
+      
+      Precisa ser algo famoso, para que não seja tão difícil
+      de adivinhar, mas também não pode ser nada tão lógico Precisa ser desafiador.
+      
+      Se for o nome de um personagem e tiver sobrenome, informe-o.
+      
+      Se fizer parte de um filme ou série, informe também o nome da mesma
+      nesse formato: Fulano - A Vida de Fulano
+      
+      Programas brasileiros que se passavam em canais abertos como Globo, SBT,
+      TV Cultura e MTV são bem vindos.`;
+    this.aiInit.submit().then((resp) => {
+      resp.response.candidates.map((candidate) => {
+        candidate.content.parts.map((part) => {
+          this.character = part.text.trim();
+        });
+      });
+    });
+  },
+
+  aiInit: useAi(),
+
+  aiGuess: useAi(),
+
+  guess() {
+    this.aiGuess.options.context = `Isso é um jogo tipo Akinator,
+      onde você vai ser um personagem e o usuário deve adivinhar quem é.
+
+      As perguntas devem ser respondidas sobre o personagem hoje em dia
+      (ou como estava antes de morrer, em caso de já ter morrido).
+
+      As perguntas são feitas exclusivamente sobre o personagem, e não
+      sobre o ator que o interpreta (caso tenha um).
+
+      Atenção ao fato do personagem ser humano ou não. Constantemente
+      é perguntado, por exemplo, se o Mickey é humano e você diz sim.
+      Se é um animal, então não é humano.
+
+      Responda apenas sim ou não. Se o usuário perguntar algo que não
+      pode ser respondido com sim ou não, responda
+      "Só posso responder sim ou não".
+
+      Se o usuário adivinhar quem é você, dê uma resposta
+      divertida comemorando por ele ter acertado, mencione também
+      quantas tentativas ele levou para acertar.
+      
+      Você é ${this.character} e esta é a tentativa número ${this.try}.
+    ---`;
+
+    this.aiGuess.prompt = this.quest;
+    this.quest = "";
+    this.try++;
+
+    this.aiGuess.submit().then((resp) => {
+      resp.response.candidates.map((candidate) => {
+        (candidate.content.parts || []).map((part) => {
+          this.response = part.text.trim();
+        });
+      });
+    });
+  },
 });
 
 const rules = reactive({
