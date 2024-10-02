@@ -1,5 +1,8 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
+// Claude AI:
+// https://docs.anthropic.com/en/api/client-sdks
+
 export default (options = {}) => {
   const app = useApp();
 

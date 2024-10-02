@@ -1,9 +1,16 @@
 services:
+  # Install Django
+  # docker run --rm -it -v ${PWD}/python:/app -w /app python:3.8 bash
+  # pip install -r requirements.txt
+  # django-admin startproject src .
+  #
+  # Init Django
+  # docker compose up --build --force-recreate --remove-orphans
   python:
-    image: python:3
+    image: python:3.8
     working_dir: /app
-    command: bash -c "python app.py"
+    command: bash -c "pip install -r requirements.txt && python manage.py runserver 0.0.0.0:8000"
     ports:
-      - "5000:5000"
+      - 8000:8000
     volumes:
-      - .:/app
+      - ./python:/app
