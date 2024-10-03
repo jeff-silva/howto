@@ -1,0 +1,11 @@
+services:
+  # docker run --rm -it -v ${PWD}/wwebjs:/app -w /app node bash
+  # yarn add nodemon qrcode-terminal whatsapp-web.js
+  wwebjs:
+    build: ./wwebjs
+    working_dir: /app
+    command: bash -c "yarn install && yarn dev"
+    ports:
+      - 3000:3000
+    volumes:
+      - ./wwebjs:/app
