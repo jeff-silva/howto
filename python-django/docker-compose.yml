@@ -2,7 +2,7 @@ services:
   # 1) Create Django project in /python folder
   # docker run --rm -it -v ${PWD}/python:/app -w /app python:3.8 bash
   # pip install django
-  # django-admin startproject src .
+  # django-admin startproject app .
   #
   # 2) Close bash then init Django
   # docker compose up --build --force-recreate --remove-orphans
