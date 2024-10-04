@@ -1,0 +1,46 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    hostname: rabbitmq
+    ports:
+      - "5672:5672" # Porta AMQP
+      - "15672:15672" # Porta de gerenciamento
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq # Persistir dados do RabbitMQ
+    environment:
+      RABBITMQ_DEFAULT_USER: main
+      RABBITMQ_DEFAULT_PASS: main
+      RABBITMQ_DEFAULT_VHOST: /
+    networks:
+      - main_network
+
+  # docker run --rm -it -v $(pwd):/app -w /app node:18 npx nuxi@latest init nuxt3
+  nuxt3:
+    image: node:22
+    working_dir: /app
+    command: bash -c "yarn install && yarn dev"
+    ports:
+      - 3000:3000
+    volumes:
+      - ./nuxt3:/app
+
+  backend:
+    image: node:22
+    working_dir: /app
+    command: bash -c "yarn install && yarn dev"
+    ports:
+      - 3001:3001
+    volumes:
+      - ./backend:/app
+    networks:
+      - main_network
+    depends_on:
+      rabbitmq:
+        condition: service_started
+
+volumes:
+  rabbitmq-data:
+
+networks:
+  main_network:
+    driver: bridge
