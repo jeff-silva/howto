@@ -1,13 +1,11 @@
 #!/bin/bash
-reset
 
 echo "Informe o nome do projeto:"
 read project_name
 
-mkdir $project_name
-cd $project_name
+mkdir ./$project_name
 
-cat << EOF > package.json
+cat << EOF > ./$project_name/package.json
 {
   "name": "$project_name",
   "version": "1.0.0",
@@ -18,7 +16,7 @@ cat << EOF > package.json
 }
 EOF
 
-cat << EOF > docker-compose.yml
+cat << EOF > ./$project_name/docker-compose.yml
 services:
   # docker run --rm -it -v $(pwd):/app -w /app node:18 npx nuxi@latest init nuxt3
   nuxt3:
@@ -29,4 +27,15 @@ services:
       - 3000:3000
     volumes:
       - ./nuxt3:/app
+EOF
+
+cat << EOF > ./$project_name/README.md
+# $project_name
+
+How to run:
+
+\`\`\`bash
+cd ./$project_name && yarn dev
+\`\`\`
+
 EOF
