@@ -18,11 +18,7 @@ export default (queue) => {
             }
 
             send(message) {
-              if (typeof message == "number") {
-                message = message.toString();
-              } else if (typeof message == "object") {
-                message = JSON.stringify(message);
-              }
+              message = JSON.stringify(message);
               channel.sendToQueue(queue, Buffer.from(message));
               return {
                 queue: this.queue,

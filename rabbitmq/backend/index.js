@@ -12,7 +12,7 @@ import amqpConnection from "./utils/amqp.js";
 const app = express();
 app.use(cors());
 
-app.get("/", async (req, res) => {
+app.get("/api/rabbitmq/send", async (req, res) => {
   const amqp = await amqpConnection("random");
   const { message } = amqp.send(Math.round(Math.random() * 9999));
   res.json({ message });

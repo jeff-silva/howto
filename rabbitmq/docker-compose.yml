@@ -39,14 +39,17 @@ services:
         condition: service_started
 
   # docker run --rm -it -v ${PWD}/laravel:/app composer create-project laravel/laravel .
+  # Install API: php artisan install:api
   laravel:
-    image: docker.io/bitnami/laravel:latest
+    image: bitnami/laravel:latest
     ports:
       - "3002:8000"
     environment:
       - DB_CONNECTION=sqlite
     volumes:
       - "./laravel:/app"
+    networks:
+      - main_network
     depends_on:
       rabbitmq:
         condition: service_started
