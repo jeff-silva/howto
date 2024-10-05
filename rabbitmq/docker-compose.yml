@@ -38,6 +38,19 @@ services:
       rabbitmq:
         condition: service_started
 
+  # docker run --rm -it -v ${PWD}/laravel:/app composer create-project laravel/laravel .
+  laravel:
+    image: docker.io/bitnami/laravel:latest
+    ports:
+      - "3002:8000"
+    environment:
+      - DB_CONNECTION=sqlite
+    volumes:
+      - "./laravel:/app"
+    depends_on:
+      rabbitmq:
+        condition: service_started
+
 volumes:
   rabbitmq-data:
 
