@@ -21,10 +21,10 @@ class RabbitMQController extends Controller
         return [ 'sent' => $sent ];
     }
 
-    public function receive($queue)
-    {
-        return $this->ampq->onReceive(
-            queue: $queue,
-        );
-    }
+    // public function receive($queue)
+    // {
+    //     return $this->ampq->onReceive(
+    //         queue: $queue,
+    //     );
+    // }
 }

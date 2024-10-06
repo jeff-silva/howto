@@ -20,9 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Event::listen(
-        //     PodcastProcessed::class,
-        //     SendPodcastNotification::class,
-        // );
+        Event::listen(
+            // PodcastProcessed::class,
+            \App\Listeners\RabbitMQListener::class,
+        );
     }
 }
