@@ -1,0 +1,22 @@
+services:
+  # docker run --rm -it -v $(pwd):/app -w /app node:18 npx nuxi@latest init nuxt3
+  nuxt3:
+    image: node:22
+    working_dir: /app
+    command: bash -c "yarn install && yarn dev"
+    ports:
+      - 8000:3000
+    volumes:
+      - ./nuxt3:/app
+
+  # docker run --rm -it -v ${PWD}/express:/app -w /app node bash
+  # yarn init -y
+  # yarn add nodemon express cors sequelize sqlite3
+  express:
+    image: node:22
+    working_dir: /app
+    command: bash -c "yarn install && yarn dev"
+    ports:
+      - 3000:3000
+    volumes:
+      - ./express:/app

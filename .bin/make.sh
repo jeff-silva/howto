@@ -18,7 +18,7 @@ EOF
 
 cat << EOF > ./$project_name/docker-compose.yml
 services:
-  # docker run --rm -it -v $(pwd):/app -w /app node:18 npx nuxi@latest init nuxt3
+  # docker run --rm -it -v \$(pwd):/app -w /app node:18 npx nuxi@latest init nuxt3
   nuxt3:
     image: node:22
     working_dir: /app
