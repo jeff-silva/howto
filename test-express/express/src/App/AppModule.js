@@ -1,6 +1,7 @@
 import { Module } from "../App.js";
 import AppController from "./AppController.js";
 import AppUser from "./Models/AppUser.js";
+import { AppUserTest } from "./Tests/AppUserTest.js";
 
 export default class AppModule extends Module {
   routes(app) {
@@ -9,5 +10,9 @@ export default class AppModule extends Module {
 
   models() {
     return { AppUser };
+  }
+
+  tests() {
+    return { AppUserTest };
   }
 }

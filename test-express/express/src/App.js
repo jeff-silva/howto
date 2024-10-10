@@ -1,10 +1,8 @@
-import path from "path";
-const __dirname = path.resolve(path.dirname(""));
+import test from "node:test";
+import assert from "node:assert";
 
 import express from "express";
 import cors from "cors";
-
-import { glob } from "glob";
 
 import * as Sequelize from "sequelize";
 
@@ -15,12 +13,13 @@ export const sequelize = new Sequelize.Sequelize({
   storage: "../database.sqlite",
 });
 
+// import configApp from "../config/app.js";
+
 export class App {
   constructor(modules = []) {
     this.express = express();
     this.express.use(cors());
     this.sequelize = sequelize;
-    this.modules = modules.map((module) => new module(this));
   }
 
   async databaseSchema() {
@@ -45,7 +44,10 @@ export class App {
     return tables;
   }
 
-  async init() {
+  async preInit() {
+    const configApp = (await import("../config/app.js")).default;
+    this.modules = configApp.modules.map((module) => new module(this));
+
     let tables = await this.databaseSchema();
 
     // Drop tables
@@ -73,16 +75,36 @@ export class App {
 
     tables = await this.databaseSchema();
 
-    setTimeout(() => {
-      tables.map((item) => {
-        console.log("");
-        console.log(item.table.name);
-        item.fields.map((field) => {
-          console.log(`- ${field.name} ${field.type}`);
-        });
-        // console.log(item.fields.map((f) => f.name).join(" | "));
+    tables.map((item) => {
+      console.log("");
+      console.log(item.table.name);
+      item.fields.map((field) => {
+        console.log(`- ${field.name} ${field.type}`);
       });
-    }, 1000);
+    });
+    console.log("");
+  }
+
+  async test() {
+    await this.preInit();
+
+    this.modules.map((module) => {
+      Object.values(module.tests()).map((moduleTest) => {
+        moduleTest = new moduleTest();
+        Object.getOwnPropertyNames(Object.getPrototypeOf(moduleTest)).map(
+          (method) => {
+            if (!method.startsWith("test")) return;
+            test.describe(`${moduleTest.constructor.name}.${method}`, () => {
+              moduleTest[method].call(moduleTest, { test, assert });
+            });
+          }
+        );
+      });
+    });
+  }
+
+  async init() {
+    await this.preInit();
 
     this.express.listen(3000, () => {
       console.log(`App listening on port 3000`);
@@ -102,6 +124,10 @@ export class Module {
   models() {
     return {};
   }
+
+  tests() {
+    return {};
+  }
 }
 
 export class Model extends Sequelize.Model {
@@ -109,3 +135,7 @@ export class Model extends Sequelize.Model {
 }
 
 export class Controller {}
+
+export class Test {
+  //
+}

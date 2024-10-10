@@ -13,18 +13,18 @@ import assert from "node:assert";
 //   assert.strictEqual(1, 1);
 // });
 
-test.describe("A thing", () => {
-  test.it("should work", () => {
-    assert.strictEqual(1, 1);
-  });
+// test.describe("A thing", () => {
+//   test.it("should work", () => {
+//     assert.strictEqual(1, 1);
+//   });
 
-  test.it("should be ok", () => {
-    assert.strictEqual(2, 2);
-  });
+//   test.it("should be ok", () => {
+//     assert.strictEqual(2, 2);
+//   });
 
-  test.describe("a nested thing", () => {
-    test.it("should work", () => {
-      assert.strictEqual(3, 3);
-    });
-  });
-});
+//   test.describe("a nested thing", () => {
+//     test.it("should work", () => {
+//       assert.strictEqual(3, 3);
+//     });
+//   });
+// });
