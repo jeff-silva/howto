@@ -19,6 +19,7 @@ AutoDriver.init(
   {
     sequelize,
     tableName: "auto_driver",
+    modelName: "AutoDriver",
     timestamps: true,
     createdAt: "created_at",
     updatedAt: "updated_at",

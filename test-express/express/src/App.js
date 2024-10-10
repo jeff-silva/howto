@@ -11,10 +11,9 @@ import * as Sequelize from "sequelize";
 export const SequelizeDataTypes = Sequelize.DataTypes;
 
 export const sequelize = new Sequelize.Sequelize({
-  // logging: true,
+  logging: false,
   dialect: "sqlite",
   storage: "database.sqlite",
-  // storage: ":memory:",
 });
 
 // import configApp from "../config/app.js";
@@ -30,25 +29,15 @@ export class App {
     this.express.use(express.json());
     this.sequelize = sequelize;
 
-    // if (
-    //   this.config.sequelizeConfig !== null &&
-    //   typeof this.config.sequelizeConfig == "object"
-    // ) {
-    //   this.sequelize = new Sequelize.Sequelize({
-    //     logging: false,
-    //     ...this.config.sequelizeConfig,
-    //   });
-    // }
-
-    // if (this.sequelize.options.storage) {
-    //   console.log(this.sequelize.options.storage);
-    //   console.log(fs.existsSync(this.sequelize.options.storage));
-    //   // if (!fs.existsSync(this.sequelize.options.storage)) {
-    //   //   console.log(this.sequelize.options.storage);
-    //   //   fs.writeFile(this.sequelize.options.storage, "", { flag: "wx" });
-    //   //   console.log(`File ${this.sequelize.options.storage} created`);
-    //   // }
-    // }
+    if (
+      this.config.sequelizeConfig !== null &&
+      typeof this.config.sequelizeConfig == "object"
+    ) {
+      this.sequelize = new Sequelize.Sequelize({
+        logging: false,
+        ...this.config.sequelizeConfig,
+      });
+    }
   }
 
   async databaseSchema() {
@@ -74,6 +63,13 @@ export class App {
   }
 
   async preInit() {
+    try {
+      await this.sequelize.authenticate();
+      console.log("Connection has been established successfully.");
+    } catch (error) {
+      console.error("Unable to connect to the database:", error);
+    }
+
     const configApp = (await import("../config/app.js")).default;
     this.modules = configApp.modules.map((module) => new module(this));
 
@@ -104,16 +100,15 @@ export class App {
       module.routes(this.express);
     });
 
-    tables = await this.databaseSchema();
-
-    tables.map((item) => {
-      console.log("");
-      console.log(item.table.name);
-      item.fields.map((field) => {
-        console.log(`- ${field.name} ${field.type}`);
-      });
-    });
-    console.log("");
+    // tables = await this.databaseSchema();
+    // tables.map((item) => {
+    //   console.log("");
+    //   console.log(item.table.name);
+    //   item.fields.map((field) => {
+    //     console.log(`- ${field.name} ${field.type}`);
+    //   });
+    // });
+    // console.log("");
   }
 
   async test() {

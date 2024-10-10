@@ -9,8 +9,22 @@ export default class AppController extends Controller {
   static async userCreate(req, res) {
     // res.json({ user: 123 });
     // res.json(JSON.parse(JSON.stringify(req.body)));
-    const user = await AppUser.create(req.body);
-    console.log(user.id);
-    res.json(user);
+    res.json(await AppUser.create(req.body));
+  }
+
+  static async userSearch(req, res) {
+    res.json({ test: true });
+  }
+
+  static async userFind(req, res) {
+    res.json({ test: true });
+  }
+
+  static async userUpdate(req, res) {
+    res.json({ test: true });
+  }
+
+  static async userDelete(req, res) {
+    res.json({ test: true });
   }
 }

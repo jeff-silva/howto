@@ -41,6 +41,7 @@ AutoCarUse.init(
   {
     sequelize,
     tableName: "auto_car_use",
+    modelName: "AutoCarUse",
     timestamps: true,
     createdAt: "created_at",
     updatedAt: "updated_at",
