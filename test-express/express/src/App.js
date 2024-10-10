@@ -23,47 +23,64 @@ export class App {
     this.modules = modules.map((module) => new module(this));
   }
 
+  async databaseSchema() {
+    const options = {
+      type: Sequelize.QueryTypes.SELECT,
+    };
+
+    let tables = (
+      await this.sequelize.query(`SELECT * FROM sqlite_master`, options)
+    )
+      .filter((table) => table.name != "sqlite_sequence")
+      .map((table) => ({ table }));
+
+    for (let i in tables) {
+      const item = tables[i];
+      item.fields = await this.sequelize.query(
+        `PRAGMA table_info(${item.table.name});`,
+        options
+      );
+    }
+
+    return tables;
+  }
+
   async init() {
-    this.modules.map((module) => {
-      // // Drop tables
-      // Object.values(module.models()).map(async (model) => {
-      //   await model.drop();
-      // });
+    let tables = await this.databaseSchema();
 
-      // Register models
-      Object.values(module.models()).map(async (model) => {
-        await model.sync({ alter: true });
-      });
+    // Drop tables
+    await Promise.all(
+      tables.map(async (item) => {
+        await this.sequelize.query(`drop table ${item.table.name}`);
+      })
+    );
 
-      // Register routes
+    // Make tables
+    await Promise.all(
+      this.modules.map(async (module) => {
+        await Promise.all(
+          Object.values(module.models()).map(async (model) => {
+            await model.sync({ force: true, alter: true });
+          })
+        );
+      })
+    );
+
+    // Routes
+    this.modules.map(async (module) => {
       module.routes(this.express);
     });
 
-    let schema = Object.fromEntries(
-      await Promise.all(
-        (
-          await this.sequelize.query(`SELECT * FROM sqlite_master`, {
-            type: Sequelize.QueryTypes.SELECT,
-          })
-        ).map(async (table) => {
-          return [
-            table.name,
-            (
-              await this.sequelize.query(`PRAGMA table_info(${table.name});`, {
-                type: Sequelize.QueryTypes.SELECT,
-              })
-            ).map((field) => field.name),
-          ];
-        })
-      )
-    );
+    tables = await this.databaseSchema();
 
     setTimeout(() => {
-      console.log("");
-      Object.entries(schema).map(([table_name, table_fields]) => {
+      tables.map((item) => {
         console.log("");
-        console.log(`| ${table_name} |`);
-        console.log(`| ${table_fields.join(" | ")} |`);
+        console.log(item.table.name);
+        item.fields.map((field) => {
+          console.log(`- ${field.name} ${field.type}`);
+        });
+        // console.log(item.fields.map((f) => f.name).join(" | "));
       });
     }, 1000);
 
@@ -88,14 +105,7 @@ export class Module {
 }
 
 export class Model extends Sequelize.Model {
-  // static schema() {
-  //   return {};
-  // }
-  // constructor(...args) {
-  //   super(...args);
-  //   this.init(this.schema());
-  //   console.log("aaa");
-  // }
+  //
 }
 
 export class Controller {}

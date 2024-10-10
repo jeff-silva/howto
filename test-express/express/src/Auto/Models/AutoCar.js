@@ -1,6 +1,6 @@
 import { Model, sequelize, SequelizeDataTypes } from "../../App.js";
 
-export default class AutoCar extends Model {
+class AutoCar extends Model {
   //
 }
 
@@ -36,3 +36,5 @@ AutoCar.init(
     updatedAt: "updated_at",
   }
 );
+
+export default AutoCar;

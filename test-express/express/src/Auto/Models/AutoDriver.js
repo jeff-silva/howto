@@ -1,10 +1,10 @@
 import { Model, sequelize, SequelizeDataTypes } from "../../App.js";
 
-export default class AutoCarDriver extends Model {
+class AutoDriver extends Model {
   //
 }
 
-AutoCarDriver.init(
+AutoDriver.init(
   {
     id: {
       type: SequelizeDataTypes.INTEGER,
@@ -24,3 +24,5 @@ AutoCarDriver.init(
     updatedAt: "updated_at",
   }
 );
+
+export default AutoDriver;

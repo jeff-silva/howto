@@ -1,6 +1,8 @@
 import { Model, sequelize, SequelizeDataTypes } from "../../App.js";
+import AutoDriver from "./AutoDriver.js";
+import AutoCar from "./AutoCar.js";
 
-export default class AutoCarUse extends Model {
+class AutoCarUse extends Model {
   //
 }
 
@@ -16,20 +18,20 @@ AutoCarUse.init(
       allowNull: true,
     },
     use_start: {
-      type: SequelizeDataTypes.STRING,
+      type: SequelizeDataTypes.DATE,
       allowNull: true,
     },
     use_final: {
-      type: SequelizeDataTypes.STRING,
+      type: SequelizeDataTypes.DATE,
       allowNull: true,
     },
     driver_id: {
-      type: SequelizeDataTypes.STRING,
-      allowNull: true,
+      type: SequelizeDataTypes.INTEGER,
+      references: { key: "id", model: AutoDriver },
     },
     car_id: {
-      type: SequelizeDataTypes.STRING,
-      allowNull: true,
+      type: SequelizeDataTypes.INTEGER,
+      references: { key: "id", model: AutoCar },
     },
     observation: {
       type: SequelizeDataTypes.STRING,
@@ -44,3 +46,5 @@ AutoCarUse.init(
     updatedAt: "updated_at",
   }
 );
+
+export default AutoCarUse;
