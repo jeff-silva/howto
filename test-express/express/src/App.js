@@ -1,3 +1,5 @@
+import fs from "fs";
+
 import test from "node:test";
 import assert from "node:assert";
 
@@ -9,9 +11,10 @@ import * as Sequelize from "sequelize";
 export const SequelizeDataTypes = Sequelize.DataTypes;
 
 export const sequelize = new Sequelize.Sequelize({
-  logging: false,
+  // logging: true,
   dialect: "sqlite",
-  storage: "../database.sqlite",
+  storage: "database.sqlite",
+  // storage: ":memory:",
 });
 
 // import configApp from "../config/app.js";
@@ -24,17 +27,28 @@ export class App {
     };
     this.express = express();
     this.express.use(cors());
+    this.express.use(express.json());
     this.sequelize = sequelize;
 
-    if (
-      this.config.sequelizeConfig !== null &&
-      typeof this.config.sequelizeConfig == "object"
-    ) {
-      this.sequelize = new Sequelize.Sequelize({
-        logging: false,
-        ...this.config.sequelizeConfig,
-      });
-    }
+    // if (
+    //   this.config.sequelizeConfig !== null &&
+    //   typeof this.config.sequelizeConfig == "object"
+    // ) {
+    //   this.sequelize = new Sequelize.Sequelize({
+    //     logging: false,
+    //     ...this.config.sequelizeConfig,
+    //   });
+    // }
+
+    // if (this.sequelize.options.storage) {
+    //   console.log(this.sequelize.options.storage);
+    //   console.log(fs.existsSync(this.sequelize.options.storage));
+    //   // if (!fs.existsSync(this.sequelize.options.storage)) {
+    //   //   console.log(this.sequelize.options.storage);
+    //   //   fs.writeFile(this.sequelize.options.storage, "", { flag: "wx" });
+    //   //   console.log(`File ${this.sequelize.options.storage} created`);
+    //   // }
+    // }
   }
 
   async databaseSchema() {
@@ -65,12 +79,14 @@ export class App {
 
     let tables = await this.databaseSchema();
 
-    // Drop tables
-    await Promise.all(
-      tables.map(async (item) => {
-        await this.sequelize.query(`drop table ${item.table.name}`);
-      })
-    );
+    this.sequelize.sync();
+
+    // // Drop tables
+    // await Promise.all(
+    //   tables.map(async (item) => {
+    //     await this.sequelize.query(`drop table ${item.table.name}`);
+    //   })
+    // );
 
     // Make tables
     await Promise.all(
@@ -108,7 +124,7 @@ export class App {
 
     this.modules.map((module) => {
       Object.values(module.tests()).map((moduleTest) => {
-        moduleTest = new moduleTest();
+        moduleTest = new moduleTest(this);
         Object.getOwnPropertyNames(Object.getPrototypeOf(moduleTest)).map(
           (method) => {
             if (!method.startsWith("test")) return;
@@ -155,5 +171,7 @@ export class Model extends Sequelize.Model {
 export class Controller {}
 
 export class Test {
-  //
+  constructor(app) {
+    this.app = app;
+  }
 }

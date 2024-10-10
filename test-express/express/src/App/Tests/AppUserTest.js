@@ -1,27 +1,57 @@
 import { Test } from "../../App.js";
+import AppUser from "../Models/AppUser.js";
 
 export class AppUserTest extends Test {
-  testRequest({ test, assert }) {
-    test("Timeout 1", async (t) => {
-      const data = await (
-        await fetch("https://randomuser.me/api/?results=1")
-      ).json();
+  // testRequest({ test, assert }) {
+  //   test("Timeout 1", async (t) => {
+  //     const data = await (
+  //       await fetch("https://randomuser.me/api/?results=1")
+  //     ).json();
 
-      assert.strictEqual(
-        true,
-        data && data.results && Array.isArray(data.results)
-      );
+  //     assert.strictEqual(
+  //       true,
+  //       data && data.results && Array.isArray(data.results)
+  //     );
+  //   });
+  // }
+
+  // async testRequestInternal({ test, assert }) {
+  //   test("Request", async (t) => {
+  //     const data = await (
+  //       await fetch("http://localhost:3000/api/v1/test")
+  //     ).json();
+
+  //     assert.strictEqual(true, data.aaa && data.aaa == 123);
+  //   });
+  // }
+
+  async testAppUserCreate() {
+    // let user = (
+    //   await (await fetch("https://randomuser.me/api/?results=1")).json()
+    // ).results.at(0);
+
+    // const resp = await (
+    //   await fetch("http://localhost:3000/api/v1/user", {
+    //     headers: {
+    //       Accept: "application/json",
+    //       "Content-Type": "application/json",
+    //     },
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //       name: `${user.name.first} ${user.name.last}`,
+    //       email: user.email,
+    //       password: user.email,
+    //     }),
+    //   })
+    // ).json();
+
+    // console.log(resp);
+
+    const appUser = await AppUser.create({
+      name: "Ana " + Math.round(Math.random() * 999),
     });
-  }
-
-  async testRequestInternal({ test, assert }) {
-    test("Request", async (t) => {
-      const data = await (
-        await fetch("http://localhost:3000/api/v1/test")
-      ).json();
-
-      assert.strictEqual(true, data.aaa && data.aaa == 123);
-    });
+    // console.log(appUser);
+    console.log(await this.app.sequelize.query(`select * from app_user`));
   }
 
   // testApiV1Test({ test, assert }) {
