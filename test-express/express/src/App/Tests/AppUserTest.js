@@ -14,6 +14,16 @@ export class AppUserTest extends Test {
     });
   }
 
+  async testRequestInternal({ test, assert }) {
+    test("Request", async (t) => {
+      const data = await (
+        await fetch("http://localhost:3000/api/v1/test")
+      ).json();
+
+      assert.strictEqual(true, data.aaa && data.aaa == 123);
+    });
+  }
+
   // testApiV1Test({ test, assert }) {
   //   test("Timeout 1", async (t) => {
   //     console.log(

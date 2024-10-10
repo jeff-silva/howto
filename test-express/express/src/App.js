@@ -16,7 +16,10 @@ export const sequelize = new Sequelize.Sequelize({
 // import configApp from "../config/app.js";
 
 export class App {
-  constructor(modules = []) {
+  constructor(config = {}) {
+    this.config = {
+      ...config,
+    };
     this.express = express();
     this.express.use(cors());
     this.sequelize = sequelize;
@@ -86,7 +89,10 @@ export class App {
   }
 
   async test() {
-    await this.preInit();
+    // await this.preInit();
+
+    const configApp = (await import("../config/app.js")).default;
+    this.modules = configApp.modules.map((module) => new module(this));
 
     this.modules.map((module) => {
       Object.values(module.tests()).map((moduleTest) => {
