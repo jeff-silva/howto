@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "repository": "https://github.com/jeff-silva/howto.git",
   "author": "Jeferson Silva <jeferson.i.silva@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "make": "sh ./.bin/make.sh"
   },
