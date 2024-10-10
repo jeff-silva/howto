@@ -20,5 +20,7 @@ AutoCarDriver.init(
     sequelize,
     tableName: "auto_driver",
     timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
   }
 );

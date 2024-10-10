@@ -25,10 +25,14 @@ export class App {
 
   async init() {
     this.modules.map((module) => {
+      // // Drop tables
+      // Object.values(module.models()).map(async (model) => {
+      //   await model.drop();
+      // });
+
       // Register models
       Object.values(module.models()).map(async (model) => {
-        // await model.drop();
-        model.sync();
+        await model.sync({ alter: true });
       });
 
       // Register routes
@@ -48,15 +52,20 @@ export class App {
               await this.sequelize.query(`PRAGMA table_info(${table.name});`, {
                 type: Sequelize.QueryTypes.SELECT,
               })
-            )
-              .map((field) => field.name)
-              .join(" | "),
+            ).map((field) => field.name),
           ];
         })
       )
     );
 
-    console.log(schema);
+    setTimeout(() => {
+      console.log("");
+      Object.entries(schema).map(([table_name, table_fields]) => {
+        console.log("");
+        console.log(`| ${table_name} |`);
+        console.log(`| ${table_fields.join(" | ")} |`);
+      });
+    }, 1000);
 
     this.express.listen(3000, () => {
       console.log(`App listening on port 3000`);

@@ -28,6 +28,8 @@ AppUser.init(
     sequelize,
     tableName: "app_user",
     timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
   }
 );
 

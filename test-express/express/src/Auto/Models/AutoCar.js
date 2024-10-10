@@ -32,5 +32,7 @@ AutoCar.init(
     sequelize,
     tableName: "auto_car",
     timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
   }
 );
