@@ -9,6 +9,7 @@ import * as Sequelize from "sequelize";
 export const SequelizeDataTypes = Sequelize.DataTypes;
 
 export const sequelize = new Sequelize.Sequelize({
+  logging: false,
   dialect: "sqlite",
   storage: "../database.sqlite",
 });
@@ -18,11 +19,22 @@ export const sequelize = new Sequelize.Sequelize({
 export class App {
   constructor(config = {}) {
     this.config = {
+      sequelizeConfig: null,
       ...config,
     };
     this.express = express();
     this.express.use(cors());
     this.sequelize = sequelize;
+
+    if (
+      this.config.sequelizeConfig !== null &&
+      typeof this.config.sequelizeConfig == "object"
+    ) {
+      this.sequelize = new Sequelize.Sequelize({
+        logging: false,
+        ...this.config.sequelizeConfig,
+      });
+    }
   }
 
   async databaseSchema() {
@@ -89,10 +101,10 @@ export class App {
   }
 
   async test() {
-    // await this.preInit();
+    await this.preInit();
 
-    const configApp = (await import("../config/app.js")).default;
-    this.modules = configApp.modules.map((module) => new module(this));
+    // const configApp = (await import("../config/app.js")).default;
+    // this.modules = configApp.modules.map((module) => new module(this));
 
     this.modules.map((module) => {
       Object.values(module.tests()).map((moduleTest) => {
