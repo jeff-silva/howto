@@ -8,15 +8,11 @@ import AutoCarUse from "./Models/AutoCarUse.js";
 import AutoDriver from "./Models/AutoDriver.js";
 
 export default class AutoModule extends Module {
-  // routes(app) {
-  //   app.get("/api/v1/auto", AutoController.test);
-  // }
-
   controllers() {
     return {
+      AutoController,
       AutoCarController,
       AutoCarUseController,
-      AutoController,
       AutoDriverController,
     };
   }

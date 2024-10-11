@@ -176,7 +176,7 @@ export class App {
           const prefix = Object.keys(layer.route.methods)
             .join(",")
             .padEnd(8, " ");
-          console.log(`${prefix} - ${layer.route.path}`);
+          console.log(`${prefix} ${layer.route.path}`);
         }
       });
     });
