@@ -2,7 +2,7 @@ import { Test } from "../../App.js";
 
 export class AppUserTest extends Test {
   async testAppUserCrud({ test, assert }) {
-    return await this.makeCrudTests(test, assert, {
+    return await this.makeCrudTests("User", test, assert, {
       create: async (scope) => {
         return {
           method: "post",

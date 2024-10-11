@@ -305,7 +305,7 @@ export class Test {
     return ret;
   }
 
-  async makeCrudTests(test, assert, options = {}) {
+  async makeCrudTests(description, test, assert, options = {}) {
     options = {
       create: null,
       update: null,
@@ -319,7 +319,7 @@ export class Test {
       ["create", "update", "delete"].map(async (attr) => {
         let option = options[attr];
         if (option !== null && typeof option == "function") {
-          test(`Model ${attr}`, async (t) => {
+          test(`${description} ${attr}`, async (t) => {
             const resp = await this.request(await option(scope));
             assert.strictEqual(true, resp.success);
             scope[attr] = resp;

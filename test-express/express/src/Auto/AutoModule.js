@@ -6,6 +6,7 @@ import AutoDriverController from "./Controllers/AutoDriverController.js";
 import AutoCar from "./Models/AutoCar.js";
 import AutoCarUse from "./Models/AutoCarUse.js";
 import AutoDriver from "./Models/AutoDriver.js";
+import AutoTest from "./Tests/AutoTest.js";
 
 export default class AutoModule extends Module {
   controllers() {
@@ -19,5 +20,9 @@ export default class AutoModule extends Module {
 
   models() {
     return { AutoCar, AutoCarUse, AutoDriver };
+  }
+
+  tests() {
+    return { AutoTest };
   }
 }
