@@ -1,17 +1,15 @@
 import { Module } from "../App.js";
-import AppController from "./AppController.js";
 import AppUser from "./Models/AppUser.js";
 import { AppUserTest } from "./Tests/AppUserTest.js";
+import AppUserController from "./Controllers/AppUserController.js";
 
 export default class AppModule extends Module {
-  routes(app) {
-    app.get("/api/v1/test", AppController.test);
+  // routes(app) {
+  //   app.crud("/api/v1/user", AppUserController);
+  // }
 
-    app.get("/api/v1/user", AppController.userSearch);
-    app.post("/api/v1/user", AppController.userCreate);
-    app.put("/api/v1/user/:id", AppController.userUpdate);
-    app.get("/api/v1/user/:id", AppController.userFind);
-    app.delete("/api/v1/user/:id", AppController.userDelete);
+  controllers() {
+    return { AppUserController };
   }
 
   models() {

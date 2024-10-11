@@ -1,6 +1,55 @@
 import { Test } from "../../App.js";
 
 export class AppUserTest extends Test {
+  async testAppUserCrud({ test, assert }) {
+    const crud = await this.crud({
+      create: async (scope) => {
+        let user = await this.request({
+          url: "https://randomuser.me/api/?results=1",
+        });
+
+        user = user.data.results.at(0);
+
+        return {
+          method: "post",
+          url: "http://localhost:3000/api/v1/user",
+          data: {
+            name: `${user.name.first} ${user.name.last}`,
+            email: user.email,
+            password: user.email,
+          },
+        };
+      },
+      update: async (scope) => {
+        return {
+          method: "put",
+          url: `http://localhost:3000/api/v1/user/${scope.create.data.entity.id}`,
+          data: { name: `${scope.create.data.entity.name} (Updated)` },
+        };
+      },
+      delete: async (scope) => {
+        return {
+          method: "delete",
+          url: `http://localhost:3000/api/v1/user/${scope.update.data.entity.id}`,
+        };
+      },
+    });
+
+    // test("App User Create", async (t) => {
+    //   assert.strictEqual(true, crud.create);
+    // });
+
+    // test("App User Update", async (t) => {
+    //   assert.strictEqual(true, crud.update);
+    // });
+
+    // test("App User Delete", async (t) => {
+    //   assert.strictEqual(true, crud.delete);
+    // });
+
+    console.log(crud);
+  }
+
   // testRequest({ test, assert }) {
   //   test("Timeout 1", async (t) => {
   //     const data = await (
@@ -24,32 +73,53 @@ export class AppUserTest extends Test {
   //   });
   // }
 
-  async testAppUserCreate() {
-    let user = (
-      await (await fetch("https://randomuser.me/api/?results=1")).json()
-    ).results.at(0);
+  // async testAppUserCreate({ test, assert }) {
+  //   test("User create", async (t) => {
+  //     let user = await this.request({
+  //       url: "https://randomuser.me/api/?results=1",
+  //     });
 
-    const resp = await (
-      await fetch("http://localhost:3000/api/v1/user", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          name: `${user.name.first} ${user.name.last}`,
-          email: user.email,
-          password: user.email,
-        }),
-      })
-    ).json();
+  //     user = user.data.results.at(0);
 
-    console.log(resp);
-  }
+  //     user = await this.request({
+  //       method: "post",
+  //       url: "http://localhost:3000/api/v1/user",
+  //       data: {
+  //         name: `${user.name.first} ${user.name.last}`,
+  //         email: user.email,
+  //         password: user.email,
+  //       },
+  //     });
 
-  async testAppUserUpdate() {}
+  //     assert.strictEqual(true, !!user.data.entity.id);
+  //   });
+  // }
 
-  async testAppUserDelete() {}
+  // async testAppUserUpdate() {
+  //   const users = await this.request({
+  //     url: "http://localhost:3000/api/v1/user",
+  //   });
+
+  //   let user =
+  //     users.data.results[Math.floor(Math.random() * users.data.results.length)];
+
+  //   let randomUser = await this.request({
+  //     url: "https://randomuser.me/api/?results=1",
+  //   });
+
+  //   randomUser = randomUser.data.results.at(0);
+  //   user.name = `${randomUser.name.first} ${randomUser.name.last}`;
+
+  //   await this.request({
+  //     method: "put",
+  //     url: `http://localhost:3000/api/v1/user/${user.id}`,
+  //     data: user,
+  //   });
+
+  //   console.log(JSON.stringify({ users, randomUser, user }, null, 2));
+  // }
+
+  // async testAppUserDelete() {}
 
   // testApiV1Test({ test, assert }) {
   //   test("Timeout 1", async (t) => {

@@ -1,4 +1,4 @@
-import { Controller } from "../App.js";
+import { Controller } from "../../App.js";
 
 export default class AutoController extends Controller {
   static test(req, res) {
