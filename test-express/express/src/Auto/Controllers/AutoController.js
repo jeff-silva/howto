@@ -2,10 +2,10 @@ import { Controller } from "../../App.js";
 
 export default class AutoController extends Controller {
   routes(app) {
-    app.get("/api/v1/auto/test", AutoController.test);
+    app.get("/api/v1/auto/test", this.test);
   }
 
-  static test(req, res) {
+  test(req, res) {
     res.json({ aaa: 123 });
   }
 }

@@ -2,52 +2,34 @@ import { Test } from "../../App.js";
 
 export class AppUserTest extends Test {
   async testAppUserCrud({ test, assert }) {
-    const crud = await this.crud({
+    return await this.makeCrudTests(test, assert, {
       create: async (scope) => {
-        let user = await this.request({
-          url: "https://randomuser.me/api/?results=1",
-        });
-
-        user = user.data.results.at(0);
-
         return {
           method: "post",
           url: "http://localhost:3000/api/v1/user",
           data: {
-            name: `${user.name.first} ${user.name.last}`,
-            email: user.email,
-            password: user.email,
+            name: `John Doe`,
+            email: "johndoe@grr.la",
+            password: "johndoe@grr.la",
           },
         };
       },
       update: async (scope) => {
+        const created = scope.create.data.entity;
         return {
           method: "put",
-          url: `http://localhost:3000/api/v1/user/${scope.create.data.entity.id}`,
-          data: { name: `${scope.create.data.entity.name} (Updated)` },
+          url: `http://localhost:3000/api/v1/user/${created.id}`,
+          data: { name: `${created.name} (Updated)` },
         };
       },
       delete: async (scope) => {
+        const updated = scope.update.data.entity;
         return {
           method: "delete",
-          url: `http://localhost:3000/api/v1/user/${scope.update.data.entity.id}`,
+          url: `http://localhost:3000/api/v1/user/${updated.id}`,
         };
       },
     });
-
-    // test("App User Create", async (t) => {
-    //   assert.strictEqual(true, crud.create);
-    // });
-
-    // test("App User Update", async (t) => {
-    //   assert.strictEqual(true, crud.update);
-    // });
-
-    // test("App User Delete", async (t) => {
-    //   assert.strictEqual(true, crud.delete);
-    // });
-
-    console.log(crud);
   }
 
   // testRequest({ test, assert }) {

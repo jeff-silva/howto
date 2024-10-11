@@ -35,23 +35,33 @@ export class App {
       }
 
       if (!except.includes("select")) {
-        this.express.get(`${path}/:id`, controller.select);
+        this.express.get(`${path}/:id`, (...args) => {
+          return controller.select(...args);
+        });
       }
 
       if (!except.includes("search")) {
-        this.express.get(`${path}`, controller.search);
+        this.express.get(`${path}`, (...args) => {
+          return controller.search(...args);
+        });
       }
 
       if (!except.includes("create")) {
-        this.express.post(`${path}`, controller.create);
+        this.express.post(`${path}`, (...args) => {
+          return controller.create(...args);
+        });
       }
 
       if (!except.includes("update")) {
-        this.express.put(`${path}/:id`, controller.update);
+        this.express.put(`${path}/:id`, (...args) => {
+          return controller.update(...args);
+        });
       }
 
       if (!except.includes("delete")) {
-        this.express.delete(`${path}/:id`, controller.delete);
+        this.express.delete(`${path}/:id`, (...args) => {
+          return controller.delete(...args);
+        });
       }
     };
 
@@ -145,9 +155,6 @@ export class App {
   async test() {
     await this.preInit();
 
-    // const configApp = (await import("../config/app.js")).default;
-    // this.modules = configApp.modules.map((module) => new module(this));
-
     this.modules.map((module) => {
       Object.values(module.tests()).map((moduleTest) => {
         moduleTest = new moduleTest(this);
@@ -155,9 +162,6 @@ export class App {
           (method) => {
             if (!method.startsWith("test")) return;
             moduleTest[method].call(moduleTest, { test, assert });
-            // test.describe(`${moduleTest.constructor.name}.${method}`, () => {
-            //   moduleTest[method].call(moduleTest, { test, assert });
-            // });
           }
         );
       });
@@ -171,12 +175,15 @@ export class App {
       console.log(`App listening on port 3000`);
       console.log(``);
 
+      let index = 1;
       this.express._router.stack.map((layer) => {
         if (layer.route && layer.route.path) {
-          const prefix = Object.keys(layer.route.methods)
-            .join(",")
-            .padEnd(8, " ");
+          const prefix =
+            index.toString().padStart(2, "0") +
+            " . " +
+            Object.keys(layer.route.methods).join(",").padEnd(8, " ");
           console.log(`${prefix} ${layer.route.path}`);
+          index++;
         }
       });
     });
@@ -217,41 +224,35 @@ export class Controller {
   }
 
   async select(req, res) {
-    // const model = this.model();
-    // const entity = await model.findByPk(req.params.id);
-    // res.json({ entity });
-    res.json({ test: true });
+    const model = this.model();
+    const entity = await model.findByPk(req.params.id);
+    res.json({ entity });
   }
 
   async search(req, res) {
-    // const model = this.model();
-    // const data = await model.findAll();
-    // res.json({ data });
-    res.json({ test: true });
+    const model = this.model();
+    const data = await model.findAll();
+    res.json({ data });
   }
 
   async create(req, res) {
-    // const model = this.model();
-    console.log("this", this);
-    res.json({ test: true });
-    // const entity = await model.create(req.body);
-    // res.json({ entity });
+    const model = this.model();
+    const entity = await model.create(req.body);
+    res.json({ entity });
   }
 
   async update(req, res) {
-    // const model = this.model();
-    // const entity = await model.findByPk(req.params.id);
-    // entity.set(req.body);
-    // res.json({ entity });
-    res.json({ test: true });
+    const model = this.model();
+    const entity = await model.findByPk(req.params.id);
+    entity.set(req.body);
+    res.json({ entity });
   }
 
   async delete(req, res) {
-    // const model = this.model();
-    // const entity = await model.findByPk(req.params.id);
-    // entity.destroy();
-    // res.json({ entity });
-    res.json({ test: true });
+    const model = this.model();
+    const entity = await model.findByPk(req.params.id);
+    entity.destroy();
+    res.json({ entity });
   }
 }
 
@@ -302,6 +303,30 @@ export class Test {
     }
 
     return ret;
+  }
+
+  async makeCrudTests(test, assert, options = {}) {
+    options = {
+      create: null,
+      update: null,
+      delete: null,
+      ...options,
+    };
+
+    let scope = {};
+
+    await Promise.all(
+      ["create", "update", "delete"].map(async (attr) => {
+        let option = options[attr];
+        if (option !== null && typeof option == "function") {
+          test(`Model ${attr}`, async (t) => {
+            const resp = await this.request(await option(scope));
+            assert.strictEqual(true, resp.success);
+            scope[attr] = resp;
+          });
+        }
+      })
+    );
   }
 
   async crud(options = {}) {
