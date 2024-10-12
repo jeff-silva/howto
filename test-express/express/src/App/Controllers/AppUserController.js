@@ -7,6 +7,6 @@ export default class AppUserController extends Controller {
   }
 
   routes(app) {
-    app.crud("/api/v1/user", AppUserController);
+    app.crud("/api/v1/app_user", AppUserController);
   }
 }

@@ -155,17 +155,22 @@ export class App {
   async test() {
     await this.preInit();
 
+    let callbacks = [];
     this.modules.map((module) => {
       Object.values(module.tests()).map((moduleTest) => {
         moduleTest = new moduleTest(this);
         Object.getOwnPropertyNames(Object.getPrototypeOf(moduleTest)).map(
           (method) => {
             if (!method.startsWith("test")) return;
-            moduleTest[method].call(moduleTest, { test, assert });
+            callbacks.push(async () => {
+              return await moduleTest[method]({ test, assert });
+            });
           }
         );
       });
     });
+
+    await Promise.all(callbacks.map(async (call) => await call()));
   }
 
   async init() {
@@ -278,13 +283,11 @@ export class Test {
       headers: options.headers,
     };
 
+    fetchOptions.headers["Accept"] = "application/json";
+    fetchOptions.headers["Content-Type"] = "application/json";
+
     if (["PUT", "POST"].includes(options.method)) {
       fetchOptions.body = JSON.stringify(options.data);
-      fetchOptions.headers = {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        ...options.headers,
-      };
     }
 
     let ret = {};
@@ -305,49 +308,26 @@ export class Test {
     return ret;
   }
 
-  async makeCrudTests(description, test, assert, options = {}) {
-    options = {
-      create: null,
-      update: null,
-      delete: null,
-      ...options,
-    };
-
+  async requestTests(description, test, assert, requests = {}) {
     let scope = {};
 
-    await Promise.all(
-      ["create", "update", "delete"].map(async (attr) => {
-        let option = options[attr];
-        if (option !== null && typeof option == "function") {
-          test(`${description} ${attr}`, async (t) => {
-            const resp = await this.request(await option(scope));
-            assert.strictEqual(true, resp.success);
-            scope[attr] = resp;
-          });
-        }
-      })
-    );
-  }
-
-  async crud(options = {}) {
-    options = {
-      create: (scope) => ({}),
-      update: (scope) => ({}),
-      delete: (scope) => ({}),
-      ...options,
+    const call = async (fn, ...args) => {
+      const r = fn(...args);
+      if (r instanceof Promise) return await r;
+      return r;
     };
 
-    let scope = {};
-    scope.create = await this.request(await options.create(scope));
-    // scope.update = await this.request(await options.update(scope));
-    // scope.delete = await this.request(await options.delete(scope));
+    for (let attr in requests) {
+      let request = await call(requests[attr], scope);
+      scope[attr] = await this.request(request);
+      scope[attr]["request"] = request;
 
-    console.log(JSON.stringify(scope, null, 2));
+      test(`${description} ${attr}`, async (t) => {
+        assert.strictEqual(true, scope[attr]["success"]);
+      });
+    }
 
-    return {
-      // create: !!scope.create.data.entity.id,
-      // update: !!scope.update.data.entity.id,
-      // delete: !!scope.delete.data.entity.id,
-    };
+    // console.log(JSON.stringify(scope, null, 2));
+    return scope;
   }
 }
