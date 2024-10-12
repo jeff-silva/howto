@@ -235,9 +235,15 @@ export class Controller {
   }
 
   async search(req, res) {
+    const page = parseInt(req.query.page || 1);
+    const per_page = parseInt(req.query.per_page || 10);
     const model = this.model();
-    const data = await model.findAll();
-    res.json({ data });
+    const data = await model.findAndCountAll({
+      offset: (page - 1) * per_page,
+      limit: per_page,
+    });
+    const pages = Math.ceil(data.count / per_page);
+    res.json({ page, per_page, pages, ...data });
   }
 
   async create(req, res) {
