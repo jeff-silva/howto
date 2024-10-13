@@ -28,7 +28,6 @@ AutoCar.init(
         return plate.toUpperCase();
       },
       validate: {
-        // notEmpty: true,
         required(value) {
           if (!value) throw new Error("Campo obrigatório");
         },
@@ -38,14 +37,18 @@ AutoCar.init(
       type: SequelizeDataTypes.STRING,
       allowNull: true,
       validate: {
-        // notEmpty: { msg: "Campo obrigatório" },
+        required(value) {
+          if (!value) throw new Error("Campo obrigatório");
+        },
       },
     },
     brand: {
       type: SequelizeDataTypes.STRING,
       allowNull: true,
       validate: {
-        // notEmpty: { msg: "Campo obrigatório" },
+        required(value) {
+          if (!value) throw new Error("Campo obrigatório");
+        },
       },
     },
   },

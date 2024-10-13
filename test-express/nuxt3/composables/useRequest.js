@@ -68,31 +68,37 @@ export default (options = {}) => {
     })
   );
 
-  options.method = options.method.toUpperCase();
   options.params = { ...params2, ...options.params };
   options.headers["Accept"] = "application/json";
   options.headers["Content-Type"] = "application/json";
 
   const r = reactive({
+    ...options,
     busy: false,
-    method: options.method,
-    url: options.url,
-    params: options.params,
-    data: options.data,
-    headers: options.headers,
     error: null,
-    response: options.response,
+
+    errorField(name) {
+      if (r.error === null) return [];
+      if (typeof r.error.errors[name] == "undefined") return [];
+      return r.error.errors[name];
+    },
+
+    errorClear() {
+      r.error = null;
+    },
 
     submit() {
       return new Promise(async (resolve, reject) => {
+        r.errorClear();
         r.error = null;
         r.busy = true;
+        r.method = r.method.toUpperCase();
 
-        options.onBeforeRequest();
+        r.onBeforeRequest();
 
         let fetchOpts = {
-          method: options.method,
-          headers: options.headers,
+          method: r.method,
+          headers: r.headers,
         };
 
         if (["POST", "PUT"].includes(r.method)) {
@@ -108,15 +114,16 @@ export default (options = {}) => {
           }
         }
 
+        console.log(fetchOpts);
         const resp = await fetch(url, fetchOpts);
 
         if (resp.status >= 200 && resp.status <= 299) {
           r.response = await resp.json();
-          options.onSuccess(r.response);
+          r.onSuccess(r.response);
           resolve(r.response);
         } else {
           r.error = await resp.json();
-          options.onError(r.error);
+          r.onError(r.error);
           reject(r.error);
         }
 
