@@ -24,16 +24,29 @@ AutoCar.init(
       type: SequelizeDataTypes.STRING,
       allowNull: true,
       get() {
-        return this.getDataValue("plate").toUpperCase();
+        const plate = this.getDataValue("plate") || "";
+        return plate.toUpperCase();
+      },
+      validate: {
+        // notEmpty: true,
+        required(value) {
+          if (!value) throw new Error("Campo obrigatório");
+        },
       },
     },
     color: {
       type: SequelizeDataTypes.STRING,
       allowNull: true,
+      validate: {
+        // notEmpty: { msg: "Campo obrigatório" },
+      },
     },
     brand: {
       type: SequelizeDataTypes.STRING,
       allowNull: true,
+      validate: {
+        // notEmpty: { msg: "Campo obrigatório" },
+      },
     },
   },
   {

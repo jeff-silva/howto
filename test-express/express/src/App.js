@@ -228,43 +228,73 @@ export class Controller {
     //
   }
 
+  success(req, res, data = {}) {
+    res.json({ success: true, ...data });
+  }
+
+  error(req, res, err) {
+    let data = { error: err.message };
+    if (err.constructor.name == "ValidationError") {
+      data.errors = {};
+      err.errors.map((e) => {
+        if (typeof data.errors[e.path] == "undefined") {
+          data.errors[e.path] = [];
+        }
+        data.errors[e.path].push(e.message);
+      });
+    }
+    res.status(500).json({ success: false, status: 500, ...data });
+  }
+
   async select(req, res) {
     const model = this.model();
     const entity = await model.findByPk(req.params.id);
-    res.json({ entity });
+    this.success(req, res, { entity });
   }
 
   async search(req, res) {
-    const page = parseInt(req.query.page || 1);
-    const per_page = parseInt(req.query.per_page || 10);
-    const model = this.model();
-    const data = await model.findAndCountAll({
-      offset: (page - 1) * per_page,
-      limit: per_page,
-    });
-    const pages = Math.ceil(data.count / per_page);
-    res.json({ page, per_page, pages, ...data });
+    try {
+      const page = parseInt(req.query.page || 1);
+      const per_page = parseInt(req.query.per_page || 10);
+      const model = this.model();
+      const data = await model.findAndCountAll({
+        offset: (page - 1) * per_page,
+        limit: per_page,
+      });
+      const pages = Math.ceil(data.count / per_page);
+      this.success(req, res, { page, per_page, pages, ...data });
+    } catch (err) {
+      //
+    }
   }
 
   async create(req, res) {
-    const model = this.model();
-    const entity = await model.create(req.body);
-    res.json({ entity });
+    try {
+      const model = this.model();
+      const entity = await model.create(req.body);
+      this.success(req, res, { entity });
+    } catch (err) {
+      this.error(req, res, err);
+    }
   }
 
   async update(req, res) {
-    const model = this.model();
-    const entity = await model.findByPk(req.params.id);
-    entity.set(req.body);
-    entity.save();
-    res.json({ entity });
+    try {
+      const model = this.model();
+      const entity = await model.findByPk(req.params.id);
+      entity.set(req.body);
+      await entity.save();
+      this.success(req, res, { entity });
+    } catch (err) {
+      this.error(req, res, err);
+    }
   }
 
   async delete(req, res) {
     const model = this.model();
     const entity = await model.findByPk(req.params.id);
     entity.destroy();
-    res.json({ entity });
+    this.success(req, res, { entity });
   }
 }
 

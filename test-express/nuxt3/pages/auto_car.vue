@@ -145,6 +145,8 @@
         </div>
       </v-form>
     </v-navigation-drawer>
+    <pre>autoCarCreate: {{ autoCarCreate }}</pre>
+    <pre>autoCarUpdate: {{ autoCarUpdate }}</pre>
   </v-container>
 </template>
 

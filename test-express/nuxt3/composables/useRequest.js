@@ -73,7 +73,7 @@ export default (options = {}) => {
   options.headers["Accept"] = "application/json";
   options.headers["Content-Type"] = "application/json";
 
-  return reactive({
+  const r = reactive({
     busy: false,
     method: options.method,
     url: options.url,
@@ -85,46 +85,45 @@ export default (options = {}) => {
 
     submit() {
       return new Promise(async (resolve, reject) => {
-        this.error = null;
-        this.busy = true;
+        r.error = null;
+        r.busy = true;
 
         options.onBeforeRequest();
 
-        try {
-          let fetchOpts = {
-            method: options.method,
-            headers: options.headers,
-          };
+        let fetchOpts = {
+          method: options.method,
+          headers: options.headers,
+        };
 
-          if (["POST", "PUT"].includes(this.method)) {
-            fetchOpts.body = JSON.stringify(this.data);
-          }
-
-          let url = this.url;
-          if (["GET"].includes(this.method)) {
-            const queryString =
-              "?" + new URLSearchParams(this.params).toString();
-            url = u.href + queryString;
-            if (u.search) {
-              url = u.href.replace(u.search, queryString);
-            }
-          }
-
-          const resp = await fetch(url, fetchOpts);
-          this.response = await resp.json();
-          options.onSuccess(this.response);
-          resolve(this.response);
-        } catch (err) {
-          this.error = {
-            code: null,
-            message: err.message,
-          };
-          options.onError(this.error);
-          reject(this.response);
+        if (["POST", "PUT"].includes(r.method)) {
+          fetchOpts.body = JSON.stringify(r.data);
         }
 
-        this.busy = false;
+        let url = r.url;
+        if (["GET"].includes(r.method)) {
+          const queryString = "?" + new URLSearchParams(r.params).toString();
+          url = u.href + queryString;
+          if (u.search) {
+            url = u.href.replace(u.search, queryString);
+          }
+        }
+
+        const resp = await fetch(url, fetchOpts);
+
+        if (resp.status >= 200 && resp.status <= 299) {
+          r.response = await resp.json();
+          options.onSuccess(r.response);
+          resolve(r.response);
+        } else {
+          r.error = await resp.json();
+          options.onError(r.error);
+          reject(r.error);
+        }
+
+        r.busy = false;
       });
     },
   });
+
+  return r;
 };
