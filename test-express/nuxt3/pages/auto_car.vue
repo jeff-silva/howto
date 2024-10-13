@@ -84,9 +84,10 @@
       v-model="autoCarDialog.visible"
       width="600"
     >
-      <div
+      <v-form
         class="d-flex flex-column pa-2 ga-3 h-100 border"
         v-if="autoCarDialog.data"
+        @submit.prevent="autoCarDialog.save()"
       >
         <div class="flex-grow-1 overflow-auto">
           <br />
@@ -138,11 +139,11 @@
           <v-btn
             text="Salvar"
             color="primary"
+            type="submit"
             :loading="autoCarCreate.busy || autoCarUpdate.busy"
-            @click="autoCarDialog.save()"
           />
         </div>
-      </div>
+      </v-form>
     </v-navigation-drawer>
   </v-container>
 </template>
