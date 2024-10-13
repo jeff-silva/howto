@@ -14,10 +14,18 @@ AutoCar.init(
     name: {
       type: SequelizeDataTypes.STRING,
       allowNull: true,
+      get() {
+        const brand = this.getDataValue("brand") || "";
+        const plate = this.getDataValue("plate") || "";
+        return `${brand} - ${plate}`;
+      },
     },
     plate: {
       type: SequelizeDataTypes.STRING,
       allowNull: true,
+      get() {
+        return this.getDataValue("plate").toUpperCase();
+      },
     },
     color: {
       type: SequelizeDataTypes.STRING,

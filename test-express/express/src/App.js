@@ -256,6 +256,7 @@ export class Controller {
     const model = this.model();
     const entity = await model.findByPk(req.params.id);
     entity.set(req.body);
+    entity.save();
     res.json({ entity });
   }
 

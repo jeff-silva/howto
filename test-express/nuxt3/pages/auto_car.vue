@@ -1,35 +1,44 @@
 <template>
   <v-container>
+    <div class="d-flex justify-end">
+      <v-btn
+        text="Criar"
+        color="primary"
+        @click="autoCarDialog.setData({}).show()"
+      />
+    </div>
+    <br />
+
     <v-table class="border">
       <colgroup>
-        <col width="10px" />
+        <col width="*" />
         <col width="80px" />
-        <col width="200px" />
-        <col width="*" />
-        <col width="*" />
+        <col width="140px" />
       </colgroup>
       <thead>
         <tr>
-          <th>ID</th>
+          <th>Nome</th>
           <th>Cor</th>
-          <th>Placa</th>
-          <th>Marca</th>
-          <th>Ações</th>
+          <th></th>
         </tr>
       </thead>
 
       <tbody>
-        <template v-for="o in carList.response.rows">
+        <template v-for="o in autoCarSearch.response.rows">
           <tr>
-            <td>{{ o.id }}</td>
+            <td>{{ o.name }}</td>
             <td><div :style="`height:20px; background:${o.color};`"></div></td>
-            <td>{{ o.plate }}</td>
-            <td>{{ o.brand }}</td>
             <td>
               <v-btn
                 icon="material-symbols:edit"
                 variant="text"
-                @click="carEditDialog.setData(o).show()"
+                @click="autoCarDialog.setData(o).show()"
+              ></v-btn>
+              <v-btn
+                icon="material-symbols:delete"
+                color="error"
+                variant="text"
+                @click="autoCarDeleteHandler(o)"
               ></v-btn>
             </td>
           </tr>
@@ -37,19 +46,20 @@
       </tbody>
     </v-table>
 
+    <br />
     <div class="d-flex align-center ga-3">
       <div class="flex-grow-1">
         <v-pagination
-          v-model="carList.params.page"
-          :length="carList.response.pages || 0"
-          @update:modelValue="carList.submit()"
+          v-model="autoCarSearch.params.page"
+          :length="autoCarSearch.response.pages || 0"
+          @update:modelValue="autoCarSearch.submit()"
         />
       </div>
 
       <div style="min-width: 200px">
         <v-select
           label="Exibir"
-          v-model="carList.params.per_page"
+          v-model="autoCarSearch.params.per_page"
           density="compact"
           :hide-details="true"
           :items="[
@@ -57,7 +67,7 @@
             { value: 10, title: '10 ítens' },
             { value: 20, title: '20 ítens' },
           ]"
-          @update:modelValue="carList.submit()"
+          @update:modelValue="autoCarSearch.submit()"
         />
       </div>
 
@@ -65,46 +75,49 @@
         icon="mdi-home"
         variant="text"
         rounded="0"
-        :loading="carList.busy"
-        @click="carList.submit()"
+        :loading="autoCarSearch.busy"
+        @click="autoCarSearch.submit()"
       />
     </div>
 
     <v-navigation-drawer
-      v-model="carEditDialog.visible"
+      v-model="autoCarDialog.visible"
       width="600"
     >
       <div
         class="d-flex flex-column pa-2 ga-3 h-100 border"
-        v-if="carEditDialog.data"
+        v-if="autoCarDialog.data"
       >
         <div class="flex-grow-1 overflow-auto">
+          <br />
           <v-text-field
             label="Placa"
-            v-model="carEditDialog.data.plate"
+            v-model="autoCarDialog.data.plate"
           />
 
           <v-menu
             :close-on-content-click="false"
             offset="10"
+            width="200"
           >
             <template #activator="bind">
               <v-btn
                 block
-                :color="carEditDialog.data.color"
+                :color="autoCarDialog.data.color || 'primary'"
+                :text="autoCarDialog.data.color || 'Vazio'"
                 v-bind="bind.props"
               />
               <br />
             </template>
             <v-color-picker
               label="Cor"
-              v-model="carEditDialog.data.color"
+              v-model="autoCarDialog.data.color"
             />
           </v-menu>
 
           <v-autocomplete
             label="Marca"
-            v-model="carEditDialog.data.brand"
+            v-model="autoCarDialog.data.brand"
             :items="[
               'Chevrolet',
               'Dodge',
@@ -120,20 +133,22 @@
               'Volvo',
             ]"
           />
-          <pre>{{ carEditDialog }}</pre>
         </div>
-        <div class="border">Aaa</div>
-        <!-- <pre>carEditDialog: {{ carEditDialog }}</pre> -->
+        <div class="d-flex justify-end">
+          <v-btn
+            text="Salvar"
+            color="primary"
+            :loading="autoCarCreate.busy || autoCarUpdate.busy"
+            @click="autoCarDialog.save()"
+          />
+        </div>
       </div>
     </v-navigation-drawer>
-
-    <!-- <pre>carList: {{ carList }}</pre> -->
-    <pre>carEdit: {{ carEdit }}</pre>
   </v-container>
 </template>
 
 <script setup>
-const carList = useRequest({
+const autoCarSearch = useRequest({
   method: "get",
   url: "http://localhost:3000/api/v1/auto_car",
   params: {
@@ -143,13 +158,54 @@ const carList = useRequest({
   response: { rows: [] },
 });
 
-const carEdit = useRequest({
+const autoCarCreate = useRequest({
+  method: "post",
   url: "http://localhost:3000/api/v1/auto_car",
+  async onSuccess() {
+    await autoCarSearch.submit();
+    autoCarDialog.hide();
+  },
 });
 
-const carEditDialog = useDialog();
+const autoCarUpdate = useRequest({
+  method: "put",
+  url: "http://localhost:3000/api/v1/auto_car/0",
+  async onSuccess() {
+    await autoCarSearch.submit();
+    autoCarDialog.hide();
+  },
+});
+
+const autoCarDialog = useDialog({
+  async save() {
+    if (this.data.id) {
+      autoCarUpdate.url = `http://localhost:3000/api/v1/auto_car/${this.data.id}`;
+      autoCarUpdate.data = this.data;
+      autoCarUpdate.submit();
+      return;
+    }
+
+    autoCarCreate.data = this.data;
+    autoCarCreate.submit();
+  },
+});
+
+const autoCarDelete = useRequest({
+  method: "delete",
+  url: "http://localhost:3000/api/v1/auto_car/0",
+  async onSuccess() {
+    await autoCarSearch.submit();
+    autoCarDialog.hide();
+  },
+});
+
+const autoCarDeleteHandler = (row) => {
+  if (!confirm(`Deletar veículo #${row.id}?`)) return;
+  autoCarDelete.url = `http://localhost:3000/api/v1/auto_car/${row.id}`;
+  return autoCarDelete.submit();
+};
 
 onMounted(() => {
-  carList.submit();
+  autoCarSearch.submit();
 });
 </script>

@@ -1,6 +1,7 @@
 export default (options = {}) => {
   return reactive({
-    visible: true,
+    visible: false,
+    ...options,
     toggle() {
       return this.visible ? this.hide() : this.show();
     },

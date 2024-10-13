@@ -70,6 +70,8 @@ export default (options = {}) => {
 
   options.method = options.method.toUpperCase();
   options.params = { ...params2, ...options.params };
+  options.headers["Accept"] = "application/json";
+  options.headers["Content-Type"] = "application/json";
 
   return reactive({
     busy: false,
@@ -98,10 +100,14 @@ export default (options = {}) => {
             fetchOpts.body = JSON.stringify(this.data);
           }
 
-          const queryString = "?" + new URLSearchParams(this.params).toString();
-          let url = u.href + queryString;
-          if (u.search) {
-            url = u.href.replace(u.search, queryString);
+          let url = this.url;
+          if (["GET"].includes(this.method)) {
+            const queryString =
+              "?" + new URLSearchParams(this.params).toString();
+            url = u.href + queryString;
+            if (u.search) {
+              url = u.href.replace(u.search, queryString);
+            }
           }
 
           const resp = await fetch(url, fetchOpts);
