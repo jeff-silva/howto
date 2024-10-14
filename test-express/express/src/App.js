@@ -138,14 +138,16 @@ export class App {
 
     let promises = [];
 
-    // Drop tables
-    tables.map((item) => {
-      promises.push(async () => {
-        const sql = `drop table ${item.table.name}`;
-        console.log({ sql });
-        return await this.sequelize.query(sql);
-      });
-    });
+    // // Drop tables
+    // tables.map((item) => {
+    //   promises.push(async () => {
+    //     try {
+    //       const sql = `drop table ${item.table.name}`;
+    //       console.log({ sql });
+    //       return await this.sequelize.query(sql);
+    //     } catch (err) {}
+    //   });
+    // });
 
     promises.push(
       () =>
