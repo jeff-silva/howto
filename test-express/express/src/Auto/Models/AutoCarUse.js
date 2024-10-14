@@ -32,46 +32,49 @@ AutoCarUse.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    name: {
-      type: SequelizeDataTypes.STRING,
+    // name: {
+    //   type: SequelizeDataTypes.STRING,
+    //   allowNull: true,
+    // },
+    driver_id: {
+      type: SequelizeDataTypes.INTEGER,
       allowNull: true,
+      references: { key: "id", model: AutoDriver },
+      // validate: {
+      //   required(value) {
+      //     if (!value) throw new Error("Campo obrigatório");
+      //   },
+      // },
+    },
+    car_id: {
+      type: SequelizeDataTypes.INTEGER,
+      allowNull: true,
+      references: { key: "id", model: AutoCar },
+      // validate: {
+      //   required(value) {
+      //     if (!value) throw new Error("Campo obrigatório");
+      //   },
+      // },
     },
     use_start: {
       type: SequelizeDataTypes.DATE,
       allowNull: true,
-      validate: {
-        required(value) {
-          if (!value) throw new Error("Campo obrigatório");
-        },
-      },
+      // validate: {
+      //   required(value) {
+      //     if (!value) throw new Error("Campo obrigatório");
+      //   },
+      // },
     },
     use_final: {
       type: SequelizeDataTypes.DATE,
       allowNull: true,
-      validate: {
-        required(value) {
-          if (!value) throw new Error("Campo obrigatório");
-        },
-      },
+      // validate: {
+      //   required(value) {
+      //     if (!value) throw new Error("Campo obrigatório");
+      //   },
+      // },
     },
-    driver_id: {
-      type: SequelizeDataTypes.INTEGER,
-      references: { key: "id", model: AutoDriver },
-      validate: {
-        required(value) {
-          if (!value) throw new Error("Campo obrigatório");
-        },
-      },
-    },
-    car_id: {
-      type: SequelizeDataTypes.INTEGER,
-      references: { key: "id", model: AutoCar },
-      validate: {
-        required(value) {
-          if (!value) throw new Error("Campo obrigatório");
-        },
-      },
-    },
+
     observation: {
       type: SequelizeDataTypes.STRING,
       allowNull: true,
@@ -80,7 +83,7 @@ AutoCarUse.init(
   {
     sequelize,
     tableName: "auto_car_use",
-    modelName: "AutoCarUse",
+    modelName: "auto_car_use",
     timestamps: true,
     createdAt: "created_at",
     updatedAt: "updated_at",
@@ -91,17 +94,14 @@ AutoCarUse.init(
   }
 );
 
-// AutoDriver.belongsTo(AutoCarUse);
-// AutoCar.belongsTo(AutoCarUse);
-
-// AutoDriver.hasOne(AutoCarUse, {
+// AutoCarUse.belongsTo(AutoDriver, {
 //   type: SequelizeDataTypes.INTEGER,
 //   foreignKey: "id",
 //   onDelete: "RESTRICT",
 //   onUpdate: "RESTRICT",
 // });
 
-// AutoCar.hasOne(AutoCarUse, {
+// AutoCarUse.belongsTo(AutoCar, {
 //   type: SequelizeDataTypes.INTEGER,
 //   foreignKey: "id",
 //   onDelete: "RESTRICT",

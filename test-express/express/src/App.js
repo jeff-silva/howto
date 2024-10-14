@@ -141,15 +141,25 @@ export class App {
     // Drop tables
     tables.map((item) => {
       promises.push(async () => {
-        return await this.sequelize.query(`drop table ${item.table.name}`);
+        const sql = `drop table ${item.table.name}`;
+        console.log({ sql });
+        return await this.sequelize.query(sql);
       });
     });
+
+    promises.push(
+      () =>
+        new Promise((resolve, reject) => {
+          setTimeout(() => resolve(), 1000);
+        })
+    );
 
     // Create tables
     this.modules.map((module) => {
       Object.values(module.models()).map((model) => {
         promises.push(async () => {
-          return await model.sync();
+          // return await model.sync({ force: true, alter: true });
+          return await model.sync({});
         });
       });
     });
@@ -288,7 +298,7 @@ export class Controller {
       req,
       res,
       await model.findAll({
-        include: this.searchInclude(),
+        // include: this.searchInclude(),
       })
     );
   }

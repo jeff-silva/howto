@@ -64,7 +64,7 @@ AutoCar.init(
   {
     sequelize,
     tableName: "auto_car",
-    modelName: "AutoCar",
+    modelName: "auto_car",
     timestamps: true,
     createdAt: "created_at",
     updatedAt: "updated_at",
