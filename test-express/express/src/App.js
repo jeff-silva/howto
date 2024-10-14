@@ -1,3 +1,5 @@
+import fs from "fs/promises";
+
 import test from "node:test";
 import assert from "node:assert";
 
@@ -133,8 +135,7 @@ export class App {
   }
 
   async install() {
-    let tables = await this.databaseSchema();
-    this.sequelize.sync();
+    // await fs.unlink(this.sequelize.options.storage);
 
     let promises = [];
 
@@ -149,33 +150,40 @@ export class App {
     //   });
     // });
 
-    promises.push(
-      () =>
-        new Promise((resolve, reject) => {
-          setTimeout(() => resolve(), 1000);
-        })
-    );
-
     // Create tables
-    this.modules.map((module) => {
-      Object.values(module.models()).map((model) => {
-        promises.push(async () => {
-          // return await model.sync({ force: true, alter: true });
-          return await model.sync({});
-        });
-      });
+    promises.push(async () => {
+      await this.sequelize.sync();
+      return `create tables`;
     });
+
+    // // Create tables
+    // this.modules.map((module) => {
+    //   Object.values(module.models()).map((model) => {
+    //     promises.push(async () => {
+    //       // await sequelize.query("PRAGMA foreign_keys = true;");
+    //       // return await model.sync({ force: true, alter: true });
+    //       await model.sync();
+    //       // await sequelize.query("PRAGMA foreign_keys = false;");
+    //       return `table sync: ${model.name}`;
+    //     });
+    //   });
+    // });
 
     // Seed tables
     this.modules.map((module) => {
       Object.values(module.models()).map((model) => {
         promises.push(async () => {
-          return await new model().onSeed();
+          await new model().onSeed();
+          return `table seed: ${model.name}`;
         });
       });
     });
 
-    await Promise.all(promises.map(async (promise) => await promise()));
+    const results = await Promise.all(
+      promises.map(async (promise) => await promise())
+    );
+    console.log(results);
+    // let tables = await this.databaseSchema();
   }
 
   async test() {

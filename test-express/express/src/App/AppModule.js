@@ -9,7 +9,9 @@ export default class AppModule extends Module {
   // }
 
   controllers() {
-    return { AppUserController };
+    return {
+      // AppUserController,
+    };
   }
 
   models() {

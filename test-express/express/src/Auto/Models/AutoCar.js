@@ -3,11 +3,19 @@ import { Model, sequelize, SequelizeDataTypes } from "../../App.js";
 class AutoCar extends Model {
   async onSeed() {
     await AutoCar.findOrCreate({
-      where: { plate: "ABC0D12" },
+      where: { id: 1 },
       defaults: {
-        plate: "ABC0D12",
+        plate: "ABC0D01",
         color: "#ffffff",
         brand: "Volkswagen",
+      },
+    });
+    await AutoCar.findOrCreate({
+      where: { id: 2 },
+      defaults: {
+        plate: "ABC0D02",
+        color: "#ffffff",
+        brand: "Fiat",
       },
     });
   }
