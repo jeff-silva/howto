@@ -12,14 +12,16 @@
 
       <v-table class="border">
         <colgroup>
+          <col width="200px" />
+          <col width="300px" />
           <col width="*" />
-          <col width="80px" />
           <col width="10px" />
         </colgroup>
         <thead>
           <tr>
-            <th>Nome</th>
-            <th>Cor</th>
+            <th>Motorista</th>
+            <th>Veículo</th>
+            <th>Utilização</th>
             <th></th>
           </tr>
         </thead>
@@ -27,10 +29,9 @@
         <tbody>
           <template v-for="o in autoCarUseSearch.response.rows">
             <tr>
-              <td>{{ o.name }}</td>
-              <td>
-                <div :style="`height:20px; background:${o.color};`"></div>
-              </td>
+              <td>{{ o.auto_driver?.name || null }}</td>
+              <td>{{ o.auto_car?.name || null }}</td>
+              <td>xxx ~ xxx</td>
               <td>
                 <v-table-actions>
                   <v-btn
@@ -148,8 +149,6 @@
                 v-model="autoCarDialog.data.observation"
                 :error-messages="autoCarUseSave.errorField('observation')"
               />
-
-              <pre>autoCarDialog: {{ autoCarDialog }}</pre>
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -162,9 +161,6 @@
           </v-card>
         </v-form>
       </v-dialog>
-      <!-- <pre>autoCarSearch.response.rows: {{ autoCarSearch.response.rows }}</pre> -->
-      <!-- <pre>autoDriverSearch.response.rows: {{ autoDriverSearch.response.rows }}</pre> -->
-      <!-- <pre>autoCarUseSave: {{ autoCarUseSave }}</pre> -->
     </v-container>
   </nuxt-layout>
 </template>
