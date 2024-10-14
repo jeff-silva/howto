@@ -296,21 +296,21 @@ export class Controller {
     const per_page = parseInt(req.query.per_page || 10);
     const model = this.model();
 
-    // const data = await model.findAndCountAll({
-    //   include: this.searchInclude(),
-    //   offset: (page - 1) * per_page,
-    //   limit: per_page,
-    // });
-    // const pages = Math.ceil(data.count / per_page);
-    // this.success(req, res, { page, per_page, pages, ...data });
+    const data = await model.findAndCountAll({
+      include: this.searchInclude(),
+      offset: (page - 1) * per_page,
+      limit: per_page,
+    });
+    const pages = Math.ceil(data.count / per_page);
+    this.success(req, res, { page, per_page, pages, ...data });
 
-    this.success(
-      req,
-      res,
-      await model.findAll({
-        // include: this.searchInclude(),
-      })
-    );
+    // this.success(
+    //   req,
+    //   res,
+    //   await model.findAll({
+    //     include: this.searchInclude(),
+    //   })
+    // );
   }
 
   async create(req, res) {
