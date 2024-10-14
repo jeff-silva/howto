@@ -14,8 +14,8 @@ export default class AutoCarUseController extends Controller {
 
   searchInclude() {
     // return [{ model: AutoCar }];
-    // return AutoCar;
+    return [AutoDriver, AutoCar];
     // return "AutoCar";
-    return [];
+    // return [];
   }
 }

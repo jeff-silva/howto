@@ -16,8 +16,8 @@ class AutoCarUse extends Model {
     await AutoCarUse.findOrCreate({
       where: { id: 2 },
       defaults: {
-        driver_id: 1,
-        car_id: 1,
+        driver_id: 2,
+        car_id: 2,
         use_start: "2024-01-01 00:00:00",
         use_final: "2024-01-15 00:00:00",
       },
@@ -32,10 +32,6 @@ AutoCarUse.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    // name: {
-    //   type: SequelizeDataTypes.STRING,
-    //   allowNull: true,
-    // },
     driver_id: {
       type: SequelizeDataTypes.INTEGER,
       allowNull: true,
@@ -100,18 +96,26 @@ AutoCarUse.init(
   }
 );
 
-AutoCarUse.hasOne(AutoDriver, {
+AutoCarUse.belongsTo(AutoDriver, {
   foreignKey: "driver_id",
-  model: AutoDriver,
   onDelete: "SET NULL",
   onUpdate: "SET NULL",
 });
 
-AutoCarUse.hasOne(AutoCar, {
+AutoCarUse.belongsTo(AutoCar, {
   foreignKey: "car_id",
-  model: AutoCar,
   onDelete: "SET NULL",
   onUpdate: "SET NULL",
 });
+
+// AutoCarUse.hasOne(AutoCar, {
+//   foreignKey: "car_id",
+//   // model: AutoCar,
+//   onDelete: "SET NULL",
+//   onUpdate: "SET NULL",
+// });
+
+// AutoDriver.belongsTo(AutoCarUse);
+// AutoCar.belongsTo(AutoCarUse);
 
 export default AutoCarUse;

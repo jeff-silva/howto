@@ -152,7 +152,7 @@ export class App {
 
     // Create tables
     promises.push(async () => {
-      await this.sequelize.sync();
+      await this.sequelize.sync({ force: true, alter: true });
       return `create tables`;
     });
 
@@ -169,6 +169,14 @@ export class App {
     //   });
     // });
 
+    promises.push(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(`wait`);
+        }, 2000);
+      });
+    });
+
     // Seed tables
     this.modules.map((module) => {
       Object.values(module.models()).map((model) => {
@@ -180,7 +188,9 @@ export class App {
     });
 
     const results = await Promise.all(
-      promises.map(async (promise) => await promise())
+      promises.map(async (promise) => {
+        return await promise();
+      })
     );
     console.log(results);
     // let tables = await this.databaseSchema();
@@ -204,7 +214,11 @@ export class App {
       });
     });
 
-    await Promise.all(callbacks.map(async (call) => await call()));
+    await Promise.all(
+      callbacks.map(async (call) => {
+        return await call();
+      })
+    );
   }
 
   async init() {
