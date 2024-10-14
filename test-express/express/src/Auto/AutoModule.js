@@ -19,7 +19,7 @@ export default class AutoModule extends Module {
   }
 
   models() {
-    return { AutoCar, AutoCarUse, AutoDriver };
+    return { AutoCar, AutoDriver, AutoCarUse };
   }
 
   tests() {

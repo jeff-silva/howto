@@ -72,7 +72,7 @@
         </div>
 
         <v-btn
-          icon="mdi-home"
+          icon="material-symbols:search-rounded"
           variant="text"
           rounded="0"
           :loading="autoDriverSearch.busy"

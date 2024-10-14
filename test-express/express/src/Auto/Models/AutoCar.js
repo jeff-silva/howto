@@ -1,7 +1,16 @@
 import { Model, sequelize, SequelizeDataTypes } from "../../App.js";
 
 class AutoCar extends Model {
-  //
+  async onSeed() {
+    await AutoCar.findOrCreate({
+      where: { plate: "ABC0D12" },
+      defaults: {
+        plate: "ABC0D12",
+        color: "#ffffff",
+        brand: "Volkswagen",
+      },
+    });
+  }
 }
 
 AutoCar.init(

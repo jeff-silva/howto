@@ -114,7 +114,6 @@ export default (options = {}) => {
           }
         }
 
-        console.log(fetchOpts);
         const resp = await fetch(url, fetchOpts);
 
         if (resp.status >= 200 && resp.status <= 299) {

@@ -1,7 +1,12 @@
 import { Model, sequelize, SequelizeDataTypes } from "../../App.js";
 
 class AutoDriver extends Model {
-  //
+  async onSeed() {
+    await AutoDriver.findOrCreate({
+      where: { name: "Maria" },
+      defaults: { plate: "Maria" },
+    });
+  }
 }
 
 AutoDriver.init(

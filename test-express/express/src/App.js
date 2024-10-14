@@ -13,6 +13,7 @@ export const sequelize = new Sequelize.Sequelize({
   host: "localhost",
   dialect: "sqlite",
   storage: "database.sqlite",
+  transactionType: "IMMEDIATE",
 });
 
 // import configApp from "../config/app.js";
@@ -73,6 +74,7 @@ export class App {
     ) {
       this.sequelize = new Sequelize.Sequelize({
         logging: false,
+        transactionType: "IMMEDIATE",
         ...this.config.sequelizeConfig,
       });
     }
@@ -111,23 +113,11 @@ export class App {
     const configApp = (await import("../config/app.js")).default;
     this.modules = configApp.modules.map((module) => new module(this));
 
-    // let tables = await this.databaseSchema();
-
-    // this.sequelize.sync();
-
-    // // Drop tables
-    // await Promise.all(
-    //   tables.map(async (item) => {
-    //     await this.sequelize.query(`drop table ${item.table.name}`);
-    //   })
-    // );
-
     // Make tables
     await Promise.all(
       this.modules.map(async (module) => {
         await Promise.all(
           Object.values(module.models()).map(async (model) => {
-            // await model.sync({ force: true, alter: true });
             await model.sync();
           })
         );
@@ -140,16 +130,40 @@ export class App {
         new controller().routes(this.express);
       });
     });
+  }
 
-    // tables = await this.databaseSchema();
-    // tables.map((item) => {
-    //   console.log("");
-    //   console.log(item.table.name);
-    //   item.fields.map((field) => {
-    //     console.log(`- ${field.name} ${field.type}`);
-    //   });
-    // });
-    // console.log("");
+  async install() {
+    let tables = await this.databaseSchema();
+    this.sequelize.sync();
+
+    let promises = [];
+
+    // Drop tables
+    tables.map((item) => {
+      promises.push(async () => {
+        return await this.sequelize.query(`drop table ${item.table.name}`);
+      });
+    });
+
+    // Create tables
+    this.modules.map((module) => {
+      Object.values(module.models()).map((model) => {
+        promises.push(async () => {
+          return await model.sync();
+        });
+      });
+    });
+
+    // Seed tables
+    this.modules.map((module) => {
+      Object.values(module.models()).map((model) => {
+        promises.push(async () => {
+          return await new model().onSeed();
+        });
+      });
+    });
+
+    await Promise.all(promises.map(async (promise) => await promise()));
   }
 
   async test() {
@@ -175,6 +189,7 @@ export class App {
 
   async init() {
     await this.preInit();
+    await this.install();
 
     this.express.listen(3000, () => {
       console.log(`App listening on port 3000`);
@@ -214,7 +229,7 @@ export class Module {
 }
 
 export class Model extends Sequelize.Model {
-  //
+  async onSeed() {}
 }
 
 export class Controller {
@@ -252,20 +267,30 @@ export class Controller {
     this.success(req, res, { entity });
   }
 
+  searchInclude() {
+    return [];
+  }
+
   async search(req, res) {
-    try {
-      const page = parseInt(req.query.page || 1);
-      const per_page = parseInt(req.query.per_page || 10);
-      const model = this.model();
-      const data = await model.findAndCountAll({
-        offset: (page - 1) * per_page,
-        limit: per_page,
-      });
-      const pages = Math.ceil(data.count / per_page);
-      this.success(req, res, { page, per_page, pages, ...data });
-    } catch (err) {
-      //
-    }
+    const page = parseInt(req.query.page || 1);
+    const per_page = parseInt(req.query.per_page || 10);
+    const model = this.model();
+
+    // const data = await model.findAndCountAll({
+    //   include: this.searchInclude(),
+    //   offset: (page - 1) * per_page,
+    //   limit: per_page,
+    // });
+    // const pages = Math.ceil(data.count / per_page);
+    // this.success(req, res, { page, per_page, pages, ...data });
+
+    this.success(
+      req,
+      res,
+      await model.findAll({
+        include: this.searchInclude(),
+      })
+    );
   }
 
   async create(req, res) {

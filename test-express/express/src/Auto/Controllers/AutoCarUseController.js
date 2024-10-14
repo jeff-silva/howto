@@ -1,5 +1,7 @@
 import { Controller } from "../../App.js";
 import AutoCarUse from "../Models/AutoCarUse.js";
+import AutoDriver from "../Models/AutoDriver.js";
+import AutoCar from "../Models/AutoCar.js";
 
 export default class AutoCarUseController extends Controller {
   model() {
@@ -8,5 +10,11 @@ export default class AutoCarUseController extends Controller {
 
   routes(app) {
     app.crud("/api/v1/auto_car_use", this);
+  }
+
+  searchInclude() {
+    return [{ model: AutoCar }];
+    // return AutoCar;
+    // return "AutoCar";
   }
 }

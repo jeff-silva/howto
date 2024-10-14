@@ -13,10 +13,14 @@ export default class AppModule extends Module {
   }
 
   models() {
-    return { AppUser };
+    return {
+      // AppUser,
+    };
   }
 
   tests() {
-    return { AppUserTest };
+    return {
+      // AppUserTest,
+    };
   }
 }

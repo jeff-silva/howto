@@ -54,8 +54,9 @@
 <script setup>
 const navItems = [
   { title: "Dashboard", to: "/" },
-  { title: "Veículos", to: "/auto_car" },
   { title: "Motoristas", to: "/auto_driver" },
+  { title: "Veículos", to: "/auto_car" },
+  { title: "Utilização de veículos", to: "/auto_car_use" },
 ];
 
 const drawer = useDialog({ visible: false });
