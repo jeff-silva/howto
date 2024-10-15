@@ -29,7 +29,7 @@
         <tbody>
           <template v-for="o in autoCarUseSearch.response.rows">
             <tr>
-              <td>{{ o.auto_driver?.name || null }}</td>
+              <td>#{{ o.id }} - {{ o.auto_driver?.name || null }}</td>
               <td>{{ o.auto_car?.name || null }}</td>
               <td>{{ f.date(o.use_start) }} ~ {{ f.date(o.use_final) }}</td>
               <td>
@@ -38,7 +38,7 @@
                     icon="material-symbols:delete"
                     color="error"
                     variant="text"
-                    @click="autoCarDeleteHandler(o)"
+                    @click="autoCarUseDeleteHandler(o)"
                   />
                   <v-btn
                     icon="material-symbols:edit"
@@ -114,35 +114,13 @@
                 item-value="id"
               />
 
-              <v-menu :close-on-content-click="false">
-                <template #activator="bind">
-                  <div
-                    class="d-flex ga-3"
-                    v-bind="bind.props"
-                  >
-                    <v-text-field
-                      label="Início da utilização"
-                      v-model="autoCarDialog.data.use_start"
-                      :error-messages="autoCarUseSave.errorField('use_start')"
-                    />
-                    <v-text-field
-                      label="Fim da utilização"
-                      v-model="autoCarDialog.data.use_final"
-                      :error-messages="autoCarUseSave.errorField('use_final')"
-                    />
-                  </div>
-                </template>
-                <v-date-picker
-                  multiple="range"
-                  @update:model-value="
-                    (dates) => {
-                      if (dates.length <= 1) return;
-                      autoCarDialog.data.use_start = dates.at(0);
-                      autoCarDialog.data.use_final = dates.at(-1);
-                    }
-                  "
-                />
-              </v-menu>
+              <v-date-picker-range
+                v-model:dateStart="autoCarDialog.data.use_start"
+                v-model:dateFinal="autoCarDialog.data.use_final"
+              />
+
+              <pre>{{ autoCarDialog.data.use_start }}</pre>
+              <pre>{{ autoCarDialog.data.use_final }}</pre>
 
               <v-textarea
                 label="observation"
@@ -227,7 +205,7 @@ const autoCarDialog = useDialog({
   },
 });
 
-const autoCarDelete = useRequest({
+const autoCarUseDelete = useRequest({
   method: "delete",
   url: "http://localhost:3000/api/v1/auto_car_use/0",
   async onSuccess() {
@@ -236,10 +214,10 @@ const autoCarDelete = useRequest({
   },
 });
 
-const autoCarDeleteHandler = (row) => {
+const autoCarUseDeleteHandler = (row) => {
   if (!confirm(`Deletar veículo #${row.id}?`)) return;
-  autoCarDelete.url = `http://localhost:3000/api/v1/auto_car/${row.id}`;
-  return autoCarDelete.submit();
+  autoCarUseDelete.url = `http://localhost:3000/api/v1/auto_car_use/${row.id}`;
+  return autoCarUseDelete.submit();
 };
 
 onMounted(() => {

@@ -1,6 +1,12 @@
-import { Model, sequelize, SequelizeDataTypes } from "../../App.js";
+import dayjs from "dayjs";
+
+import { Model, sequelize, Sequelizee, SequelizeDataTypes } from "../../App.js";
 import AutoDriver from "./AutoDriver.js";
 import AutoCar from "./AutoCar.js";
+
+const validations = async () => {
+  // throw new Error("Aaa");
+};
 
 class AutoCarUse extends Model {
   async onSeed() {
@@ -35,30 +41,66 @@ AutoCarUse.init(
     driver_id: {
       type: SequelizeDataTypes.INTEGER,
       allowNull: true,
-      // references: {
-      //   key: "id",
-      //   model: AutoDriver,
-      //   onDelete: "SET NULL",
-      //   onUpdate: "SET NULL",
-      // },
       validate: {
-        required(value) {
+        async custom(value) {
           if (!value) throw new Error("Campo obrigatório");
+
+          const use_start = dayjs(this.use_start).format("YYYY-MM-DD");
+          const use_final = dayjs(this.use_final).format("YYYY-MM-DD");
+
+          const exists = await AutoCarUse.findAll({
+            where: {
+              id: { [Sequelizee.Op.ne]: this.id },
+              driver_id: this.driver_id,
+              [Sequelizee.Op.or]: [
+                // sequelize.literal(`'${use_start}' < auto_car_use.use_start`),
+                // sequelize.literal(`'${use_final}' > auto_car_use.use_final`),
+                sequelize.literal(
+                  `'${use_start}' BETWEEN auto_car_use.use_start AND auto_car_use.use_final`
+                ),
+                sequelize.literal(
+                  `'${use_final}' BETWEEN auto_car_use.use_start AND auto_car_use.use_final`
+                ),
+              ],
+            },
+          });
+
+          if (exists.length) {
+            throw new Error(`Motorista ocupado(a) na data selecionada`);
+          }
         },
       },
     },
     car_id: {
       type: SequelizeDataTypes.INTEGER,
       allowNull: true,
-      // references: {
-      //   key: "id",
-      //   model: AutoCar,
-      //   onDelete: "SET NULL",
-      //   onUpdate: "SET NULL",
-      // },
       validate: {
-        required(value) {
+        async custom(value) {
           if (!value) throw new Error("Campo obrigatório");
+
+          const use_start = dayjs(this.use_start).format("YYYY-MM-DD");
+          const use_final = dayjs(this.use_final).format("YYYY-MM-DD");
+
+          // const exists = await AutoCarUse.findAll({
+          //   where: {
+          //     id: { [Sequelizee.Op.ne]: this.id },
+          //     car_id: this.car_id,
+          //     [Sequelizee.Op.or]: [
+          //       sequelize.literal(
+          //         `'${use_start}' BETWEEN auto_car_use.use_start and auto_car_use.use_final `
+          //       ),
+          //       sequelize.literal(
+          //         `'${use_final}' BETWEEN auto_car_use.use_start and auto_car_use.use_final `
+          //       ),
+          //       // sequelize.literal(
+          //       //   `auto_car_use.use_start BETWEEN '${use_start}' and '${use_final}' `
+          //       // ),
+          //       // sequelize.literal(
+          //       //   `auto_car_use.use_final BETWEEN '${use_start}' and '${use_final}' `
+          //       // ),
+          //     ],
+          //   },
+          // });
         },
       },
     },

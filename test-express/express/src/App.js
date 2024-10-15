@@ -8,6 +8,7 @@ import cors from "cors";
 
 import * as Sequelize from "sequelize";
 
+export const Sequelizee = Sequelize;
 export const SequelizeDataTypes = Sequelize.DataTypes;
 
 export const sequelize = new Sequelize.Sequelize({
@@ -29,6 +30,16 @@ export class App {
     this.express = express();
     this.express.use(cors());
     this.express.use(express.json());
+
+    this.express.use((req, res, next) => {
+      res.set(
+        "Cache-Control",
+        "no-cache, no-store, must-revalidate, max-age=0"
+      );
+      res.set("Pragma", "no-cache");
+      res.set("Expires", 0);
+      next();
+    });
 
     this.express.crud = (path, controller, except = []) => {
       path = path.replace(/\/$/, "");
@@ -330,7 +341,9 @@ export class Controller {
   async create(req, res) {
     try {
       const model = this.model();
-      const entity = await model.create(req.body);
+      const entity = await model.build(req.body);
+      await entity.validate();
+      entity.save();
       this.success(req, res, { entity });
     } catch (err) {
       this.error(req, res, err);
@@ -342,6 +355,7 @@ export class Controller {
       const model = this.model();
       const entity = await model.findByPk(req.params.id);
       entity.set(req.body);
+      await entity.validate();
       await entity.save();
       this.success(req, res, { entity });
     } catch (err) {
@@ -352,8 +366,12 @@ export class Controller {
   async delete(req, res) {
     const model = this.model();
     const entity = await model.findByPk(req.params.id);
-    entity.destroy();
-    this.success(req, res, { entity });
+    if (entity) {
+      entity.destroy();
+      this.success(req, res, { entity });
+      return;
+    }
+    this.success(req, res, {});
   }
 }
 
