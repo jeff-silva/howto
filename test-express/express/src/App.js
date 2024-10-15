@@ -350,9 +350,9 @@ export class Controller {
   async create(req, res) {
     try {
       const model = this.model();
-      const entity = await model.build(req.body);
+      let entity = await model.build(req.body);
       await entity.validate();
-      entity.save();
+      entity = await entity.save();
       this.success(req, res, { entity });
     } catch (err) {
       this.error(req, res, err);
@@ -364,7 +364,7 @@ export class Controller {
       const model = this.model();
       const entity = await model.findByPk(req.params.id);
       entity.set(req.body);
-      await entity.validate();
+      const errors = await entity.validate();
       await entity.save();
       this.success(req, res, { entity });
     } catch (err) {
