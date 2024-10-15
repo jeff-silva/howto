@@ -31,7 +31,7 @@
             <tr>
               <td>{{ o.auto_driver?.name || null }}</td>
               <td>{{ o.auto_car?.name || null }}</td>
-              <td>xxx ~ xxx</td>
+              <td>{{ f.date(o.use_start) }} ~ {{ f.date(o.use_final) }}</td>
               <td>
                 <v-table-actions>
                   <v-btn
@@ -166,6 +166,8 @@
 </template>
 
 <script setup>
+const f = useFormatter();
+
 const autoCarSearch = useRequest({
   method: "get",
   url: "http://localhost:3000/api/v1/auto_car",

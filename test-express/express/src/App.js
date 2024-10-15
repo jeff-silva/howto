@@ -223,7 +223,7 @@ export class App {
 
   async init() {
     await this.preInit();
-    await this.install();
+    // await this.install();
 
     this.express.listen(3000, () => {
       console.log(`App listening on port 3000`);
