@@ -119,9 +119,6 @@
                 v-model:dateFinal="autoCarDialog.data.use_final"
               />
 
-              <pre>{{ autoCarDialog.data.use_start }}</pre>
-              <pre>{{ autoCarDialog.data.use_final }}</pre>
-
               <v-textarea
                 label="observation"
                 v-model="autoCarDialog.data.observation"
