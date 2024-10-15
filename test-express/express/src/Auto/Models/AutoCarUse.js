@@ -95,7 +95,7 @@ AutoCarUse.init(
           });
 
           if (exists.length) {
-            throw new Error(`Motorista ocupado(a) na data selecionada`);
+            throw new Error(`Veículo ocupado na data selecionada`);
           }
         },
       },

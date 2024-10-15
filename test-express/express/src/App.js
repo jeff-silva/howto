@@ -148,6 +148,15 @@ export class App {
   async install() {
     // await fs.unlink(this.sequelize.options.storage);
 
+    const { total } = (
+      await this.sequelize.query(
+        `SELECT count(*) as total FROM sqlite_master WHERE type = 'table'`,
+        { type: Sequelize.QueryTypes.SELECT }
+      )
+    ).at(0);
+
+    if (total > 1) return;
+
     let promises = [];
 
     // // Drop tables
@@ -234,7 +243,7 @@ export class App {
 
   async init() {
     await this.preInit();
-    // await this.install();
+    await this.install();
 
     this.express.listen(3000, () => {
       console.log(`App listening on port 3000`);
