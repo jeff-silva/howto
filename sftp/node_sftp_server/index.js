@@ -1,9 +1,10 @@
-import fs from "fs";
-import SFTPServer from "node-sftp-server";
-import ReadableStreamClone from "readable-stream-clone";
+let fs = require("fs");
+let path = require("path");
+// let SFTPServer = require("./src/server.js");
+let SFTPServer = require("node-sftp-server");
 
 let srv = new SFTPServer({
-  privateKeyFile: "./ssh/id_rsa",
+  privateKeyFile: `${__dirname}/ssh/id_rsa`,
   debug: false,
 });
 
@@ -22,41 +23,25 @@ srv.on("connect", function (auth, info) {
       return fs.createReadStream("tmp" + path).pipe(writestream);
     });
 
-    session.on("realpath", function (path, callback) {
-      callback("/tmp/");
+    session.on("realpath", function (source, callback) {
+      if (source == ".") source = `${__dirname}/tmp`;
+      source = source.replace(/\.$/, "");
+      console.log(`session.realpath: ${source}`);
+      callback(source);
     });
 
-    session.on("writefile", function (path, readstream, ex) {
-      let something = fs.createWriteStream("tmp");
-      return readstream.pipe(something);
+    session.on("writefile", function (file, readstream, ex) {
+      console.log(`session.writefile: ${file}`);
+      return readstream.pipe(fs.createWriteStream(file));
     });
 
-    // return session.on ...
-    session.on("readdir", function (path, responder) {
-      let files, i, j, results;
-
-      // collect the files placed in the out directory
-      // it applies an async flow not clear to me
-      files = function () {
-        results = [];
-        fs.readdir("./tmp", (err, files) => {
-          (files || []).forEach((file) => {
-            results.push(file);
-          });
-        });
-        return results;
-      }.apply(this);
-
-      i = 0;
-      responder.on("dir", function () {
-        if (files[i]) {
-          responder.file(files[i]);
-          return i++;
-        } else {
-          return responder.end();
-        }
+    session.on("readdir", async (path, responder) => {
+      let files = fs.readdirSync("./tmp");
+      console.log(`session.readdir:`, files);
+      responder.on("dir", () => {
+        files.map((file) => responder.file(file));
+        responder.end();
       });
-      return responder.on("end", function () {});
     });
 
     session.on("stat", function (path, statkind, statresponder) {
