@@ -7,86 +7,11 @@ services:
   #     - ./atmoz_sftp/home:/home
   #     - ./atmoz_sftp/users.conf:/etc/sftp/users.conf:ro
 
-  sftp:
+  atmoz_sftp_based:
     build: ./sftp/.docker
     volumes:
-      - ./sftp/home:/home
-      - ./sftp/users.conf:/etc/sftp/users.conf
+      - ./atmoz_sftp_based/home:/home
+      - ./atmoz_sftp_based/users.conf:/etc/sftp/users.conf
       # - ./sftp/.docker/check-user-changes.sh:/usr/local/bin/check-user-changes.sh
     ports:
       - "2222:22"
-
-  # openssh:
-  #   image: lscr.io/linuxserver/openssh-server:latest
-  #   environment:
-  #     - PUID=1000
-  #     - PGID=1000
-  #     - TZ=Etc/UTC
-  #     - PUBLIC_KEY=yourpublickey #optional
-  #     - PUBLIC_KEY_FILE=/path/to/file #optional
-  #     - PUBLIC_KEY_DIR=/path/to/directory/containing/_only_/pubkeys #optional
-  #     - PUBLIC_KEY_URL=https://github.com/username.keys #optional
-  #     - SUDO_ACCESS=false #optional
-  #     - PASSWORD_ACCESS=false #optional
-  #     - USER_PASSWORD=password #optional
-  #     - USER_PASSWORD_FILE=/path/to/file #optional
-  #     - USER_NAME=linuxserver.io #optional
-  #     - LOG_STDOUT= #optional
-  #   volumes:
-  #     - ./openssh:/config
-  #   ports:
-  #     - 2222:2222
-
-  # # https://github.com/crazy-max/ftpgrab
-  # ftpgrab:
-  #   image: crazymax/ftpgrab:latest
-  #   volumes:
-  #     - "./ftpgrab/db:/db:rw"
-  #     - "./ftpgrab/download:/download:rw"
-  #   environment:
-  #     - "TZ=America/Sao_Paulo"
-  #     - "SCHEDULE=* * * * *"
-  #     - "LOG_LEVEL=info"
-  #     - "LOG_JSON=false"
-  #     - "FTPGRAB_SERVER_FTP_HOST=test.rebex.net"
-  #     - "FTPGRAB_SERVER_FTP_PORT=21"
-  #     - "FTPGRAB_SERVER_FTP_USERNAME=demo"
-  #     - "FTPGRAB_SERVER_FTP_PASSWORD=demo"
-  #     - "FTPGRAB_SERVER_FTP_SOURCES=/src1,/src2"
-  #     - "FTPGRAB_DOWNLOAD_GID=1000"
-  #     - "FTPGRAB_DOWNLOAD_UID=1000"
-  #     - "FTPGRAB_DOWNLOAD_INCLUDE=^Mr\\.Robot\\.S04.+(VOSTFR|SUBFRENCH).+(720p).+(HDTV|WEB-DL|WEBRip).+"
-  #     - "FTPGRAB_DOWNLOAD_EXCLUDE=\\.nfo$$"
-  #     - "FTPGRAB_DOWNLOAD_SINCE=2019-02-01T18:50:05Z"
-  #     - "FTPGRAB_DOWNLOAD_RETRY=5"
-  #     - "FTPGRAB_NOTIF_MAIL_HOST=smtp.example.com"
-  #     - "FTPGRAB_NOTIF_MAIL_PORT=25"
-  #     - "FTPGRAB_NOTIF_MAIL_FROM=ftpgrab@example.com"
-  #     - "FTPGRAB_NOTIF_MAIL_TO=webmaster@example.com"
-
-  # # https://github.com/Turgon37/docker-sftp-ldap/tree/master
-  # sftp_ldap:
-  #   image: turgon37/sftp-ldap
-  #   environment:
-  #     - "LDAP_URI=ldap://fqdn.domain.com"
-  #     - "LDAP_BASE=cn=accounts,dc=domain,dc=com"
-  #     - "LDAP_BASE_USER=cn=users,cn=accounts,dc=domain,dc=com"
-  #     - "LDAP_BASE_GROUP=cn=groups,cn=accounts,dc=domain,dc=com"
-  #     - "LDAP_BIND_USER=krbprincipalname=docker-sftp/fqdn.domain.com@DOMAIN.COM,cn=services,cn=accounts,dc=domain,dc=com"
-  #     - "LDAP_BIND_PWD=XXXXXXXXXXXXX"
-  #     - "LDAP_HOMEDIR=/homes/%u-%U"
-  #     - "LDAP_ATTR_SSHPUBLICKEY=ipasshpubkey"
-  #     - "LDAP_TLS_STARTTLS=true"
-  #     - "LDAP_TLS_CACERT=/etc/ssl/ca.pem"
-  #   ports:
-  #     - "2222:22"
-  #   volumes:
-  #     - "./sftp_ldap/homes:/data/homes"
-
-  # sshd:
-  #   image: maltyxx/sshd
-  #   volumes:
-  #     - ./sshd/users.conf:/etc/sshd-users.conf:ro
-  #     - ./sshd/home:/home
-  #   ports:
-  #     - "2222:22"
