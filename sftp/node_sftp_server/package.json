@@ -1,0 +1,12 @@
+{
+  "type": "module",
+  "name": "node_sftp_server",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "dependencies": {
+    "node-sftp-server": "^0.3.0"
+  }
+}

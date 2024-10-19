@@ -7,11 +7,20 @@ services:
   #     - ./atmoz_sftp/home:/home
   #     - ./atmoz_sftp/users.conf:/etc/sftp/users.conf:ro
 
-  atmoz_sftp_based:
-    build: ./sftp/.docker
-    volumes:
-      - ./atmoz_sftp_based/home:/home
-      - ./atmoz_sftp_based/users.conf:/etc/sftp/users.conf
-      # - ./sftp/.docker/check-user-changes.sh:/usr/local/bin/check-user-changes.sh
+  # atmoz_sftp_based:
+  #   build: ./sftp/.docker
+  #   volumes:
+  #     - ./atmoz_sftp_based/home:/home
+  #     - ./atmoz_sftp_based/users.conf:/etc/sftp/users.conf
+  #     # - ./sftp/.docker/check-user-changes.sh:/usr/local/bin/check-user-changes.sh
+  #   ports:
+  #     - "2222:22"
+
+  node_sftp_server:
+    image: node:18.16.0
+    working_dir: /app
+    command: bash -c "yarn install && yarn dev"
     ports:
-      - "2222:22"
+      - 2222:22
+    volumes:
+      - ./node_sftp_server:/app
