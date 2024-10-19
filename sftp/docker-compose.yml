@@ -24,3 +24,13 @@ services:
       - 2222:22
     volumes:
       - ./node_sftp_server:/app
+
+  # sftp_server:
+  #   image: node:18.16.0
+  #   working_dir: /app
+  #   command: bash -c "yarn install && yarn dev"
+  #   ports:
+  #     - 2222:22
+  #     - 8000:8000
+  #   volumes:
+  #     - ./sftp_server:/app
