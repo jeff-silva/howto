@@ -1,39 +1,20 @@
 const ssh2 = require("ssh2");
 const fs = require("fs");
+const path = require("path");
 
+const _log = console.log;
 const STATUS_CODE = ssh2.utils.sftp.STATUS_CODE;
+let FIRST_LOAD = true;
 
-const getRealPath = (path) =>
-  path === "." || path === "/."
-    ? "/"
-    : path.startsWith("./")
-    ? path.slice(1)
-    : path.startsWith("/")
-    ? path
-    : `/${path}`;
-
-const createGetDirectory = (path, host, port, ident) => ({
-  type: "GET",
-  payload: { path, host, port },
-  meta: { ident },
-});
-
-const isObject = (value) =>
-  Object.prototype.toString.call(value) === "[object Object]";
-
-const getFileRecord = (handleBuffer) => {
-  // Validate that the handle buffer is the right size for a 32bit BE integer.
-  if (handleBuffer.length !== 4) {
-    return null;
-  }
-
-  const handle = handleBuffer.readUInt32BE(0); // Get the handle of the file from the SFTP client.
-
-  if (!openFiles.has(handle)) {
-    return null;
-  }
-
-  return openFiles.get(handle);
+const fileData = (fpath) => {
+  fpath = fs.realpathSync(fpath);
+  const stats = fs.statSync(fpath);
+  const mode = stats.isFile() ? fs.constants.S_IFREG : fs.constants.S_IFDIR;
+  return {
+    filename: fpath,
+    longname: fpath,
+    attrs: { ...stats, mode },
+  };
 };
 
 const options = {
@@ -47,173 +28,155 @@ let srv = new ssh2.Server(options, (client) => {
   });
 
   client.on("end", () => {
-    console.warn("client@end");
+    _log("client@end");
   });
 
   client.on("ready", async (ctx) => {
     client.on("session", (accept, reject) => {
       const session = accept();
-      let openFiles = {};
-      let handleCount = 0;
-      let calledReadDir = false;
 
       session.on("sftp", (accept, reject) => {
+        _log("______________INIT______________");
         const sftp = accept();
 
+        const HOME_DIR = "/app/tmp";
+
         sftp.on("OPEN", (reqid, fpath, flags, attrs) => {
-          console.log("sftp@OPEN");
-          const handle = Buffer.from(getRealPath(fpath));
+          _log("sftp@OPEN");
+          const handle = Buffer.from(fs.realpathSync(fpath));
           sftp.handle(reqid, handle);
         });
 
         sftp.on("CLOSE", (reqid, handle) => {
-          console.log("sftp@CLOSE");
+          _log("sftp@CLOSE");
           sftp.status(reqid, STATUS_CODE.OK);
+          sftpReaddirData.eof = false;
         });
 
         sftp.on("EXTENDED", () => {
-          console.log("sftp@EXTENDED");
+          _log("sftp@EXTENDED");
         });
 
         sftp.on("FSETSTAT", () => {
-          console.log("sftp@FSETSTAT");
+          _log("sftp@FSETSTAT");
         });
 
         sftp.on("FSTAT", () => {
-          console.log("sftp@FSTAT");
+          _log("sftp@FSTAT");
         });
 
         sftp.on("LSTAT", () => {
-          console.log("sftp@LSTAT");
+          _log("sftp@LSTAT");
         });
 
         sftp.on("MKDIR", () => {
-          console.log("sftp@MKDIR");
+          _log("sftp@MKDIR");
         });
 
+        let sftpOpendir = {
+          handleCount: 0,
+        };
         sftp.on("OPENDIR", (reqid, fpath) => {
-          console.log("sftp@OPENDIR", fpath);
-          const handle = Buffer.from(getRealPath(fpath));
+          _log("sftp@OPENDIR", fpath);
+          const handle = Buffer.from(fs.realpathSync(fpath));
           sftp.handle(reqid, handle);
         });
 
         sftp.on("READ", async (reqid, handle, offset, length) => {
-          console.log("sftp@READ");
-          const fpath = handle.toString();
+          _log("sftp@READ");
+          // const fpath = handle.toString();
 
-          if (handle.length !== 4 || !openFiles[handle.readUInt32BE(0, true)]) {
-            return sftp.status(reqid, STATUS_CODE.FAILURE);
-          }
+          // if (handle.length !== 4 || !openFiles[handle.readUInt32BE(0, true)]) {
+          //   return sftp.status(reqid, STATUS_CODE.FAILURE);
+          // }
 
-          let state = {};
-          if (state.read) {
-            sftp.status(reqid, STATUS_CODE.EOF);
-          } else {
-            state.read = true;
-            sftp.data(reqid, "bar");
-            debug("Read from file at offset %d, length %d", offset, length);
-          }
+          // let state = {};
+          // if (state.read) {
+          //   sftp.status(reqid, STATUS_CODE.EOF);
+          // } else {
+          //   state.read = true;
+          //   sftp.data(reqid, "bar");
+          //   debug("Read from file at offset %d, length %d", offset, length);
+          // }
         });
 
         let sftpReaddirData = {
           eof: false,
         };
         sftp.on("READDIR", async (reqid, handle) => {
-          let fpath = handle.toString();
-          console.log("sftp@READDIR", { fpath });
+          try {
+            let fpath = handle.toString();
+            fpath = fs.realpathSync(fpath);
 
-          if (sftpReaddirData.eof) {
-            return sftp.status(reqid, STATUS_CODE.EOF);
-          }
+            _log("sftp@READDIR", fpath);
 
-          sftpReaddirData.eof = true;
-          let files = fs.readdirSync(fpath).map((filename) => {
-            return {
-              filename,
-              longname: `${fpath}/${filename}`,
-              attrs: {
-                mode: 777 + fs.constants.S_IFDIR,
-                uid: 0,
-                gid: 0,
-                size: 0,
-                atime: 0,
-                mtime: 0,
-              },
-            };
-          });
+            if (sftpReaddirData.eof) {
+              sftpReaddirData.eof = false;
+              return sftp.status(reqid, STATUS_CODE.EOF);
+            }
 
-          sftp.name(reqid, files);
-          console.log({ files });
+            sftpReaddirData.eof = true;
+            let files = fs
+              .readdirSync(fpath)
+              .map((file) => fileData(`${fpath}/${file}`));
+
+            sftp.name(reqid, files);
+          } catch (err) {}
         });
 
         sftp.on("READLINK", () => {
-          console.log("sftp@READLINK");
+          _log("sftp@READLINK");
         });
 
         sftp.on("REALPATH", (reqid, fpath) => {
-          if (["/", ".", ".."].includes(fpath)) {
-            fpath = `${__dirname}/tmp`;
-          }
-          fpath = fpath.replace(/\.$/g, "");
-          console.log("sftp@REALPATH", fpath);
-          sftp.name(reqid, [
-            {
-              filename: fpath,
-              longname: fpath,
-              attrs: {
-                mode: ssh2.utils.sftp.OPEN_MODE,
-                uid: 0,
-                gid: 0,
-                size: 0,
-                atime: 0,
-                mtime: 0,
-              },
-            },
-          ]);
+          fpath = fs.realpathSync(fpath);
+          let items = [fileData(fpath)];
+          _log("sftp@REALPATH", fpath);
+          sftp.name(reqid, items);
         });
 
         sftp.on("REMOVE", () => {
-          console.log("sftp@REMOVE");
+          _log("sftp@REMOVE");
         });
 
         sftp.on("RENAME", () => {
-          console.log("sftp@RENAME");
+          _log("sftp@RENAME");
         });
 
         sftp.on("RMDIR", () => {
-          console.log("sftp@RMDIR");
+          _log("sftp@RMDIR");
         });
 
         sftp.on("SETSTAT", () => {
-          console.log("sftp@SETSTAT");
+          _log("sftp@SETSTAT");
         });
 
-        sftp.on("STAT", () => {
-          console.log("sftp@STAT");
+        sftp.on("STAT", (reqid, fpath) => {
+          _log("sftp@STAT", fpath);
         });
 
         sftp.on("SYMLINK", () => {
-          console.log("sftp@SYMLINK");
+          _log("sftp@SYMLINK");
         });
 
         sftp.on("WRITE", () => {
-          console.log("sftp@WRITE");
+          _log("sftp@WRITE");
         });
 
         sftp.on("error", (err) => {
-          console.log("sftp@error", err);
+          _log("sftp@error", err);
         });
       });
     });
   });
 
   client.on("end", () => {
-    console.log("client disconnected");
+    _log("client disconnected");
   });
 });
 
 srv.on("close", () => null);
 
 srv.listen(22, () => {
-  console.log("Listening on port " + srv.address().port);
+  _log("Listening on port " + srv.address().port);
 });
