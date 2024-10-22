@@ -10,8 +10,6 @@ const {
   STATUS_CODE,
 } = require("ssh2/lib/protocol/SFTP.js");
 
-const debug = require("debug");
-
 const strftime = require("mout/date/strftime");
 const pick = require("mout/object/pick");
 
@@ -28,12 +26,6 @@ function pathLocalToRemote(localpath) {
   if (IS_WIN32) return wslpath(localpath);
   return localpath;
 }
-
-const logger = {
-  debug: debug("sftp:debug"),
-  info: debug("sftp:info"),
-  error: debug("sftp:error"),
-};
 
 const errorCode = (code) => {
   if (["ENOTEMPTY", "ENOTDIR", "ENOENT"].includes(code))
@@ -87,7 +79,6 @@ const modeLinux = (filename, filepath) => {
 
     return { filename, longname, attrs };
   } catch (err) {
-    logger.error(err.message);
     return {
       filename,
       longname: `?????????? ? ? ? ? ? ? ? ${filename}`,
@@ -122,29 +113,23 @@ class SFTP {
   _write(reqid, handle, offset, data) {
     //var state = this.openFiles[handle];
     fs.writeSync(handle[0], data, 0, data.length, offset);
-    logger.debug("write to file at offset %d, length %d", offset, data.length);
     this.sftpStream.status(reqid, STATUS_CODE.OK);
   }
 
   _close(reqid, fd) {
     fs.closeSync(fd[0]);
-    logger.info("CLOSE", { reqid, fd });
     this.sftpStream.status(reqid, STATUS_CODE.OK);
   }
 
   _realpath(reqid, filename) {
-    logger.info("realpath ", filename, pathRemoteToLocal(filename));
-
     if (IS_WIN32) filename = pathLocalToRemote(pathRemoteToLocal(filename));
     else filename = path.resolve(filename);
 
-    logger.info("REALPATH normalize ", filename);
     this.sftpStream.name(reqid, [{ filename }]);
   }
 
   _onSTAT(statType, reqid, remotepath, handle) {
     let filepath = pathRemoteToLocal(remotepath);
-    logger.info("STAT", { filepath, remotepath, statType, handle });
     try {
       var fstats = fs[statType](filepath);
       let stats = pick(fstats, [
@@ -160,14 +145,12 @@ class SFTP {
         this.openFiles[handle].stats = stats;
       return this.sftpStream.attrs(reqid, stats);
     } catch (err) {
-      logger.error(err);
       return this.sftpStream.status(reqid, errorCode(err.code));
     }
   }
 
   _opendir(reqid, remotepath) {
     let filepath = pathRemoteToLocal(remotepath);
-    // logger.info("OPENDIR", { reqid, filepath, remotepath });
 
     try {
       let stat = fs.statSync(filepath);
@@ -182,7 +165,6 @@ class SFTP {
   }
 
   _read(reqid, handle, offset, length) {
-    logger.debug("READ", { reqid, offset, length });
     var state = this.openFiles[handle];
 
     if (offset >= state.stat.size)
@@ -203,21 +185,18 @@ class SFTP {
   _rename(reqid, remotepath, newremotePath) {
     let filepath = pathRemoteToLocal(remotepath);
     let newfilepath = pathRemoteToLocal(newremotePath);
-    logger.info("RENAME", { filepath, remotepath, newfilepath, newremotePath });
     fs.renameSync(filepath, newfilepath);
     this.sftpStream.status(reqid, STATUS_CODE.OK);
   }
 
   _remove(reqid, remotepath) {
     let filepath = pathRemoteToLocal(remotepath);
-    logger.info("REMOVE", { filepath, remotepath });
     fs.unlinkSync(filepath);
     this.sftpStream.status(reqid, STATUS_CODE.OK);
   }
 
   _rmdir(reqid, remotepath) {
     let filepath = pathRemoteToLocal(remotepath);
-    logger.info("RMDIR", { filepath, remotepath });
     fs.rmdirSync(filepath);
     this.sftpStream.status(reqid, STATUS_CODE.OK);
   }
@@ -229,7 +208,6 @@ class SFTP {
   }
 
   async _readdir(reqid, handle) {
-    logger.info("READDIR", this.openFiles[handle].filepath);
     if (this.openFiles[handle].closed) {
       this.sftpStream.status(reqid, STATUS_CODE.EOF);
       return;
@@ -255,7 +233,6 @@ class SFTP {
     filepath = pathRemoteToLocal(filepath);
     flags = flagsToString(flags);
 
-    logger.info("OPEN", { reqid, filepath, flags, attrs });
     if (flags != "w" && !fs.existsSync(filepath))
       return this.sftpStream.status(reqid, STATUS_CODE.NO_SUCH_FILE);
 
@@ -266,7 +243,6 @@ class SFTP {
       this.openFiles[handle] = { filepath, flags, stat, pos: 0 };
       return this.sftpStream.handle(reqid, handle);
     } catch (err) {
-      logger.error(err);
       return this.sftpStream.status(reqid, errorCode(err.code));
     }
   }
