@@ -264,7 +264,7 @@ class SFTP {
   WRITE(reqid, handle, offset, data) {
     var state = this.openFiles[handle];
     _log("WRITE", { filepath: state.filepath });
-    fs.writeSync(state.filepath, data.toString(), 0, data.length, offset);
+    fs.writeSync(handle[0], data, 0, data.length, offset);
     this.sftpStream.status(reqid, STATUS_CODE.OK);
   }
 }
