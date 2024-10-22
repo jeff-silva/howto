@@ -55,6 +55,12 @@ let srv = new ssh2.Server(options, (client, info) => {
       });
     }
 
+    if (ctx.method == "publickey") {
+      if (ctx.key.algo == "ssh-rsa") {
+        success = true;
+      }
+    }
+
     if (success) {
       sftpServerOptions.rootDir = `${__dirname}/uploads/${ctx.username}`;
 
