@@ -1,8 +1,6 @@
 "use strict";
 
-// TODO: Verificar Senha da conexão
-// TODO: Verificar IP da conexão
-// TODO: Bloquear conexão de acordo com users.json
+// TODO: Implementar conexão com chave SSH
 
 const fs = require("fs");
 const ssh2 = require("ssh2");
@@ -34,11 +32,16 @@ const options = {
   debug: true,
 };
 
-let srv = new ssh2.Server(options, (client) => {
+let srv = new ssh2.Server(options, (client, info) => {
   client.on("authentication", (ctx) => {
     if (ctx.method == "password") {
       config.users.map((user) => {
         if (ctx.username == user.user && ctx.password == user.pass) {
+          if (user.ips.length > 0) {
+            if (!user.ips.includes(info.ip)) {
+              return ctx.reject();
+            }
+          }
           return ctx.accept();
         }
       });
