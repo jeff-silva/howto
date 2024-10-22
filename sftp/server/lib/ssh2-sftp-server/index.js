@@ -42,7 +42,6 @@ const modeLinux = (filename, filepath) => {
   ];
 
   if (filename == "" && filepath != "/") {
-    //this is root
     filename = filepath.toLowerCase().replace(":", "");
   }
 
