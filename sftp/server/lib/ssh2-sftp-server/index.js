@@ -1,7 +1,7 @@
 "use strict";
 
 const _log = (...args) => {
-  console.log(...args);
+  // console.log(...args);
 };
 
 const os = require("os");
