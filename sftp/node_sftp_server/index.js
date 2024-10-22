@@ -3,6 +3,7 @@
 const fs = require("fs");
 const ssh2 = require("ssh2");
 const SftpServer = require("./lib/ssh2-sftp-server/index.js");
+// const SftpServer = require("ssh2-sftp-server");
 const _log = console.log;
 
 const options = {

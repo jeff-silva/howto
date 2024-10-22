@@ -4,6 +4,12 @@ const os = require("os");
 const path = require("path");
 const fs = require("fs");
 
+const {
+  flagsToString,
+  OPEN_MODE,
+  STATUS_CODE,
+} = require("ssh2/lib/protocol/SFTP.js");
+
 const debug = require("debug");
 
 const strftime = require("mout/date/strftime");
@@ -14,8 +20,9 @@ const { getLogicalDisks, wslpath, winpath } = require("./utils/");
 const IS_WIN32 = os.platform() == "win32";
 //from stream scope
 
-var SFTP_OPEN_MODE, SFTP_STATUS_CODE;
-var flagsToString;
+let SFTP_STATUS_CODE = STATUS_CODE;
+let SFTP_OPEN_MODE = OPEN_MODE;
+// var flagsToString;
 
 function pathRemoteToLocal(remotepath) {
   if (IS_WIN32) return winpath(remotepath);
@@ -95,10 +102,6 @@ const modeLinux = (filename, filepath) => {
 
 class SFTP {
   constructor(sftpStream) {
-    ({ flagsToString } = sftpStream.constructor);
-    ({ OPEN_MODE: SFTP_OPEN_MODE, STATUS_CODE: SFTP_STATUS_CODE } =
-      sftpStream.constructor);
-
     this.openFiles = {};
     this._handleCount = 0;
     this.sftpStream = sftpStream;
@@ -180,7 +183,6 @@ class SFTP {
       return this.sftpStream.status(reqid, SFTP_STATUS_CODE.NO_SUCH_FILE);
     }
 
-    console.log(this._open.toString());
     return this._open(reqid, remotepath, SFTP_OPEN_MODE.READ);
   }
 
@@ -255,24 +257,23 @@ class SFTP {
   }
 
   _open(reqid, filepath, flags, attrs = {}) {
-    console.log("aaa");
-    // filepath = pathRemoteToLocal(filepath);
-    // flags = flagsToString(flags);
+    filepath = pathRemoteToLocal(filepath);
+    flags = flagsToString(flags);
 
-    // logger.info("OPEN", { reqid, filepath, flags, attrs });
-    // if (flags != "w" && !fs.existsSync(filepath))
-    //   return this.sftpStream.status(reqid, SFTP_STATUS_CODE.NO_SUCH_FILE);
+    logger.info("OPEN", { reqid, filepath, flags, attrs });
+    if (flags != "w" && !fs.existsSync(filepath))
+      return this.sftpStream.status(reqid, SFTP_STATUS_CODE.NO_SUCH_FILE);
 
-    // try {
-    //   var handle = fs.openSync(filepath, flags);
-    //   let stat = fs.statSync(filepath);
-    //   handle = Buffer.from([handle]);
-    //   this.openFiles[handle] = { filepath, flags, stat, pos: 0 };
-    //   return this.sftpStream.handle(reqid, handle);
-    // } catch (err) {
-    //   logger.error(err);
-    //   return this.sftpStream.status(reqid, errorCode(err.code));
-    // }
+    try {
+      var handle = fs.openSync(filepath, flags);
+      let stat = fs.statSync(filepath);
+      handle = Buffer.from([handle]);
+      this.openFiles[handle] = { filepath, flags, stat, pos: 0 };
+      return this.sftpStream.handle(reqid, handle);
+    } catch (err) {
+      logger.error(err);
+      return this.sftpStream.status(reqid, errorCode(err.code));
+    }
   }
 }
 
