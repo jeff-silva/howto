@@ -1,6 +1,7 @@
 "use strict";
 
 // TODO: Implementar conexão com chave SSH
+// TODO: Implementar pasta raiz para cada usuário
 
 const fs = require("fs");
 const ssh2 = require("ssh2");
