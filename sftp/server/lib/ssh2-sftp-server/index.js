@@ -1,7 +1,7 @@
 "use strict";
 
 const _log = (...args) => {
-  // console.log(...args);
+  console.log(...args);
 };
 
 const os = require("os");
@@ -249,7 +249,7 @@ class SFTP {
   MKDIR(reqid, remotepath /*, attrs*/) {
     _log("MKDIR", {});
     let filepath = this.pathRemoteToLocal(remotepath);
-    fs.mkdirSync(filepath);
+    if (!fs.existsSync(filepath)) fs.mkdirSync(filepath);
     this.sftpStream.status(reqid, STATUS_CODE.OK);
   }
 
@@ -262,10 +262,9 @@ class SFTP {
   }
 
   WRITE(reqid, handle, offset, data) {
-    _log("WRITE", { file: handle[0] });
-    //var state = this.openFiles[handle];
-    let filepath = this.pathRemoteToLocal(handle[0]);
-    fs.writeSync(filepath, data, 0, data.length, offset);
+    var state = this.openFiles[handle];
+    _log("WRITE", { filepath: state.filepath });
+    fs.writeSync(state.filepath, data.toString(), 0, data.length, offset);
     this.sftpStream.status(reqid, STATUS_CODE.OK);
   }
 }
