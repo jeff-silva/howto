@@ -1,15 +1,16 @@
 "use strict";
 
 // TODO: Implementar conexão com chave SSH
-// TODO: Implementar pasta raiz para cada usuário
 
 const fs = require("fs");
 const ssh2 = require("ssh2");
 const SftpServer = require("./lib/ssh2-sftp-server/index.js");
 
-if (!fs.existsSync("./uploads/config.json")) {
+const CONFIG_FILE = `${__dirname}/uploads/config.json`;
+
+if (!fs.existsSync(CONFIG_FILE)) {
   fs.writeFileSync(
-    "./uploads/config.json",
+    CONFIG_FILE,
     JSON.stringify(
       {
         users: [
@@ -26,15 +27,21 @@ if (!fs.existsSync("./uploads/config.json")) {
   );
 }
 
-const config = require("./uploads/config.json");
+const config = require(CONFIG_FILE);
 
 const options = {
   hostKeys: [fs.readFileSync(`${__dirname}/ssh/id_rsa`)],
   debug: true,
 };
 
+const sftpServerOptions = {
+  rootDir: "/",
+};
+
 let srv = new ssh2.Server(options, (client, info) => {
   client.on("authentication", (ctx) => {
+    let success = false;
+
     if (ctx.method == "password") {
       config.users.map((user) => {
         if (ctx.username == user.user && ctx.password == user.pass) {
@@ -43,9 +50,18 @@ let srv = new ssh2.Server(options, (client, info) => {
               return ctx.reject();
             }
           }
-          return ctx.accept();
+          success = true;
         }
       });
+    }
+
+    if (success) {
+      sftpServerOptions.rootDir = `${__dirname}/uploads/${ctx.username}`;
+
+      if (!fs.existsSync(sftpServerOptions.rootDir)) {
+        fs.mkdirSync(sftpServerOptions.rootDir);
+      }
+      return ctx.accept();
     }
 
     return ctx.reject();
@@ -56,7 +72,7 @@ let srv = new ssh2.Server(options, (client, info) => {
       let session = accept();
       session.on("sftp", (accept, reject) => {
         let sftpStream = accept();
-        new SftpServer(sftpStream);
+        new SftpServer(sftpStream, sftpServerOptions);
       });
     });
   });
