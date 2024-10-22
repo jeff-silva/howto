@@ -18,11 +18,6 @@ const pick = require("mout/object/pick");
 const { getLogicalDisks, wslpath, winpath } = require("./utils/");
 
 const IS_WIN32 = os.platform() == "win32";
-//from stream scope
-
-let SFTP_STATUS_CODE = STATUS_CODE;
-let SFTP_OPEN_MODE = OPEN_MODE;
-// var flagsToString;
 
 function pathRemoteToLocal(remotepath) {
   if (IS_WIN32) return winpath(remotepath);
@@ -42,10 +37,10 @@ const logger = {
 
 const errorCode = (code) => {
   if (["ENOTEMPTY", "ENOTDIR", "ENOENT"].includes(code))
-    return SFTP_STATUS_CODE.NO_SUCH_FILE;
+    return STATUS_CODE.NO_SUCH_FILE;
   if (["EACCES", "EEXIST", "EISDIR"].includes(code))
-    return SFTP_STATUS_CODE.PERMISSION_DENIED;
-  return SFTP_STATUS_CODE.FAILURE;
+    return STATUS_CODE.PERMISSION_DENIED;
+  return STATUS_CODE.FAILURE;
 };
 
 const modeLinux = (filename, filepath) => {
@@ -128,13 +123,13 @@ class SFTP {
     //var state = this.openFiles[handle];
     fs.writeSync(handle[0], data, 0, data.length, offset);
     logger.debug("write to file at offset %d, length %d", offset, data.length);
-    this.sftpStream.status(reqid, SFTP_STATUS_CODE.OK);
+    this.sftpStream.status(reqid, STATUS_CODE.OK);
   }
 
   _close(reqid, fd) {
     fs.closeSync(fd[0]);
     logger.info("CLOSE", { reqid, fd });
-    this.sftpStream.status(reqid, SFTP_STATUS_CODE.OK);
+    this.sftpStream.status(reqid, STATUS_CODE.OK);
   }
 
   _realpath(reqid, filename) {
@@ -177,13 +172,13 @@ class SFTP {
     try {
       let stat = fs.statSync(filepath);
       if (!stat.isDirectory()) {
-        return this.sftpStream.status(reqid, SFTP_STATUS_CODE.FAILURE);
+        return this.sftpStream.status(reqid, STATUS_CODE.FAILURE);
       }
     } catch (err) {
-      return this.sftpStream.status(reqid, SFTP_STATUS_CODE.NO_SUCH_FILE);
+      return this.sftpStream.status(reqid, STATUS_CODE.NO_SUCH_FILE);
     }
 
-    return this._open(reqid, remotepath, SFTP_OPEN_MODE.READ);
+    return this._open(reqid, remotepath, OPEN_MODE.READ);
   }
 
   _read(reqid, handle, offset, length) {
@@ -191,7 +186,7 @@ class SFTP {
     var state = this.openFiles[handle];
 
     if (offset >= state.stat.size)
-      return this.sftpStream.status(reqid, SFTP_STATUS_CODE.EOF);
+      return this.sftpStream.status(reqid, STATUS_CODE.EOF);
 
     var size =
       state.stat.size - state.pos > length
@@ -210,33 +205,33 @@ class SFTP {
     let newfilepath = pathRemoteToLocal(newremotePath);
     logger.info("RENAME", { filepath, remotepath, newfilepath, newremotePath });
     fs.renameSync(filepath, newfilepath);
-    this.sftpStream.status(reqid, SFTP_STATUS_CODE.OK);
+    this.sftpStream.status(reqid, STATUS_CODE.OK);
   }
 
   _remove(reqid, remotepath) {
     let filepath = pathRemoteToLocal(remotepath);
     logger.info("REMOVE", { filepath, remotepath });
     fs.unlinkSync(filepath);
-    this.sftpStream.status(reqid, SFTP_STATUS_CODE.OK);
+    this.sftpStream.status(reqid, STATUS_CODE.OK);
   }
 
   _rmdir(reqid, remotepath) {
     let filepath = pathRemoteToLocal(remotepath);
     logger.info("RMDIR", { filepath, remotepath });
     fs.rmdirSync(filepath);
-    this.sftpStream.status(reqid, SFTP_STATUS_CODE.OK);
+    this.sftpStream.status(reqid, STATUS_CODE.OK);
   }
 
   _mkdir(reqid, remotepath /*, attrs*/) {
     let filepath = pathRemoteToLocal(remotepath);
     fs.mkdirSync(filepath);
-    this.sftpStream.status(reqid, SFTP_STATUS_CODE.OK);
+    this.sftpStream.status(reqid, STATUS_CODE.OK);
   }
 
   async _readdir(reqid, handle) {
     logger.info("READDIR", this.openFiles[handle].filepath);
     if (this.openFiles[handle].closed) {
-      this.sftpStream.status(reqid, SFTP_STATUS_CODE.EOF);
+      this.sftpStream.status(reqid, STATUS_CODE.EOF);
       return;
     }
 
@@ -262,7 +257,7 @@ class SFTP {
 
     logger.info("OPEN", { reqid, filepath, flags, attrs });
     if (flags != "w" && !fs.existsSync(filepath))
-      return this.sftpStream.status(reqid, SFTP_STATUS_CODE.NO_SUCH_FILE);
+      return this.sftpStream.status(reqid, STATUS_CODE.NO_SUCH_FILE);
 
     try {
       var handle = fs.openSync(filepath, flags);
