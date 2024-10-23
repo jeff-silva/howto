@@ -42,6 +42,30 @@ let srv = new ssh2.Server(options, (client, info) => {
   client.on("authentication", (ctx) => {
     let success = false;
 
+    console.log("authentication", {
+      info,
+      method: ctx.method,
+      username: ctx.username,
+      password: ctx.password,
+    });
+
+    if (["password", "publickey"].includes(ctx.method)) {
+      for (let attr in config.users) {
+        const user = config.users[attr];
+
+        const authPass =
+          ctx.method == "password" &&
+          ctx.username == user.user &&
+          ctx.password == user.pass;
+
+        const authKey = ctx.method == "publickey" && ctx.username == user.user;
+
+        if (authPass || authKey) {
+          success = true;
+        }
+      }
+    }
+
     if (ctx.method == "password") {
       config.users.map((user) => {
         if (ctx.username == user.user && ctx.password == user.pass) {
