@@ -24,14 +24,14 @@ services:
     volumes:
       - ./nuxt3:/app
 
-  backend:
+  express:
     image: node:22
     working_dir: /app
     command: bash -c "yarn install && yarn dev"
     ports:
       - 3001:3001
     volumes:
-      - ./backend:/app
+      - ./express:/app
     networks:
       - main_network
     depends_on:
