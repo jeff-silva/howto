@@ -1,0 +1,10 @@
+services:
+  node:
+    image: node:22
+    working_dir: /app
+    command: bash -c "yarn install && yarn dev"
+    ports:
+      - 3000:3000
+    volumes:
+      - ./node:/app
+      - ./proto:/app/proto
