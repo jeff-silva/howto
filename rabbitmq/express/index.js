@@ -3,10 +3,12 @@ import cors from "cors";
 import amqpConnection from "./utils/amqp.js";
 
 (async () => {
-  const amqp = await amqpConnection("random");
-  amqp.onReceive((message) => {
-    console.log(message);
-  });
+  try {
+    const amqp = await amqpConnection("random");
+    amqp.onReceive((message) => {
+      console.log("express.ampq.receive:", message);
+    });
+  } catch (err) {}
 })();
 
 const app = express();

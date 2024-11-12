@@ -35,8 +35,7 @@ services:
     networks:
       - main_network
     depends_on:
-      rabbitmq:
-        condition: service_started
+      - rabbitmq
 
   # docker run --rm -it -v ${PWD}/laravel:/app composer create-project laravel/laravel .
   # Install API: php artisan install:api
@@ -51,8 +50,7 @@ services:
     networks:
       - main_network
     depends_on:
-      rabbitmq:
-        condition: service_started
+      - rabbitmq
 
 volumes:
   rabbitmq-data:
