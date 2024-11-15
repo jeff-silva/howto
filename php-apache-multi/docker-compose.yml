@@ -1,9 +1,9 @@
 services:
   apache-php:
-    image: php:8.3-apache
-    working_dir: /var/www
-    # command: bash -c "yarn install && yarn dev"
+    build: ./apache-php
     ports:
-      - 80:80
-    # volumes:
-    #   - ./nuxt3:/app
+      - 80-89:80-89
+    volumes:
+      - ./site80:/var/www/site80
+      - ./site81:/var/www/site81
+      - ./site82:/var/www/site82
