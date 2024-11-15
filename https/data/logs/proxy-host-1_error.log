@@ -1,0 +1,5 @@
+2024/11/15 02:35:43 [error] 225#225: *42 localhost could not be resolved (3: Host not found), client: 172.25.0.1, server: localhost, request: "GET / HTTP/1.1", host: "localhost"
+2024/11/15 02:39:35 [error] 211#211: *18 localhost could not be resolved (3: Host not found), client: 172.25.0.1, server: localhost, request: "GET / HTTP/1.1", host: "localhost"
+2024/11/15 02:42:48 [error] 212#212: *37 localhost could not be resolved (3: Host not found), client: 172.25.0.1, server: localhost, request: "GET / HTTP/1.1", host: "localhost", referrer: "http://localhost:81/"
+2024/11/15 02:43:59 [error] 245#245: *57 site82.test could not be resolved (3: Host not found), client: 172.25.0.1, server: localhost, request: "GET / HTTP/1.1", host: "localhost", referrer: "http://localhost:81/"
+2024/11/15 02:44:24 [error] 246#246: *59 site82.test could not be resolved (3: Host not found), client: 172.25.0.1, server: localhost, request: "GET / HTTP/1.1", host: "localhost", referrer: "http://localhost:81/"
