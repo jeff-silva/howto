@@ -1,0 +1,17 @@
+volumes:
+  caddy_data:
+  caddy_config:
+
+services:
+  php:
+    image: dunglas/frankenphp
+    #build: .
+    ports:
+      - "80-89:80-89" # HTTP
+      - "443:443" # HTTPS
+      - "443:443/udp" # HTTP/3
+    volumes:
+      - ./app:/app
+      - ./caddy:/etc/caddy
+      - caddy_data:/data
+      - caddy_config:/config
