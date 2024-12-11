@@ -1,4 +1,4 @@
-# frankenphp
+# FrankenPHP
 
 How to run:
 
@@ -6,3 +6,7 @@ How to run:
 cd ./frankenphp && yarn dev
 ```
 
+## Dúvidas
+
+- Como alterar versão do PHP?
+- Como criar Dockerfile customizado?
