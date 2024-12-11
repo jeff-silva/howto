@@ -1,0 +1,18 @@
+volumes:
+  caddy_data:
+  caddy_config:
+
+services:
+  caddy:
+    image: caddy:latest
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80-89:80-89"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./caddy:/etc/caddy
+      - ./www:/var/www
+      - caddy_data:/data
+      - caddy_config:/config
