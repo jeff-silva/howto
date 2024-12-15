@@ -11,9 +11,17 @@ services:
 
   # cd ./laravel-dir
   # docker run --rm -it -v ${PWD}/laravel:/app composer create-project laravel/laravel . && php artisan install:api
+
+  # apache-php:
+  #   build: ./apache-test
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./laravel:/var/www/html
+
   laravel:
-    build: ./apache-test
-    ports:
-      - "80:80"
+    image: bitnami/laravel:latest
     volumes:
-      - "./apache-test/public:/var/www/html"
+      - ./laravel:/app
+    ports:
+      - 8000:8000
