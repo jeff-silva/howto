@@ -5,14 +5,18 @@ volumes:
 services:
   php:
     image: dunglas/frankenphp
-    #build: .
+    build: .
+    working_dir: /apps/laravel
     ports:
-      - "80-89:80-89" # HTTP
+      - "80:80" # HTTP
+      - "81:81" # HTTP
       - "443:443" # HTTPS
       - "443:443/udp" # HTTP/3
     volumes:
-      - ./app:/app
-      - ../laravel/laravel:/app/laravel
-      - ./caddy:/etc/caddy
       - caddy_data:/data
       - caddy_config:/config
+      - ./frankenphp/caddy:/etc/caddy
+      - ./laravel:/apps/laravel
+      - ./site81:/apps/site81
+    environment:
+      - LARAVEL_STORAGE_PATH=/apps/laravel/storage
