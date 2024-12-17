@@ -5,7 +5,7 @@ volumes:
 services:
   php:
     image: dunglas/frankenphp
-    build: .
+    build: ./frankenphp
     working_dir: /apps/laravel
     ports:
       - "80:80" # HTTP
