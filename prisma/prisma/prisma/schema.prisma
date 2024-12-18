@@ -20,11 +20,11 @@ generator jsonSchema {
 
 model app_user {
   id            Int             @id @default(autoincrement())
-  email         String
-  name          String?
+  name          String?         @db.VarChar(255)
+  email         String?
   group_id      Int?
-  created_at    DateTime?
-  updated_at    DateTime?
+  created_at    DateTime?       @default(now())
+  updated_at    DateTime?       @updatedAt
   deleted_at    DateTime?
   group         app_user_group? @relation(fields: [group_id], references: [id])
   cms_site_page cms_site_page[]
@@ -32,31 +32,90 @@ model app_user {
 
 model app_user_group {
   id          Int        @id @default(autoincrement())
-  name        String?
+  name        String?    @db.VarChar(255)
   permissions String?
-  created_at  DateTime?
-  updated_at  DateTime?
+  created_at  DateTime?  @default(now())
+  updated_at  DateTime?  @updatedAt
   deleted_at  DateTime?
   users       app_user[]
 }
 
 model cms_site {
-  id      Int             @id @default(autoincrement())
-  name    String?
-  address String?
-  pages   cms_site_page[]
+  id         Int             @id @default(autoincrement())
+  name       String?         @db.VarChar(255)
+  address    String?
+  created_at DateTime?       @default(now())
+  updated_at DateTime?       @updatedAt
+  deleted_at DateTime?
+  pages      cms_site_page[]
 }
 
 model cms_site_page {
   id         Int       @id @default(autoincrement())
-  name       String?
+  name       String?   @db.VarChar(255)
+  slug       String?
   content    String?
   author_id  Int?
   site_id    Int?
   published  Boolean   @default(false)
-  created_at DateTime?
-  updated_at DateTime?
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
   deleted_at DateTime?
   author     app_user? @relation(fields: [author_id], references: [id])
   site       cms_site? @relation(fields: [site_id], references: [id])
+}
+
+model uber_driver {
+  id   Int     @id @default(autoincrement())
+  name String? @db.VarChar(255)
+}
+
+model uber_driver_rating {
+  id           Int     @id @default(autoincrement())
+  name         String? @db.VarChar(255)
+  ride_id      Int?
+  passenger_id Int?
+  rating       Int?
+}
+
+model uber_passenger {
+  id   Int     @id @default(autoincrement())
+  name String? @db.VarChar(255)
+}
+
+model uber_passenger_rating {
+  id        Int     @id @default(autoincrement())
+  name      String? @db.VarChar(255)
+  ride_id   Int?
+  driver_id Int?
+  rating    Int?
+}
+
+model uber_ride {
+  id          Int       @id @default(autoincrement())
+  name        String?   @db.VarChar(255)
+  driver_id   Int?
+  started_at  DateTime?
+  finished_at DateTime?
+}
+
+model uber_ride_log {
+  id         Int       @id @default(autoincrement())
+  name       String?   @db.VarChar(255)
+  ride_id    Int?
+  created_at DateTime?
+}
+
+model uber_ride_passenger {
+  id      Int     @id @default(autoincrement())
+  name    String? @db.VarChar(255)
+  ride_id Int?
+}
+
+model uber_ride_points {
+  id      Int     @id @default(autoincrement())
+  name    String? @db.VarChar(255)
+  ride_id Int?
+  lat     Decimal @db.Decimal(10, 8)
+  lng     Decimal @db.Decimal(11, 8)
 }

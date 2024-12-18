@@ -7,10 +7,13 @@
         "id": {
           "type": "integer"
         },
-        "email": {
-          "type": "string"
-        },
         "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "email": {
           "type": [
             "string",
             "null"
@@ -120,6 +123,27 @@
             "null"
           ]
         },
+        "created_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "deleted_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
         "pages": {
           "type": "array",
           "items": {
@@ -135,6 +159,12 @@
           "type": "integer"
         },
         "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "slug": {
           "type": [
             "string",
             "null"
@@ -192,6 +222,205 @@
           ]
         }
       }
+    },
+    "uber_driver": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "uber_driver_rating": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ride_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "passenger_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "rating": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    },
+    "uber_passenger": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "uber_passenger_rating": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ride_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "driver_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "rating": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    },
+    "uber_ride": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "driver_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "started_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "finished_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      }
+    },
+    "uber_ride_log": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ride_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "created_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      }
+    },
+    "uber_ride_passenger": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ride_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    },
+    "uber_ride_points": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ride_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        }
+      }
     }
   },
   "type": "object",
@@ -207,6 +436,30 @@
     },
     "cms_site_page": {
       "$ref": "#/definitions/cms_site_page"
+    },
+    "uber_driver": {
+      "$ref": "#/definitions/uber_driver"
+    },
+    "uber_driver_rating": {
+      "$ref": "#/definitions/uber_driver_rating"
+    },
+    "uber_passenger": {
+      "$ref": "#/definitions/uber_passenger"
+    },
+    "uber_passenger_rating": {
+      "$ref": "#/definitions/uber_passenger_rating"
+    },
+    "uber_ride": {
+      "$ref": "#/definitions/uber_ride"
+    },
+    "uber_ride_log": {
+      "$ref": "#/definitions/uber_ride_log"
+    },
+    "uber_ride_passenger": {
+      "$ref": "#/definitions/uber_ride_passenger"
+    },
+    "uber_ride_points": {
+      "$ref": "#/definitions/uber_ride_points"
     }
   }
 }
