@@ -1,0 +1,42 @@
+networks:
+  mysql-network:
+
+services:
+  prisma:
+    image: node:22
+    working_dir: /app
+    command: bash -c "yarn install && yarn dev"
+    ports:
+      - 3000:3000
+    volumes:
+      - ./prisma:/app
+    networks:
+      - mysql-network
+
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+      MYSQL_DATABASE: app
+      MYSQL_ROOT_PASSWORD: app
+      MYSQL_ROOT_HOST: "%"
+    networks:
+      - mysql-network
+
+  mysql-pma:
+    image: phpmyadmin
+    ports:
+      - "3307:80"
+    networks:
+      - mysql-network
+    depends_on:
+      - mysql
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: app
+      PMA_PASSWORD: app
