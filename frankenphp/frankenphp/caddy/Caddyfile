@@ -41,25 +41,6 @@
 
         {$CADDY_SERVER_EXTRA_DIRECTIVES}
         php_server
-
-        # supervise {
-        #         command ["sleep 60 && php /apps/laravel/artisan schedule:run"]
-        #         replicas 0 # ou 1 se quiser que execute continuamente
-        #         dir /apps/laravel/ # importante para achar os arquivos
-        #         env {
-        #         # Variáveis de ambiente, se necessário
-        #         }
-        #         redirect_stdout {
-        #         type file # ou null para ignorar
-        #         file /var/log/supervisor/schedule_stdout.log # caminho para salvar o stdout
-        #         }
-        #         redirect_stderr {
-        #         type file # ou null para ignorar
-        #         file /var/log/supervisor/schedule_stderr.log # caminho para salvar o stderr
-        #         }
-        #         restart_policy always # ou on-failure ou never
-        #         termination_grace_period 10s # tempo para o processo terminar antes de ser forçado
-        # }
 }
 
 localhost:81 {

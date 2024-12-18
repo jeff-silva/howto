@@ -22,5 +22,6 @@ echo "----------------------------------------------------------------"
 echo "----------------------------------------------------------------"
 echo "----------------------------------------------------------------"
 
-exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf & \
-exec docker-php-entrypoint "$@"
+# exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+
+sleep 5 && php /apps/laravel/artisan schedule:run

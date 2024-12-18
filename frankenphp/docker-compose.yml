@@ -18,5 +18,3 @@ services:
       - ./frankenphp/caddy:/etc/caddy
       - ./laravel:/apps/laravel
       - ./site81:/apps/site81
-    environment:
-      - LARAVEL_STORAGE_PATH=/apps/laravel/storage
