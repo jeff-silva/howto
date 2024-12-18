@@ -26,6 +26,5 @@ class AppTestCommand extends Command
     public function handle()
     {
         $this->info('Test run');
-        file_put_contents(base_path('test.txt'), date('H:i:s'));
     }
 }
