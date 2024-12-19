@@ -40,7 +40,7 @@
           ],
           "format": "date-time"
         },
-        "group": {
+        "app_group": {
           "anyOf": [
             {
               "$ref": "#/definitions/app_user_group"
@@ -50,10 +50,22 @@
             }
           ]
         },
-        "cms_site_page": {
+        "cms_site_pages": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/cms_site_page"
+          }
+        },
+        "shop_carts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/shop_cart"
+          }
+        },
+        "shop_order": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/shop_order"
           }
         }
       }
@@ -97,7 +109,7 @@
           ],
           "format": "date-time"
         },
-        "users": {
+        "app_users": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/app_user"
@@ -144,7 +156,7 @@
           ],
           "format": "date-time"
         },
-        "pages": {
+        "cms_pages": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/cms_site_page"
@@ -211,7 +223,7 @@
             }
           ]
         },
-        "site": {
+        "cms_site": {
           "anyOf": [
             {
               "$ref": "#/definitions/cms_site"
@@ -219,6 +231,210 @@
             {
               "type": "null"
             }
+          ]
+        }
+      }
+    },
+    "shop_cart": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "amount": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "order_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "user": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/app_user"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "shop_category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "amount": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    },
+    "shop_order": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "amount": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "app_user": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/app_user"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "shop_order_items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/shop_order_item"
+          }
+        }
+      }
+    },
+    "shop_order_item": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "amount": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "shop_order": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/shop_order"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "shop_product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "amount": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "shop_product_category": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/shop_product_category"
+          }
+        }
+      }
+    },
+    "shop_product_category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "amount": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "shop_product": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/shop_product"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "shop_product_promo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "filter": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rules": {
+          "type": [
+            "string",
+            "null"
           ]
         }
       }
@@ -234,6 +450,12 @@
             "string",
             "null"
           ]
+        },
+        "uber_passenger_rating": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/uber_passenger_rating"
+          }
         }
       }
     },
@@ -249,22 +471,30 @@
             "null"
           ]
         },
-        "ride_id": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "passenger_id": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
         "rating": {
           "type": [
             "integer",
             "null"
+          ]
+        },
+        "ride": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/uber_ride"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "passenger": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/uber_passenger"
+            },
+            {
+              "type": "null"
+            }
           ]
         }
       }
@@ -280,6 +510,12 @@
             "string",
             "null"
           ]
+        },
+        "uber_driver_rating": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/uber_driver_rating"
+          }
         }
       }
     },
@@ -295,22 +531,30 @@
             "null"
           ]
         },
-        "ride_id": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "driver_id": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
         "rating": {
           "type": [
             "integer",
             "null"
+          ]
+        },
+        "ride": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/uber_ride"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "driver": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/uber_driver"
+            },
+            {
+              "type": "null"
+            }
           ]
         }
       }
@@ -346,6 +590,42 @@
             "null"
           ],
           "format": "date-time"
+        },
+        "amount": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "passenger_rating": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/uber_passenger_rating"
+          }
+        },
+        "driver_rating": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/uber_driver_rating"
+          }
+        },
+        "ride_log": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/uber_ride_log"
+          }
+        },
+        "ride_passenger": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/uber_ride_passenger"
+          }
+        },
+        "ride_points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/uber_ride_points"
+          }
         }
       }
     },
@@ -361,18 +641,22 @@
             "null"
           ]
         },
-        "ride_id": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
         "created_at": {
           "type": [
             "string",
             "null"
           ],
           "format": "date-time"
+        },
+        "ride": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/uber_ride"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       }
     },
@@ -388,10 +672,14 @@
             "null"
           ]
         },
-        "ride_id": {
-          "type": [
-            "integer",
-            "null"
+        "ride": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/uber_ride"
+            },
+            {
+              "type": "null"
+            }
           ]
         }
       }
@@ -408,17 +696,21 @@
             "null"
           ]
         },
-        "ride_id": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
         "lat": {
           "type": "number"
         },
         "lng": {
           "type": "number"
+        },
+        "ride": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/uber_ride"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       }
     }
@@ -436,6 +728,27 @@
     },
     "cms_site_page": {
       "$ref": "#/definitions/cms_site_page"
+    },
+    "shop_cart": {
+      "$ref": "#/definitions/shop_cart"
+    },
+    "shop_category": {
+      "$ref": "#/definitions/shop_category"
+    },
+    "shop_order": {
+      "$ref": "#/definitions/shop_order"
+    },
+    "shop_order_item": {
+      "$ref": "#/definitions/shop_order_item"
+    },
+    "shop_product": {
+      "$ref": "#/definitions/shop_product"
+    },
+    "shop_product_category": {
+      "$ref": "#/definitions/shop_product_category"
+    },
+    "shop_product_promo": {
+      "$ref": "#/definitions/shop_product_promo"
     },
     "uber_driver": {
       "$ref": "#/definitions/uber_driver"
