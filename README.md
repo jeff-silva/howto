@@ -5,6 +5,11 @@
 cd ./laravel && yarn dev
 ```
 
+### [x-scrapper](./x-scrapper)
+```bash
+cd ./x-scrapper && yarn dev
+```
+
 ### [wwebjs](./wwebjs)
 ```bash
 cd ./wwebjs && yarn dev
@@ -25,6 +30,11 @@ cd ./nestjs && yarn dev
 cd ./tensorflow && yarn dev
 ```
 
+### [x-profile-md](./x-profile-md)
+```bash
+cd ./x-profile-md && yarn dev
+```
+
 ### [algorithm](./algorithm)
 ```bash
 cd ./algorithm && yarn dev
@@ -33,6 +43,11 @@ cd ./algorithm && yarn dev
 ### [sftpgo](./sftpgo)
 ```bash
 cd ./sftpgo && yarn dev
+```
+
+### [https](./https)
+```bash
+cd ./https && yarn dev
 ```
 
 ### [ai](./ai)
@@ -60,6 +75,21 @@ cd ./osm && yarn dev
 cd ./python && yarn dev
 ```
 
+### [keycloak](./keycloak)
+```bash
+cd ./keycloak && yarn dev
+```
+
+### [apache-letsencrypt](./apache-letsencrypt)
+```bash
+cd ./apache-letsencrypt && yarn dev
+```
+
+### [nginx-proxy-manager](./nginx-proxy-manager)
+```bash
+cd ./nginx-proxy-manager && yarn dev
+```
+
 ### [angular](./angular)
 ```bash
 cd ./angular && yarn dev
@@ -68,6 +98,11 @@ cd ./angular && yarn dev
 ### [python-django](./python-django)
 ```bash
 cd ./python-django && yarn dev
+```
+
+### [apache-multi](./apache-multi)
+```bash
+cd ./apache-multi && yarn dev
 ```
 
 ### [grpc](./grpc)

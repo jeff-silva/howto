@@ -1,0 +1,12 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak
+    working_dir: /opt/keycloak
+    command: start-dev
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: main@grr.la
+      KC_BOOTSTRAP_ADMIN_PASSWORD: main@grr.la
+    volumes:
+      - ./keycloak/providers:/opt/keycloak/providers
+    ports:
+      - 8080:8080
