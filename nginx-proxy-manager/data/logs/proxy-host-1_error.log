@@ -1,1 +1,0 @@
-2024/12/11 05:34:19 [warn] 214#214: *3031 using uninitialized "server" variable while logging request, client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost"
