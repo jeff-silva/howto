@@ -11,6 +11,18 @@ services:
       - 3000:3000
     volumes:
       - ./nestjs:/app
+    networks:
+      - mysql-network
+
+  # curl -sL https://raw.githubusercontent.com/jeff-silva/howto/refs/heads/main/.bin/nuxt-install.sh | bash
+  nuxt3:
+    image: node:18.16.0
+    working_dir: /app
+    command: bash -c "yarn install && yarn dev"
+    ports:
+      - 3001:3001
+    volumes:
+      - ./nuxt3:/app
 
   mysql:
     image: mysql
@@ -22,5 +34,20 @@ services:
       MYSQL_DATABASE: app
       MYSQL_ROOT_PASSWORD: app
       MYSQL_ROOT_HOST: "%"
+    networks:
+      - mysql-network
+
+  mysql-pma:
+    image: phpmyadmin
+    ports:
+      - "3307:80"
+    depends_on:
+      - mysql
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: app
+      PMA_PASSWORD: app
     networks:
       - mysql-network
