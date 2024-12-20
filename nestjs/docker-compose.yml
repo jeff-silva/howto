@@ -1,7 +1,7 @@
 services:
   # curl -sL https://raw.githubusercontent.com/jeff-silva/howto/refs/heads/main/.bin/nestjs-install.sh | bash
   nestjs:
-    image: node:22
+    build: ./nestjs/.docker
     working_dir: /app
     command: bash -c "yarn install && yarn run start"
     ports:
