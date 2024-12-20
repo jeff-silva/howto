@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAppUserDto } from './dto/create-app_user.dto';
+// import { CreateAppUserDto } from './dto/create-app_user.dto';
 import { UpdateAppUserDto } from './dto/update-app_user.dto';
+import { AppUserCreateUseCase } from 'core/use-cases/AppUserCreateUseCase';
 
 @Injectable()
 export class AppUserService {
-  create(createAppUserDto: CreateAppUserDto) {
-    return 'This action adds a new appUser';
+  // create(createAppUserDto: CreateAppUserDto) {
+  //   return ['This action adds a new appUser', createAppUserDto];
+  // }
+
+  create(data: object = {}) {
+    return new AppUserCreateUseCase();
   }
 
   index() {
@@ -17,10 +22,10 @@ export class AppUserService {
   }
 
   update(id: number, updateAppUserDto: UpdateAppUserDto) {
-    return `This action updates a #${id} appUser`;
+    return [`This action updates a #${id} appUser`, updateAppUserDto];
   }
 
   remove(id: number) {
-    return `This action removes a #${id} appUser`;
+    return [`This action removes a #${id} appUser`, id];
   }
 }
