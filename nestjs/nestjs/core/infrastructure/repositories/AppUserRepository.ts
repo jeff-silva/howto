@@ -7,7 +7,7 @@ export class AppUserRepository implements RepositoryInterface {
   }
 
   async index(params: object): Promise<object | null> {
-    return params;
+    return { params };
   }
 
   async show(id: number): Promise<AppUserEntity | null> {

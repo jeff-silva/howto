@@ -15,7 +15,7 @@ import {
   AppUserShowUseCase,
   AppUserUpdateUseCase,
   AppUserRemoveUseCase,
-} from 'core/use-cases/AppUser';
+} from 'core/use-cases/AppUserUseCase';
 
 @Controller('app_user')
 export class AppUserController {

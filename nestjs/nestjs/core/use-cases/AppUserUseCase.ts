@@ -1,9 +1,9 @@
-import { RepositoryInterface } from '../domain/repositories/RepositoryInterface';
+import { AppUserRepository } from '../infrastructure/repositories/AppUserRepository';
 import { AppUserEntity } from '../domain/entities/AppUserEntity';
 
 // Create
 export class AppUserCreateUseCase {
-  constructor(private appUserRepository: RepositoryInterface) {}
+  constructor(private appUserRepository: AppUserRepository) {}
 
   async execute(appUserData: object = {}): Promise<AppUserEntity> {
     const appUserEntity = new AppUserEntity(appUserData);
@@ -13,16 +13,16 @@ export class AppUserCreateUseCase {
 
 // Index
 export class AppUserIndexUseCase {
-  constructor(private appUserRepository: RepositoryInterface) {}
+  constructor(private appUserRepository: AppUserRepository) {}
 
   async execute(params: object): Promise<object> {
-    return await this.appUserRepository.index(params);
+    return this.appUserRepository.index(params);
   }
 }
 
 // Show
 export class AppUserShowUseCase {
-  constructor(private appUserRepository: RepositoryInterface) {}
+  constructor(private appUserRepository: AppUserRepository) {}
 
   async execute(id: number): Promise<AppUserEntity | null> {
     if (!id) return null;
@@ -32,7 +32,7 @@ export class AppUserShowUseCase {
 
 // Update
 export class AppUserUpdateUseCase {
-  constructor(private appUserRepository: RepositoryInterface) {}
+  constructor(private appUserRepository: AppUserRepository) {}
 
   async execute(
     id: number,
@@ -45,7 +45,7 @@ export class AppUserUpdateUseCase {
 
 // Remove
 export class AppUserRemoveUseCase {
-  constructor(private appUserRepository: RepositoryInterface) {}
+  constructor(private appUserRepository: AppUserRepository) {}
 
   async execute(id: number): Promise<AppUserEntity | null> {
     if (!id) return null;

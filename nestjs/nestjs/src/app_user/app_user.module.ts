@@ -7,7 +7,7 @@ import {
   AppUserShowUseCase,
   AppUserUpdateUseCase,
   AppUserRemoveUseCase,
-} from 'core/use-cases/AppUser';
+} from 'core/use-cases/AppUserUseCase';
 
 @Module({
   controllers: [AppUserController],
