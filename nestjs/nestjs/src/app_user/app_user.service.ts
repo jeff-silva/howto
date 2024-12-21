@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 // import { CreateAppUserDto } from './dto/create-app_user.dto';
 import { UpdateAppUserDto } from './dto/update-app_user.dto';
-import { AppUserCreateUseCase } from 'core/use-cases/AppUserCreateUseCase';
+// import { AppUserCreateUseCase } from 'core/use-cases/AppUserCreateUseCase';
 
 @Injectable()
 export class AppUserService {
@@ -9,8 +9,8 @@ export class AppUserService {
   //   return ['This action adds a new appUser', createAppUserDto];
   // }
 
-  create(data: object = {}) {
-    return new AppUserCreateUseCase();
+  create() {
+    return 'create';
   }
 
   index() {

@@ -1,9 +1,22 @@
 import { Module } from '@nestjs/common';
-import { AppUserService } from './app_user.service';
 import { AppUserController } from './app_user.controller';
+
+import {
+  AppUserCreateUseCase,
+  AppUserIndexUseCase,
+  AppUserShowUseCase,
+  AppUserUpdateUseCase,
+  AppUserRemoveUseCase,
+} from 'core/use-cases/AppUser';
 
 @Module({
   controllers: [AppUserController],
-  providers: [AppUserService],
+  providers: [
+    AppUserCreateUseCase,
+    AppUserIndexUseCase,
+    AppUserShowUseCase,
+    AppUserUpdateUseCase,
+    AppUserRemoveUseCase,
+  ],
 })
 export class AppUserModule {}

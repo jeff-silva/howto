@@ -3,55 +3,52 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 
-import { AppUserService } from './app_user.service';
-import { CreateAppUserDto } from './dto/create-app_user.dto';
-import { UpdateAppUserDto } from './dto/update-app_user.dto';
-// import { AppUserCreateUseCase } from 'core/use-cases/AppUserCreateUseCase';
+import {
+  AppUserCreateUseCase,
+  AppUserIndexUseCase,
+  AppUserShowUseCase,
+  AppUserUpdateUseCase,
+  AppUserRemoveUseCase,
+} from 'core/use-cases/AppUser';
 
 @Controller('app_user')
 export class AppUserController {
   constructor(
-    private readonly appUserService: AppUserService,
-    // private readonly appUserCreateUseCase: AppUserCreateUseCase,
+    private readonly appUserCreateUseCase: AppUserCreateUseCase,
+    private readonly appUserIndexUseCase: AppUserIndexUseCase,
+    private readonly appUserShowUseCase: AppUserShowUseCase,
+    private readonly appUserUpdateUseCase: AppUserUpdateUseCase,
+    private readonly appUserRemoveUseCase: AppUserRemoveUseCase,
   ) {}
 
-  // @Post()
-  // create(@Body() createAppUserDto: CreateAppUserDto) {
-  //   return this.appUserService.create(createAppUserDto);
-  // }
-
   @Post()
-  create(@Body() data: object = {}) {
-    return this.appUserService.create(data);
+  create(@Body() data) {
+    return this.appUserCreateUseCase.execute(data);
   }
 
-  // @Post()
-  // create(@Body() data: object = {}) {
-  //   return this.appUserCreateUseCase.execute(data);
-  // }
-
   @Get()
-  index() {
-    return this.appUserService.index();
+  index(@Query() query) {
+    return this.appUserIndexUseCase.execute(query);
   }
 
   @Get(':id')
-  show(@Param('id') id: string) {
-    return this.appUserService.show(+id);
+  show(@Param('id') id) {
+    return this.appUserShowUseCase.execute(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAppUserDto: UpdateAppUserDto) {
-    return this.appUserService.update(+id, updateAppUserDto);
+  @Put(':id')
+  update(@Param('id') id, @Body() data) {
+    return this.appUserUpdateUseCase.execute(id, data);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.appUserService.remove(+id);
+  remove(@Param('id') id) {
+    return this.appUserRemoveUseCase.execute(id);
   }
 }
