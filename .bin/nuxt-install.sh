@@ -4,7 +4,7 @@
 echo "Folder name"
 read folder
 
-docker run --rm -it --user $(id -u):$(id -g) -v $(pwd):/app -w /app node:18 bash -c "
+docker run --rm --user $(id -u):$(id -g) -v $(pwd):/app -w /app node:18 bash -c "
   npx nuxi@latest init $folder &&
   cd $folder &&
   yarn add -D vuetify vite-plugin-vuetify @iconify/vue @date-io/dayjs dayjs axios
