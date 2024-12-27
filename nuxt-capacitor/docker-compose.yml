@@ -10,7 +10,7 @@ services:
   #     - ./nuxt3:/app
 
   capacitor:
-    build: ./.docker/capacitor
+    build: ./nuxt3/.docker/
     working_dir: /app
     command: bash -c "yarn install && yarn dev"
     ports:
