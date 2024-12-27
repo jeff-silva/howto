@@ -4,11 +4,15 @@ import amqpConnection from "./utils/amqp.js";
 
 (async () => {
   try {
-    const amqp = await amqpConnection("random");
-    amqp.onReceive((message) => {
-      console.log("express.ampq.receive:", message);
+    ["KK.EVENT.#", "KK.EVENT.*.MYREALM.#"].map(async (evt) => {
+      const amqp = await amqpConnection(evt);
+      amqp.onReceive((message) => {
+        console.log("message:", { evt, message });
+      });
     });
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 })();
 
 // const app = express();
