@@ -90,6 +90,11 @@ cd ./keycloak && yarn dev
 cd ./apache-letsencrypt && yarn dev
 ```
 
+### [framework7](./framework7)
+```bash
+cd ./framework7 && yarn dev
+```
+
 ### [nginx-proxy-manager](./nginx-proxy-manager)
 ```bash
 cd ./nginx-proxy-manager && yarn dev
