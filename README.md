@@ -75,6 +75,11 @@ cd ./osm && yarn dev
 cd ./python && yarn dev
 ```
 
+### [nuxt-capacitor](./nuxt-capacitor)
+```bash
+cd ./nuxt-capacitor && yarn dev
+```
+
 ### [keycloak](./keycloak)
 ```bash
 cd ./keycloak && yarn dev
