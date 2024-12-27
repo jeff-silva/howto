@@ -1,5 +1,6 @@
 #!/bin/bash
-# curl -sL https://raw.githubusercontent.com/jeff-silva/howto/refs/heads/main/.bin/nuxt-install.sh | bash
+# bash <(curl -sL "https://raw.githubusercontent.com/jeff-silva/howto/refs/heads/main/.bin/nuxt-install.sh")
+
 
 echo "Folder name"
 read folder
