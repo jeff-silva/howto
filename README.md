@@ -25,6 +25,11 @@ cd ./prisma && yarn dev
 cd ./nestjs && yarn dev
 ```
 
+### [ionic](./ionic)
+```bash
+cd ./ionic && yarn dev
+```
+
 ### [tensorflow](./tensorflow)
 ```bash
 cd ./tensorflow && yarn dev
@@ -88,11 +93,6 @@ cd ./keycloak && yarn dev
 ### [apache-letsencrypt](./apache-letsencrypt)
 ```bash
 cd ./apache-letsencrypt && yarn dev
-```
-
-### [framework7](./framework7)
-```bash
-cd ./framework7 && yarn dev
 ```
 
 ### [nginx-proxy-manager](./nginx-proxy-manager)
