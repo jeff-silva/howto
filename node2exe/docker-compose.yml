@@ -1,0 +1,9 @@
+services:
+  node2exe:
+    build: ./node2exe/.docker
+    working_dir: /app
+    command: bash -c "yarn install && yarn dev"
+    ports:
+      - 3000:3000
+    volumes:
+      - ./node2exe:/app

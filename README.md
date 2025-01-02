@@ -80,6 +80,11 @@ cd ./osm && yarn dev
 cd ./python && yarn dev
 ```
 
+### [nexe](./nexe)
+```bash
+cd ./nexe && yarn dev
+```
+
 ### [nuxt-capacitor](./nuxt-capacitor)
 ```bash
 cd ./nuxt-capacitor && yarn dev
@@ -93,6 +98,11 @@ cd ./keycloak && yarn dev
 ### [apache-letsencrypt](./apache-letsencrypt)
 ```bash
 cd ./apache-letsencrypt && yarn dev
+```
+
+### [framework7](./framework7)
+```bash
+cd ./framework7 && yarn dev
 ```
 
 ### [nginx-proxy-manager](./nginx-proxy-manager)
