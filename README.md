@@ -90,6 +90,11 @@ cd ./osm && yarn dev
 cd ./python && yarn dev
 ```
 
+### [nexe](./nexe)
+```bash
+cd ./nexe && yarn dev
+```
+
 ### [nuxt-capacitor](./nuxt-capacitor)
 ```bash
 cd ./nuxt-capacitor && yarn dev
@@ -138,6 +143,11 @@ cd ./grpc && yarn dev
 ### [caddy](./caddy)
 ```bash
 cd ./caddy && yarn dev
+```
+
+### [py-klogger](./py-klogger)
+```bash
+cd ./py-klogger && yarn dev
 ```
 
 ### [php-apache-multi](./php-apache-multi)
