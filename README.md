@@ -25,6 +25,11 @@ cd ./prisma && yarn dev
 cd ./nestjs && yarn dev
 ```
 
+### [node2exe](./node2exe)
+```bash
+cd ./node2exe && yarn dev
+```
+
 ### [ionic](./ionic)
 ```bash
 cd ./ionic && yarn dev
@@ -65,6 +70,11 @@ cd ./ai && yarn dev
 cd ./typescript && yarn dev
 ```
 
+### [bevy](./bevy)
+```bash
+cd ./bevy && yarn dev
+```
+
 ### [rabbitmq](./rabbitmq)
 ```bash
 cd ./rabbitmq && yarn dev
@@ -78,11 +88,6 @@ cd ./osm && yarn dev
 ### [python](./python)
 ```bash
 cd ./python && yarn dev
-```
-
-### [nexe](./nexe)
-```bash
-cd ./nexe && yarn dev
 ```
 
 ### [nuxt-capacitor](./nuxt-capacitor)

@@ -1,0 +1,5 @@
+services:
+  bevy:
+    build: ./bevy
+    volumes:
+      - ./bevy:/app
