@@ -3,9 +3,17 @@
 echo "Informe o nome do projeto:"
 read project_name
 
-mkdir ./$project_name
+if [ -d ./$project_name ]; then
+  rm -rf ./$project_name
+fi
 
-cat << EOF > ./$project_name/package.json
+mkdir ./$project_name
+mkdir ./$project_name/$project_name
+mkdir ./$project_name/$project_name/.docker
+
+cd ./$project_name
+
+cat << EOF > ./package.json
 {
   "name": "$project_name",
   "version": "1.0.0",
@@ -16,8 +24,13 @@ cat << EOF > ./$project_name/package.json
 }
 EOF
 
-cat << EOF > ./$project_name/docker-compose.yml
+cat << EOF > ./docker-compose.yml
 services:
+  # Base application
+  $project_name:
+    build: ./$project_name/.docker
+
+  # Nuxt: to create, run command above.
   # docker run --rm -it -v \$(pwd):/app -w /app node:18 npx nuxi@latest init nuxt3
   nuxt3:
     image: node:22
@@ -29,7 +42,7 @@ services:
       - ./nuxt3:/app
 EOF
 
-cat << EOF > ./$project_name/README.md
+cat << EOF > ./README.md
 # $project_name
 
 How to run:
@@ -39,6 +52,22 @@ cd ./$project_name && yarn dev
 \`\`\`
 
 EOF
+
+cd ./$project_name
+
+yarn init -y
+
+cat << EOF > ./.docker/Dockerfile
+FROM node:22
+WORKDIR /app
+EXPOSE 3000
+
+COPY . .
+
+CMD ["sh", "-c", "yarn install && yarn start"]
+EOF
+
+cd ../..
 
 echo "# HowTo" > ./README.md
 
@@ -51,19 +80,8 @@ for dir in $(find . -maxdepth 1 -type d); do
     continue  # Pula para o próximo diretório
   fi
 
-  # if [ -f "$folder_readme" ]; then
-  #   readme_content=$(cat "$folder_readme")
-  #   printf "%s\n" "$readme_content" >> ./README.md
-  # else
-  #   echo "\n## $folder" >> ./README.md
-  #   echo "\`\`\`bash" >> ./README.md
-  #   echo "cd ./$folder && yarn dev" >> ./README.md
-  #   echo "\`\`\`" >> ./README.md
-  # fi
-
   echo "\n### [$folder](./$folder)" >> ./README.md
   echo "\`\`\`bash" >> ./README.md
   echo "cd ./$folder && yarn dev" >> ./README.md
   echo "\`\`\`" >> ./README.md
-
 done
