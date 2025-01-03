@@ -130,11 +130,6 @@ cd ./angular && yarn dev
 cd ./python-django && yarn dev
 ```
 
-### [openvoiceos](./openvoiceos)
-```bash
-cd ./openvoiceos && yarn dev
-```
-
 ### [apache-multi](./apache-multi)
 ```bash
 cd ./apache-multi && yarn dev
@@ -148,6 +143,11 @@ cd ./grpc && yarn dev
 ### [pyklogger](./pyklogger)
 ```bash
 cd ./pyklogger && yarn dev
+```
+
+### [portainer](./portainer)
+```bash
+cd ./portainer && yarn dev
 ```
 
 ### [caddy](./caddy)
