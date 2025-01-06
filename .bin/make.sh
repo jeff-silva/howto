@@ -11,9 +11,7 @@ mkdir ./$project_name
 mkdir ./$project_name/$project_name
 mkdir ./$project_name/$project_name/.docker
 
-cd ./$project_name
-
-cat << EOF > ./package.json
+cat << EOF > ./$project_name/package.json
 {
   "name": "$project_name",
   "version": "1.0.0",
@@ -24,25 +22,14 @@ cat << EOF > ./package.json
 }
 EOF
 
-cat << EOF > ./docker-compose.yml
+cat << EOF > ./$project_name/docker-compose.yml
 services:
   # Base application
   $project_name:
     build: ./$project_name/.docker
-
-  # Nuxt: to create, run command above.
-  # docker run --rm -it -v \$(pwd):/app -w /app node:18 npx nuxi@latest init nuxt3
-  nuxt3:
-    image: node:22
-    working_dir: /app
-    command: bash -c "yarn install && yarn dev"
-    ports:
-      - 3000:3000
-    volumes:
-      - ./nuxt3:/app
 EOF
 
-cat << EOF > ./README.md
+cat << EOF > ./$project_name/README.md
 # $project_name
 
 How to run:
@@ -50,26 +37,45 @@ How to run:
 \`\`\`bash
 cd ./$project_name && yarn dev
 \`\`\`
-
 EOF
 
-cd ./$project_name
+yarn init -y --cwd ./$project_name/$project_name
 
-yarn init -y
-
-cat << EOF > ./.docker/Dockerfile
+cat << EOF > ./$project_name/$project_name/.docker/Dockerfile
 FROM node:22
 WORKDIR /app
 EXPOSE 3000
 
 COPY . .
 
-CMD ["sh", "-c", "yarn install && yarn start"]
+CMD ["sh", "-c", "yarn install && yarn dev"]
 EOF
 
-cd ../..
 
-echo "# HowTo" > ./README.md
+echo "Criar frontend com Nuxt3? Se sim, qual o nome da pasta?"
+read nuxt3_folder
+
+if [ -n $nuxt3_folder ]; then
+  docker_eval="docker run --rm -it -v \$(pwd):/app -w /app node:18 npx nuxi@latest init $nuxt3_folder"
+  cat << EOF > ./$project_name/docker-compose.yml
+
+  # $docker_eval
+  $nuxt3_folder:
+    image: node:22
+    working_dir: /app
+    command: bash -c "yarn install && yarn dev"
+    ports:
+      - 3000:3000
+    volumes:
+      - ./{$nuxt3_folder}:/app
+EOF
+
+  cd ./$project_name
+  eval $docker_eval
+  cd ..
+fi
+
+echo "# HowTo" > ./$project_name/README.md
 
 # Usando find para listar apenas os diretórios
 for dir in $(find . -maxdepth 1 -type d); do
