@@ -52,14 +52,18 @@ CMD ["sh", "-c", "yarn install && yarn dev"]
 EOF
 
 
-echo "Criar frontend com Nuxt3? Se sim, qual o nome da pasta?"
+echo "Instalar Nuxt3? Se sim, informar nome da pasta:"
 read nuxt3_folder
 
 if [ -n $nuxt3_folder ]; then
-  docker_eval="docker run --rm -it -v \$(pwd):/app -w /app node:18 npx nuxi@latest init $nuxt3_folder"
-  cat << EOF > ./$project_name/docker-compose.yml
+  cd ./$project_name
+  export nuxt3_folder="$nuxt3_folder"
+  sh ../.bin/nuxt-install.sh
+  cd ..
 
-  # $docker_eval
+  cat << EOF >> ./$project_name/docker-compose.yml
+
+  # bash <(curl -s "https://raw.githubusercontent.com/jeff-silva/howto/refs/heads/main/.bin/nuxt-install.sh")
   $nuxt3_folder:
     image: node:22
     working_dir: /app
@@ -67,12 +71,8 @@ if [ -n $nuxt3_folder ]; then
     ports:
       - 3000:3000
     volumes:
-      - ./{$nuxt3_folder}:/app
+      - ./$nuxt3_folder:/app
 EOF
-
-  cd ./$project_name
-  eval $docker_eval
-  cd ..
 fi
 
 echo "# HowTo" > ./$project_name/README.md

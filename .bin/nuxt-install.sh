@@ -1,18 +1,20 @@
 #!/bin/bash
 # bash <(curl -s "https://raw.githubusercontent.com/jeff-silva/howto/refs/heads/main/.bin/nuxt-install.sh")
 
-echo "Folder name"
-read folder
+if [[ -z "$nuxt3_folder" ]]; then
+  echo "Folder name"
+  read nuxt3_folder
+fi
 
 docker run --rm -it --user $(id -u):$(id -g) -v $(pwd):/app -w /app node:18 bash -c "
-  npx nuxi@latest init $folder &&
-  cd $folder &&
+  npx nuxi@latest init $nuxt3_folder &&
+  cd $nuxt3_folder &&
   yarn add -D vuetify vite-plugin-vuetify @iconify/vue @date-io/dayjs dayjs axios
 "
 
-mkdir -p ./$folder/plugins
+mkdir -p ./$nuxt3_folder/plugins
 
-cat << EOF > ./$folder/plugins/1.vuetify.client.js
+cat << EOF > ./$nuxt3_folder/plugins/1.vuetify.client.js
 /**
  * Install Vuetify and create nuxt.config.ts like in link above.
  * Dont need to install @mdi/font. We will use @iconify/vue
