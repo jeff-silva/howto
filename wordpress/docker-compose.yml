@@ -1,0 +1,34 @@
+services:
+  wordpress:
+    build: ./wordpress
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: app
+      WORDPRESS_DB_PASSWORD: app
+      WORDPRESS_DB_NAME: app
+    volumes:
+      - ./wordpress/themes/daradomingues:/var/www/html/wp-content/themes/daradomingues
+      # - ./wordpress/plugins:/var/www/html/wp-content/plugins
+    networks:
+      - main
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: app
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+      MYSQL_RANDOM_ROOT_PASSWORD: "1"
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      - main
+
+volumes:
+  wordpress:
+  mysql:
+
+networks:
+  main:

@@ -55,7 +55,7 @@ EOF
 echo "Instalar Nuxt3? Se sim, informar nome da pasta:"
 read nuxt3_folder
 
-if [ -n $nuxt3_folder ]; then
+if [ -n "$nuxt3_folder" ]; then
   cd ./$project_name
   export nuxt3_folder="$nuxt3_folder"
   sh ../.bin/nuxt-install.sh
