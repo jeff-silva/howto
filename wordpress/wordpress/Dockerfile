@@ -9,3 +9,5 @@ RUN chown -R www-data:www-data /var/www/html/wp-content
 
 # Define o usuário www-data para executar o WordPress
 USER www-data
+
+COPY custom.ini $PHP_INI_DIR/conf.d/

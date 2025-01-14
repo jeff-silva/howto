@@ -11,4 +11,8 @@
  */
 
 wp_footer();
-echo '</body></html>';
+?>
+
+</body>
+
+</html>
