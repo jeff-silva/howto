@@ -103,11 +103,55 @@ return new class extends \Elementor\Widget_Base
     $this->end_controls_section();
   }
 
+  protected function get_attach($id)
+  {
+    $url = wp_get_attachment_image_url($id, 'full');
+    $meta = wp_get_attachment_metadata($id);
+    return (object) [
+      'id' => $id,
+      'url' => $url,
+      'size' => $meta['filesize'],
+      'width' => $meta['width'],
+      'height' => $meta['height'],
+      // 'meta' => $meta,
+    ];
+  }
+
+  protected function get_posts_schema($type)
+  {
+    $terms = get_terms(['taxonomy' => 'work_tag']);
+    $terms = array_values($terms);
+
+    $posts = get_posts(['post_type' => $type, 'posts_per_page' => -1]);
+    $posts = array_map(function ($post) {
+      $post->meta = new stdClass;
+
+      $post->meta->work_tag = get_the_terms($post->ID, 'work_tag');
+      $post->meta->work_tag = is_array($post->meta->work_tag) ? $post->meta->work_tag : [];
+      $post->meta->work_tag = array_values($post->meta->work_tag);
+
+      $post->meta->cover = get_post_meta($post->ID, 'cover');
+      $post->meta->cover = isset($post->meta->cover[0]) ? $post->meta->cover[0] : null;
+      $post->meta->cover = $this->get_attach($post->meta->cover);
+
+      $post->meta->images = get_post_meta($post->ID, 'images');
+      $post->meta->images = array_map(fn($id) => $this->get_attach($id), $post->meta->images);
+
+      return $post;
+    }, $posts);
+
+    return [
+      'terms' => $terms,
+      'posts' => $posts,
+    ];
+  }
+
   protected function render()
   {
     $settings = $this->get_settings_for_display();
+    $work = $this->get_posts_schema('work');
 ?>
-    <div id="app">
+    <div id="app" style="opacity:0;">
       <div
         class="px-4 py-6 sm:px-6 lg:px-8 sticky top-0"
         style="background: #ffffffee">
@@ -122,17 +166,17 @@ return new class extends \Elementor\Widget_Base
             <a
               href="javascript:;"
               class="text-gray-500 text-gray-700 px-3 py-2 font-medium text-sm rounded-md hover:bg-gray-100"
-              :class="{'bg-gray-100': portfolio.params.category == null}"
-              @click="portfolio.params.category = null">
+              :class="{'bg-gray-100': work.filter.work_tag == null}"
+              @click="work.filter.work_tag = null">
               All
             </a>
 
-            <template v-for="o in portfolio.options.categories">
+            <template v-for="o in work.terms">
               <a
                 href="javascript:;"
                 class="text-gray-500 text-gray-700 px-3 py-2 font-medium text-sm rounded-md hover:bg-gray-100"
-                :class="{'bg-gray-100': portfolio.params.category == o.slug}"
-                @click="portfolio.params.category = o.slug">
+                :class="{'bg-gray-100': work.filter.work_tag == o.slug}"
+                @click="work.filter.work_tag = o.slug">
                 {{ o.name }}
               </a>
             </template>
@@ -147,22 +191,28 @@ return new class extends \Elementor\Widget_Base
       </div>
 
       <!-- Preload -->
-      <template v-for="o in portfolio.results.data">
-        <link rel="preload" as="image" :href="o.image" />
+      <template v-for="o in work.raw.posts">
+        <link rel="preload" as="image" :href="o.meta.cover.url" />
       </template>
 
       <!-- Results -->
       <div class="mx-auto max-w-7xl">
         <div class="columns-1 md:columns-3">
-          <template v-for="o in portfolio.results.filtered">
+          <template v-for="o in work.posts">
             <div
               class="bg-gray-100 rounded shadow mb-4"
               style="break-inside: avoid-column"
               @click="dialog.setData(o)">
-              <img v-if="o.image.url" :src="o.image.url" class="w-full rounded-t-lg" alt="" />
-              <div class="p-3" v-if="o.name || o.description">
-                <div class="text-sm font-medium">{{ o.name }}</div>
-                <div class="text-sm line-clamp-2" style="height:40px;" v-html="o.description"></div>
+              <div class="bg-gray-200" style="min-height:300px;">
+                <img v-if="o.meta.cover" :src="o.meta.cover.url" class="w-full rounded-t-lg" alt="" />
+              </div>
+              <div class="p-3">
+                <div class="text-sm font-medium">{{ o.post_title }}</div>
+                <div
+                  v-if="o.post_excerpt"
+                  v-html="o.post_excerpt"
+                  class="text-sm line-clamp-2"
+                  style="height:40px;"></div>
               </div>
             </div>
           </template>
@@ -176,18 +226,27 @@ return new class extends \Elementor\Widget_Base
         open
         @click.self="dialog.setData(null)">
         <div
-          class="bg-white shadow rounded overflow-hidden"
-          style="width: 700px">
+          class="flex flex-col bg-white shadow rounded overflow-hidden"
+          style="width: 700px; max-width: 90vw; max-height:90vh;">
           <div class="p-3 bg-gray-200 text-gray-700 font-medium">
-            {{ dialog.data.name }}
+            {{ dialog.data.post_title }}
           </div>
-          <img
-            v-if="dialog.data.image.url"
-            :src="dialog.data.image.url"
-            alt=""
-            style="width: 100%; max-height: 60vh; object-fit: contain"
-            class="bg-gray-300" />
-          <div class="p-3" v-html="dialog.data.description"></div>
+          <div class="grow overflow-auto">
+            <div
+              class="relative w-full flex gap-6 snap-x snap-mandatory overflow-x-auto"
+              @drag="(ev) => {
+                const scrollTo = ev.currentTarget.scrollLeft - (ev.movementX * 30);
+                ev.currentTarget.scrollTo(scrollTo, 0);
+                console.clear();
+                console.log(ev.movementX);
+              }">
+              <template v-for="o in dialog.data.meta.images">
+                <div class="snap-center shrink-0">
+                  <img :src="o.url" style="width:auto; height:70vh;" />
+                </div>
+              </template>
+            </div>
+          </div>
           <div class="p-3 flex justify-end">
             <a
               href="javascript:;"
@@ -204,7 +263,7 @@ return new class extends \Elementor\Widget_Base
         &copy; 2025 daradomingues.com | All rights reserved.
       </div>
 
-      <!-- <pre>portfolio: {{ portfolio }}</pre> -->
+      <!-- <pre>work: {{ work }}</pre> -->
     </div>
     <script type="module">
       const {
@@ -213,85 +272,31 @@ return new class extends \Elementor\Widget_Base
       const {
         createApp,
         reactive,
-        computed
+        computed,
+        onMounted,
       } = Vue;
 
       createApp({
         setup() {
-          const portfolio = reactive({
-            params: {
-              category: null,
+          const work = reactive({
+            filter: {
+              work_tag: null,
             },
-            options: {
-              columns: 3,
-              categories: <?php echo json_encode($this->get_portfolio_items_categories()); ?>,
-            },
-            results: {
-              data: (() => {
-                const arrayShuffle = ([...arr]) => {
-                  let m = arr.length;
-                  while (m) {
-                    const i = Math.floor(Math.random() * m--);
-                    [arr[m], arr[i]] = [arr[i], arr[m]];
-                  }
-                  return arr;
-                };
+            terms: computed(() => {
+              return work.raw.terms;
+            }),
+            posts: computed(() => {
+              if (!work.filter.work_tag) {
+                return work.raw.posts;
+              }
 
-                let items = <?php echo json_encode($settings['portfolio_items']); ?>;
-
-                items = items.map((item) => {
-                  item.categories = arrayShuffle([
-                    "styling",
-                    "styling-assistant",
-                    "production",
-                  ]);
-                  item.categories.shift();
-
-                  return item;
-                });
-
-                // for (let i = 0; i <= 33; i++) {
-                //   const id = faker.commerce.isbn();
-                //   const name = faker.commerce.productName();
-                //   const description = faker.commerce.productDescription();
-                //   const width = 300;
-                //   const height = 100 + Math.round(Math.random() * 200);
-                //   const image = faker.image.url({
-                //     width,
-                //     height
-                //   });
-
-                //   const categories = arrayShuffle([
-                //     "styling",
-                //     "styling-assistant",
-                //     "production",
-                //   ]);
-                //   categories.shift();
-
-                //   items.push({
-                //     id,
-                //     name,
-                //     image,
-                //     description,
-                //     width,
-                //     height,
-                //     categories,
-                //   });
-                // }
-
-                return items;
-              })(),
-
-              filtered: computed(() => {
-                let items = JSON.parse(JSON.stringify(portfolio.results.data));
-                if (portfolio.params.category) {
-                  items = items.filter((item) => {
-                    return item.categories.includes(portfolio.params.category);
-                  });
-                }
-                return items;
-              }),
-            },
+              return work.raw.posts.filter((post) => {
+                return post.meta.work_tag.filter((tag) => {
+                  return tag.slug == work.filter.work_tag;
+                }).length >= 1;
+              });
+            }),
+            raw: <?php echo json_encode($work); ?>,
           });
 
           const dialog = reactive({
@@ -301,8 +306,12 @@ return new class extends \Elementor\Widget_Base
             },
           });
 
+          onMounted(() => {
+            document.querySelector('#app').style.opacity = 1;
+          });
+
           return {
-            portfolio,
+            work,
             dialog
           };
         },

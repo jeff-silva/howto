@@ -17,8 +17,32 @@
 <head>
 	<meta charset="<?php bloginfo('charset'); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="profile" href="https://gmpg.org/xfn/11">
 	<?php wp_head(); ?>
+
+	<style>
+		html,
+		body {
+			max-width: 100vw;
+			overflow: auto;
+		}
+
+		*::-webkit-scrollbar {
+			width: 14px;
+			height: 14px;
+		}
+
+		*::-webkit-scrollbar-track {
+			background: transparent;
+		}
+
+		*::-webkit-scrollbar-thumb {
+			border: 4px solid rgba(0, 0, 0, 0);
+			background-clip: padding-box;
+			background-color: #7f7f7f44;
+			border-radius: 10px;
+			cursor: pointer;
+		}
+	</style>
 </head>
 
 <body <?php body_class(); ?>>
