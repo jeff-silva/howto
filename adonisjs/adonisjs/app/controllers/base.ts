@@ -5,23 +5,27 @@ export default class Base {
     return { data }
   }
 
-  async index(http: HttpContext) {
-    return ['index', http.params]
+  public error(code: any, message: string, meta = {}) {
+    return { code, message, meta }
   }
 
-  async store(http: HttpContext) {
-    return ['store', http.params]
+  async index(http: HttpContext): Promise<Record<string, any>> {
+    return { type: 'index', params: http.params }
   }
 
-  async show(http: HttpContext) {
-    return ['show', http.params]
+  async store(http: HttpContext): Promise<Record<string, any>> {
+    return { type: 'store', params: http.params }
   }
 
-  async update(http: HttpContext) {
-    return ['update', http.params]
+  async show(http: HttpContext): Promise<Record<string, any>> {
+    return { type: 'show', params: http.params }
   }
 
-  async destroy(http: HttpContext) {
-    return ['destroy', http.params]
+  async update(http: HttpContext): Promise<Record<string, any>> {
+    return { type: 'update', params: http.params }
+  }
+
+  async destroy(http: HttpContext): Promise<Record<string, any>> {
+    return { type: 'destroy', params: http.params }
   }
 }

@@ -37,3 +37,18 @@ services:
       MYSQL_ROOT_HOST: "%"
     networks:
       - mysql-network
+
+  mysql-pma:
+    image: phpmyadmin
+    ports:
+      - "3307:80"
+    depends_on:
+      - mysql
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: app
+      PMA_PASSWORD: app
+    networks:
+      - mysql-network
