@@ -10,11 +10,11 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 
-const UserController = () => import('#controllers/user_controller')
-router.resource('user', UserController).apiOnly().only(['index']).use(middleware.auth())
+const AppUserController = () => import('#controllers/app_user_controller')
+router.resource('app_user', AppUserController).apiOnly().only(['index']).use('*', middleware.auth())
 
-const TestController = () => import('#controllers/test_controller')
-router.resource('test', TestController).apiOnly()
+const AppTestController = () => import('#controllers/app_test_controller')
+router.resource('app_test', AppTestController).apiOnly()
 
 router.get('/', async () => {
   return {

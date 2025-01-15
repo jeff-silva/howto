@@ -45,8 +45,8 @@ export const middleware = router.named({
   auth: () => import('#middleware/auth_middleware'),
 })
 
-import fs from 'fs'
-import { exec } from 'child_process'
+import fs from 'node:fs'
+import { exec } from 'node:child_process'
 
 fs.watch('./prisma/schema.prisma', { encoding: 'buffer' }, (eventType, filename) => {
   exec('npx prisma db push', (error, stdout, stderr) => {
