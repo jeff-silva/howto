@@ -21,11 +21,16 @@ export default class Base {
   }
 
   async index(http: HttpContext): Promise<Record<string, any>> {
-    return { type: 'index', params: http.params }
+    const data = await this.model.constructor.query().paginate(1, 20)
+    return this.success({
+      page: data.currentPage,
+      pages: data.lastPage,
+      total: data.total,
+      data: data.rows,
+    })
   }
 
   async store(http: HttpContext): Promise<Record<string, any>> {
-    console.log(http.request.body())
     const data = await this.storeValidate(http.request.body())
     const entity = await this.model.merge(data).save()
     return { entity }

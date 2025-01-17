@@ -5,12 +5,28 @@
         cols="12"
         md="6"
       >
+        <v-table>
+          <thead>
+            <tr>
+              <th>name</th>
+              <th>email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-for="o in appUserIndex.response.data">
+              <tr>
+                <td>{{ o.name }}</td>
+                <td>{{ o.email }}</td>
+              </tr>
+            </template>
+          </tbody>
+        </v-table>
         <v-btn
           text="Submit"
-          :loading="appIndex.busy"
-          @click="appIndex.submit()"
+          :loading="appUserIndex.busy"
+          @click="appUserIndex.submit()"
         />
-        <pre>appIndex: {{ appIndex }}</pre>
+        <pre>appUserIndex: {{ appUserIndex }}</pre>
       </v-col>
 
       <v-col
@@ -32,75 +48,43 @@
         />
         <pre>appUserCreate: {{ appUserCreate }}</pre>
       </v-col>
+
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <v-btn
+          text="Submit"
+          :loading="appIndex.busy"
+          @click="appIndex.submit()"
+        />
+        <pre>appIndex: {{ appIndex }}</pre>
+      </v-col>
     </v-row>
   </div>
 </template>
 
 <script setup>
-import axios from "axios";
-
-const useRequest = (options = {}) => {
-  if (options.url.startsWith("api://")) {
-    options.url = options.url.replace("api://", "http://localhost:3333/");
-  }
-
-  const r = reactive({
-    busy: false,
-    url: "",
-    method: "get",
-    params: {},
-    data: {},
-    headers: {},
-    response: null,
-    onSuccess: () => null,
-    onError: () => null,
-    ...options,
-    error: null,
-    async submit() {
-      r.busy = true;
-      r.error = null;
-
-      let fetchOptions = {
-        url: r.url,
-        method: r.method || "get",
-        params: r.params || {},
-        headers: r.headers || {},
-      };
-
-      if (["post", "put"].includes(fetchOptions.method)) {
-        fetchOptions.data = r.data;
-      }
-
-      console.log(fetchOptions);
-
-      try {
-        const resp = await axios(fetchOptions);
-        r.response = resp.data;
-      } catch (err) {
-        r.error = {
-          name: err.name,
-          status: err.status,
-          message: err.message,
-          response: err.response,
-        };
-      }
-
-      r.busy = false;
-    },
-  });
-
-  return r;
-};
-
-const appIndex = useRequest({
+const appIndex = useAxios({
   method: "get",
   url: "api://app/index",
   response: { data: [] },
 });
 
-const appUserCreate = useRequest({
+appIndex.submit();
+
+const appUserCreate = useAxios({
   method: "post",
   url: "api://app_user",
   response: { entity: null },
+  onSuccess() {
+    appIndex.submit();
+  },
+});
+
+const appUserIndex = useAxios({
+  method: "get",
+  url: "api://app_user",
+  response: { data: [] },
 });
 </script>
