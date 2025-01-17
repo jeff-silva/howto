@@ -1,12 +1,23 @@
 import type { HttpContext } from '@adonisjs/core/http'
+// import { BaseModel } from '@adonisjs/lucid/orm'
 
 export default class Base {
-  public success(data = {}) {
-    return { data }
+  // private model: typeof BaseModel
+
+  protected async storeValidate(data = {}) {
+    return data
   }
 
-  public error(code: any, message: string, meta = {}) {
-    return { code, message, meta }
+  protected async updateValidate(data = {}) {
+    return data
+  }
+
+  public success(data = {}) {
+    return { success: true, ...data }
+  }
+
+  public error(code: any, message: string, data = {}) {
+    return { code, message, data }
   }
 
   async index(http: HttpContext): Promise<Record<string, any>> {
@@ -14,7 +25,10 @@ export default class Base {
   }
 
   async store(http: HttpContext): Promise<Record<string, any>> {
-    return { type: 'store', params: http.params }
+    console.log(http.request.body())
+    const data = await this.storeValidate(http.request.body())
+    const entity = await this.model.merge(data).save()
+    return { entity }
   }
 
   async show(http: HttpContext): Promise<Record<string, any>> {
@@ -22,7 +36,8 @@ export default class Base {
   }
 
   async update(http: HttpContext): Promise<Record<string, any>> {
-    return { type: 'update', params: http.params }
+    const data = await this.updateValidate(http.request.all())
+    return { type: 'update', params: http.params, data }
   }
 
   async destroy(http: HttpContext): Promise<Record<string, any>> {
