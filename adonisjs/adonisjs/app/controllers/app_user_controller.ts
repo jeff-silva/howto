@@ -13,7 +13,6 @@ export default class AppUserController extends Base {
   }
 
   protected async storeValidate(data = {}) {
-    // console.log(data)
     return await appUserSave.validate(data)
   }
 

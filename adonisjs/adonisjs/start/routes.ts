@@ -25,6 +25,19 @@ const AppUserController = () => import('#controllers/app_user_controller')
 // router.resource('app_user', AppUserController).apiOnly().only(['index']).use('*', middleware.auth())
 router.resource('app_user', AppUserController).apiOnly()
 
+// app_file
+const AppFileController = () => import('#controllers/app_file_controller')
+router.resource('app_file', AppFileController).apiOnly()
+
+// app_address
+const AppAddressController = () => import('#controllers/app_address_controller')
+router.resource('app_address', AppAddressController).apiOnly()
+
+// app_config
+const AppConfigController = () => import('#controllers/app_config_controller')
+router.post('/app_config/saveAll', [AppConfigController, 'saveAll']).as('app_config.save')
+router.post('/app_config/listAll', [AppConfigController, 'listAll']).as('app_config.llist')
+
 // AppTestCrud
 const AppTestController = () => import('#controllers/app_test_controller')
 router.resource('app_test', AppTestController).apiOnly()

@@ -18,6 +18,45 @@ model app_user {
   email      String?
   name       String?
   password   String?
-  created_at DateTime
-  updated_at DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model app_config {
+  id         Int      @id @default(autoincrement())
+  name       String?
+  value      String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model app_file {
+  id         Int      @id @default(autoincrement())
+  name       String?
+  mime       String?
+  size       String?
+  path       String?
+  content    String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model app_address {
+  id           Int      @id @default(autoincrement())
+  name         String?
+  route        String?
+  number       String?
+  complement   String?
+  zipcode      String?
+  district     String?
+  city         String?
+  city_code    String?
+  state        String?
+  state_code   String?
+  country      String?
+  country_code String?
+  lat          Float?
+  lng          Float?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
 }
