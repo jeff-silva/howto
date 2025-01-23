@@ -20,10 +20,24 @@
 	<?php wp_head(); ?>
 
 	<style>
-		html,
+		@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+		<?php foreach ([100, 200, 300, 400, 500, 600, 700, 800, 900] as $weight): ?>.font-roboto-<?php echo $weight; ?> {
+			font-family: "Roboto", serif;
+			font-optical-sizing: auto;
+			font-weight: <?php echo $weight; ?>;
+			font-style: normal;
+			font-variation-settings: "wdth" 100;
+		}
+
+		<?php endforeach; ?>html,
 		body {
 			max-width: 100vw;
 			overflow: auto;
+		}
+
+		* {
+			transition: all 300ms ease;
 		}
 
 		*::-webkit-scrollbar {
@@ -41,6 +55,10 @@
 			background-color: #7f7f7f44;
 			border-radius: 10px;
 			cursor: pointer;
+		}
+
+		.container {
+			max-width: 1000px !important;
 		}
 	</style>
 </head>

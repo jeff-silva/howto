@@ -152,43 +152,89 @@ return new class extends \Elementor\Widget_Base
     $work = $this->get_posts_schema('work');
 ?>
     <div id="app" style="opacity:0;">
+
+      <!-- Nav -->
       <div
-        class="px-4 py-6 sm:px-6 lg:px-8 sticky top-0"
-        style="background: #ffffffee">
-        <div class="flex items-center gap-6 justify-between mx-auto max-w-7xl">
+        class="fixed top-0 left-0 w-full"
+        style="background: #ffffffee; z-index:99;">
+        <div class="mx-auto container py-2 flex items-center gap-2">
           <a
-            href="javascript:;"
-            class="text-gray-500 text-gray-700 px-3 py-2 font-medium text-sm rounded-md hover:bg-gray-100">
+            href="/"
+            class="text-gray-500 text-slate-600 px-3 text-sm font-roboto-800 hover:text-slate-900">
             Dara Domingues
           </a>
 
-          <nav class="flex space-x-4" aria-label="Tabs">
-            <a
-              href="javascript:;"
-              class="text-gray-500 text-gray-700 px-3 py-2 font-medium text-sm rounded-md hover:bg-gray-100"
-              :class="{'bg-gray-100': work.filter.work_tag == null}"
-              @click="work.filter.work_tag = null">
-              All
-            </a>
-
-            <template v-for="o in work.terms">
-              <a
-                href="javascript:;"
-                class="text-gray-500 text-gray-700 px-3 py-2 font-medium text-sm rounded-md hover:bg-gray-100"
-                :class="{'bg-gray-100': work.filter.work_tag == o.slug}"
-                @click="work.filter.work_tag = o.slug">
-                {{ o.name }}
-              </a>
-            </template>
-          </nav>
+          <div class="flex-1 flex justify-center">
+            <nav class="hidden lg:flex space-x-4" aria-label="Tabs">
+              <template v-for="o in nav.items">
+                <a
+                  href="javascript:;"
+                  class="text-gray-500 text-slate-600 px-3 py-2 hover:text-slate-900"
+                  v-bind="o.bind">
+                  <span
+                    class="decoration-black underline-offset-8 font-roboto-400 text-sm"
+                    :class="{'underline text-slate-900': o.active}">
+                    {{ o.name }}
+                  </span>
+                </a>
+              </template>
+            </nav>
+          </div>
 
           <a
-            href="javascript:;"
-            class="text-gray-500 text-gray-700 px-3 py-2 font-medium text-sm rounded-md hover:bg-gray-100">
+            href="mailto:daradomingues.studio@gmail.com"
+            class="text-gray-500 text-slate-600 px-3 text-sm font-roboto-400 hover:text-slate-900">
             Contact
+          </a>
+
+          <a href="javascript:;" class="lg:hidden" @click="nav.dialog.set()">
+            <img src="https://api.iconify.design/fluent:navigation-16-filled.svg?height=35" alt="">
           </a>
         </div>
       </div>
+
+      <!-- Drawer -->
+      <dialog
+        class="fixed top-0 left-0 w-full h-full flex items-center justify-center p-3"
+        style="background: #00000088; z-index:99;"
+        :style="{
+          'opacity': nav.dialog.visible ? 1 : 0,
+          'z-index': nav.dialog.visible ? 99 : -1,
+        }"
+        open
+        @click.self="nav.dialog.set(null)">
+        <div
+          class="fixed flex flex-col bg-white h-full shadow overflow-hidden"
+          style="width: 300px;"
+          :style="{
+            'top': 0,
+            'right': nav.dialog.visible ? 0 : '-100%',
+          }">
+          <div class="grow overflow-auto">
+            <template v-for="o in nav.items">
+              <a
+                href="javascript:;"
+                class="flex items-center px-2 py-3 text-slate-600 hover:bg-gray-100 font-roboto-400"
+                :class="{'underline text-slate-900': o.active}"
+                v-bind="o.bind"
+                @click="() => {
+                  o.bind.onClick();
+                  nav.dialog.set(null);
+                }">
+                <span>{{ o.name }}</span>
+              </a>
+            </template>
+          </div>
+          <div class="p-3 flex justify-end">
+            <a
+              href="javascript:;"
+              class="bg-gray-200 text-slate-600 px-3 py-2 rounded"
+              @click="nav.dialog.set(null)">
+              Close
+            </a>
+          </div>
+        </div>
+      </dialog>
 
       <!-- Preload -->
       <template v-for="o in work.raw.posts">
@@ -196,17 +242,17 @@ return new class extends \Elementor\Widget_Base
       </template>
 
       <!-- Results -->
-      <div class="mx-auto max-w-7xl">
+      <div class="mx-auto container mt-16">
         <div class="columns-1 md:columns-3">
           <template v-for="o in work.posts">
             <div
-              class="bg-gray-100 rounded shadow mb-4"
+              class="group rounded shadow mb-4 relative"
               style="break-inside: avoid-column"
               @click="dialog.setData(o)">
               <div class="bg-gray-200" style="min-height:300px;">
                 <img v-if="o.meta.cover" :src="o.meta.cover.url" class="w-full rounded-t-lg" alt="" />
               </div>
-              <div class="p-3">
+              <div class="p-3 opacity-0 group-hover:opacity-100 absolute left-0 bottom-0 w-full bg-gray-100">
                 <div class="text-sm font-medium">{{ o.post_title }}</div>
                 <div
                   v-if="o.post_excerpt"
@@ -219,27 +265,26 @@ return new class extends \Elementor\Widget_Base
         </div>
       </div>
 
+      <!-- Dialog -->
       <dialog
-        v-if="!!dialog.data"
         class="fixed top-0 left-0 w-full h-full flex items-center justify-center p-3"
         style="background: #00000088"
+        :style="{
+          'z-index': dialog.visible ? 99 : -1,
+          'opacity': dialog.visible ? 1 : 0,
+        }"
         open
         @click.self="dialog.setData(null)">
         <div
           class="flex flex-col bg-white shadow rounded overflow-hidden"
           style="width: 700px; max-width: 90vw; max-height:90vh;">
-          <div class="p-3 bg-gray-200 text-gray-700 font-medium">
+          <div v-if="dialog.data" class="p-3 bg-gray-200 text-slate-600 font-medium">
             {{ dialog.data.post_title }}
           </div>
           <div class="grow overflow-auto">
             <div
-              class="relative w-full flex gap-6 snap-x snap-mandatory overflow-x-auto"
-              @drag="(ev) => {
-                const scrollTo = ev.currentTarget.scrollLeft - (ev.movementX * 30);
-                ev.currentTarget.scrollTo(scrollTo, 0);
-                console.clear();
-                console.log(ev.movementX);
-              }">
+              v-if="dialog.data"
+              class="relative w-full flex gap-6 snap-x snap-mandatory overflow-x-auto">
               <template v-for="o in dialog.data.meta.images">
                 <div class="snap-center shrink-0">
                   <img :src="o.url" style="width:auto; height:70vh;" />
@@ -250,7 +295,7 @@ return new class extends \Elementor\Widget_Base
           <div class="p-3 flex justify-end">
             <a
               href="javascript:;"
-              class="bg-gray-200 text-gray-700 px-3 py-2 rounded"
+              class="bg-gray-200 text-slate-600 px-3 py-2 rounded"
               @click="dialog.setData(null)">
               Close
             </a>
@@ -259,7 +304,7 @@ return new class extends \Elementor\Widget_Base
       </dialog>
 
       <div
-        class="mx-auto max-w-7xl text-md text-gray-400 text-center py-5 mt-5">
+        class="mx-auto container text-md text-gray-400 text-center py-5 mt-5">
         &copy; 2025 daradomingues.com | All rights reserved.
       </div>
 
@@ -299,9 +344,36 @@ return new class extends \Elementor\Widget_Base
             raw: <?php echo json_encode($work); ?>,
           });
 
+          const nav = reactive({
+            dialog: {
+              visible: false,
+              set(visible = null) {
+                nav.dialog.visible = visible === null ? !nav.dialog.visible : visible;
+              },
+            },
+            items: computed(() => {
+              return work.raw.terms.map((term) => {
+                const name = term.name;
+                const active = work.filter.work_tag == term.slug;
+                const bind = {
+                  onClick: (ev) => {
+                    work.filter.work_tag = active ? null : term.slug;
+                  },
+                };
+                return {
+                  name,
+                  active,
+                  bind
+                };
+              })
+            }),
+          });
+
           const dialog = reactive({
+            visible: false,
             data: null,
             setData(data = {}) {
+              dialog.visible = !!data;
               dialog.data = data;
             },
           });
@@ -312,6 +384,7 @@ return new class extends \Elementor\Widget_Base
 
           return {
             work,
+            nav,
             dialog
           };
         },

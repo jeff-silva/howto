@@ -58,14 +58,15 @@ remove_action('wp_print_styles', 'print_emoji_styles');
 remove_action('admin_print_scripts', 'print_emoji_detection_script');
 remove_action('admin_print_styles', 'print_emoji_styles');
 
-foreach (['wp_enqueue_scripts', 'admin_enqueue_scripts'] as $action) {
-	add_action($action, function () use ($action) {
-		if ($action == 'wp_enqueue_scripts') {
-			wp_enqueue_script('vue', '//unpkg.com/vue@3/dist/vue.global.js');
-			wp_enqueue_script('tailwind', '//cdn.tailwindcss.com');
-			// wp_enqueue_style('animate-css', '//cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css');
-		}
-	});
-}
+add_action('wp_enqueue_scripts', function () {
+	wp_enqueue_script('vue', '//unpkg.com/vue@3/dist/vue.global.js');
+	wp_enqueue_script('tailwind', '//cdn.tailwindcss.com');
+});
+
+show_admin_bar(false);
+
+// add_action('admin_enqueue_scripts', function () {
+// 	wp_enqueue_style('animate-css', '//cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css');
+// });
 
 include __DIR__ . '/elementor/elementor.php';
