@@ -3,15 +3,21 @@
     <!-- <pre>props: {{ props }}</pre> -->
     <!-- <pre>modelList: {{ modelList }}</pre> -->
 
-    <div class="d-flex align-center justify-end">
+    <div class="d-flex align-center justify-end ga-2 mb-3">
       <div class="flex-grow-1">{{ props.model }}</div>
       <v-btn
         color="primary"
-        text="Create"
-        @click="modelEditDialig.toggle()"
+        text="Criar"
+        :loading="modelSave.busy"
+        @click="modelSaveDialog.toggle()"
+      />
+      <v-btn
+        color="primary"
+        text="Atualizar"
+        :loading="modelList.busy"
+        @click="modelList.submit()"
       />
     </div>
-    <br />
 
     <v-card :loading="modelList.busy">
       <v-table>
@@ -44,6 +50,7 @@
                   color="error"
                   icon="mdi:delete"
                   rounded="0"
+                  @click="modelDelete.delete(o)"
                 />
               </td>
             </tr>
@@ -53,7 +60,7 @@
     </v-card>
 
     <v-dialog
-      v-model="modelEditDialig.visible"
+      v-model="modelSaveDialog.visible"
       max-width="700"
     >
       <v-form @submit.prevent="modelSave.submit()">
@@ -67,15 +74,17 @@
               <v-text-field
                 label="Nome"
                 v-model="modelSave.data.name"
+                :error-messages="modelSave.error.getField('name')"
               />
             </slot>
-            <pre>modelSave: {{ modelSave }}</pre>
+            <!-- <pre>modelSave.error: {{ modelSave.error }}</pre> -->
           </v-card-text>
           <v-card-actions>
             <v-btn
               type="submit"
               text="Salvar"
               class="bg-primary"
+              :loading="modelSave.busy"
             />
           </v-card-actions>
         </v-card>
@@ -101,19 +110,35 @@ const modelSave = useAxios({
   data: {},
   async onSuccess() {
     await modelList.submit();
-    modelEditDialig.toggle(false);
+    modelSaveDialog.toggle(false);
     modelSave.data = {};
   },
   edit(item) {
     modelSave.data = item;
-    modelEditDialig.toggle(true);
+    modelSaveDialog.toggle(true);
   },
 });
 
-const modelEditDialig = reactive({
+const modelDelete = useAxios({
+  method: "delete",
+  url: `api://${props.model}`,
+  delete(item) {
+    if (!confirm("Deletar?")) return;
+    modelDelete.url = `api://${props.model}/${item.id}`;
+    modelDelete.submit();
+  },
+  async onSuccess() {
+    await modelList.submit();
+    modelSaveDialog.toggle(false);
+    modelSave.data = {};
+  },
+});
+
+const modelSaveDialog = reactive({
   visible: false,
   toggle(value = null) {
-    modelEditDialig.visible = value === null ? !modelEditDialig.visible : value;
+    modelSaveDialog.visible = value === null ? !modelSaveDialog.visible : value;
+    modelSave.error.clear();
   },
 });
 

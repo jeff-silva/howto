@@ -1,11 +1,33 @@
 import axios from "axios";
 import { reactive } from "vue";
 
-export default (options = {}) => {
-  if (options.url.startsWith("api://")) {
-    options.url = options.url.replace("api://", "http://localhost:3333/");
+class Error {
+  status = "";
+  message = "";
+  field = {};
+  load(ex) {
+    this.status = ex.status;
+    this.message = ex.message;
+    this.field = {};
+    if (ex.response) {
+      ex.response.data.errors.map((err) => {
+        this.field[err.field] = this.field[err.field] || [];
+        this.field[err.field].push(err.message);
+      });
+    }
   }
+  clear() {
+    this.status = null;
+    this.message = "";
+    this.field = {};
+  }
+  getField(name) {
+    if (!this.field[name]) return [];
+    return this.field[name] || [];
+  }
+}
 
+export default (options = {}) => {
   const r = reactive({
     busy: false,
     url: "",
@@ -17,10 +39,16 @@ export default (options = {}) => {
     onSuccess: () => null,
     onError: () => null,
     ...options,
-    error: null,
+    error: new Error(),
+    init() {
+      if (r.url.startsWith("api://")) {
+        r.url = r.url.replace("api://", "http://localhost:3333/");
+      }
+    },
     async submit() {
+      r.init();
       r.busy = true;
-      r.error = null;
+      r.error.clear();
 
       let fetchOptions = {
         url: r.url,
@@ -38,12 +66,13 @@ export default (options = {}) => {
         r.response = resp.data;
         r.onSuccess(r.response);
       } catch (err) {
-        r.error = {
-          name: err.name,
-          status: err.status,
-          message: err.message,
-          response: err.response,
-        };
+        // r.error = {
+        //   name: err.name,
+        //   status: err.status,
+        //   message: err.message,
+        //   response: err.response,
+        // };
+        r.error.load(err);
         r.onError(r.error);
       }
 
@@ -51,5 +80,6 @@ export default (options = {}) => {
     },
   });
 
+  r.init();
   return r;
 };

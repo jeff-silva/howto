@@ -55,6 +55,8 @@ export default class Base {
   }
 
   async destroy(http: HttpContext): Promise<Record<string, any>> {
-    return { type: 'destroy', params: http.params }
+    const entity = await this.model.constructor.find(http.params.id)
+    await entity.delete()
+    return { entity, params: http.params }
   }
 }
