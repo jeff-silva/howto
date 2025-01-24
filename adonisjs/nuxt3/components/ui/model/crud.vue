@@ -6,16 +6,15 @@
     <div class="d-flex align-center justify-end ga-2 mb-3">
       <div class="flex-grow-1">{{ props.model }}</div>
       <v-btn
+        text="Atualizar"
+        :loading="modelList.busy"
+        @click="modelList.submit()"
+      />
+      <v-btn
         color="primary"
         text="Criar"
         :loading="modelSave.busy"
         @click="modelSaveDialog.toggle()"
-      />
-      <v-btn
-        color="primary"
-        text="Atualizar"
-        :loading="modelList.busy"
-        @click="modelList.submit()"
       />
     </div>
 
