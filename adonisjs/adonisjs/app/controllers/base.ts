@@ -30,9 +30,18 @@ export default class Base {
     })
   }
 
+  protected async modelSave(data: Record<string, any>): Promise<Record<string, any>> {
+    let entity = new this.model.constructor()
+    if (data.id) {
+      entity = await this.model.constructor.find(data.id)
+    }
+    entity.fill(data).save()
+    return entity
+  }
+
   async store(http: HttpContext): Promise<Record<string, any>> {
     const data = await this.storeValidate(http.request.body())
-    const entity = await this.model.merge(data).save()
+    const entity = await this.modelSave(data)
     return { entity }
   }
 
@@ -41,7 +50,7 @@ export default class Base {
   }
 
   async update(http: HttpContext): Promise<Record<string, any>> {
-    const data = await this.updateValidate(http.request.all())
+    const entity = await this.modelSave(data)
     return { type: 'update', params: http.params, data }
   }
 
