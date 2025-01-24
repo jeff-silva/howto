@@ -62,6 +62,7 @@
     <v-dialog
       v-model="modelSaveDialog.visible"
       max-width="700"
+      scrollable
     >
       <v-form @submit.prevent="modelSave.submit()">
         <v-card>
@@ -77,7 +78,7 @@
                 :error-messages="modelSave.error.getField('name')"
               />
             </slot>
-            <!-- <pre>modelSave.error: {{ modelSave.error }}</pre> -->
+            <!-- <pre>modelSave: {{ modelSave }}</pre> -->
           </v-card-text>
           <v-card-actions>
             <v-btn

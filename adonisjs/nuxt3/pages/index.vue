@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ui-crud model="app_user">
+    <ui-model-crud model="app_user">
       <template #edit="scope">
         <v-text-field
           label="Nome"
@@ -12,11 +12,18 @@
           v-model="scope.modelSave.data.email"
           :error-messages="scope.modelSave.error.getField('email')"
         />
+        <ui-model-select
+          model="app_user_group"
+          v-model="scope.modelSave.data.group_id"
+          :error-messages="scope.modelSave.error.getField('group_id')"
+        />
       </template>
-    </ui-crud>
+    </ui-model-crud>
 
-    <ui-crud model="app_address"></ui-crud>
+    <ui-model-crud model="app_user_group"></ui-model-crud>
 
-    <ui-crud model="app_file"></ui-crud>
+    <ui-model-crud model="app_address"></ui-model-crud>
+
+    <ui-model-crud model="app_file"></ui-model-crud>
   </div>
 </template>

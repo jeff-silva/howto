@@ -14,12 +14,23 @@ datasource db {
 }
 
 model app_user {
-  id         Int      @id @default(autoincrement())
-  email      String?
-  name       String?
-  password   String?
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id             Int             @id @default(autoincrement())
+  name           String?
+  email          String?
+  password       String?
+  group_id       Int?
+  created_at     DateTime        @default(now())
+  updated_at     DateTime        @updatedAt
+  app_user_group app_user_group? @relation(fields: [group_id], references: [id])
+}
+
+model app_user_group {
+  id          Int        @id @default(autoincrement())
+  name        String?
+  permissions String?
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+  app_user    app_user[]
 }
 
 model app_config {

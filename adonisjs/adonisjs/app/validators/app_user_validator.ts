@@ -7,11 +7,10 @@ export const appUserSave = vine.compile(
       .string()
       .email()
       .unique(async (db, value, field) => {
-        return !(await db
-          .from('app_user')
-          .whereNot('id', field.data.id || null)
-          .where('email', value)
-          .first())
+        const user = await db.from('app_user').where('email', value).first()
+        if (!user) return true
+        if (!!field.data.id && +user.id === +field.data.id) return true
+        return false
       }),
   })
 )

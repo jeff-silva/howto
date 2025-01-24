@@ -35,12 +35,13 @@ export default class Base {
     if (data.id) {
       entity = await this.model.constructor.find(data.id)
     }
-    entity.fill(data).save()
+    await entity.fill(data).save()
     return entity
   }
 
   async store(http: HttpContext): Promise<Record<string, any>> {
-    const data = await this.storeValidate(http.request.body())
+    const data = http.request.body()
+    await this.storeValidate(data)
     const entity = await this.modelSave(data)
     return { entity }
   }
@@ -50,8 +51,10 @@ export default class Base {
   }
 
   async update(http: HttpContext): Promise<Record<string, any>> {
+    const data = http.request.body()
+    await this.storeValidate(data)
     const entity = await this.modelSave(data)
-    return { type: 'update', params: http.params, data }
+    return { entity }
   }
 
   async destroy(http: HttpContext): Promise<Record<string, any>> {

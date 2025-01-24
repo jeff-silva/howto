@@ -20,10 +20,14 @@ router.post('/auth/register', [AuthController, 'register']).as('auth.register')
 router.post('/auth/login', [AuthController, 'login']).as('auth.login')
 router.post('/auth/logout', [AuthController, 'logout']).as('auth.logout').use(middleware.auth())
 
-// AppUser crud
+// app_user
 const AppUserController = () => import('#controllers/app_user_controller')
 // router.resource('app_user', AppUserController).apiOnly().only(['index']).use('*', middleware.auth())
 router.resource('app_user', AppUserController).apiOnly()
+
+// app_user_group
+const AppUserGroupController = () => import('#controllers/app_user_group_controller')
+router.resource('app_user_group', AppUserGroupController).apiOnly()
 
 // app_file
 const AppFileController = () => import('#controllers/app_file_controller')
