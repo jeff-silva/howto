@@ -1,8 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
-import Base from './base.js'
+import Controller from '#controllers/controller'
 
-export default class AppTestController extends Base {
+export default class AppTestController extends Controller {
   async index(http: HttpContext) {
     return {
       test: 123456,

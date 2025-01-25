@@ -1,9 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 
-import Base from './base.js'
+import Controller from '#controllers/controller'
 
-export default class AppController extends Base {
+export default class AppController extends Controller {
   async index(http: HttpContext) {
     const routerJSON = router.toJSON()
     const data = routerJSON.root.map((route) => {

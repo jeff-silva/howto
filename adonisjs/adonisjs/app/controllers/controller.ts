@@ -1,8 +1,12 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import SearchBase from '#search/search'
 // import { BaseModel } from '@adonisjs/lucid/orm'
 
 export default class Base {
-  // private model: typeof BaseModel
+  // constructor(
+  //   protected model = null,
+  //   protected modelSearch = null
+  // ) {}
 
   protected async storeValidate(data = {}) {
     return data
@@ -21,13 +25,16 @@ export default class Base {
   }
 
   async index(http: HttpContext): Promise<Record<string, any>> {
-    const data = await this.model.constructor.query().paginate(1, 20)
-    return this.success({
-      page: data.currentPage,
-      pages: data.lastPage,
-      total: data.total,
-      data: data.rows,
-    })
+    const params = http.request.all()
+    return params
+    // return await this.modelSearch.constructor.paginate(params)
+    // const data = await this.model.constructor.query().paginate(1, 20)
+    // return this.success({
+    //   page: data.currentPage,
+    //   pages: data.lastPage,
+    //   total: data.total,
+    //   data: data.rows,
+    // })
   }
 
   protected async modelSave(data: Record<string, any>): Promise<Record<string, any>> {

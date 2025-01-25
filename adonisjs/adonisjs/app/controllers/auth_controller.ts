@@ -1,8 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
-import Base from './base.js'
+import Controller from '#controllers/controller'
 
-export default class AuthController extends Base {
+export default class AuthController extends Controller {
   async login(http: HttpContext) {
     return {
       test: true,
