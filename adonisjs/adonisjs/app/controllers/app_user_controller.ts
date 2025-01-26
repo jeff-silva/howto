@@ -22,7 +22,7 @@ export default class AppUserController extends Controller {
   }
 
   async index(http: HttpContext): Promise<Record<string, any>> {
-    return await new AppUserSearch().paginate(http.request.all())
+    return await AppUserSearch.paginate(http.request.all())
 
     // const data = await this.model.constructor.query().paginate(1, 20)
     // return this.success({

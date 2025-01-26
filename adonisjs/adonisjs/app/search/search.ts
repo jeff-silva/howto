@@ -1,10 +1,10 @@
-// import { inject } from '@adonisjs/core'
+import { inject } from '@adonisjs/core'
 // import { BaseModel } from '@adonisjs/lucid/orm'
 
-// @inject()
+@inject()
 export default class SearchBase {
   // constructor(protected model: typeof BaseModel) {}
-  protected model = null
+  // private model = null
 
   params() {
     return {}
@@ -28,21 +28,23 @@ export default class SearchBase {
     return query
   }
 
-  async get(params = {}) {
+  static async get(params = {}) {
     return { params }
   }
 
-  async first(params = {}) {
+  static async first(params = {}) {
     return { params }
   }
 
-  async paginate(params = {}) {
-    params = this.paramsDefault(params)
+  static async paginate(params = {}) {
+    const search = new this()
+    params = search.paramsDefault(params)
     console.log(this.model)
     return { params }
-    // const data = await entity.query().paginate(params.page, params.per_page)
-    // const pagination = {}
-    // const options = this.options()
-    // return { pagination, data, params, options }
+    // return { params }
+    // // const data = await entity.query().paginate(params.page, params.per_page)
+    // // const pagination = {}
+    // // const options = this.options()
+    // // return { pagination, data, params, options }
   }
 }
