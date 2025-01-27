@@ -27,15 +27,14 @@ export default class Search {
     }
   }
 
-  onQuery(query, params) {
-    return query
+  async query(params = {}) {
+    params = this.paramsDefault(params)
+    const query = this.model.query()
+    return this.onQuery(query, params)
   }
 
-  async query(params = {}) {
-    const model = this.getModel()
-    const query = await model.query()
-    params = this.paramsDefault(params)
-    return this.onQuery(query, params)
+  async onQuery(query, params) {
+    return query
   }
 
   onOptions(ctx: Record<any, any>) {
@@ -58,8 +57,12 @@ export default class Search {
   static async paginate(params = {}) {
     const search = new this()
     params = search.paramsDefault(params)
-    const query = search.model.query()
-    const paginate = await query.paginate(params.page, params.per_page)
+    const query = search.query()
+    // console.log('paginate: ', query.paginate.toString())
+    console.log('paginate: ', query.paginate(1))
+    console.log({ query })
+    return { query }
+    const paginate = query.paginate(params.page, params.per_page)
     const { meta: pagination, data } = paginate.serialize()
     const options = search.options({ query, params })
     return { params, pagination, data, options }

@@ -30,7 +30,7 @@ export default class AppUser extends compose(BaseModel, AuthFinder) {
   declare password: string
 
   @column()
-  declare group_id: string
+  declare group_id: number
 
   @column.dateTime({ autoCreate: true })
   declare created_at: DateTime
@@ -38,6 +38,6 @@ export default class AppUser extends compose(BaseModel, AuthFinder) {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updated_at: DateTime | null
 
-  @hasOne(() => AppUserGroup, { foreignKey: 'group_id' })
+  @hasOne(() => AppUserGroup, { localKey: 'group_id', foreignKey: 'id' })
   declare app_user_group: HasOne<typeof AppUserGroup>
 }

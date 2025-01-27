@@ -9,4 +9,9 @@ export default class AppUserSearch extends Search {
   constructor(protected model = AppUser) {
     super(model)
   }
+
+  async onQuery(query, params) {
+    query.preload('app_user_group')
+    return query
+  }
 }
