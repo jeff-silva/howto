@@ -14,7 +14,7 @@
         color="primary"
         text="Criar"
         :loading="modelSave.busy"
-        @click="modelSaveDialog.toggle()"
+        @click="modelSave.edit({})"
       />
     </div>
 
