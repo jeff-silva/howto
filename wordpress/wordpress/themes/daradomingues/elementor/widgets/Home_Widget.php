@@ -153,46 +153,6 @@ return new class extends \Elementor\Widget_Base
 ?>
     <div id="app" style="opacity:0;">
 
-      <!-- Nav -->
-      <div
-        class="fixed top-0 left-0 w-full"
-        style="background: #ffffffee; z-index:99;">
-        <div class="mx-auto container py-2 flex items-center gap-2">
-          <a
-            href="/"
-            class="text-gray-500 text-slate-600 px-3 text-sm font-roboto-800 hover:text-slate-900">
-            Dara Domingues
-          </a>
-
-          <div class="flex-1 flex justify-center">
-            <nav class="hidden lg:flex space-x-4" aria-label="Tabs">
-              <template v-for="o in nav.items">
-                <a
-                  href="javascript:;"
-                  class="text-gray-500 text-slate-600 px-3 py-2 hover:text-slate-900"
-                  v-bind="o.bind">
-                  <span
-                    class="decoration-black underline-offset-8 font-roboto-400 text-sm"
-                    :class="{'underline text-slate-900': o.active}">
-                    {{ o.name }}
-                  </span>
-                </a>
-              </template>
-            </nav>
-          </div>
-
-          <a
-            href="mailto:daradomingues.studio@gmail.com"
-            class="text-gray-500 text-slate-600 px-3 text-sm font-roboto-400 hover:text-slate-900">
-            Contact
-          </a>
-
-          <a href="javascript:;" class="lg:hidden" @click="nav.dialog.set()">
-            <img src="https://api.iconify.design/fluent:navigation-16-filled.svg?height=35" alt="">
-          </a>
-        </div>
-      </div>
-
       <!-- Drawer -->
       <dialog
         class="fixed top-0 left-0 w-full h-full flex items-center justify-center p-3"
@@ -354,6 +314,7 @@ return new class extends \Elementor\Widget_Base
             items: computed(() => {
               return work.raw.terms.map((term) => {
                 const name = term.name;
+                const slug = term.slug;
                 const active = work.filter.work_tag == term.slug;
                 const bind = {
                   onClick: (ev) => {
@@ -362,6 +323,7 @@ return new class extends \Elementor\Widget_Base
                 };
                 return {
                   name,
+                  slug,
                   active,
                   bind
                 };
@@ -378,8 +340,15 @@ return new class extends \Elementor\Widget_Base
             },
           });
 
+          const onHashChange = () => {
+            let work_tag = location.hash.replace('#', '') || null;
+            work.filter.work_tag = work_tag;
+          }
+
           onMounted(() => {
             document.querySelector('#app').style.opacity = 1;
+            addEventListener("hashchange", onHashChange);
+            onHashChange();
           });
 
           return {

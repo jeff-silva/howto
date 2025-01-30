@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * olhar meta title
+ * contato
+ * texto da bio
+ */
+
 session_start();
 
 function dd()
@@ -70,3 +76,46 @@ show_admin_bar(false);
 // });
 
 include __DIR__ . '/elementor/elementor.php';
+
+function daradomingues_get_attach($id)
+{
+	$url = wp_get_attachment_image_url($id, 'full');
+	$meta = wp_get_attachment_metadata($id);
+	return (object) [
+		'id' => $id,
+		'url' => $url,
+		'size' => $meta['filesize'],
+		'width' => $meta['width'],
+		'height' => $meta['height'],
+		// 'meta' => $meta,
+	];
+}
+
+function daradomingues_get_posts_schema($type)
+{
+	$terms = get_terms(['taxonomy' => 'work_tag']);
+	$terms = array_values($terms);
+
+	$posts = get_posts(['post_type' => $type, 'posts_per_page' => -1]);
+	$posts = array_map(function ($post) {
+		$post->meta = new stdClass;
+
+		$post->meta->work_tag = get_the_terms($post->ID, 'work_tag');
+		$post->meta->work_tag = is_array($post->meta->work_tag) ? $post->meta->work_tag : [];
+		$post->meta->work_tag = array_values($post->meta->work_tag);
+
+		$post->meta->cover = get_post_meta($post->ID, 'cover');
+		$post->meta->cover = isset($post->meta->cover[0]) ? $post->meta->cover[0] : null;
+		$post->meta->cover = daradomingues_get_attach($post->meta->cover);
+
+		$post->meta->images = get_post_meta($post->ID, 'images');
+		$post->meta->images = array_map(fn($id) => daradomingues_get_attach($id), $post->meta->images);
+
+		return $post;
+	}, $posts);
+
+	return [
+		'terms' => $terms,
+		'posts' => $posts,
+	];
+}
