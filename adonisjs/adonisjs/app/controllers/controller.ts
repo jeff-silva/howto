@@ -25,8 +25,7 @@ export default class Base {
   }
 
   async index(http: HttpContext): Promise<Record<string, any>> {
-    const params = http.request.all()
-    return params
+    return await this.model.searchPaginated(http.request.all())
     // return await this.modelSearch.constructor.paginate(params)
     // const data = await this.model.constructor.query().paginate(1, 20)
     // return this.success({

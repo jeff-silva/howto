@@ -10,7 +10,7 @@ services:
       WORDPRESS_DB_NAME: app
     volumes:
       - ./wordpress/themes/daradomingues:/var/www/html/wp-content/themes/daradomingues
-      # - ./wordpress/plugins:/var/www/html/wp-content/plugins
+      - ./wordpress/plugins/habitatgroup:/var/www/html/wp-content/plugins/habitatgroup
     networks:
       - main
 

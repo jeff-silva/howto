@@ -1,9 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, SnakeCaseNamingStrategy } from '@adonisjs/lucid/orm'
+import { column } from '@adonisjs/lucid/orm'
+import Model from '#models/model'
 
-export default class AppAddress extends BaseModel {
+export default class AppAddress extends Model {
   public static table = 'app_address'
-  public static namingStrategy = new SnakeCaseNamingStrategy()
 
   @column({ isPrimary: true })
   declare id: number
