@@ -7,7 +7,7 @@ export default class Model extends BaseModel {
     return {}
   }
 
-  searchOptions(options) {
+  searchOptions(options, data) {
     return options
   }
 
@@ -17,16 +17,7 @@ export default class Model extends BaseModel {
 
   searchOptionsDefault(data = []) {
     let options = {}
-
-    options.names = []
-    data.map((item) => {
-      options.names.push({
-        value: item.name,
-        name: item.name,
-      })
-    })
-
-    return this.searchOptions(options)
+    return this.searchOptions(options, data)
   }
 
   searchParamsDefault(merge = {}) {

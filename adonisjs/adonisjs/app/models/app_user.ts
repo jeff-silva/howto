@@ -41,4 +41,23 @@ export default class AppUser extends compose(Model, AuthFinder) {
 
   @hasOne(() => AppUserGroup, { localKey: 'group_id', foreignKey: 'id' })
   declare app_user_group: HasOne<typeof AppUserGroup>
+
+  searchQuery(query) {
+    query.preload('app_user_group')
+    return query
+  }
+
+  searchOptions(options, data) {
+    options.app_user_group = {}
+    data.map((item) => {
+      if (!item.app_user_group) return
+      options.app_user_group[item.app_user_group.id] = {
+        id: item.app_user_group.id,
+        name: item.app_user_group.name,
+      }
+    })
+
+    options.app_user_group = Object.values(options.app_user_group)
+    return options
+  }
 }
