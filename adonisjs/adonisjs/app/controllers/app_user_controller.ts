@@ -5,7 +5,6 @@ import { inject } from '@adonisjs/core'
 
 import AppUser from '#models/app_user'
 import { appUserSave } from '#validators/app_user_validator'
-import AppUserSearch from '#search/app_user_search'
 
 @inject()
 export default class AppUserController extends Controller {
@@ -19,9 +18,5 @@ export default class AppUserController extends Controller {
 
   protected async updateValidate(data = {}) {
     return await appUserSave.validate(data)
-  }
-
-  async index(http: HttpContext): Promise<Record<string, any>> {
-    return await AppUserSearch.paginate(http.request.all())
   }
 }

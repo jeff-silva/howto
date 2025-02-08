@@ -2,9 +2,11 @@ import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import type { HasOne } from '@adonisjs/lucid/types/relations'
-import { BaseModel, column, SnakeCaseNamingStrategy, hasOne } from '@adonisjs/lucid/orm'
+import { column, hasOne } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
+
+import Model from '#models/model'
 import AppUserGroup from '#models/app_user_group'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
@@ -12,9 +14,8 @@ const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   passwordColumnName: 'password',
 })
 
-export default class AppUser extends compose(BaseModel, AuthFinder) {
+export default class AppUser extends compose(Model, AuthFinder) {
   public static table = 'app_user'
-  public static namingStrategy = new SnakeCaseNamingStrategy()
   static accessTokens = DbAccessTokensProvider.forModel(AppUser)
 
   @column({ isPrimary: true })
