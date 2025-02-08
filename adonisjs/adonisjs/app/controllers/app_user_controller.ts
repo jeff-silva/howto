@@ -1,5 +1,3 @@
-import type { HttpContext } from '@adonisjs/core/http'
-
 import Controller from '#controllers/controller'
 import { inject } from '@adonisjs/core'
 

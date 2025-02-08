@@ -1,4 +1,4 @@
-import { BaseModel, column, SnakeCaseNamingStrategy } from '@adonisjs/lucid/orm'
+import { BaseModel, SnakeCaseNamingStrategy, ModelQueryBuilder } from '@adonisjs/lucid/orm'
 
 export default class Model extends BaseModel {
   public static namingStrategy = new SnakeCaseNamingStrategy()
@@ -7,20 +7,21 @@ export default class Model extends BaseModel {
     return {}
   }
 
-  searchOptions(options, data) {
+  // eslint-disable-line @typescript-eslint/no-unused-vars
+  searchOptions(options: Record<string, any>, data: any[] = []) {
     return options
   }
 
-  searchQuery(query, params = {}) {
+  searchQuery(query: ModelQueryBuilder, params: Record<string, any> = {}) {
     return query
   }
 
-  searchOptionsDefault(data = []) {
+  searchOptionsDefault(data: any[] = []) {
     let options = {}
     return this.searchOptions(options, data)
   }
 
-  searchParamsDefault(merge = {}) {
+  searchParamsDefault(merge: Record<string, any> = {}) {
     return {
       search: null,
       page: 1,
@@ -31,15 +32,16 @@ export default class Model extends BaseModel {
     }
   }
 
-  async search(params = {}) {
+  async search(params: Record<string, any> = {}) {
     params = this.searchParamsDefault(params)
     const query = this.searchQuery(this.constructor.query(), params)
     return query
   }
 
-  async searchPaginated(params = {}) {
+  async searchPaginated(params: Record<string, any> = {}) {
     params = this.searchParamsDefault(params)
     const query = this.searchQuery(this.constructor.query(), params)
+    console.log(query)
     const paginate = await query.paginate(1)
     const { meta: pagination, data } = paginate.serialize()
     const options = this.searchOptionsDefault(data)

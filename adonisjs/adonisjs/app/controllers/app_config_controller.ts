@@ -1,4 +1,4 @@
-import type { HttpContext } from '@adonisjs/core/http'
+// import type { HttpContext } from '@adonisjs/core/http'
 
 import Controller from '#controllers/controller'
 import { inject } from '@adonisjs/core'
@@ -11,13 +11,13 @@ export default class AppFileController extends Controller {
     super()
   }
 
-  async saveAll(http: HttpContext) {
+  async saveAll() {
     return this.success({
       test: true,
     })
   }
 
-  async listAll(http: HttpContext) {
+  async listAll() {
     return this.success({
       test: true,
     })

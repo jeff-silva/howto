@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import type { HasOne } from '@adonisjs/lucid/types/relations'
-import { column, hasOne } from '@adonisjs/lucid/orm'
+import { column, hasOne, ModelQueryBuilder } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 
@@ -42,12 +42,12 @@ export default class AppUser extends compose(Model, AuthFinder) {
   @hasOne(() => AppUserGroup, { localKey: 'group_id', foreignKey: 'id' })
   declare app_user_group: HasOne<typeof AppUserGroup>
 
-  searchQuery(query) {
+  searchQuery(query: ModelQueryBuilder) {
     query.preload('app_user_group')
     return query
   }
 
-  searchOptions(options, data) {
+  searchOptions(options: Record<string, any>, data: any[] = []) {
     options.app_user_group = {}
     data.map((item) => {
       if (!item.app_user_group) return
