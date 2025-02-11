@@ -1,3 +1,5 @@
+import env from '#start/env'
+
 /*
 |--------------------------------------------------------------------------
 | HTTP kernel file
@@ -48,13 +50,18 @@ export const middleware = router.named({
 import fs from 'node:fs'
 import { exec } from 'node:child_process'
 
-fs.watch('./prisma/schema.prisma', { encoding: 'buffer' }, (eventType, filename) => {
-  exec('npx prisma db push', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error: ${error}`)
-      if (stderr) console.error(`Stderr: ${stderr}`)
-      return
-    }
-    console.log(stdout)
+exec('npx prisma db push')
+
+if (env.get('NODE_ENV') === 'development') {
+  fs.watch('./prisma/schema.prisma', { encoding: 'buffer' }, (eventType, filename) => {
+    console.log({ eventType, filename })
+    exec('npx prisma db push', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error: ${error}`)
+        if (stderr) console.error(`Stderr: ${stderr}`)
+        return
+      }
+      console.log(stdout)
+    })
   })
-})
+}
