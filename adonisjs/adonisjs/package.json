@@ -54,11 +54,13 @@
   },
   "dependencies": {
     "@adonisjs/auth": "^9.2.4",
+    "@adonisjs/cache": "^1.1.2",
     "@adonisjs/core": "^6.17.0",
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^21.5.1",
     "@prisma/client": "6.2.1",
     "@vinejs/vine": "^3.0.0",
+    "axios": "^1.7.9",
     "luxon": "^3.5.0",
     "mysql2": "^3.12.0",
     "reflect-metadata": "^0.2.2"

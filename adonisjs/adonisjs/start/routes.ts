@@ -35,6 +35,9 @@ router.resource('app_file', AppFileController).apiOnly()
 
 // app_address
 const AppAddressController = () => import('#controllers/app_address_controller')
+router
+  .get('/app_address/autocomplete', [AppAddressController, 'autocomplete'])
+  .as('app_address.autocomplete')
 router.resource('app_address', AppAddressController).apiOnly()
 
 // app_config
