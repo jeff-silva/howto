@@ -85,6 +85,7 @@ export default class AppAddress extends Model {
     return data.map((place) => {
       const addr = place.address
       const item = { name: null }
+      const [country_code, state_code] = (addr['ISO3166-2-lvl4'] || '-').toLowerCase().split('-')
 
       item.route = addr.road || null
       item.number = addr.number || null
@@ -92,17 +93,18 @@ export default class AppAddress extends Model {
       item.zipcode = addr.postcode || null
       item.district = addr.neighbourhood || addr.suburb || null
       item.city = addr.city || null
-      item.city_code =
-        addr['ISO3166-2-lvl4'].toLowerCase() + '-' + string.slug((addr.city || '').toLowerCase())
+      item.city_code = item.city
+        ? addr['ISO3166-2-lvl4'].toLowerCase() + '-' + string.slug((addr.city || '').toLowerCase())
+        : null
       item.state = addr.state || null
-      item.state_code = (addr['ISO3166-2-lvl4'] || '-').split('-').at(1) || null
+      item.state_code = state_code || null
       item.country = addr.country || null
-      item.country_code = (addr['ISO3166-2-lvl4'] || '-').split('-').at(0) || null
+      item.country_code = country_code || null
       item.lat = parseFloat(place.lat)
       item.lng = parseFloat(place.lon)
 
       item.name =
-        [item.route, item.district, item.city, item.state, item.country_code]
+        [item.route, item.district, item.city, item.state, item.country]
           .filter((v) => !!v)
           .join(', ') || null
 

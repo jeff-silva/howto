@@ -30,6 +30,28 @@
             md="12"
           >
             <v-text-field
+              label="Buscar"
+              v-model="appAddressAutocomplete.params.search"
+              hide-details="auto"
+              append-inner-icon="mdi-magnify"
+              @click:append-inner="appAddressAutocomplete.submit()"
+            />
+            <v-card v-if="appAddressAutocomplete.response.result.length > 0">
+              <v-list>
+                <template v-for="o in appAddressAutocomplete.response.result">
+                  <v-list-item @click="scope.modelSave.data = o">
+                    <v-list-item-title>{{ o.name }}</v-list-item-title>
+                  </v-list-item>
+                </template>
+              </v-list>
+            </v-card>
+            <!-- <pre>appAddressAutocomplete: {{ appAddressAutocomplete }}</pre> -->
+          </v-col>
+          <v-col
+            cols="12"
+            md="12"
+          >
+            <v-text-field
               label="Nome"
               v-model="scope.modelSave.data.name"
               hide-details="auto"
@@ -109,3 +131,14 @@
     <ui-model-crud model="app_file"></ui-model-crud>
   </div>
 </template>
+
+<script setup>
+const appAddressAutocomplete = useAxios({
+  method: "get",
+  url: "api://app_address/autocomplete",
+  params: { search: "" },
+  response: {
+    result: [],
+  },
+});
+</script>
