@@ -45,7 +45,6 @@
                 </template>
               </v-list>
             </v-card>
-            <!-- <pre>appAddressAutocomplete: {{ appAddressAutocomplete }}</pre> -->
           </v-col>
           <v-col
             cols="12"
@@ -128,7 +127,19 @@
       </template>
     </ui-model-crud>
 
-    <ui-model-crud model="app_file"></ui-model-crud>
+    <ui-model-crud model="app_file">
+      <template #edit="scope">
+        <v-file-input
+          v-model="appFileUpload.data.file"
+          @change="
+            async () => {
+              await appFileUpload.submit();
+              scope.modelList.submit();
+            }
+          "
+        />
+      </template>
+    </ui-model-crud>
   </div>
 </template>
 
@@ -140,5 +151,9 @@ const appAddressAutocomplete = useAxios({
   response: {
     result: [],
   },
+});
+const appFileUpload = useAxios({
+  method: "post",
+  url: "api://app_file/upload",
 });
 </script>

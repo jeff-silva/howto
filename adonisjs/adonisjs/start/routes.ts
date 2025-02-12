@@ -32,6 +32,7 @@ router.resource('app_user_group', AppUserGroupController).apiOnly()
 // app_file
 const AppFileController = () => import('#controllers/app_file_controller')
 router.resource('app_file', AppFileController).apiOnly()
+router.post('/app_file/upload', [AppFileController, 'upload']).as('app_file.upload')
 
 // app_address
 const AppAddressController = () => import('#controllers/app_address_controller')

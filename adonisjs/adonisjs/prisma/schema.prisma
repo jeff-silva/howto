@@ -44,10 +44,11 @@ model app_config {
 model app_file {
   id         Int      @id @default(autoincrement())
   name       String?
+  ext        String?
   mime       String?
   size       String?
   path       String?
-  content    String?
+  content    String?  @db.LongText
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }

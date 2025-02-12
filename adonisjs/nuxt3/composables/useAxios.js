@@ -57,8 +57,21 @@ export default (options = {}) => {
         headers: r.headers || {},
       };
 
+      const hasUpload =
+        Object.values(r.data).filter((value) => value instanceof File).length >
+        0;
+
       if (["post", "put"].includes(fetchOptions.method)) {
-        fetchOptions.data = r.data;
+        if (hasUpload) {
+          const formData = new FormData();
+          for (let i in r.data) {
+            formData.append(i, r.data[i]);
+          }
+          fetchOptions.data = formData;
+          fetchOptions.headers["Content-Type"] = "multipart/form-data";
+        } else {
+          fetchOptions.data = r.data;
+        }
       }
 
       try {
