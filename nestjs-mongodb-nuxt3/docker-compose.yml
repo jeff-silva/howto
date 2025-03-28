@@ -1,0 +1,50 @@
+services:
+  nestjs:
+    build: ./nestjs
+    volumes:
+      - ./nestjs/app:/app
+    ports:
+      - 3000:3000
+
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: app
+      MONGO_INITDB_ROOT_PASSWORD: app
+      #MONGODB_AUTH_DATABASE: admin
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./workspace:/workspace
+      - type: volume
+        source: mongodb_data_volume
+        target: /data/db
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "28081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_BASICAUTH_USERNAME: app
+      ME_CONFIG_BASICAUTH_PASSWORD: app
+      #ME_CONFIG_MONGODB_AUTH_DATABASE: admin
+      ME_CONFIG_MONGODB_ADMINUSERNAME: app
+      ME_CONFIG_MONGODB_ADMINPASSWORD: app
+      ME_CONFIG_MONGODB_URL: mongo://app:app@mongo:27017/
+    depends_on:
+      - mongo
+
+  # # bash <(curl -s "https://raw.githubusercontent.com/jeff-silva/howto/refs/heads/main/.bin/nuxt-install.sh")
+  # nuxt3:
+  #   image: node:22
+  #   working_dir: /app
+  #   command: bash -c "yarn install && yarn dev"
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #     - ./nuxt3:/app
+
+volumes:
+  mongodb_data_volume:
+    driver: local
