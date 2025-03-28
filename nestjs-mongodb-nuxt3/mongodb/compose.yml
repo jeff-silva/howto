@@ -6,7 +6,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: app
       #MONGODB_AUTH_DATABASE: admin
     ports:
-      - "27017:27017"
+      - 27017:27017
     volumes:
       - ./workspace:/workspace
       - type: volume
@@ -31,3 +31,6 @@ services:
 volumes:
   mongodb_data_volume:
     driver: local
+
+networks:
+  main_network:

@@ -5,6 +5,10 @@ services:
       - ./nestjs/app:/app
     ports:
       - 3000:3000
+    networks:
+      - main_network
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo
@@ -13,9 +17,11 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: app
       #MONGODB_AUTH_DATABASE: admin
     ports:
-      - "27017:27017"
+      - 27017:27017
+    networks:
+      - main_network
     volumes:
-      - ./workspace:/workspace
+      # - ./workspace:/workspace
       - type: volume
         source: mongodb_data_volume
         target: /data/db
@@ -24,6 +30,8 @@ services:
     image: mongo-express
     ports:
       - "28081:8081"
+    networks:
+      - main_network
     environment:
       ME_CONFIG_MONGODB_SERVER: mongo
       ME_CONFIG_BASICAUTH_USERNAME: app
@@ -48,3 +56,6 @@ services:
 volumes:
   mongodb_data_volume:
     driver: local
+
+networks:
+  main_network:
