@@ -1,5 +1,42 @@
+@app_url = http://localhost:3000
+@app_token = null
+@app_user_id = 67e7512c99fd807d53775f71
+
 ### hello
-GET http://localhost:3000/
+GET {{ app_url }}/
+Content-Type: application/json
+
+### app_user create
+POST {{ app_url }}/app_user
+Content-Type: application/json
+
+{
+  "name": "delete",
+  "email": "delete@grr.la",
+  "password": "delete@grr.la"
+}
 
 ### app_user findAll
-GET http://localhost:3000/app_user
+GET {{ app_url }}/app_user
+
+> {%
+    client.global.set("app_user_id", response.body[0]);
+%}
+
+### app_user findOne
+GET {{ app_url }}/app_user/{{ app_user_id }}
+Content-Type: application/json
+
+### app_user update
+PATCH {{ app_url }}/app_user/{{ app_user_id }}
+Content-Type: application/json
+
+{
+  "name": "delete2",
+  "email": "delete2@grr.la",
+  "password": "delete2@grr.la"
+}
+
+### app_user delete
+DELETE {{ app_url }}/app_user/{{ app_user_id }}
+Content-Type: application/json

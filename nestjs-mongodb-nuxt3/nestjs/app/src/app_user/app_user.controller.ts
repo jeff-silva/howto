@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   Controller,
   Get,
@@ -26,16 +27,16 @@ export class AppUserController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.appUserService.findOne(+id);
+    return this.appUserService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() appUserDto: AppUserDto) {
-    return this.appUserService.update(+id, appUserDto);
+    return this.appUserService.update(id, appUserDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.appUserService.remove(+id);
+    return this.appUserService.remove(id);
   }
 }
