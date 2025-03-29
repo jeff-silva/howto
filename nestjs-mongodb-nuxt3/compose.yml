@@ -1,33 +1,48 @@
 volumes:
   mongodb_data_volume:
+  caddy_data_volume:
+  caddy_config_volume:
 
 services:
+  caddy:
+    image: caddy:latest
+    working_dir: /app
+    ports:
+      - "443:443"
+      - "443:443/udp"
+      - "8000:8000"
+      - "8010:8010"
+      - "8020:8020"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data_volume:/data
+      - caddy_config_volume:/config
+    depends_on:
+      - nestjs
+
+  # port=3000
   nestjs:
     build: ./nestjs
     volumes:
       - ./nestjs/app:/app
-    ports:
-      - 3000:3000
     depends_on:
       - mongo
     links:
       - mongo
 
+  # port=27017
   mongo:
     image: mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: app
       MONGO_INITDB_ROOT_PASSWORD: app
       MONGO_INITDB_DATABASE: app
-    ports:
-      - 27017:27017
     volumes:
       - mongodb_data_volume:/data/db
 
+  # port=8081
   mongo-express:
     image: mongo-express
-    ports:
-      - "28081:8081"
     environment:
       ME_CONFIG_MONGODB_SERVER: mongo
       ME_CONFIG_BASICAUTH_USERNAME: app
@@ -38,12 +53,10 @@ services:
     depends_on:
       - mongo
 
-  # # bash <(curl -s "https://raw.githubusercontent.com/jeff-silva/howto/refs/heads/main/.bin/nuxt-install.sh")
-  # nuxt3:
-  #   image: node:22
-  #   working_dir: /app
-  #   command: bash -c "yarn install && yarn dev"
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - ./nuxt3:/app
+  # port=3000
+  nuxt3:
+    image: node:22
+    working_dir: /app
+    command: bash -c "yarn install && yarn dev"
+    volumes:
+      - ./nuxt3/app:/app

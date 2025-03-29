@@ -1,0 +1,19 @@
+{
+  debug
+  email jeferson.i.silva@gmail.com
+}
+
+# backend
+http://localhost:8000 {
+  reverse_proxy nestjs:3000
+}
+
+# frontend
+http://localhost:8010 {
+  reverse_proxy nuxt3:3000
+}
+
+# mongo-express
+http://localhost:8020 {
+  reverse_proxy mongo-express:8081
+}
