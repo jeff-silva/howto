@@ -42,8 +42,7 @@ export abstract class BaseRepository<T extends Document> {
       .exec();
   }
 
-  async deleteOne(entityFilterQuery: FilterQuery<T>): Promise<boolean> {
-    const deleteResult = await this.model.deleteOne(entityFilterQuery).exec();
-    return deleteResult.deletedCount === 1;
+  async deleteOne(entityFilterQuery: FilterQuery<T>): Promise<any> {
+    return await this.model.deleteOne(entityFilterQuery).exec();
   }
 }
