@@ -65,21 +65,68 @@
             <v-col cols="12">
               <v-text-field v-model="appUserSave.data.password" />
             </v-col>
+            <v-col cols="12">
+              <v-card>
+                <v-card-title>Contatos</v-card-title>
+                <v-card-text>
+                  <template v-for="(o, i) in appUserSave.data.contacts">
+                    <app-contact
+                      :model-value="o"
+                      hide-details
+                      @update:model-value="
+                        appUserSave.data.contacts[i] = $event
+                      "
+                    />
+                  </template>
+                </v-card-text>
+                <v-card-actions class="justify-end">
+                  <v-btn
+                    class="bg-primary"
+                    text="Add"
+                    @click="appUserSave.data.contacts.push({})"
+                  />
+                </v-card-actions>
+              </v-card>
+              <br />
+            </v-col>
+            <v-col cols="12">
+              <v-card>
+                <v-card-title>Endereços</v-card-title>
+                <v-card-text>
+                  <template v-for="(o, i) in appUserSave.data.addresses">
+                    <app-address
+                      :model-value="o"
+                      hide-details
+                      @update:model-value="
+                        appUserSave.data.addresses[i] = $event
+                      "
+                    />
+                  </template>
+                </v-card-text>
+                <v-card-actions class="justify-end">
+                  <v-btn
+                    class="bg-primary"
+                    text="Add"
+                    @click="appUserSave.data.addresses.push({})"
+                  />
+                </v-card-actions>
+              </v-card>
+              <br />
+            </v-col>
           </v-row>
           <div class="d-flex ga-3">
             <v-btn
               text="Salvar"
               type="submit"
-            /><v-btn
-              text="Limpar"
-              @click="appUserSave.data = {}"
+            />
+            <v-btn
+              text="Novo"
+              @click="appUserSave.edit({})"
             />
           </div>
         </v-form>
       </v-col>
     </v-row>
-
-    <pre>appUserDelete: {{ appUserDelete }}</pre>
   </v-container>
 </template>
 
@@ -91,16 +138,27 @@ const appUserList = useAxios({
 });
 
 const appUserSave = useAxios({
-  method: (self) => (self.data._id ? "patch" : "post"),
-  url: (self) =>
-    self.data._id ? `api://app_user/${self.data._id}` : "api://app_user",
+  method: "post",
+  url: "api://app_user",
   data: {},
   edit(data) {
     appUserSave.data = JSON.parse(JSON.stringify(data));
+    appUserSave.data.contacts = appUserSave.data.contacts || [];
+    appUserSave.data.addresses = appUserSave.data.addresses || [];
   },
   onSuccess(resp) {
-    appUserSave.data = resp.data;
+    appUserSave.data = {};
     appUserList.submit();
+  },
+  onBeforeSubmit() {
+    if (appUserSave.data._id) {
+      appUserSave.url = `api://app_user/${appUserSave.data._id}`;
+      appUserSave.method = "patch";
+      return;
+    }
+
+    appUserSave.url = `api://app_user`;
+    appUserSave.method = "post";
   },
 });
 
@@ -116,5 +174,6 @@ const appUserDelete = useAxios({
   },
 });
 
+appUserSave.edit({});
 appUserList.submit();
 </script>
