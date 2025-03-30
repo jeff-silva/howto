@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 
 export type AppUserDocument = HydratedDocument<AppUser>;
 
@@ -63,6 +67,15 @@ export class AppUser {
 export const AppUserSchema = SchemaFactory.createForClass(AppUser);
 
 AppUserSchema.pre('save', function (next) {
+  console.log(`
+    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  
+    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  
+    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  
+    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  
+    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  
+    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  
+  `);
+  this.password = bcrypt.hash(this.password, 10);
   this.addresses = this.addresses.map((address) => {
     const name: string[] = [];
     if (address.route) name.push(address.route);
@@ -73,4 +86,12 @@ AppUserSchema.pre('save', function (next) {
     return address;
   });
   next();
+});
+
+AppUserSchema.pre('findOneAndUpdate', async function () {
+  const entity = (await this.model.findOne(this.getQuery())).toObject();
+  if (entity.password && !entity.password.startsWith('$2')) {
+    entity.password = await bcrypt.hash(entity.password, 10);
+  }
+  this.set(entity);
 });
