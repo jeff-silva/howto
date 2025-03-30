@@ -21,9 +21,9 @@
 
     <v-btn
       text="Profile"
-      @click="authProfile.submit()"
+      @click="appLoad.submit()"
     />
-    <pre>authProfile: {{ authProfile }}</pre>
+    <pre>appLoad: {{ appLoad }}</pre>
 
     <v-row>
       <v-col
@@ -209,10 +209,9 @@ const authLogin = useAxios({
   },
 });
 
-const authProfile = useAxios({
+const appLoad = useAxios({
   method: "get",
-  url: "api://auth/profile",
-  data: { email: null, password: null },
+  url: "api://app/load",
 });
 
 appUserSave.edit({});
