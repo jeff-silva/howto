@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -66,17 +68,13 @@ export class AppUser {
 
 export const AppUserSchema = SchemaFactory.createForClass(AppUser);
 
-AppUserSchema.pre('save', function (next) {
-  console.log(`
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  
-  `);
-  this.password = bcrypt.hash(this.password, 10);
-  this.addresses = this.addresses.map((address) => {
+const appUserDataValidate = async (appUser: Record<string, any>) => {
+  console.log('before', appUser);
+  if (appUser.password && !appUser.password.startsWith('$2b$')) {
+    appUser.password = await bcrypt.hash(appUser.password, 10);
+  }
+
+  appUser.addresses = appUser.addresses.map((address) => {
     const name: string[] = [];
     if (address.route) name.push(address.route);
     if (address.number) name.push(address.number);
@@ -85,13 +83,21 @@ AppUserSchema.pre('save', function (next) {
     address.name = name.join(', ');
     return address;
   });
+
+  console.log('after', appUser);
+  return appUser;
+};
+
+AppUserSchema.pre('save', async function (next) {
+  await appUserDataValidate(this);
   next();
 });
 
 AppUserSchema.pre('findOneAndUpdate', async function () {
-  const entity = (await this.model.findOne(this.getQuery())).toObject();
-  if (entity.password && !entity.password.startsWith('$2')) {
-    entity.password = await bcrypt.hash(entity.password, 10);
+  const update = this.getUpdate();
+  if (update && typeof update === 'object' && '$set' in update) {
+    if (update.$set) {
+      this.set(await appUserDataValidate(update.$set));
+    }
   }
-  this.set(entity);
 });

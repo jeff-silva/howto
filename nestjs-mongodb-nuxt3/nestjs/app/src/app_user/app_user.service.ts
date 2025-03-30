@@ -27,7 +27,6 @@ export class AppUserService {
   }
 
   update(id: string, appUserDto: AppUserDto) {
-    // return `This action updates a #${id} appUser`;
     return this.appUserRepository.findOneAndUpdate(
       { _id: id },
       { $set: appUserDto },
