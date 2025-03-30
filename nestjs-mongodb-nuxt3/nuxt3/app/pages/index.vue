@@ -19,6 +19,12 @@
     </v-card>
     <br />
 
+    <v-btn
+      text="Profile"
+      @click="authProfile.submit()"
+    />
+    <pre>authProfile: {{ authProfile }}</pre>
+
     <v-row>
       <v-col
         cols="12"
@@ -201,6 +207,12 @@ const authLogin = useAxios({
     if (!resp.data.access_token) return;
     localStorage.setItem("api_token", resp.data.access_token);
   },
+});
+
+const authProfile = useAxios({
+  method: "get",
+  url: "api://auth/profile",
+  data: { email: null, password: null },
 });
 
 appUserSave.edit({});
