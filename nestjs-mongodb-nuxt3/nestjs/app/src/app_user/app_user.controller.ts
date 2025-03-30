@@ -7,6 +7,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { AppUserService } from './app_user.service';
 import { AppUserDto } from './dto/app_user.dto';
@@ -21,8 +22,8 @@ export class AppUserController {
   }
 
   @Get()
-  findAll() {
-    return this.appUserService.findAll();
+  findAll(@Query() query: Record<string, any>) {
+    return this.appUserService.findAll(query);
   }
 
   @Get(':id')

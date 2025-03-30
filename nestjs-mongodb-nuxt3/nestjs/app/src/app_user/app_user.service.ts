@@ -16,9 +16,8 @@ export class AppUserService {
     return this.appUserRepository.create(appUserDto);
   }
 
-  findAll() {
-    // return `This action returns all appUser`;
-    return this.appUserRepository.findAll({});
+  findAll(params: Record<string, any> = {}) {
+    return this.appUserRepository.findAll(params);
   }
 
   findOne(id: string) {
