@@ -16,5 +16,6 @@ import { AppUserRepository } from './app_user.repository';
   ],
   controllers: [AppUserController],
   providers: [AppUserService, AppUserRepository],
+  exports: [AppUserService],
 })
 export class AppUserModule {}

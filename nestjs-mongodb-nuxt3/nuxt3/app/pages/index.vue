@@ -1,5 +1,24 @@
 <template>
   <v-container>
+    <v-card>
+      <v-card-text>Login</v-card-text>
+      <v-card-text>
+        <v-text-field
+          v-model="authLogin.data.email"
+          label="E-mail"
+        />
+        <v-text-field
+          v-model="authLogin.data.password"
+          label="E-mail"
+        />
+        <v-btn
+          text="Entrar"
+          @click="authLogin.submit()"
+        />
+      </v-card-text>
+    </v-card>
+    <br />
+
     <v-row>
       <v-col
         cols="12"
@@ -171,6 +190,16 @@ const appUserDelete = useAxios({
   },
   onSuccess() {
     appUserList.submit();
+  },
+});
+
+const authLogin = useAxios({
+  method: "post",
+  url: "api://auth/login",
+  data: { email: null, password: null },
+  onSuccess(resp) {
+    if (!resp.data.access_token) return;
+    localStorage.setItem("api_token", resp.data.access_token);
   },
 });
 

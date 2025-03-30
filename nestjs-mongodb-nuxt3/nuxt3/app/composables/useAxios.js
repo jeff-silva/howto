@@ -27,10 +27,12 @@ export default (config = {}) => {
           });
           r.response = req.data;
           r.onSuccess(req);
+          resolve(req);
         } catch (e) {
           r.onError(e.response);
+          reject(e);
         }
-        resolve(req);
+
         r.busy = false;
       });
     },

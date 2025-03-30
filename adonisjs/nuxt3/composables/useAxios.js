@@ -88,7 +88,6 @@ export default (options = {}) => {
         r.error.load(err);
         r.onError(r.error);
       }
-
       r.busy = false;
     },
   });
