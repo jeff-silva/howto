@@ -1,0 +1,8 @@
+services:
+  osjs:
+    user: node
+    build: ./osjs
+    volumes:
+      - ./osjs:/usr/src/osjs
+    ports:
+      - 8000:8000
