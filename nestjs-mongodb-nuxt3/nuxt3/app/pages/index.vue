@@ -1,29 +1,42 @@
 <template>
   <v-container>
-    <v-card>
-      <v-card-text>Login</v-card-text>
-      <v-card-text>
-        <v-text-field
-          v-model="authLogin.data.email"
-          label="E-mail"
-        />
-        <v-text-field
-          v-model="authLogin.data.password"
-          label="E-mail"
-        />
-        <v-btn
-          text="Entrar"
-          @click="authLogin.submit()"
-        />
-      </v-card-text>
-    </v-card>
+    <v-toolbar>
+      <v-toolbar-title>{{
+        appLoad.response.user ? appLoad.response.user.name : "Guest"
+      }}</v-toolbar-title>
+      <template #append>
+        <div class="d-flex ga-1">
+          <v-btn
+            text="Logout"
+            @click="authLogout.submit()"
+          />
+        </div>
+      </template>
+    </v-toolbar>
     <br />
 
-    <v-btn
-      text="Profile"
-      @click="appLoad.submit()"
-    />
-    <pre>appLoad: {{ appLoad }}</pre>
+    <v-expand-transition>
+      <v-card
+        v-if="!appLoad.response.user"
+        class="mb-4"
+      >
+        <v-card-title>Login</v-card-title>
+        <v-card-text>
+          <v-text-field
+            v-model="authLogin.data.email"
+            label="E-mail"
+          />
+          <v-text-field
+            v-model="authLogin.data.password"
+            label="E-mail"
+          />
+          <v-btn
+            text="Entrar"
+            @click="authLogin.submit()"
+          />
+        </v-card-text>
+      </v-card>
+    </v-expand-transition>
 
     <v-row>
       <v-col
@@ -45,7 +58,7 @@
               </tr>
             </thead>
             <tbody>
-              <template v-for="o in appUserList.response">
+              <template v-for="o in appUserList.response.data">
                 <tr>
                   <td>{{ o.name }}</td>
                   <td class="pa-0">
@@ -68,6 +81,38 @@
               </template>
             </tbody>
           </v-table>
+          <v-card-text>
+            <v-row>
+              <v-col cols="6">
+                <v-text-field
+                  label="page"
+                  type="number"
+                  hide-details
+                  v-model.number="appUserList.params.page"
+                  @update:model-value="appUserList.submit()"
+                />
+              </v-col>
+              <v-col cols="6">
+                <v-select
+                  label="per_page"
+                  hide-details
+                  v-model="appUserList.params.per_page"
+                  :items="[
+                    { value: 3, title: '2 Itens' },
+                    { value: 10, title: '10 Itens' },
+                    { value: 50, title: '50 Itens' },
+                    { value: 100, title: '100 Itens' },
+                  ]"
+                  @update:model-value="
+                    () => {
+                      appUserList.params.page;
+                      appUserList.submit();
+                    }
+                  "
+                />
+              </v-col>
+            </v-row>
+          </v-card-text>
         </v-card>
         <br />
         <v-btn
@@ -160,7 +205,13 @@
 const appUserList = useAxios({
   method: "get",
   url: "api://app_user",
-  response: [],
+  params: {
+    page: 1,
+    per_page: 3,
+  },
+  response: {
+    data: [],
+  },
 });
 
 const appUserSave = useAxios({
@@ -207,14 +258,24 @@ const authLogin = useAxios({
   onSuccess(resp) {
     if (!resp.data.access_token) return;
     localStorage.setItem("api_token", resp.data.access_token);
+    appLoad.submit();
+  },
+});
+
+const authLogout = reactive({
+  async submit() {
+    localStorage.removeItem("api_token");
+    appLoad.submit();
   },
 });
 
 const appLoad = useAxios({
   method: "get",
   url: "api://app/load",
+  response: {},
 });
 
+appLoad.submit();
 appUserSave.edit({});
 appUserList.submit();
 </script>

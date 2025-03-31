@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import { Injectable } from '@nestjs/common';
 import {
   FilterQuery,
   HydratedDocument,
@@ -19,17 +20,33 @@ export abstract class BaseRepository<T extends Document> {
     const document = await this.model
       .findOne(entityFilterQuery, null, options)
       .exec();
-    if (!document) {
-      throw new NotFoundException(
-        `Document not found with id ${entityFilterQuery._id}`,
-      );
-    }
 
     return document;
   }
 
   async findAll(entityFilterQuery: FilterQuery<T>): Promise<T[]> {
     return this.model.find(entityFilterQuery).exec();
+  }
+
+  async findPaginated(
+    query: Record<string, any> = {},
+  ): Promise<Record<string, any>> {
+    query = {
+      page: 1,
+      per_page: 3,
+      ...query,
+    };
+
+    const results = await this.model.countDocuments({}).exec();
+    const pages = Math.ceil(results / query.per_page); // Cálculo correto de pages
+    const skip = (query.page - 1) * query.per_page;
+    const data = await this.model
+      .find()
+      .limit(query.per_page)
+      .skip(skip)
+      .exec();
+
+    return { pagination: { results, pages }, data };
   }
 
   async create(createEntityData: Partial<T>): Promise<T> {

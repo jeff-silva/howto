@@ -16,3 +16,4 @@ services:
 
 - [ ] Verificar como fazer para que o timestamps: true faça createdAt ser created_at e o mesmo para updatedAt
 - [ ] Paginação nos endpoints de list
+- [ ] Ver se tem como melhorar documentação Swagger

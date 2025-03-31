@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -19,12 +20,15 @@ export class AuthMiddleware implements NestMiddleware {
     req['user'] = null;
 
     const token = this.extractTokenFromHeader(req);
+    console.log({ token });
     if (token) {
       try {
         const payload = await this.jwtService.verifyAsync(token, {
           secret: 'app',
         });
-        req['user'] = await this.appUserService.findOne({ _id: payload.sub });
+        if (payload.sub) {
+          req['user'] = await this.appUserService.findOne({ _id: payload.sub });
+        }
       } catch (err) {}
     }
 

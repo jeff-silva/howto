@@ -19,7 +19,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     for (let prefix in protocols) {
       const protocol = protocols[prefix];
       if (config.url.startsWith(protocol.baseUrl)) {
-        const token = localStorage.getItem(protocol.tokenField);
+        const token = localStorage.getItem(protocol.tokenField) || null;
         if (token) config.headers.Authorization = `Bearer ${token}`;
       }
     }

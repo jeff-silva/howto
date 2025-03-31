@@ -18,7 +18,7 @@ export class AppUserService {
   }
 
   findAll(params: Record<string, any> = {}) {
-    return this.appUserRepository.findAll(params);
+    return this.appUserRepository.findPaginated(params);
   }
 
   findOne(query: Record<string, any>, options?: Record<string, any>) {
