@@ -9,17 +9,31 @@ import * as bcrypt from 'bcrypt';
 
 export type AppUserDocument = HydratedDocument<AppUser>;
 
-@Schema({ collection: 'app_user', timestamps: true, versionKey: false })
+@Schema({
+  collection: 'app_user',
+  versionKey: false,
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+  },
+})
 export class AppUser {
-  // id: string;
-
   @Prop()
   name: string;
 
   @Prop()
   email: string;
 
-  @Prop({ select: false })
+  @Prop({
+    select: false,
+    required: false,
+    validate: {
+      message: 'Password is required for new users',
+      validator(value: string) {
+        return this.isNew ? !!value : true;
+      },
+    },
+  })
   password: string;
 
   @Prop([

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { IsEmail, IsString, IsArray } from 'class-validator';
+import { IsEmail, IsString, IsArray, IsOptional } from 'class-validator';
 
 export class AppUserDto {
   @IsString()
@@ -9,6 +9,7 @@ export class AppUserDto {
   email: string;
 
   @IsString()
+  @IsOptional()
   password: string;
 
   @IsArray()
