@@ -149,6 +149,7 @@
               @click="appUserSave.edit({})"
             />
           </div>
+          <pre>appUserSave: {{ appUserSave }}</pre>
         </v-form>
       </v-col>
     </v-row>
@@ -175,15 +176,15 @@ const appUserSave = useAxios({
     appUserSave.data = {};
     appUserList.submit();
   },
-  onBeforeSubmit() {
-    if (appUserSave.data._id) {
-      appUserSave.url = `api://app_user/${appUserSave.data._id}`;
-      appUserSave.method = "patch";
+  onBeforeSubmit({ self }) {
+    if (self.data._id) {
+      self.url = `api://app_user/${self.data._id}`;
+      self.method = "patch";
       return;
     }
 
-    appUserSave.url = `api://app_user`;
-    appUserSave.method = "post";
+    self.url = `api://app_user`;
+    self.method = "post";
   },
 });
 

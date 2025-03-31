@@ -9,7 +9,7 @@ import * as bcrypt from 'bcrypt';
 
 export type AppUserDocument = HydratedDocument<AppUser>;
 
-@Schema({ collection: 'app_user' })
+@Schema({ collection: 'app_user', timestamps: true, versionKey: false })
 export class AppUser {
   // id: string;
 
@@ -19,7 +19,7 @@ export class AppUser {
   @Prop()
   email: string;
 
-  @Prop()
+  @Prop({ select: false })
   password: string;
 
   @Prop([
@@ -69,7 +69,6 @@ export class AppUser {
 export const AppUserSchema = SchemaFactory.createForClass(AppUser);
 
 const appUserDataValidate = async (appUser: Record<string, any>) => {
-  console.log('before', appUser);
   if (appUser.password && !appUser.password.startsWith('$2b$')) {
     appUser.password = await bcrypt.hash(appUser.password, 10);
   }
@@ -84,7 +83,6 @@ const appUserDataValidate = async (appUser: Record<string, any>) => {
     return address;
   });
 
-  console.log('after', appUser);
   return appUser;
 };
 

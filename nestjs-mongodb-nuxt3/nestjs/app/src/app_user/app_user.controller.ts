@@ -19,7 +19,7 @@ export class AppUserController {
   constructor(private readonly appUserService: AppUserService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   create(@Body() appUserDto: AppUserDto) {
     return this.appUserService.create(appUserDto);
   }
@@ -32,8 +32,8 @@ export class AppUserController {
 
   @Get(':id')
   @UseGuards(AuthGuard)
-  findOne(@Param('id') id: string) {
-    return this.appUserService.findOne(id);
+  findOne(@Param('id') _id: string) {
+    return this.appUserService.findOne({ _id });
   }
 
   @Patch(':id')

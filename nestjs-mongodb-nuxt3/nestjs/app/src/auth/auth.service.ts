@@ -14,7 +14,10 @@ export class AuthService {
   ) {}
 
   async login(email: string, password: string): Promise<any> {
-    const [user] = await this.appUserService.findAll({ email });
+    const user = await this.appUserService.findOne(
+      { email },
+      { select: '+password' },
+    );
     if (!user) throw new UnauthorizedException();
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) throw new UnauthorizedException();

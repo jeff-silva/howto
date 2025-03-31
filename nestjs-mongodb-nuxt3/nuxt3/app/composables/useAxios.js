@@ -16,7 +16,7 @@ export default (config = {}) => {
     submit() {
       return new Promise(async (resolve, reject) => {
         r.busy = true;
-        r.onBeforeSubmit();
+        r.onBeforeSubmit({ self: r });
         try {
           const req = await axios({
             method: r.method,
@@ -38,5 +38,6 @@ export default (config = {}) => {
     },
   });
 
+  r.onBeforeSubmit({ self: r });
   return r;
 };

@@ -5,14 +5,20 @@ import {
   Model,
   UpdateQuery,
   Document,
+  QueryOptions,
 } from 'mongoose';
 
 @Injectable()
 export abstract class BaseRepository<T extends Document> {
   constructor(protected readonly model: Model<T>) {}
 
-  async findOne(entityFilterQuery: FilterQuery<T>): Promise<T | null> {
-    const document = await this.model.findOne(entityFilterQuery).exec();
+  async findOne(
+    entityFilterQuery: FilterQuery<T>,
+    options?: QueryOptions,
+  ): Promise<T | null> {
+    const document = await this.model
+      .findOne(entityFilterQuery, null, options)
+      .exec();
     if (!document) {
       throw new NotFoundException(
         `Document not found with id ${entityFilterQuery._id}`,

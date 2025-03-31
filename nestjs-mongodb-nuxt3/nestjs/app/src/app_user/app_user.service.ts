@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Inject, Injectable } from '@nestjs/common';
@@ -20,9 +21,8 @@ export class AppUserService {
     return this.appUserRepository.findAll(params);
   }
 
-  findOne(id: string) {
-    // return `This action returns a #${id} appUser`;
-    return this.appUserRepository.findOne({ _id: id });
+  findOne(query: Record<string, any>, options?: Record<string, any>) {
+    return this.appUserRepository.findOne(query, options);
   }
 
   update(id: string, appUserDto: AppUserDto) {
