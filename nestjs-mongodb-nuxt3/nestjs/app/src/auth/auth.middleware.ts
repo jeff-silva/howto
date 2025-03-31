@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { JwtService } from '@nestjs/jwt';
@@ -18,10 +20,12 @@ export class AuthMiddleware implements NestMiddleware {
 
     const token = this.extractTokenFromHeader(req);
     if (token) {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: 'app',
-      });
-      req['user'] = await this.appUserService.findOne({ _id: payload.sub });
+      try {
+        const payload = await this.jwtService.verifyAsync(token, {
+          secret: 'app',
+        });
+        req['user'] = await this.appUserService.findOne({ _id: payload.sub });
+      } catch (err) {}
     }
 
     next();
