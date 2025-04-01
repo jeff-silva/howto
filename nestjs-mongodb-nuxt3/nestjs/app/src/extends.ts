@@ -80,7 +80,22 @@ export abstract class BaseRepository<T extends Document> {
       .exec();
   }
 
-  async deleteOne(entityFilterQuery: FilterQuery<T>): Promise<any> {
+  async deleteOne(
+    entityFilterQuery: FilterQuery<T>,
+    options: Record<string, any> = {},
+  ): Promise<any> {
+    options = {
+      soft: false,
+      ...options,
+    };
+    if (options.soft)
+      return await this.model
+        .findOneAndUpdate(
+          entityFilterQuery,
+          { deleted_at: new Date() },
+          { new: true },
+        )
+        .exec();
     return await this.model.deleteOne(entityFilterQuery).exec();
   }
 }

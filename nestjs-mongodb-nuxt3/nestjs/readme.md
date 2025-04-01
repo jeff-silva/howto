@@ -14,4 +14,5 @@ services:
       - 3000:3000
 ```
 
-- [ ] Ver se tem como melhorar documentação Swagger
+- [ ] Testar relacionamentos
+- [ ] Ver como funciona o salvamento de objetos direto dentro de uma collection

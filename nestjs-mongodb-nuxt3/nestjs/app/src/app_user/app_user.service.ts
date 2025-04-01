@@ -37,6 +37,6 @@ export class AppUserService {
 
   remove(id: string) {
     // return `This action removes a #${id} appUser`;
-    return this.appUserRepository.deleteOne({ _id: id });
+    return this.appUserRepository.deleteOne({ _id: id }, { soft: true });
   }
 }

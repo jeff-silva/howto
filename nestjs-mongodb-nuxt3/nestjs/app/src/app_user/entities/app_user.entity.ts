@@ -78,6 +78,9 @@ export class AppUser {
     lat: number;
     lng: number;
   }[];
+
+  @Prop({ type: Date, default: null })
+  deleted_at: Date | null;
 }
 
 export const AppUserSchema = SchemaFactory.createForClass(AppUser);
@@ -116,4 +119,12 @@ AppUserSchema.pre('findOneAndUpdate', async function () {
       this.set(await appUserDataValidate(update.$set));
     }
   }
+});
+
+AppUserSchema.pre('find', function () {
+  this.where({ deleted_at: null });
+});
+
+AppUserSchema.pre('findOne', function () {
+  this.where({ deleted_at: null });
 });
