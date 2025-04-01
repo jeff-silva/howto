@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Injectable } from '@nestjs/common';
 import {
@@ -33,9 +37,19 @@ export abstract class BaseRepository<T extends Document> {
   ): Promise<Record<string, any>> {
     query = {
       page: 1,
-      per_page: 3,
+      per_page: 10,
+      order: 'updated_at:desc',
       ...query,
     };
+
+    const sort = Object.fromEntries(
+      Array.isArray(query.order)
+        ? query.order
+        : [query.order].map((o) => {
+            const [field, order] = o.split(':');
+            return [field, order == 'asc' ? 1 : -1];
+          }),
+    );
 
     const results = await this.model.countDocuments({}).exec();
     const pages = Math.ceil(results / query.per_page); // Cálculo correto de pages
@@ -44,9 +58,10 @@ export abstract class BaseRepository<T extends Document> {
       .find()
       .limit(query.per_page)
       .skip(skip)
+      .sort(sort)
       .exec();
 
-    return { pagination: { results, pages }, data };
+    return { sort, pagination: { results, pages }, data };
   }
 
   async create(createEntityData: Partial<T>): Promise<T> {

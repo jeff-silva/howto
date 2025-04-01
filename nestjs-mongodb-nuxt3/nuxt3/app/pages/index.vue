@@ -98,7 +98,7 @@
                   hide-details
                   v-model="appUserList.params.per_page"
                   :items="[
-                    { value: 3, title: '2 Itens' },
+                    { value: 2, title: '2 Itens' },
                     { value: 10, title: '10 Itens' },
                     { value: 50, title: '50 Itens' },
                     { value: 100, title: '100 Itens' },
@@ -194,7 +194,6 @@
               @click="appUserSave.edit({})"
             />
           </div>
-          <pre>appUserSave: {{ appUserSave }}</pre>
         </v-form>
       </v-col>
     </v-row>
@@ -207,7 +206,7 @@ const appUserList = useAxios({
   url: "api://app_user",
   params: {
     page: 1,
-    per_page: 3,
+    per_page: 10,
   },
   response: {
     data: [],
@@ -226,6 +225,7 @@ const appUserSave = useAxios({
   onSuccess(resp) {
     appUserSave.data = {};
     appUserList.submit();
+    appLoad.submit();
   },
   onBeforeSubmit({ self }) {
     if (self.data._id) {

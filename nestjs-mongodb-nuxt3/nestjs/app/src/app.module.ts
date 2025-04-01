@@ -11,6 +11,7 @@ import { AppService } from './app.service';
 import { AppUserModule } from './app_user/app_user.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthMiddleware } from './auth/auth.middleware';
+import { AppSeeder } from './app.seeder';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { AuthMiddleware } from './auth/auth.middleware';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AppSeeder],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

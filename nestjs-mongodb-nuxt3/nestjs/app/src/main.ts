@@ -23,6 +23,17 @@ async function bootstrap() {
         .setTitle('Basic Auth')
         .setDescription('Basic Auth Application Example')
         .setVersion('1.0')
+        .addBearerAuth(
+          {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+            name: 'Authorization',
+            description: 'Enter JWT token',
+            in: 'header',
+          },
+          'access_token',
+        )
         .build(),
     );
   });

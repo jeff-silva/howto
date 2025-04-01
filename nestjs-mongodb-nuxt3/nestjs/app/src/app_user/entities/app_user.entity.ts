@@ -87,7 +87,11 @@ const appUserDataValidate = async (appUser: Record<string, any>) => {
     appUser.password = await bcrypt.hash(appUser.password, 10);
   }
 
-  appUser.addresses = appUser.addresses.map((address) => {
+  appUser.contacts = (appUser.contacts || []).map((contact) => {
+    return { type: 'email', value: '', ...contact };
+  });
+
+  appUser.addresses = (appUser.addresses || []).map((address) => {
     const name: string[] = [];
     if (address.route) name.push(address.route);
     if (address.number) name.push(address.number);

@@ -13,16 +13,19 @@ export class AppUserService {
   constructor(private readonly appUserRepository: AppUserRepository) {}
 
   create(appUserDto: AppUserDto) {
-    // return 'This action adds a new appUser';
     return this.appUserRepository.create(appUserDto);
-  }
-
-  findAll(params: Record<string, any> = {}) {
-    return this.appUserRepository.findPaginated(params);
   }
 
   findOne(query: Record<string, any>, options?: Record<string, any>) {
     return this.appUserRepository.findOne(query, options);
+  }
+
+  findAll(params: Record<string, any> = {}) {
+    return this.appUserRepository.findAll(params);
+  }
+
+  findPaginated(params: Record<string, any> = {}) {
+    return this.appUserRepository.findPaginated(params);
   }
 
   update(id: string, appUserDto: AppUserDto) {
