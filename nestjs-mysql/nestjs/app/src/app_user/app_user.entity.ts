@@ -17,3 +17,5 @@ export class AppUser {
   @Column({ default: null })
   password: string;
 }
+
+export class AppUserDto {}

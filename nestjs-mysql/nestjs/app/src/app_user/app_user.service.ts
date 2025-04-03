@@ -2,8 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { AppUserDto } from './app_user.dto';
-import { AppUser } from './app_user.entity';
+import { AppUser, AppUserDto } from './app_user.entity';
 
 @Injectable()
 export class AppUserService {

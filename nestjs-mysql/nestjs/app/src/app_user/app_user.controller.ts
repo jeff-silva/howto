@@ -8,34 +8,38 @@ import {
   Delete,
 } from '@nestjs/common';
 import { AppUserService } from './app_user.service';
-import { AppUserDto } from './app_user.dto';
+import { AppUserDto } from './app_user.entity';
 
 @Controller('app_user')
 export class AppUserController {
   constructor(private readonly service: AppUserService) {}
 
   @Post()
-  create(@Body() dto: AppUserDto) {
-    return this.service.create(dto);
+  async create(@Body() dto: AppUserDto) {
+    const entity = await this.service.create(dto);
+    return { entity };
   }
 
   @Get()
-  findAll() {
-    return this.service.findAll();
+  async findAll() {
+    return await this.service.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.service.findOne(+id);
+    const entity = this.service.findOne(+id);
+    return { entity };
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: AppUserDto) {
-    return this.service.update(+id, dto);
+    const entity = this.service.update(+id, dto);
+    return { entity };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.service.remove(+id);
+  async remove(@Param('id') id: string) {
+    const entity = await this.service.remove(+id);
+    return { entity };
   }
 }
