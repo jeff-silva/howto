@@ -1,19 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { AppUserService } from './app_user/app_user.service';
 import { AppUserGroupService } from './app_user_group/app_user_group.service';
-
-type SeedService = {
-  create(data: Record<string, any>): Promise<any>;
-  update(_id: string, data: Record<string, any>): Promise<any>;
-  findOne(query: { [key: string]: any }): Promise<any | null>;
-  create(data: { [key: string]: any }): Promise<any>;
-};
 
 interface SeedItem {
   find?: Record<string, any>;
@@ -63,10 +54,11 @@ export class AppSeeder implements OnApplicationBootstrap {
         if (item.find) {
           find = await service.findOne(item.find);
         }
-        if (find) {
-          find = await service.update(find._id, item.update || {});
-        } else {
+        if (!find) {
           find = await service.create(item.create || {});
+        }
+        if (find && item.update && typeof item.update === 'object') {
+          find = await service.update(find.id, item.update || {});
         }
         return JSON.parse(JSON.stringify(find));
       }),
