@@ -1,0 +1,31 @@
+services:
+  mysql:
+    build: ./mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: app
+      MYSQL_DATABASE: app
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    volumes:
+      - ./mysql/entrypoint.sql:/docker-entrypoint-initdb.d/entrypoint.sql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 81:80
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: app
+      PMA_PASSWORD: app
+      UPLOAD_LIMIT: 256M
+
+  nestjs:
+    build: ./nestjs
+    volumes:
+      - ./nestjs/app:/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - mysql
