@@ -22,6 +22,7 @@ async function bootstrap() {
         .setTitle('Rest Example')
         .setDescription('Rest Endpoints')
         .setVersion('1.0')
+        .addBearerAuth()
         .build(),
     );
   });

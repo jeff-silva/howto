@@ -16,12 +16,16 @@ export class AppUserService {
     return this.repository.save(entity);
   }
 
-  findAll(): Promise<AppUser[]> {
-    return this.repository.find();
+  findOne(params = {}): Promise<AppUserDto | null> {
+    return this.repository.findOneBy(params);
   }
 
-  findOne(id: number): Promise<AppUser | null> {
-    return this.repository.findOneBy({ id });
+  findAll(params = {}): Promise<AppUser[]> {
+    return this.repository.find(params);
+  }
+
+  findPaginated(params = {}): Promise<Record<string, any>> {
+    return this.repository.find(params);
   }
 
   async update(id: number, dto: AppUserDto) {

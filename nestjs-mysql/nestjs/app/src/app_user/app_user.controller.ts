@@ -26,8 +26,8 @@ export class AppUserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    const entity = this.service.findOne(+id);
+  findOne(@Param('id') id: number) {
+    const entity = this.service.findOne({ id });
     return { entity };
   }
 

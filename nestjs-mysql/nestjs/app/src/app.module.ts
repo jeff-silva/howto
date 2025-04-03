@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -7,6 +12,8 @@ import { AppUser } from './app_user/app_user.entity';
 import { AppSeeder } from './app.seeder';
 import { AppUserGroupModule } from './app_user_group/app_user_group.module';
 import { AppUserGroup } from './app_user_group/app_user_group.entity';
+import { AuthModule } from './auth/auth.module';
+import { AuthMiddleware } from './auth/auth.middleware';
 
 @Module({
   imports: [
@@ -20,10 +27,18 @@ import { AppUserGroup } from './app_user_group/app_user_group.entity';
       entities: [AppUser, AppUserGroup],
       synchronize: true,
     }),
+    AuthModule,
     AppUserModule,
     AppUserGroupModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppSeeder],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes({
+      path: '*',
+      method: RequestMethod.ALL,
+    });
+  }
+}

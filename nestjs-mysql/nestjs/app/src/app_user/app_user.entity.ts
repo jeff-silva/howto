@@ -63,6 +63,9 @@ export class AppUser {
 }
 
 export class AppUserDto {
+  @IsNumber()
+  id: number;
+
   @IsString()
   @IsNotEmpty()
   name: string;
