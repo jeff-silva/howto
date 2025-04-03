@@ -15,17 +15,24 @@ async function bootstrap() {
     }),
   );
 
-  SwaggerModule.setup('/', app, () => {
-    return SwaggerModule.createDocument(
-      app,
-      new DocumentBuilder()
-        .setTitle('Rest Example')
-        .setDescription('Rest Endpoints')
-        .setVersion('1.0')
-        .addBearerAuth()
-        .build(),
-    );
-  });
+  SwaggerModule.setup(
+    '/',
+    app,
+    () => {
+      return SwaggerModule.createDocument(
+        app,
+        new DocumentBuilder()
+          .setTitle('Rest Example')
+          .setDescription('Rest Endpoints')
+          .setVersion('1.0')
+          .addBearerAuth()
+          .build(),
+      );
+    },
+    {
+      jsonDocumentUrl: 'api/v1/app/openapi',
+    },
+  );
 
   await app.listen(process.env.PORT ?? 3000);
 }
