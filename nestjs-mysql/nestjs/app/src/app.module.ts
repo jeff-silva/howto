@@ -14,6 +14,7 @@ import { AppUserGroupModule } from './app_user_group/app_user_group.module';
 import { AppUserGroup } from './app_user_group/app_user_group.entity';
 import { AuthModule } from './auth/auth.module';
 import { AuthMiddleware } from './auth/auth.middleware';
+import { TestCommand } from './@app/commands/test.command';
 
 @Module({
   imports: [
@@ -32,7 +33,7 @@ import { AuthMiddleware } from './auth/auth.middleware';
     AppUserGroupModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AppSeeder],
+  providers: [AppService, AppSeeder, TestCommand],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
