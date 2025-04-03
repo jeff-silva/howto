@@ -5,15 +5,15 @@ export class AppUser {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ default: null })
   name: string;
 
-  @Column()
+  @Column({ default: null })
   email: string;
 
-  @Column()
+  @Column({ default: null })
   phone: string;
 
-  @Column()
+  @Column({ default: null })
   password: string;
 }
