@@ -35,7 +35,7 @@ export class AppUser {
   @Column({ default: null })
   phone: string;
 
-  @Column({ default: null })
+  @Column({ default: null, select: false })
   password: string;
 
   @Column({ nullable: true })

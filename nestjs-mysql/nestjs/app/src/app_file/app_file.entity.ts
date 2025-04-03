@@ -41,17 +41,17 @@ export class AppFileDto {
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ type: String, example: 'filename.txt' })
+  @ApiProperty({ type: String, example: 'Description' })
   name: string;
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ type: String, example: 'algo.txt' })
+  @ApiProperty({ type: String, example: 'file.txt' })
   path: string;
 
-  @IsNumber()
-  @ApiProperty({ type: Number, example: 1024 })
-  size: number;
+  // @IsNumber()
+  // @ApiProperty({ type: Number, example: 1024 })
+  // size: number;
 
   @IsString()
   @IsNotEmpty()
@@ -60,6 +60,6 @@ export class AppFileDto {
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ type: String, example: 'base64encodedstring...' })
-  content: string;
+  @ApiProperty({ type: String, format: 'binary' })
+  content: any;
 }

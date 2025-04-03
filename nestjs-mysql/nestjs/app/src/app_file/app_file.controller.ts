@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/await-thenable */
 
 import {
   Controller,
@@ -12,11 +10,14 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { AppFileService } from './app_file.service';
 import { AppFileDto } from './app_file.entity';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('app_file')
 @Controller('app_file')
@@ -26,9 +27,14 @@ export class AppFileController {
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  async create(@Body() dto: AppFileDto) {
+  @UseInterceptors(FileInterceptor('content'))
+  @ApiConsumes('multipart/form-data')
+  async create(
+    @Body() dto: AppFileDto,
+    @UploadedFile() content: Express.Multer.File,
+  ) {
     const entity = await this.service.create(dto);
-    return { entity };
+    return { entity, content };
   }
 
   @Get()

@@ -27,16 +27,7 @@ export class AuthMiddleware implements NestMiddleware {
           secret: 'app',
         });
         if (payload.sub) {
-          req['user'] = await this.appUserService.findOne({
-            where: { _id: payload.sub },
-            aggregate: [
-              {
-                from: 'app_user_group',
-                localField: 'group_id',
-                as: 'group',
-              },
-            ],
-          });
+          req['user'] = await this.appUserService.findOne({ id: payload.sub });
         }
       } catch (err) {}
     }
