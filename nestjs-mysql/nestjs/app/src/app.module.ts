@@ -4,6 +4,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AppUserModule } from './app_user/app_user.module';
 import { AppUser } from './app_user/app_user.entity';
+import { AppSeeder } from './app.seeder';
+import { AppUserGroupModule } from './app_user_group/app_user_group.module';
+import { AppUserGroup } from './app_user_group/app_user_group.entity';
 
 @Module({
   imports: [
@@ -14,12 +17,13 @@ import { AppUser } from './app_user/app_user.entity';
       username: 'app',
       password: 'app',
       database: 'app',
-      entities: [AppUser],
+      entities: [AppUser, AppUserGroup],
       synchronize: true,
     }),
     AppUserModule,
+    AppUserGroupModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AppSeeder],
 })
 export class AppModule {}
