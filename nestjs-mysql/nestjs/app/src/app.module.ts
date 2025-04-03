@@ -15,6 +15,8 @@ import { AppUserGroup } from './app_user_group/app_user_group.entity';
 import { AuthModule } from './auth/auth.module';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { TestCommand } from './@app/commands/test.command';
+import { AppFileModule } from './app_file/app_file.module';
+import { AppFile } from './app_file/app_file.entity';
 
 @Module({
   imports: [
@@ -25,12 +27,13 @@ import { TestCommand } from './@app/commands/test.command';
       username: 'app',
       password: 'app',
       database: 'app',
-      entities: [AppUser, AppUserGroup],
+      entities: [AppUser, AppUserGroup, AppFile],
       synchronize: true,
     }),
     AuthModule,
     AppUserModule,
     AppUserGroupModule,
+    AppFileModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppSeeder, TestCommand],
