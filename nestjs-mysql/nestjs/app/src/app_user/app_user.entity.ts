@@ -13,6 +13,13 @@ import {
 } from 'typeorm';
 
 import { AppUserGroup } from 'src/app_user_group/app_user_group.entity';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 @Entity('app_user')
 export class AppUser {
@@ -31,8 +38,8 @@ export class AppUser {
   @Column({ default: null })
   password: string;
 
-  @Column({ nullable: true }) // Permite valores nulos
-  group_id: number; // Coluna para a chave estrangeira
+  @Column({ nullable: true })
+  group_id: number;
 
   @ManyToOne(() => AppUserGroup, (group) => group.users)
   @JoinColumn({ name: 'group_id' })
@@ -55,4 +62,25 @@ export class AppUser {
   }
 }
 
-export class AppUserDto {}
+export class AppUserDto {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsEmail()
+  @IsNotEmpty()
+  @IsOptional()
+  email: string;
+
+  @IsString()
+  @IsOptional()
+  phone: string;
+
+  @IsString()
+  @IsOptional()
+  password: string;
+
+  @IsNumber()
+  @IsOptional()
+  group_id: number;
+}

@@ -32,8 +32,8 @@ export class AppUserController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: AppUserDto) {
-    const entity = this.service.update(+id, dto);
+  async update(@Param('id') id: string, @Body() dto: AppUserDto) {
+    const entity = await this.service.update(+id, dto);
     return { entity };
   }
 

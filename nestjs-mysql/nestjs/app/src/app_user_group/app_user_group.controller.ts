@@ -15,27 +15,31 @@ export class AppUserGroupController {
   constructor(private readonly service: AppUserGroupService) {}
 
   @Post()
-  create(@Body() dto: AppUserGroupDto) {
-    return this.service.create(dto);
+  async create(@Body() dto: AppUserGroupDto) {
+    const entity = await this.service.create(dto);
+    return { entity };
   }
 
   @Get()
-  findAll() {
-    return this.service.findAll();
+  async findAll() {
+    return await this.service.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.service.findOne(+id);
+    const entity = this.service.findOne(+id);
+    return { entity };
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: AppUserGroupDto) {
-    return this.service.update(+id, dto);
+  async update(@Param('id') id: string, @Body() dto: AppUserGroupDto) {
+    const entity = await this.service.update(+id, dto);
+    return { entity };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.service.remove(+id);
+  async remove(@Param('id') id: string) {
+    const entity = await this.service.remove(+id);
+    return { entity };
   }
 }
