@@ -5,7 +5,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { IsNumber, IsString, IsNotEmpty } from 'class-validator';
+import { IsNumber, IsString, IsNotEmpty, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('app_file')
@@ -16,16 +16,16 @@ export class AppFile {
   @Column({ default: null })
   name: string;
 
-  @Column()
+  @Column({ default: null })
   path: string;
 
-  @Column()
+  @Column({ default: null })
   size: number;
 
-  @Column()
+  @Column({ default: null })
   mime: string;
 
-  @Column('longtext')
+  @Column('longtext', { default: null })
   content: string;
 
   @CreateDateColumn()
@@ -37,6 +37,7 @@ export class AppFile {
 
 export class AppFileDto {
   @IsNumber()
+  @IsOptional()
   id: number;
 
   @IsString()
@@ -49,9 +50,10 @@ export class AppFileDto {
   @ApiProperty({ type: String, example: 'file.txt' })
   path: string;
 
-  // @IsNumber()
-  // @ApiProperty({ type: Number, example: 1024 })
-  // size: number;
+  @IsNumber()
+  @IsOptional()
+  @ApiProperty({ type: Number, example: 1024 })
+  size: number;
 
   @IsString()
   @IsNotEmpty()
@@ -59,7 +61,7 @@ export class AppFileDto {
   mime: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty({ type: String, format: 'binary' })
   content: any;
 }

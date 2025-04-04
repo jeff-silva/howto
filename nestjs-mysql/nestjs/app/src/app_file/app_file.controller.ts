@@ -33,8 +33,8 @@ export class AppFileController {
     @Body() dto: AppFileDto,
     @UploadedFile() content: Express.Multer.File,
   ) {
-    const entity = await this.service.create(dto);
-    return { entity, content };
+    const entity = await this.service.create(dto, content);
+    return { entity };
   }
 
   @Get()
