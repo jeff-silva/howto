@@ -20,6 +20,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
+import { AppFile } from 'src/app_file/app_file.entity';
 
 @Entity('app_user')
 export class AppUser {
@@ -44,6 +45,13 @@ export class AppUser {
   @ManyToOne(() => AppUserGroup, (group) => group.users)
   @JoinColumn({ name: 'group_id' })
   group: AppUserGroup;
+
+  @Column({ nullable: true })
+  photo_id: number;
+
+  @ManyToOne(() => AppFile, (group) => group.users)
+  @JoinColumn({ name: 'photo_id' })
+  photo: AppFile;
 
   async onSave() {
     if (this.password && !this.password.startsWith('$2b$')) {
@@ -86,4 +94,8 @@ export class AppUserDto {
   @IsNumber()
   @IsOptional()
   group_id: number;
+
+  @IsNumber()
+  @IsOptional()
+  photo_id: number;
 }

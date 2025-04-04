@@ -2,11 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { IsNumber, IsString, IsNotEmpty, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { AppUser } from 'src/app_user/app_user.entity';
 
 @Entity('app_file')
 export class AppFile {
@@ -33,6 +35,9 @@ export class AppFile {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => AppUser, (user) => user.group)
+  users: AppUser[];
 }
 
 export class AppFileDto {
