@@ -1,0 +1,5 @@
+services:
+  joke:
+    build: ./joke
+    volumes:
+      - ./joke:/app
