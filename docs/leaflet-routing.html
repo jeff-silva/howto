@@ -63,6 +63,7 @@
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
+    <script></script>
 
     <!-- Leaflet Routing Machine -->
     <link
@@ -89,6 +90,8 @@
       href="https://cdn.jsdelivr.net/npm/vuetify@3.8.2/dist/vuetify.min.css"
     />
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.8.2/dist/vuetify.min.js"></script>
+
+    <script src="./assets/humanize.js"></script>
   </head>
   <body>
     <div id="app">
@@ -128,9 +131,12 @@
           </v-list>
           <br />
           <template v-for="o in routing.response.routes">
-            <pre>Duração: {{ format.time.duration(o.duration) }}</pre>
+            <div>
+              Duração: {{ humanize.time.duration(o.duration +
+              (routing.markers.length * 60)) }}
+            </div>
           </template>
-          <pre>{{ routing.response }}</pre>
+          <pre>{{ routing.debug }}</pre>
         </div>
       </div>
     </div>
@@ -138,71 +144,14 @@
     <script type="module">
       import { faker } from "https://esm.sh/@faker-js/faker";
 
-      const format = {
-        time: {
-          duration(totalSeconds) {
-            const decades = Math.floor(
-              totalSeconds / (60 * 60 * 24 * 365.25 * 10)
-            );
-            const years =
-              Math.floor(totalSeconds / (60 * 60 * 24 * 365.25)) % 10;
-            const days = Math.floor(totalSeconds / (60 * 60 * 24)) % 365;
-            const hours = Math.floor(totalSeconds / (60 * 60)) % 24;
-            const minutes = Math.floor(totalSeconds / 60) % 60;
-            const seconds = Math.floor(totalSeconds % 60);
-
-            const parts = [];
-
-            if (decades > 0) {
-              parts.push(`${decades} decade${decades !== 1 ? "s" : ""}`);
-            }
-
-            if (years > 0) {
-              parts.push(`${years} year${years !== 1 ? "s" : ""}`);
-            }
-
-            if (days > 0) {
-              parts.push(`${days} day${days !== 1 ? "s" : ""}`);
-            }
-
-            if (hours > 0) {
-              parts.push(`${hours} hour${hours !== 1 ? "s" : ""}`);
-            }
-
-            if (
-              minutes > 0 ||
-              decades > 0 ||
-              years > 0 ||
-              days > 0 ||
-              hours > 0
-            ) {
-              parts.push(`${minutes} minute${minutes !== 1 ? "s" : ""}`);
-            }
-
-            if (
-              seconds >= 0 ||
-              (decades === 0 &&
-                years === 0 &&
-                days === 0 &&
-                hours === 0 &&
-                minutes === 0)
-            ) {
-              parts.push(`${seconds} second${seconds !== 1 ? "s" : ""}`);
-            }
-
-            return parts.join(", ").trim();
-          },
-        },
-      };
-
       const { createApp, ref, reactive, onMounted, computed } = Vue;
       const { createVuetify } = Vuetify;
       const { useGeolocation } = VueUse;
 
       const app = createApp({
         setup() {
-          let map = null,
-            L = null;
+          let map = null;
+          // let L = null;
 
           const routing = reactive({
             busy: false,
@@ -371,11 +320,13 @@
               // url += `${coords}?overview=false&alternatives=true&steps=true`;
               url += `${coords}?overview=full&geometries=geojson`;
               // routing.response = await fetch(url).then((resp) => resp.json());
-              routing.response = await axios({
+
+              const resp = await axios({
                 method: "get",
                 url,
                 cache: true,
               });
+              routing.response = resp.data.data;
               routing.busy = false;
               routing.render();
             },
@@ -387,7 +338,9 @@
               });
 
               routing.markers.map((item) => {
-                item.marker = L.marker(item.coords, { draggable: true });
+                const icon = new L.Icon.Default();
+                icon.options.shadowSize = [0, 0];
+                item.marker = L.marker(item.coords, { draggable: true, icon });
                 item.marker
                   .bindPopup(item.name, {
                     autoClose: false,
@@ -412,8 +365,6 @@
                 routing.response.routes.map((route, routeIndex) => {
                   let routesFull = [];
                   let routesPart = [];
-
-                  console.log(format.time.duration(route.duration));
 
                   // geojson
                   if (
@@ -480,6 +431,48 @@
                       );
                     }
 
+                    const markerAnimateTest = ({
+                      marker,
+                      speed = 25,
+                      onStart = () => {},
+                      onProgress = () => {},
+                      onEnd = () => {},
+                    }) => {
+                      const polylines = [];
+                      routing.response.routes.map((route, routeIndex) => {
+                        route.geometry.coordinates.map((coord, coordIndex) => {
+                          polylines.push([coord[1], coord[0]]);
+                        });
+                      });
+
+                      onStart({ progress: 0 });
+                      L.polyline(polylines)._latlngs.map(
+                        (coord, coordIndex) => {
+                          setTimeout(() => {
+                            const transition = `all ${speed}ms linear`;
+                            const progress =
+                              (coordIndex * 100) / polylines.length;
+                            marker.marker._icon.style[L.DomUtil.TRANSITION] =
+                              transition;
+                            marker.marker.setLatLng(coord);
+                            map.setView(coord, 18);
+                            onProgress({ progress: 0, coord });
+                          }, coordIndex * speed);
+
+                          setTimeout(() => {
+                            onEnd({ progress: 100 });
+                          }, polylines.length * speed);
+                        }
+                      );
+
+                      const stop = () => {};
+                      return { stop };
+                    };
+
+                    markerAnimateTest({
+                      marker: routing.markers[0],
+                    });
+
                     // map.fitBounds(routesPart);
                   }
                 });
@@ -492,7 +485,7 @@
 
           const leafletHandle = (scope) => {
             map = scope.map;
-            L = scope.L;
+            // L = scope.L;
             routing.init();
 
             map.on("click", (ev) => {
@@ -503,7 +496,7 @@
             });
           };
 
-          return { format, routing, leafletHandle };
+          return { humanize, routing, leafletHandle };
         },
       });
 
@@ -515,7 +508,7 @@
           const mapData = reactive({
             lat: -19.804979,
             lng: -43.925504,
-            zoom: 13,
+            zoom: 16,
             bounds: {
               _southWest: { lat: 0, lng: 0 },
               _northEast: { lat: 0, lng: 0 },
