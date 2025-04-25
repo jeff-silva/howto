@@ -74,7 +74,7 @@
                 <template #default> {{ o.name }} </template>
                 <template #append>
                   <v-btn
-                    :disabled="i==0"
+                    v-if="!(i==0 || i==routing.markers.length-1)"
                     color="success"
                     @click="routing.markerRemove(o)"
                   >
@@ -84,13 +84,74 @@
               </v-list-item>
             </template>
           </v-list>
-          <pre>{{ routing.debug }}</pre>
+          <br />
+          <template v-for="o in routing.response.routes">
+            <pre>Duração: {{ format.time.duration(o.duration) }}</pre>
+          </template>
+          <pre>{{ routing.response }}</pre>
         </div>
       </div>
     </div>
 
     <script type="module">
       import { faker } from "https://esm.sh/@faker-js/faker";
+
+      const format = {
+        time: {
+          duration(totalSeconds) {
+            const decades = Math.floor(
+              totalSeconds / (60 * 60 * 24 * 365.25 * 10)
+            );
+            const years =
+              Math.floor(totalSeconds / (60 * 60 * 24 * 365.25)) % 10;
+            const days = Math.floor(totalSeconds / (60 * 60 * 24)) % 365;
+            const hours = Math.floor(totalSeconds / (60 * 60)) % 24;
+            const minutes = Math.floor(totalSeconds / 60) % 60;
+            const seconds = Math.floor(totalSeconds % 60);
+
+            const parts = [];
+
+            if (decades > 0) {
+              parts.push(`${decades} decade${decades !== 1 ? "s" : ""}`);
+            }
+
+            if (years > 0) {
+              parts.push(`${years} year${years !== 1 ? "s" : ""}`);
+            }
+
+            if (days > 0) {
+              parts.push(`${days} day${days !== 1 ? "s" : ""}`);
+            }
+
+            if (hours > 0) {
+              parts.push(`${hours} hour${hours !== 1 ? "s" : ""}`);
+            }
+
+            if (
+              minutes > 0 ||
+              decades > 0 ||
+              years > 0 ||
+              days > 0 ||
+              hours > 0
+            ) {
+              parts.push(`${minutes} minute${minutes !== 1 ? "s" : ""}`);
+            }
+
+            if (
+              seconds >= 0 ||
+              (decades === 0 &&
+                years === 0 &&
+                days === 0 &&
+                hours === 0 &&
+                minutes === 0)
+            ) {
+              parts.push(`${seconds} second${seconds !== 1 ? "s" : ""}`);
+            }
+
+            return parts.join(", ").trim();
+          },
+        },
+      };
 
       const { createApp, ref, reactive, onMounted, computed } = Vue;
       const { createVuetify } = Vuetify;
@@ -146,10 +207,37 @@
                 coords: [-19.80267138777249, -43.93539637327194],
               },
             ],
+            markerAdd(data = {}) {
+              data = {
+                id: faker.string.ulid(),
+                name: faker.person.firstName(),
+                coords: [0, 0],
+                ...data,
+              };
+              routing.markers.splice(routing.markers.length - 1, 0, data);
+              routing.render();
+            },
             markerRemove(marker) {
               const index = routing.markers.indexOf(marker);
               routing.markers.splice(index, 1);
               routing.routeCalculate();
+            },
+            markersSort() {
+              // const markers = JSON.parse(JSON.stringify(routing.markers));
+              const markers = routing.markers;
+              const first = markers.shift();
+              const last = markers.pop();
+              markers.map((marker) => {
+                marker.distance = routing.coordsDistance(
+                  first.coords[0],
+                  first.coords[1],
+                  marker.coords[0],
+                  marker.coords[1]
+                );
+              });
+              markers.sort((a, b) => a.distance - b.distance);
+              markers.unshift(first);
+              markers.push(last);
             },
             polylines: [],
             response: { code: null, routes: [], waypoints: [] },
@@ -181,6 +269,7 @@
               return earthRadius * c; // Distância em quilômetros
             },
             async routeCalculate() {
+              routing.markersSort();
               if (routing.markers.length <= 1) {
                 routing.response = { code: null, routes: [], waypoints: [] };
                 routing.render();
@@ -208,7 +297,6 @@
               });
 
               routing.markers.map((item) => {
-                // if (item.marker) item.marker.remove();
                 item.marker = L.marker(item.coords, { draggable: true });
                 item.marker
                   .bindPopup(item.name, {
@@ -234,6 +322,8 @@
                 routing.response.routes.map((route, routeIndex) => {
                   let routesFull = [];
                   let routesPart = [];
+
+                  console.log(format.time.duration(route.duration));
 
                   // geojson
                   if (
@@ -300,7 +390,7 @@
                       );
                     }
 
-                    map.fitBounds(routesPart);
+                    // map.fitBounds(routesPart);
                   }
                 });
               }
@@ -316,11 +406,13 @@
             routing.init();
 
             map.on("click", (ev) => {
-              console.log(Object.values(ev.target.getCenter()));
+              const coords = Object.values(ev.latlng);
+              routing.markerAdd({ coords });
+              routing.routeCalculate();
             });
           };
 
-          return { routing, leafletHandle };
+          return { format, routing, leafletHandle };
         },
       });
 
