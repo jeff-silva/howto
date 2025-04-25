@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- Docs: https://project-osrm.org/docs/v5.5.1/api/#general-options -->
+
+    <!-- Tailwind -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Lodash -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+
+    <!-- Leaflet -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+
+    <!-- Leaflet Routing Machine -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+    <!-- Vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- VueUse -->
+    <script src="https://unpkg.com/@vueuse/shared"></script>
+    <script src="https://unpkg.com/@vueuse/core"></script>
+
+    <!-- Vuetify -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vuetify@3.8.2/dist/vuetify.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.8.2/dist/vuetify.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="flex">
+        <div class="grow">
+          <leaflet style="height: 100vh" @ready="leafletHandle"></leaflet>
+        </div>
+        <div
+          class=""
+          style="
+            min-width: 400px;
+            max-width: 400px;
+            height: 100vh;
+            overflow: auto;
+          "
+        >
+          <v-list elevation="1">
+            <template v-for="(o, i) in routing.markers">
+              <v-list-item>
+                <template #default> {{ o.name }} </template>
+                <template #append>
+                  <v-btn
+                    :disabled="i==0"
+                    color="success"
+                    @click="routing.markerRemove(o)"
+                  >
+                    Ok
+                  </v-btn>
+                </template>
+              </v-list-item>
+            </template>
+          </v-list>
+          <pre>{{ routing.debug }}</pre>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { faker } from "https://esm.sh/@faker-js/faker";
+
+      const { createApp, ref, reactive, onMounted, computed } = Vue;
+      const { createVuetify } = Vuetify;
+      const { useGeolocation } = VueUse;
+
+      const app = createApp({
+        setup() {
+          let map = null,
+            L = null;
+
+          const routing = reactive({
+            busy: false,
+            type: "driving",
+            markers: [
+              {
+                id: faker.string.ulid(),
+                name: "Van",
+                coords: [-19.804979, -43.925504],
+              },
+              {
+                id: faker.string.ulid(),
+                name: "Lis",
+                coords: [-19.80193449619157, -43.92635196447373],
+              },
+              {
+                id: faker.string.ulid(),
+                name: "Ana",
+                coords: [-19.805959600055854, -43.93649876117706],
+              },
+              {
+                id: faker.string.ulid(),
+                name: "Lua",
+                coords: [-19.807403060882788, -43.928677439689636],
+              },
+              {
+                id: faker.string.ulid(),
+                name: "Escola Estadual Paschoal Comanducci",
+                coords: [-19.80267138777249, -43.93539637327194],
+              },
+            ],
+            markerRemove(marker) {
+              const index = routing.markers.indexOf(marker);
+              routing.markers.splice(index, 1);
+              routing.routeCalculate();
+            },
+            polylines: [],
+            response: { code: null, routes: [], waypoints: [] },
+            debug: computed(() => {
+              return {
+                busy: routing.busy,
+                // markers: routing.markers.map((o) => ({
+                //   id: o.id,
+                //   name: o.name,
+                //   coords: o.coords,
+                // })),
+                // response: routing.response,
+              };
+            }),
+            coordsDistance(lat1, lng1, lat2, lng2) {
+              const degToRad = (deg) => deg * (Math.PI / 180);
+              const earthRadius = 6371; // Raio da Terra em quilômetros
+              const dLat = degToRad(lat2 - lat1);
+              const dLng = degToRad(lng2 - lng1);
+
+              const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(degToRad(lat1)) *
+                  Math.cos(degToRad(lat2)) *
+                  Math.sin(dLng / 2) *
+                  Math.sin(dLng / 2);
+
+              const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+              return earthRadius * c; // Distância em quilômetros
+            },
+            async routeCalculate() {
+              if (routing.markers.length <= 1) {
+                routing.response = { code: null, routes: [], waypoints: [] };
+                routing.render();
+                return;
+              }
+              routing.busy = true;
+              let url = `https://router.project-osrm.org/route/v1/${routing.type}/`;
+              const coords = routing.markers
+                .map((item) => {
+                  return `${item.coords[1]},${item.coords[0]}`;
+                })
+                .join(";");
+
+              // url += `${coords}?overview=false&alternatives=true&steps=true`;
+              url += `${coords}?overview=full&geometries=geojson`;
+              routing.response = await fetch(url).then((resp) => resp.json());
+              routing.busy = false;
+              routing.render();
+            },
+            render() {
+              routing.markers.map((item) => {
+                if (item.marker) item.marker.remove();
+                item.marker = L.marker(item.coords, { draggable: true });
+                item.marker
+                  .bindPopup(item.name, {
+                    autoClose: false,
+                    closeOnClick: false,
+                  })
+                  .openPopup();
+                item.marker.addTo(map);
+                item.marker.on("dragend", (ev) => {
+                  item.coords = Object.values(ev.target.getLatLng());
+                  routing.routeCalculate();
+                });
+                return { ...item };
+              });
+
+              routing.polylines.map((polyline) => {
+                polyline.remove();
+              });
+
+              routing.polylines = [];
+
+              if (routing.response.routes.length > 0) {
+                routing.response.routes.map((route, routeIndex) => {
+                  let routesFull = [];
+                  let routesPart = [];
+
+                  // geojson
+                  if (
+                    typeof route.geometry == "object" &&
+                    Array.isArray(route.geometry.coordinates)
+                  ) {
+                    routesFull = route.geometry.coordinates.map(
+                      ([lng, lat]) => [lat, lng]
+                    );
+                  } else {
+                    route.legs.map((leg, legIndex) => {
+                      leg.steps.map((step, stepIndex) => {
+                        const distance = step.distance / 1000;
+                        const duration = step.duration / 60;
+                        step.intersections.map((inter, interIndex) => {
+                          const [lat, lng] = Object.values(inter.location);
+                          routesFull.push([lng, lat]);
+                        });
+                      });
+                    });
+                  }
+
+                  if (routesFull.length > 0) {
+                    routing.polylines.push(
+                      L.polyline(routesFull, {
+                        color: "#0066cc",
+                        weight: 2,
+                        opacity: 0.8,
+                        lineJoin: "round",
+                        // dashArray: "10, 10",
+                        lineCap: "round",
+                      }).addTo(map)
+                    );
+                    // map.fitBounds(routesFull);
+
+                    routesPart = (() => {
+                      if (typeof routing.markers[1] == "undefined") return [];
+                      const markerTargetCoords = routing.markers[1].coords;
+                      const routesFullDistances = routesFull.map(([lat, lng]) =>
+                        routing.coordsDistance(
+                          markerTargetCoords[0],
+                          markerTargetCoords[1],
+                          lat,
+                          lng
+                        )
+                      );
+                      const routesFullLower = routesFullDistances.reduce(
+                        (prev, curr) => (prev < curr ? prev : curr)
+                      );
+                      const routesFullLowerIndex =
+                        routesFullDistances.indexOf(routesFullLower);
+                      return routesFull.slice(0, routesFullLowerIndex);
+                    })();
+                  }
+
+                  if (routesPart.length > 0) {
+                    routing.polylines.push(
+                      L.polyline(routesPart, {
+                        color: "#00ff00",
+                        weight: 4,
+                        opacity: 0.8,
+                        lineJoin: "round",
+                        // dashArray: "10, 10",
+                        lineCap: "round",
+                      }).addTo(map)
+                    );
+                  }
+                });
+              }
+            },
+            init() {
+              routing.routeCalculate();
+            },
+          });
+
+          const leafletHandle = (scope) => {
+            map = scope.map;
+            L = scope.L;
+            routing.init();
+
+            map.on("click", (ev) => {
+              console.log(Object.values(ev.target.getCenter()));
+            });
+
+            // const waypoints = points.waypoints.map((item) => {
+            //   return L.latLng(...item.coords);
+            // });
+
+            // console.log(waypoints);
+
+            // const routing = L.Routing.control({
+            //   waypoints,
+            // }).addTo(map);
+          };
+
+          return { routing, leafletHandle };
+        },
+      });
+
+      app.component("leaflet", {
+        template: `<div style="position:relative; height:400px;">
+          <div ref="mapRef" style="height: 100%">leaflet</div>
+        </div>`,
+        setup(props, ctx) {
+          const mapData = reactive({
+            lat: -19.804979,
+            lng: -43.925504,
+            zoom: 13,
+            bounds: {
+              _southWest: { lat: 0, lng: 0 },
+              _northEast: { lat: 0, lng: 0 },
+            },
+            meta: {},
+          });
+
+          const mapRef = ref(null);
+
+          onMounted(() => {
+            const map = L.map(mapRef.value).setView(
+              [mapData.lat, mapData.lng],
+              mapData.zoom
+            );
+            L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
+              map
+            );
+            ctx.emit("ready", { el: mapRef.value, map, mapData, L });
+            ["dragend", "zoomend"].map((evt) => {
+              map.on(evt, (ev) => {
+                const { lat, lng } = map.getCenter();
+                mapData.lat = lat;
+                mapData.lng = lng;
+                mapData.zoom = map.getZoom();
+                mapData.bounds = map.getBounds();
+              });
+            });
+          });
+
+          return { mapData, mapRef };
+        },
+      });
+
+      app.use(createVuetify());
+      app.mount("#app");
+    </script>
+  </body>
+</html>
