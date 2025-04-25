@@ -1,3 +1,4 @@
+<!-- TODO: Ordenar marcadores por proximidade -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -111,18 +112,33 @@
               },
               {
                 id: faker.string.ulid(),
-                name: "Lis",
-                coords: [-19.80193449619157, -43.92635196447373],
+                name: faker.person.firstName(),
+                coords: [-19.802916176446278, -43.92603278160095],
               },
               {
                 id: faker.string.ulid(),
-                name: "Ana",
+                name: faker.person.firstName(),
                 coords: [-19.805959600055854, -43.93649876117706],
               },
               {
                 id: faker.string.ulid(),
-                name: "Lua",
+                name: faker.person.firstName(),
                 coords: [-19.807403060882788, -43.928677439689636],
+              },
+              {
+                id: faker.string.ulid(),
+                name: faker.person.firstName(),
+                coords: [-19.800084680319518, -43.93029749393464],
+              },
+              {
+                id: faker.string.ulid(),
+                name: faker.person.firstName(),
+                coords: [-19.80209853033214, -43.927116394042976],
+              },
+              {
+                id: faker.string.ulid(),
+                name: faker.person.firstName(),
+                coords: [-19.810446398349715, -43.92901539802551],
               },
               {
                 id: faker.string.ulid(),
@@ -185,8 +201,14 @@
               routing.render();
             },
             render() {
+              map.eachLayer((layer) => {
+                if (layer instanceof L.Marker) {
+                  map.removeLayer(layer);
+                }
+              });
+
               routing.markers.map((item) => {
-                if (item.marker) item.marker.remove();
+                // if (item.marker) item.marker.remove();
                 item.marker = L.marker(item.coords, { draggable: true });
                 item.marker
                   .bindPopup(item.name, {
@@ -245,7 +267,6 @@
                         lineCap: "round",
                       }).addTo(map)
                     );
-                    // map.fitBounds(routesFull);
 
                     routesPart = (() => {
                       if (typeof routing.markers[1] == "undefined") return [];
@@ -265,19 +286,21 @@
                         routesFullDistances.indexOf(routesFullLower);
                       return routesFull.slice(0, routesFullLowerIndex);
                     })();
-                  }
 
-                  if (routesPart.length > 0) {
-                    routing.polylines.push(
-                      L.polyline(routesPart, {
-                        color: "#00ff00",
-                        weight: 4,
-                        opacity: 0.8,
-                        lineJoin: "round",
-                        // dashArray: "10, 10",
-                        lineCap: "round",
-                      }).addTo(map)
-                    );
+                    if (routesPart.length > 0) {
+                      routing.polylines.push(
+                        L.polyline(routesPart, {
+                          color: "#00ff00",
+                          weight: 4,
+                          opacity: 0.8,
+                          lineJoin: "round",
+                          // dashArray: "10, 10",
+                          lineCap: "round",
+                        }).addTo(map)
+                      );
+                    }
+
+                    map.fitBounds(routesPart);
                   }
                 });
               }
@@ -295,16 +318,6 @@
             map.on("click", (ev) => {
               console.log(Object.values(ev.target.getCenter()));
             });
-
-            // const waypoints = points.waypoints.map((item) => {
-            //   return L.latLng(...item.coords);
-            // });
-
-            // console.log(waypoints);
-
-            // const routing = L.Routing.control({
-            //   waypoints,
-            // }).addTo(map);
           };
 
           return { routing, leafletHandle };
