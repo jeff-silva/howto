@@ -112,10 +112,10 @@
             <template v-for="(o, i) in routing.markers">
               <v-list-item>
                 <template #default>
-                  <div class="font-weight-bold">{{ o.name }}</div>
                   <div class="text-disabled font-italic text-body-2">
                     {{ o.type }}
                   </div>
+                  <div class="font-weight-bold">{{ o.name }}</div>
                 </template>
                 <template #append>
                   <v-btn
@@ -161,60 +161,70 @@
                 id: faker.string.ulid(),
                 name: "Van",
                 type: "vehicle",
+                distance: 0,
                 coords: [-19.804979, -43.925504],
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
                 type: "passenger",
+                distance: 0,
                 coords: [-19.802916176446278, -43.92603278160095],
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
                 type: "passenger",
+                distance: 0,
                 coords: [-19.805959600055854, -43.93649876117706],
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
                 type: "passenger",
+                distance: 0,
                 coords: [-19.807403060882788, -43.928677439689636],
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
                 type: "passenger",
+                distance: 0,
                 coords: [-19.800084680319518, -43.93029749393464],
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
                 type: "passenger",
+                distance: 0,
                 coords: [-19.80209853033214, -43.927116394042976],
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
                 type: "passenger",
+                distance: 0,
                 coords: [-19.810446398349715, -43.92901539802551],
               },
               {
                 id: faker.string.ulid(),
                 name: "Escola Estadual Paschoal Comanducci",
                 type: "destination",
+                distance: 0,
                 coords: [-19.80267138777249, -43.93539637327194],
               },
               {
                 id: faker.string.ulid(),
                 name: "Escola Municipal Acadêmico Vivaldi Moreira",
                 type: "destination",
+                distance: 0,
                 coords: [-19.805207582058472, -43.9400178194046],
               },
               {
                 id: faker.string.ulid(),
                 name: "Escola Estadual Maria Coutinho",
                 type: "destination",
+                distance: 0,
                 coords: [-19.80400636472945, -43.94369781017304],
               },
             ],
@@ -232,7 +242,8 @@
             markerRemove(marker) {
               const index = routing.markers.indexOf(marker);
               routing.markers.splice(index, 1);
-              routing.routeCalculate();
+              // routing.routeCalculate();
+              routing.render();
             },
             markersSort() {
               const markersVehicle = routing.markers.filter(
@@ -283,7 +294,7 @@
                 //   name: o.name,
                 //   coords: o.coords,
                 // })),
-                // response: routing.response,
+                // response: routing.response.routes[0],
               };
             }),
             coordsDistance(lat1, lng1, lat2, lng2) {
@@ -431,55 +442,77 @@
                       );
                     }
 
-                    const markerAnimateTest = ({
-                      marker,
-                      speed = 25,
-                      onStart = () => {},
-                      onProgress = () => {},
-                      onEnd = () => {},
-                    }) => {
-                      const polylines = [];
-                      routing.response.routes.map((route, routeIndex) => {
-                        route.geometry.coordinates.map((coord, coordIndex) => {
-                          polylines.push([coord[1], coord[0]]);
-                        });
-                      });
+                    // const markerAnimateTest = ({
+                    //   marker,
+                    //   speed = 100,
+                    //   onStart = () => {},
+                    //   onProgress = () => {},
+                    //   onEnd = () => {},
+                    // }) => {
+                    //   const polylines = [];
+                    //   routing.response.routes.map((route, routeIndex) => {
+                    //     route.geometry.coordinates.map((coord, coordIndex) => {
+                    //       polylines.push([coord[1], coord[0]]);
+                    //     });
+                    //   });
 
-                      onStart({ progress: 0 });
-                      L.polyline(polylines)._latlngs.map(
-                        (coord, coordIndex) => {
-                          setTimeout(() => {
-                            const transition = `all ${speed}ms linear`;
-                            const progress =
-                              (coordIndex * 100) / polylines.length;
-                            marker.marker._icon.style[L.DomUtil.TRANSITION] =
-                              transition;
-                            marker.marker.setLatLng(coord);
-                            map.setView(coord, 18);
-                            onProgress({ progress: 0, coord });
-                          }, coordIndex * speed);
+                    //   onStart({ progress: 0 });
+                    //   L.polyline(polylines)._latlngs.map(
+                    //     (coord, coordIndex) => {
+                    //       setTimeout(() => {
+                    //         const transition = `all ${speed}ms linear`;
+                    //         const progress =
+                    //           (coordIndex * 100) / polylines.length;
+                    //         marker.marker._icon.style[L.DomUtil.TRANSITION] =
+                    //           transition;
+                    //         marker.marker.setLatLng(coord);
+                    //         marker.coords = [coord.lat, coord.lng];
+                    //         onProgress({ progress: 0, coord });
+                    //       }, coordIndex * speed);
 
-                          setTimeout(() => {
-                            onEnd({ progress: 100 });
-                          }, polylines.length * speed);
-                        }
-                      );
+                    //       setTimeout(() => {
+                    //         onEnd({ progress: 100, coord });
+                    //       }, 500 + polylines.length * speed);
+                    //     }
+                    //   );
 
-                      const stop = () => {};
-                      return { stop };
-                    };
+                    //   const stop = () => {};
+                    //   return { stop };
+                    // };
 
-                    markerAnimateTest({
-                      marker: routing.markers[0],
-                    });
-
-                    // map.fitBounds(routesPart);
+                    // markerAnimateTest({
+                    //   marker: routing.markers[0],
+                    //   onProgress({ coord }) {
+                    //     map.setView(coord, 18, { animate: true });
+                    //   },
+                    //   onEnd({ coord }) {
+                    //     map.setView(coord, 16, { animate: true });
+                    //     // map.fitBounds(routesFull);
+                    //   },
+                    // });
                   }
                 });
               }
             },
+            onUpdate() {
+              const vehicle = routing.markers
+                .filter((o) => o.type == "vehicle")
+                .at(0);
+              const passengers = routing.markers.filter((o) =>
+                ["passenger", "destination"].includes(o.type)
+              );
+              passengers.map((item) => {
+                item.distance = routing.coordsDistance(
+                  vehicle.coords[0],
+                  vehicle.coords[1],
+                  item.coords[0],
+                  item.coords[1]
+                );
+              });
+            },
             init() {
               routing.routeCalculate();
+              setInterval(routing.onUpdate, 100);
             },
           });
 
@@ -495,6 +528,42 @@
               console.log(coords);
             });
           };
+
+          // Simulate driver
+          (() => {
+            const speed = 100;
+            let i = 0;
+            setInterval(() => {
+              if (typeof routing.markers[0] == "undefined") return;
+              if (typeof routing.response.routes[0] == "undefined") return;
+              if (
+                typeof routing.response.routes[0].geometry.coordinates[0] ==
+                "undefined"
+              )
+                return;
+
+              const marker = routing.markers[0];
+              const route = routing.response.routes[0];
+              const coord = route.geometry.coordinates[0];
+
+              routing.markers.map((item) => {
+                if (item == marker) return;
+                if (item.distance < 0.1) {
+                  console.log(item.name);
+                  routing.markerRemove(item);
+                }
+              });
+
+              route.geometry.coordinates.splice(0, 1);
+              marker.marker.setLatLng([...coord]);
+              marker.marker._icon.style[
+                L.DomUtil.TRANSITION
+              ] = `all ${speed}ms linear`;
+              marker.coords = [coord[1], coord[0]];
+              routing.render();
+              i++;
+            }, speed);
+          })();
 
           return { humanize, routing, leafletHandle };
         },
