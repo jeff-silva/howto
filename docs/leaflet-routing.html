@@ -1,3 +1,4 @@
+<!-- Docs: https://project-osrm.org/docs/v5.5.1/api/#general-options -->
 <!-- TODO: Ordenar marcadores por proximidade -->
 <!DOCTYPE html>
 <html lang="en">
@@ -6,13 +7,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 
-    <!-- Docs: https://project-osrm.org/docs/v5.5.1/api/#general-options -->
-
     <!-- Tailwind -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
     <!-- Lodash -->
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios@1.9.0/dist/axios.min.js"></script>
+    <script>
+      (() => {
+        axios.interceptors.request.use((config) => {
+          if (config.cache == true) {
+            config.cacheKey = config.url;
+            const cachedData = localStorage.getItem(config.cacheKey);
+            if (cachedData) {
+              config.adapter = async (cfg) => {
+                return JSON.parse(cachedData);
+              };
+            }
+          }
+          return config;
+        });
+
+        axios.interceptors.response.use((response) => {
+          if (response.config.cache) {
+            if (response.status.toString().startsWith("2")) {
+              localStorage.setItem(
+                response.config.cacheKey,
+                JSON.stringify(response)
+              );
+            }
+          }
+
+          const cachedData = localStorage.getItem(response.config.cacheKey);
+          if (cachedData) {
+            response.data = JSON.parse(cachedData);
+            response.cached = true;
+          }
+
+          return response;
+        });
+      })();
+    </script>
 
     <!-- Leaflet -->
     <link
@@ -71,10 +108,15 @@
           <v-list elevation="1">
             <template v-for="(o, i) in routing.markers">
               <v-list-item>
-                <template #default> {{ o.name }} </template>
+                <template #default>
+                  <div class="font-weight-bold">{{ o.name }}</div>
+                  <div class="text-disabled font-italic text-body-2">
+                    {{ o.type }}
+                  </div>
+                </template>
                 <template #append>
                   <v-btn
-                    v-if="!(i==0 || i==routing.markers.length-1)"
+                    v-if="['passenger', 'destination'].includes(o.type)"
                     color="success"
                     @click="routing.markerRemove(o)"
                   >
@@ -169,48 +211,69 @@
               {
                 id: faker.string.ulid(),
                 name: "Van",
+                type: "vehicle",
                 coords: [-19.804979, -43.925504],
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
+                type: "passenger",
                 coords: [-19.802916176446278, -43.92603278160095],
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
+                type: "passenger",
                 coords: [-19.805959600055854, -43.93649876117706],
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
+                type: "passenger",
                 coords: [-19.807403060882788, -43.928677439689636],
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
+                type: "passenger",
                 coords: [-19.800084680319518, -43.93029749393464],
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
+                type: "passenger",
                 coords: [-19.80209853033214, -43.927116394042976],
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
+                type: "passenger",
                 coords: [-19.810446398349715, -43.92901539802551],
               },
               {
                 id: faker.string.ulid(),
                 name: "Escola Estadual Paschoal Comanducci",
+                type: "destination",
                 coords: [-19.80267138777249, -43.93539637327194],
+              },
+              {
+                id: faker.string.ulid(),
+                name: "Escola Municipal Acadêmico Vivaldi Moreira",
+                type: "destination",
+                coords: [-19.805207582058472, -43.9400178194046],
+              },
+              {
+                id: faker.string.ulid(),
+                name: "Escola Estadual Maria Coutinho",
+                type: "destination",
+                coords: [-19.80400636472945, -43.94369781017304],
               },
             ],
             markerAdd(data = {}) {
               data = {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
+                type: "passenger",
                 coords: [0, 0],
                 ...data,
               };
@@ -223,21 +286,43 @@
               routing.routeCalculate();
             },
             markersSort() {
-              // const markers = JSON.parse(JSON.stringify(routing.markers));
-              const markers = routing.markers;
-              const first = markers.shift();
-              const last = markers.pop();
-              markers.map((marker) => {
-                marker.distance = routing.coordsDistance(
-                  first.coords[0],
-                  first.coords[1],
-                  marker.coords[0],
-                  marker.coords[1]
-                );
-              });
-              markers.sort((a, b) => a.distance - b.distance);
-              markers.unshift(first);
-              markers.push(last);
+              const markersVehicle = routing.markers.filter(
+                (marker) => marker.type === "vehicle"
+              );
+              const markersPassenger = routing.markers.filter(
+                (marker) => marker.type === "passenger"
+              );
+              const markersDestination = routing.markers.filter(
+                (marker) => marker.type === "destination"
+              );
+
+              markersPassenger
+                .map((marker) => {
+                  marker.distance = routing.coordsDistance(
+                    markersVehicle[0].coords[0],
+                    markersVehicle[0].coords[1],
+                    marker.coords[0],
+                    marker.coords[1]
+                  );
+                })
+                .sort((a, b) => a.distance - b.distance);
+
+              markersDestination
+                .map((marker) => {
+                  marker.distance = routing.coordsDistance(
+                    markersVehicle[0].coords[0],
+                    markersVehicle[0].coords[1],
+                    marker.coords[0],
+                    marker.coords[1]
+                  );
+                })
+                .sort((a, b) => a.distance - b.distance);
+
+              routing.markers = [
+                ...markersVehicle,
+                ...markersPassenger,
+                ...markersDestination,
+              ];
             },
             polylines: [],
             response: { code: null, routes: [], waypoints: [] },
@@ -285,7 +370,12 @@
 
               // url += `${coords}?overview=false&alternatives=true&steps=true`;
               url += `${coords}?overview=full&geometries=geojson`;
-              routing.response = await fetch(url).then((resp) => resp.json());
+              // routing.response = await fetch(url).then((resp) => resp.json());
+              routing.response = await axios({
+                method: "get",
+                url,
+                cache: true,
+              });
               routing.busy = false;
               routing.render();
             },
@@ -409,6 +499,7 @@
               const coords = Object.values(ev.latlng);
               routing.markerAdd({ coords });
               routing.routeCalculate();
+              console.log(coords);
             });
           };
 
