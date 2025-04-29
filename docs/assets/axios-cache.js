@@ -1,7 +1,17 @@
 (() => {
   axios.interceptors.request.use((config) => {
     if (config.cache == true) {
-      config.cacheKey = config.url;
+      config.cacheKey =
+        config.url +
+        "#" +
+        btoa(
+          JSON.stringify({
+            // headers: config.headers,
+            method: config.method,
+            params: config.params,
+            // data: config.data,
+          })
+        );
       const cachedData = localStorage.getItem(config.cacheKey);
       if (cachedData) {
         config.adapter = async (cfg) => {
