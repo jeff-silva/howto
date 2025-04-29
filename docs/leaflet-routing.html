@@ -1,5 +1,12 @@
-<!-- Docs: https://project-osrm.org/docs/v5.5.1/api/#general-options -->
-<!-- TODO: Ordenar marcadores por proximidade -->
+<!-- 
+Docs:
+- https://project-osrm.org/docs/v5.5.1/api/#general-options
+- https://account.heigit.org/manage/key
+
+Docs Geoapify
+- https://myprojects.geoapify.com/api/d61op2KWTUdtcxdQuqjo/keys
+- https://apidocs.geoapify.com/playground/routing/
+ -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -15,41 +22,6 @@
 
     <!-- Axios -->
     <script src="https://unpkg.com/axios@1.9.0/dist/axios.min.js"></script>
-    <script>
-      (() => {
-        axios.interceptors.request.use((config) => {
-          if (config.cache == true) {
-            config.cacheKey = config.url;
-            const cachedData = localStorage.getItem(config.cacheKey);
-            if (cachedData) {
-              config.adapter = async (cfg) => {
-                return JSON.parse(cachedData);
-              };
-            }
-          }
-          return config;
-        });
-
-        axios.interceptors.response.use((response) => {
-          if (response.config.cache) {
-            if (response.status.toString().startsWith("2")) {
-              localStorage.setItem(
-                response.config.cacheKey,
-                JSON.stringify(response)
-              );
-            }
-          }
-
-          const cachedData = localStorage.getItem(response.config.cacheKey);
-          if (cachedData) {
-            response.data = JSON.parse(cachedData);
-            response.cached = true;
-          }
-
-          return response;
-        });
-      })();
-    </script>
 
     <!-- Leaflet -->
     <link
@@ -77,6 +49,9 @@
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
+    <!-- Mapbox Polyline -->
+    <!-- <script src="https://unpkg.com/@mapbox/polyline@1.1.1/src/polyline.js"></script> -->
+
     <!-- Vue -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
@@ -92,6 +67,8 @@
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.8.2/dist/vuetify.min.js"></script>
 
     <script src="./assets/humanize.js"></script>
+    <script src="./assets/coder.js"></script>
+    <script src="./assets/axios-cache.js"></script>
   </head>
   <body>
     <div id="app">
@@ -132,7 +109,7 @@
           <br />
           <template v-for="o in routing.response.routes">
             <div>
-              Duração: {{ humanize.time.duration(o.duration +
+              Duração: {{ humanize.timeDuration(o.duration +
               (routing.markers.length * 60)) }}
             </div>
           </template>
@@ -228,6 +205,10 @@
                 coords: [-19.80400636472945, -43.94369781017304],
               },
             ],
+            markerCoord(marker, coord) {
+              marker.coords = coord;
+              marker.marker.setLatLng(coord);
+            },
             markerAdd(data = {}) {
               data = {
                 id: faker.string.ulid(),
@@ -246,40 +227,66 @@
               routing.render();
             },
             markersSort() {
-              const markersVehicle = routing.markers.filter(
-                (marker) => marker.type === "vehicle"
-              );
-              const markersPassenger = routing.markers.filter(
-                (marker) => marker.type === "passenger"
-              );
-              const markersDestination = routing.markers.filter(
-                (marker) => marker.type === "destination"
+              const sortAlgorithm = (markerStart, markers) => {
+                let items = [markerStart, ...markers];
+                const returns = [];
+
+                const itemsLength = items.length;
+                for (let i = 0; i < itemsLength; i++) {
+                  const itemCurr = items.shift();
+                  itemCurr.distance = 0;
+                  items = items
+                    .map((item) => {
+                      item.distance = routing.coordsDistance(
+                        itemCurr.coords,
+                        item.coords
+                      );
+                      return item;
+                    })
+                    .sort((a, b) => a.distance - b.distance);
+
+                  if (typeof items[0] == "undefined") continue;
+                  returns.push(items[0]);
+                }
+                return returns;
+              };
+
+              const markersVehicle = routing.markers
+                .filter((marker) => marker.type === "vehicle")
+                .at(0);
+
+              const markersPassenger = sortAlgorithm(
+                markersVehicle,
+                routing.markers.filter((marker) => marker.type === "passenger")
               );
 
-              markersPassenger
-                .map((marker) => {
-                  marker.distance = routing.coordsDistance(
-                    markersVehicle[0].coords[0],
-                    markersVehicle[0].coords[1],
-                    marker.coords[0],
-                    marker.coords[1]
-                  );
-                })
-                .sort((a, b) => a.distance - b.distance);
+              const markersDestination = sortAlgorithm(
+                markersVehicle,
+                routing.markers.filter(
+                  (marker) => marker.type === "destination"
+                )
+              );
 
-              markersDestination
-                .map((marker) => {
-                  marker.distance = routing.coordsDistance(
-                    markersVehicle[0].coords[0],
-                    markersVehicle[0].coords[1],
-                    marker.coords[0],
-                    marker.coords[1]
-                  );
-                })
-                .sort((a, b) => a.distance - b.distance);
+              // markersPassenger
+              //   .map((marker) => {
+              //     marker.distance = routing.coordsDistance(
+              //       [markersVehicle[0].coords[0], markersVehicle[0].coords[1]],
+              //       [marker.coords[0], marker.coords[1]]
+              //     );
+              //   })
+              //   .sort((a, b) => a.distance - b.distance);
+
+              // markersDestination
+              //   .map((marker) => {
+              //     marker.distance = routing.coordsDistance(
+              //       [markersVehicle[0].coords[0], markersVehicle[0].coords[1]],
+              //       [marker.coords[0], marker.coords[1]]
+              //     );
+              //   })
+              //   .sort((a, b) => a.distance - b.distance);
 
               routing.markers = [
-                ...markersVehicle,
+                markersVehicle,
                 ...markersPassenger,
                 ...markersDestination,
               ];
@@ -297,7 +304,7 @@
                 // response: routing.response.routes[0],
               };
             }),
-            coordsDistance(lat1, lng1, lat2, lng2) {
+            coordsDistance([lat1, lng1], [lat2, lng2]) {
               const degToRad = (deg) => deg * (Math.PI / 180);
               const earthRadius = 6371; // Raio da Terra em quilômetros
               const dLat = degToRad(lat2 - lat1);
@@ -314,32 +321,49 @@
               return earthRadius * c; // Distância em quilômetros
             },
             async routeCalculate() {
-              routing.markersSort();
-              if (routing.markers.length <= 1) {
-                routing.response = { code: null, routes: [], waypoints: [] };
-                routing.render();
-                return;
-              }
-              routing.busy = true;
-              let url = `https://router.project-osrm.org/route/v1/${routing.type}/`;
-              const coords = routing.markers
-                .map((item) => {
-                  return `${item.coords[1]},${item.coords[0]}`;
-                })
-                .join(";");
-
-              // url += `${coords}?overview=false&alternatives=true&steps=true`;
-              url += `${coords}?overview=full&geometries=geojson`;
-              // routing.response = await fetch(url).then((resp) => resp.json());
-
-              const resp = await axios({
-                method: "get",
-                url,
-                cache: true,
+              map.eachLayer((layer) => {
+                if (layer instanceof L.Polyline) {
+                  map.removeLayer(layer);
+                }
               });
-              routing.response = resp.data.data;
-              routing.busy = false;
-              routing.render();
+
+              const opts = coder.decode([
+                "eyJjYWNoZSI6dHJ1ZSwibWV0aG9kIjoiZ2V0IiwidXJsIjoiaH",
+                "R0cHM6Ly9hcGkuZ2VvYXBpZnkuY29tL3YxL3JvdXRpbmciLCJw",
+                "YXJhbXMiOnsiYXBpS2V5IjoiZjY3ZTZmMDNhYzQ2NDU4ZTgxMG",
+                "E2NTA3ZTkzNGI1YmIifSwiaGVhZGVycyI6eyJDb250ZW50LVR5",
+                "cGUiOiJhcHBsaWNhdGlvbi9qc29uIn19",
+              ]);
+
+              opts.params.mode = "drive";
+              opts.params.details = "instruction_details";
+              opts.params.waypoints = routing.markers
+                .map((marker) => {
+                  return marker.coords.join(",");
+                })
+                .join("|");
+
+              const resp = await axios(opts);
+
+              const polylineFull = [];
+              resp.data.features.map((feature) => {
+                feature.geometry.coordinates.map((coords) => {
+                  coords.map((coord) => {
+                    polylineFull.push([coord[1], coord[0]]);
+                  });
+                });
+              });
+
+              const polyline = L.polyline(polylineFull, {
+                color: "#0066cc",
+                weight: 2,
+                opacity: 0.8,
+                lineJoin: "round",
+                // dashArray: "10, 10",
+                lineCap: "round",
+              }).addTo(map);
+
+              driverSimulator.init(polyline);
             },
             render() {
               map.eachLayer((layer) => {
@@ -415,10 +439,8 @@
                       const markerTargetCoords = routing.markers[1].coords;
                       const routesFullDistances = routesFull.map(([lat, lng]) =>
                         routing.coordsDistance(
-                          markerTargetCoords[0],
-                          markerTargetCoords[1],
-                          lat,
-                          lng
+                          [markerTargetCoords[0], markerTargetCoords[1]],
+                          [lat, lng]
                         )
                       );
                       const routesFullLower = routesFullDistances.reduce(
@@ -441,55 +463,6 @@
                         }).addTo(map)
                       );
                     }
-
-                    // const markerAnimateTest = ({
-                    //   marker,
-                    //   speed = 100,
-                    //   onStart = () => {},
-                    //   onProgress = () => {},
-                    //   onEnd = () => {},
-                    // }) => {
-                    //   const polylines = [];
-                    //   routing.response.routes.map((route, routeIndex) => {
-                    //     route.geometry.coordinates.map((coord, coordIndex) => {
-                    //       polylines.push([coord[1], coord[0]]);
-                    //     });
-                    //   });
-
-                    //   onStart({ progress: 0 });
-                    //   L.polyline(polylines)._latlngs.map(
-                    //     (coord, coordIndex) => {
-                    //       setTimeout(() => {
-                    //         const transition = `all ${speed}ms linear`;
-                    //         const progress =
-                    //           (coordIndex * 100) / polylines.length;
-                    //         marker.marker._icon.style[L.DomUtil.TRANSITION] =
-                    //           transition;
-                    //         marker.marker.setLatLng(coord);
-                    //         marker.coords = [coord.lat, coord.lng];
-                    //         onProgress({ progress: 0, coord });
-                    //       }, coordIndex * speed);
-
-                    //       setTimeout(() => {
-                    //         onEnd({ progress: 100, coord });
-                    //       }, 500 + polylines.length * speed);
-                    //     }
-                    //   );
-
-                    //   const stop = () => {};
-                    //   return { stop };
-                    // };
-
-                    // markerAnimateTest({
-                    //   marker: routing.markers[0],
-                    //   onProgress({ coord }) {
-                    //     map.setView(coord, 18, { animate: true });
-                    //   },
-                    //   onEnd({ coord }) {
-                    //     map.setView(coord, 16, { animate: true });
-                    //     // map.fitBounds(routesFull);
-                    //   },
-                    // });
                   }
                 });
               }
@@ -503,14 +476,14 @@
               );
               passengers.map((item) => {
                 item.distance = routing.coordsDistance(
-                  vehicle.coords[0],
-                  vehicle.coords[1],
-                  item.coords[0],
-                  item.coords[1]
+                  [vehicle.coords[0], vehicle.coords[1]],
+                  [item.coords[0], item.coords[1]]
                 );
               });
             },
             init() {
+              routing.markersSort();
+              routing.render();
               routing.routeCalculate();
               setInterval(routing.onUpdate, 100);
             },
@@ -518,54 +491,54 @@
 
           const leafletHandle = (scope) => {
             map = scope.map;
-            // L = scope.L;
             routing.init();
 
             map.on("click", (ev) => {
               const coords = Object.values(ev.latlng);
-              routing.markerAdd({ coords });
-              routing.routeCalculate();
+              // routing.markerAdd({ coords });
+              // routing.routeCalculate();
               console.log(coords);
             });
           };
 
           // Simulate driver
-          (() => {
-            const speed = 100;
-            let i = 0;
-            setInterval(() => {
-              if (typeof routing.markers[0] == "undefined") return;
-              if (typeof routing.response.routes[0] == "undefined") return;
-              if (
-                typeof routing.response.routes[0].geometry.coordinates[0] ==
-                "undefined"
-              )
-                return;
-
+          const driverSimulator = reactive({
+            onStart() {},
+            onUpdate({ progress }) {
+              // console.log({ progress });
+            },
+            onEnd() {},
+            init(polyline) {
               const marker = routing.markers[0];
-              const route = routing.response.routes[0];
-              const coord = route.geometry.coordinates[0];
-
-              routing.markers.map((item) => {
-                if (item == marker) return;
-                if (item.distance < 0.1) {
-                  console.log(item.name);
-                  routing.markerRemove(item);
+              const polylineLength = polyline._latlngs.length;
+              const updateTime = 200;
+              const animateUpdate = () => {
+                if (typeof polyline._latlngs[1] == "undefined") {
+                  driverSimulator.onUpdate({ progress: 100 });
+                  driverSimulator.onEnd({ progress: 100, marker });
+                  return;
                 }
-              });
 
-              route.geometry.coordinates.splice(0, 1);
-              marker.marker.setLatLng([...coord]);
-              marker.marker._icon.style[
-                L.DomUtil.TRANSITION
-              ] = `all ${speed}ms linear`;
-              marker.coords = [coord[1], coord[0]];
-              routing.render();
-              i++;
-            }, speed);
-          })();
+                const coordNext = polyline._latlngs[1];
+                routing.markerCoord(marker, coordNext);
 
-          return { humanize, routing, leafletHandle };
+                const progress =
+                  100 - (polyline._latlngs.length * 100) / polylineLength;
+                driverSimulator.onUpdate({ progress, marker });
+                marker.marker._icon.style.transition = `all ${updateTime}ms linear`;
+
+                polyline._latlngs.splice(0, 1);
+                setTimeout(() => {
+                  animateUpdate();
+                }, updateTime);
+              };
+
+              driverSimulator.onStart({ progress: 0, marker });
+              animateUpdate();
+            },
+          });
+
+          return { humanize, routing, leafletHandle, driverSimulator };
         },
       });
 
