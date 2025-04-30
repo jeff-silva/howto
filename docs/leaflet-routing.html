@@ -198,7 +198,7 @@
     <script type="module">
       import { faker } from "https://esm.sh/@faker-js/faker";
 
-      const { createApp, ref, reactive, onMounted, computed } = Vue;
+      const { createApp, ref, reactive, onMounted, computed, h } = Vue;
       const { createVuetify } = Vuetify;
       const { useGeolocation } = VueUse;
 
@@ -849,7 +849,26 @@
         },
       });
 
-      app.use(createVuetify());
+      app.use(
+        createVuetify({
+          icons: {
+            defaultSet: "main",
+            sets: {
+              main: {
+                component: (props) => {
+                  return h("img", {
+                    src: `https://api.iconify.design/${props.icon}.svg`,
+                    style: {
+                      width: (props.size || 24) + "px",
+                      height: (props.size || 24) + "px",
+                    },
+                  });
+                },
+              },
+            },
+          },
+        })
+      );
       app.mount("#app");
     </script>
   </body>
