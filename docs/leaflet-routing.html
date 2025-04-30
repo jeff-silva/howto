@@ -64,10 +64,67 @@
     <script src="./assets/coder.js"></script>
     <script src="./assets/axios-cache.js"></script>
     <script src="./assets/game-input.js"></script>
+    <script src="./assets/app-layout.vue.js"></script>
+
+    <style>
+      [test],
+      [test] * {
+        outline: dashed 1px red;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
-      <div class="flex">
+      <app-layout drawer-width="350px">
+        <template #drawer>
+          <v-list elevation="1">
+            <template v-for="(o, i) in routing.markers">
+              <v-list-item>
+                <template #default>
+                  <div class="text-disabled font-italic text-body-2">
+                    {{ o.type }}
+                  </div>
+                  <div class="font-weight-bold">{{ o.name }}</div>
+                </template>
+                <template #append>
+                  <v-btn
+                    v-if="['passenger', 'destination'].includes(o.type)"
+                    color="success"
+                    @click="() => {
+                      routing.markerRemove(o);
+                      routing.routeCalculate();
+                    }"
+                  >
+                    Ok
+                  </v-btn>
+                </template>
+              </v-list-item>
+            </template>
+          </v-list>
+          <br />
+          <template v-for="o in routing.response.routes">
+            <div>
+              Duração: {{ humanize.timeDuration(o.duration +
+              (routing.markers.length * 60)) }}
+            </div>
+          </template>
+          <pre>{{ routing.debug }}</pre>
+        </template>
+
+        <!-- <template #header>isso é o header</template> -->
+
+        <template #default="scope">
+          <leaflet
+            v-if="scope.view.ready"
+            :style="{ width: '100%', height: scope.content.height, zIndex: 1 }"
+            @ready="leafletHandle"
+          ></leaflet>
+        </template>
+
+        <!-- <template #footer>isso é o footer</template>
+        <template #actions>isso é o actions</template> -->
+      </app-layout>
+      <!-- <div class="flex">
         <div class="grow">
           <leaflet
             style="height: 100vh"
@@ -135,10 +192,7 @@
             </v-btn>
           </template>
         </v-snackbar>
-      </template>
-      <!-- <v-snackbar-queue
-        :model-value="routing.markersNext.map(o => o.name)"
-      ></v-snackbar-queue> -->
+      </template> -->
     </div>
 
     <script type="module">
@@ -595,51 +649,51 @@
                 }
               });
 
-              const isOnroute = (() => {
-                return false;
-                const distanceMeters = 10; // Distance to route
+              // const isOnroute = (() => {
+              //   return false;
+              //   const distanceMeters = 10; // Distance to route
 
-                if (routing.polyline.length == 0) return false;
-                const vehiclePoint = turf.point([...vehicle.coords].reverse());
+              //   if (routing.polyline.length == 0) return false;
+              //   const vehiclePoint = turf.point([...vehicle.coords].reverse());
 
-                const routingPolyline = routing.polyline.map((coords) =>
-                  turf.point([...coords].reverse())
-                );
+              //   const routingPolyline = routing.polyline.map((coords) =>
+              //     turf.point([...coords].reverse())
+              //   );
 
-                const polylinePoints = turf.featureCollection(routingPolyline);
-                const nearest = turf.nearestPoint(vehiclePoint, polylinePoints);
+              //   const polylinePoints = turf.featureCollection(routingPolyline);
+              //   const nearest = turf.nearestPoint(vehiclePoint, polylinePoints);
 
-                let pointDataSize = 3;
-                let pointsDataStart = nearest.properties.featureIndex - 1;
-                pointsDataStart = Math.max(0, pointsDataStart);
-                let pointsDataFinal = pointsDataStart + pointDataSize;
-                if (pointsDataFinal > routingPolyline.length) {
-                  pointsDataFinal = routingPolyline.length;
-                  pointsDataStart = routingPolyline.length - pointDataSize;
-                }
-                const pointsData = routingPolyline
-                  .slice(pointsDataStart, pointsDataFinal)
-                  .map((o, i) => {
-                    if (typeof routingPolyline[i + 1] == "undefined") return 0;
-                    const point1 = o.geometry.coordinates;
-                    const point2 = routingPolyline[i + 1].geometry.coordinates;
-                    const distance = turf.pointToLineDistance(
-                      vehiclePoint,
-                      [point1, point2],
-                      {
-                        units: "meters",
-                      }
-                    );
-                    return distance;
-                  })
-                  .filter((n) => n <= distanceMeters);
+              //   let pointDataSize = 3;
+              //   let pointsDataStart = nearest.properties.featureIndex - 1;
+              //   pointsDataStart = Math.max(0, pointsDataStart);
+              //   let pointsDataFinal = pointsDataStart + pointDataSize;
+              //   if (pointsDataFinal > routingPolyline.length) {
+              //     pointsDataFinal = routingPolyline.length;
+              //     pointsDataStart = routingPolyline.length - pointDataSize;
+              //   }
+              //   const pointsData = routingPolyline
+              //     .slice(pointsDataStart, pointsDataFinal)
+              //     .map((o, i) => {
+              //       if (typeof routingPolyline[i + 1] == "undefined") return 0;
+              //       const point1 = o.geometry.coordinates;
+              //       const point2 = routingPolyline[i + 1].geometry.coordinates;
+              //       const distance = turf.pointToLineDistance(
+              //         vehiclePoint,
+              //         [point1, point2],
+              //         {
+              //           units: "meters",
+              //         }
+              //       );
+              //       return distance;
+              //     })
+              //     .filter((n) => n <= distanceMeters);
 
-                return pointsData.length > 0;
-              })();
+              //   return pointsData.length > 0;
+              // })();
 
-              if (!isOnroute) {
-                console.log("Out of route");
-              }
+              // if (!isOnroute) {
+              //   console.log("Out of route");
+              // }
             },
             init() {
               routing.markersSort();
@@ -732,6 +786,8 @@
           return { humanize, routing, leafletHandle, driverSimulator };
         },
       });
+
+      app.component("app-layout", appLayout);
 
       app.component("leaflet", {
         template: `<div style="position:relative; height:400px;">
