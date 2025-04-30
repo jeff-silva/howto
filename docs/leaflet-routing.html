@@ -54,7 +54,10 @@ TODO:
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
     <!-- Mapbox Polyline -->
-    <script src="https://unpkg.com/@mapbox/polyline@1.1.1/src/polyline.js"></script>
+    <!-- <script src="https://unpkg.com/@mapbox/polyline@1.1.1/src/polyline.js"></script> -->
+
+    <!-- Turf.js -->
+    <script src="https://unpkg.com/@turf/turf@7.0.0/turf.min.js"></script>
 
     <!-- Vue -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -405,7 +408,7 @@ TODO:
                   const resp = await axios(opts);
                   let polylineFull = [];
                   resp.data.routes.map((route) => {
-                    polylineFull = polyline.decode(route.geometry);
+                    polylineFull = polyline.decode(route.geometry); // mapbox polyline
                   });
                   return polylineFull;
                 },
@@ -463,7 +466,8 @@ TODO:
                 item.marker.addTo(map);
                 item.marker.on("dragend", (ev) => {
                   item.coords = Object.values(ev.target.getLatLng());
-                  routing.routeCalculate();
+                  routing.markerCoord(item, item.coords);
+                  // routing.routeCalculate();
                 });
                 return { ...item };
               });
@@ -553,19 +557,50 @@ TODO:
                 }
               });
 
-              // const markers = routing.markers.filter((o) =>
-              //   ["passenger", "destination"].includes(o.type)
-              // );
+              const isOutOfRoute = (() => {
+                const distanceMeters = 10; // Distance to route
 
-              // markers.map((marker) => {
-              //   const distance = routing.coordsDistance(
-              //     vehicle.coords,
-              //     marker.coords
-              //   );
-              //   if (distance < 0.01) {
-              //     console.log(marker);
-              //   }
-              // });
+                if (routing.polyline.length == 0) return false;
+                const vehiclePoint = turf.point([...vehicle.coords].reverse());
+
+                const routingPolyline = routing.polyline.map((coords) =>
+                  turf.point([...coords].reverse())
+                );
+
+                const polylinePoints = turf.featureCollection(routingPolyline);
+                const nearest = turf.nearestPoint(vehiclePoint, polylinePoints);
+
+                let pointDataSize = 3;
+                let pointsDataStart = nearest.properties.featureIndex - 1;
+                pointsDataStart = Math.max(0, pointsDataStart);
+                let pointsDataFinal = pointsDataStart + pointDataSize;
+                if (pointsDataFinal > routingPolyline.length) {
+                  pointsDataFinal = routingPolyline.length;
+                  pointsDataStart = routingPolyline.length - pointDataSize;
+                }
+                const pointsData = routingPolyline
+                  .slice(pointsDataStart, pointsDataFinal)
+                  .map((o, i) => {
+                    if (typeof routingPolyline[i + 1] == "undefined") return 0;
+                    const point1 = o.geometry.coordinates;
+                    const point2 = routingPolyline[i + 1].geometry.coordinates;
+                    const distance = turf.pointToLineDistance(
+                      vehiclePoint,
+                      [point1, point2],
+                      {
+                        units: "meters",
+                      }
+                    );
+                    return distance;
+                  })
+                  .filter((n) => n <= distanceMeters);
+
+                return pointsData.length == 0;
+              })();
+
+              if (isOutOfRoute) {
+                console.log("Out of route");
+              }
             },
             init() {
               routing.markersSort();
