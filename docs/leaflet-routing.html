@@ -73,6 +73,7 @@ TODO:
     <script src="./assets/humanize.js"></script>
     <script src="./assets/coder.js"></script>
     <script src="./assets/axios-cache.js"></script>
+    <script src="./assets/game-input.js"></script>
   </head>
   <body>
     <div id="app">
@@ -123,6 +124,24 @@ TODO:
           <pre>{{ routing.debug }}</pre>
         </div>
       </div>
+      <template v-for="o in routing.markersNext">
+        <v-snackbar :model-value="true" :timeout="-1">
+          Confirmar {{ o.name }}
+          <template #actions>
+            <v-btn
+              @click="() => {
+              routing.markerRemove(o);
+              routing.routeCalculate();
+            }"
+            >
+              Ok
+            </v-btn>
+          </template>
+        </v-snackbar>
+      </template>
+      <!-- <v-snackbar-queue
+        :model-value="routing.markersNext.map(o => o.name)"
+      ></v-snackbar-queue> -->
     </div>
 
     <script type="module">
@@ -230,6 +249,7 @@ TODO:
             markerRemove(marker) {
               const index = routing.markers.indexOf(marker);
               routing.markers.splice(index, 1);
+              marker.marker.remove();
               routing.render();
             },
             markersSort() {
@@ -279,11 +299,27 @@ TODO:
                 ...markersDestination,
               ];
             },
+            markersNext: computed(() => {
+              const vehicle = routing.markers
+                .filter((o) => o.type == "vehicle")
+                .at(0);
+
+              return routing.markers
+                .filter((o) => ["passenger", "destination"].includes(o.type))
+                .filter((o) => {
+                  const distance = routing.coordsDistance(
+                    vehicle.coords,
+                    o.coords
+                  );
+                  return distance < 0.05;
+                });
+            }),
             polyline: [],
             response: { code: null, routes: [], waypoints: [] },
             debug: computed(() => {
               return {
                 busy: routing.busy,
+                markersNext: routing.markersNext.length,
                 // markers: routing.markers.map((o) => ({
                 //   id: o.id,
                 //   name: o.name,
@@ -328,7 +364,7 @@ TODO:
                   opts.params.mode = "drive";
                   opts.params.details = "instruction_details";
                   opts.params.waypoints = routing.markers
-                    .slice(0, 3)
+                    .slice(0, 2)
                     .map((marker) => {
                       return marker.coords.join(",");
                     })
@@ -379,7 +415,6 @@ TODO:
               polylineFull.map((coord) => {
                 routing.polyline.push(coord);
               });
-              console.log(routing.polyline);
 
               const polyline = L.polyline(polylineFull, {
                 color: "#0066cc",
@@ -399,7 +434,23 @@ TODO:
               //   }
               // });
 
+              map.eachLayer((layer) => {
+                if (layer instanceof L.Polyline) {
+                  map.removeLayer(layer);
+                }
+              });
+
+              L.polyline(routing.polyline, {
+                color: "#0066cc",
+                weight: 2,
+                opacity: 0.8,
+                lineJoin: "round",
+                // dashArray: "10, 10",
+                lineCap: "round",
+              }).addTo(map);
+
               routing.markers.map((item) => {
+                if (item.marker) return;
                 const icon = new L.Icon.Default();
                 icon.options.shadowSize = [0, 0];
                 item.marker = L.marker(item.coords, { draggable: true, icon });
@@ -492,21 +543,41 @@ TODO:
               const vehicle = routing.markers
                 .filter((o) => o.type == "vehicle")
                 .at(0);
-              const passengers = routing.markers.filter((o) =>
-                ["passenger", "destination"].includes(o.type)
-              );
-              passengers.map((item) => {
-                item.distance = routing.coordsDistance(
-                  [vehicle.coords[0], vehicle.coords[1]],
-                  [item.coords[0], item.coords[1]]
-                );
+
+              // Remove polyline parts
+              routing.polyline.map((coord, coordIndex) => {
+                const distance = routing.coordsDistance(vehicle.coords, coord);
+                if (distance < 0.01) {
+                  routing.polyline.splice(0, coordIndex);
+                  routing.render();
+                }
               });
+
+              // const markers = routing.markers.filter((o) =>
+              //   ["passenger", "destination"].includes(o.type)
+              // );
+
+              // markers.map((marker) => {
+              //   const distance = routing.coordsDistance(
+              //     vehicle.coords,
+              //     marker.coords
+              //   );
+              //   if (distance < 0.01) {
+              //     console.log(marker);
+              //   }
+              // });
             },
             init() {
               routing.markersSort();
               routing.render();
               routing.routeCalculate();
-              setInterval(routing.onUpdate, 100);
+
+              const updateHandle = () => {
+                routing.onUpdate();
+                requestAnimationFrame(updateHandle);
+              };
+
+              updateHandle();
             },
           });
 
@@ -534,28 +605,53 @@ TODO:
               const polylineLength = routing.polyline;
               const updateTime = 500;
               const animateUpdate = () => {
-                if (typeof routing.polyline[1] == "undefined") {
-                  driverSimulator.onUpdate({ progress: 100 });
-                  driverSimulator.onEnd({ progress: 100, marker });
-                  return;
-                }
-
-                const coordNext = routing.polyline[1];
-                routing.markerCoord(marker, coordNext);
-
-                const progress =
-                  100 - (routing.polyline.length * 100) / polylineLength;
-                driverSimulator.onUpdate({ progress, marker });
-                marker.marker._icon.style.transition = `all ${updateTime}ms linear`;
-
-                routing.polyline.splice(0, 1);
-                setTimeout(() => {
-                  animateUpdate();
-                }, updateTime);
+                // if (typeof routing.polyline[1] == "undefined") {
+                //   driverSimulator.onUpdate({ progress: 100 });
+                //   driverSimulator.onEnd({ progress: 100, marker });
+                //   return;
+                // }
+                // const coordNext = routing.polyline[1];
+                // routing.markerCoord(marker, coordNext);
+                // const progress =
+                //   100 - (routing.polyline.length * 100) / polylineLength;
+                // driverSimulator.onUpdate({ progress, marker });
+                // marker.marker._icon.style.transition = `all ${updateTime}ms linear`;
+                // routing.polyline.splice(0, 1);
+                // setTimeout(() => {
+                //   animateUpdate();
+                // }, updateTime);
               };
 
               driverSimulator.onStart({ progress: 0, marker });
               animateUpdate();
+
+              const input = new GameInput();
+              const vehicleSpeed = 0.000005;
+              const mapZoom = 19;
+
+              input.on(["w", "ArrowUp"], (ev) => {
+                marker.coords[0] += vehicleSpeed;
+                routing.markerCoord(marker, marker.coords);
+                map.setView(marker.coords, mapZoom);
+              });
+
+              input.on(["s", "ArrowDown"], (ev) => {
+                marker.coords[0] -= vehicleSpeed;
+                routing.markerCoord(marker, marker.coords);
+                map.setView(marker.coords, mapZoom);
+              });
+
+              input.on(["a", "ArrowLeft"], (ev) => {
+                marker.coords[1] -= vehicleSpeed;
+                routing.markerCoord(marker, marker.coords);
+                map.setView(marker.coords, mapZoom);
+              });
+
+              input.on(["d", "ArrowRight"], (ev) => {
+                marker.coords[1] += vehicleSpeed;
+                routing.markerCoord(marker, marker.coords);
+                map.setView(marker.coords, mapZoom);
+              });
             },
           });
 
