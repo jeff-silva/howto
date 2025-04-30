@@ -4,14 +4,12 @@
       config.cacheKey =
         config.url +
         "#" +
-        btoa(
-          JSON.stringify({
-            // headers: config.headers,
-            method: config.method,
-            params: config.params,
-            // data: config.data,
-          })
-        );
+        JSON.stringify({
+          method: config.method,
+          headers: config.headers,
+          params: config.params,
+          data: config.data,
+        });
       const cachedData = localStorage.getItem(config.cacheKey);
       if (cachedData) {
         config.adapter = async (cfg) => {

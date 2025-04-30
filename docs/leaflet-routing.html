@@ -1,16 +1,3 @@
-<!-- 
-Docs:
-- https://project-osrm.org/docs/v5.5.1/api/#general-options
-- https://account.heigit.org/manage/key
-
-Docs Geoapify
-- https://myprojects.geoapify.com/api/d61op2KWTUdtcxdQuqjo/keys
-- https://apidocs.geoapify.com/playground/routing/
-
-TODO:
-- Fazer com que aplicação detecte que motorista saiu do trajeto para recalcular a rota.
-- Ao deletar passageiro ou destino, recalcular a rota deve inserir próxima parada nas coordenadas.
- -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -82,7 +69,14 @@ TODO:
     <div id="app">
       <div class="flex">
         <div class="grow">
-          <leaflet style="height: 100vh" @ready="leafletHandle"></leaflet>
+          <leaflet
+            style="height: 100vh"
+            @ready="leafletHandle"
+            @change="(scope) => {
+              console.clear();
+              console.log(JSON.stringify(scope.mapData, null, 2));
+            }"
+          ></leaflet>
         </div>
         <div
           class=""
@@ -412,9 +406,53 @@ TODO:
                   });
                   return polylineFull;
                 },
+                async tomtom() {
+                  if (routing.markers.length < 2) {
+                    return [];
+                  }
+
+                  const opts = coder.decode([
+                    "eyJjYWNoZSI6dHJ1ZSwibWV0aG9kIjoicG9zdCIsInVybCI6Im",
+                    "h0dHBzOi8vYXBpLnRvbXRvbS5jb20vcm91dGluZy8xL2NhbGN1",
+                    "bGF0ZVJvdXRlL3tsb2NhdGlvbnN9L2pzb24iLCJwYXJhbXMiOn",
+                    "sia2V5IjoiREFLUmMwVUJLa3lPZm9jZTlnZnZ6b2lKUk5nSXJH",
+                    "cFIifSwiaGVhZGVycyI6eyJDb250ZW50LVR5cGUiOiJhcHBsaW",
+                    "NhdGlvbi9qc29uIiwiYWNjZXB0IjoiKi8qIn0sImRhdGEiOnt9",
+                    "fQ==",
+                  ]);
+
+                  opts.url = opts.url.replace(
+                    "{locations}",
+                    routing.markers
+                      .slice(0, 2)
+                      .map((o) => o.coords.join(","))
+                      .join(":")
+                  );
+
+                  opts.data = {
+                    supportingPoints: [],
+                    avoidVignette: [],
+                    avoidAreas: {
+                      rectangles: [],
+                    },
+                  };
+
+                  let polylineFull = [];
+                  const resp = await axios(opts);
+                  resp.data.routes.map((route, routeIndex) => {
+                    route.legs.map((leg, legIndex) => {
+                      leg.points.map((point, pointIndex) => {
+                        polylineFull.push([point.latitude, point.longitude]);
+                      });
+                    });
+                  });
+
+                  return polylineFull;
+                },
               };
 
-              const polylineFull = await services.geoapify();
+              const polylineFull = await services.tomtom();
+              console.log({ polylineFull });
               polylineFull.map((coord) => {
                 routing.polyline.push(coord);
               });
@@ -557,7 +595,8 @@ TODO:
                 }
               });
 
-              const isOutOfRoute = (() => {
+              const isOnroute = (() => {
+                return false;
                 const distanceMeters = 10; // Distance to route
 
                 if (routing.polyline.length == 0) return false;
@@ -595,10 +634,10 @@ TODO:
                   })
                   .filter((n) => n <= distanceMeters);
 
-                return pointsData.length == 0;
+                return pointsData.length > 0;
               })();
 
-              if (isOutOfRoute) {
+              if (!isOnroute) {
                 console.log("Out of route");
               }
             },
@@ -712,6 +751,18 @@ TODO:
 
           const mapRef = ref(null);
 
+          const mapDataSync = (map) => {
+            const { lat, lng } = map.getCenter();
+            mapData.lat = lat;
+            mapData.lng = lng;
+            mapData.zoom = map.getZoom();
+            mapData.bounds = map.getBounds();
+          };
+
+          const scope = (merge = {}) => {
+            return { el: mapRef.value, mapData, L, ...merge };
+          };
+
           onMounted(() => {
             const map = L.map(mapRef.value).setView(
               [mapData.lat, mapData.lng],
@@ -720,15 +771,21 @@ TODO:
             L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
               map
             );
-            ctx.emit("ready", { el: mapRef.value, map, mapData, L });
+
+            mapDataSync(map);
+            ctx.emit("ready", scope({ map }));
+            ctx.emit("change", scope({ map }));
+
             ["dragend", "zoomend"].map((evt) => {
               map.on(evt, (ev) => {
-                const { lat, lng } = map.getCenter();
-                mapData.lat = lat;
-                mapData.lng = lng;
-                mapData.zoom = map.getZoom();
-                mapData.bounds = map.getBounds();
+                mapDataSync(map);
+                ctx.emit("change", scope({ map }));
               });
+            });
+
+            window.addEventListener("resize", () => {
+              mapDataSync(map);
+              ctx.emit("change", scope({ map }));
             });
           });
 
@@ -741,3 +798,19 @@ TODO:
     </script>
   </body>
 </html>
+<!-- 
+Docs:
+- https://project-osrm.org/docs/v5.5.1/api/#general-options
+- https://account.heigit.org/manage/key
+
+Docs Geoapify
+- https://myprojects.geoapify.com/api/d61op2KWTUdtcxdQuqjo/keys
+- https://apidocs.geoapify.com/playground/routing/
+
+Docs Tomtom
+- https://developer.tomtom.com/routing-api/api-explorer
+- https://developer.tomtom.com/user/me/analytics
+
+TODO:
+- Fazer com que aplicação detecte que motorista saiu do trajeto para recalcular a rota.
+ -->
