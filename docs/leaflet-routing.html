@@ -75,7 +75,55 @@
   </head>
   <body>
     <div id="app">
-      <app-layout drawer-width="350px">
+      <app-layout
+        drawer-width="350px"
+        :actions="(scope) => [
+          {
+            text: 'Snackbar',
+            onClick() {
+              for(let i=1; i<=2; i++) {
+                scope.snackbar.add({
+                  text: `Snackbar ${i}`,
+                  actions: (scope) => [
+                    {
+                      text: '123',
+                      onClick() {
+                        console.log(scope.item)
+                      },
+                    },
+                  ],
+                });
+              }
+            },
+          },
+          {
+            text: 'Confirm',
+            onClick() {
+              scope.dialog.create({
+                title: 'Confirmação',
+                actions: [
+                  {
+                    text: 'Sim',
+                    color: 'success',
+                    onClick() {
+                      console.log('sim');
+                      scope.dialog.close();
+                    },
+                  },
+                  {
+                    text: 'Não',
+                    color: 'error',
+                    onClick() {
+                      console.log('não');
+                      scope.dialog.close();
+                    },
+                  },
+                ],
+              });
+            },
+          },
+        ]"
+      >
         <template #drawer>
           <v-list elevation="1">
             <template v-for="(o, i) in routing.markers">
@@ -506,7 +554,6 @@
               };
 
               const polylineFull = await services.tomtom();
-              console.log({ polylineFull });
               polylineFull.map((coord) => {
                 routing.polyline.push(coord);
               });

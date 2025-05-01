@@ -6,6 +6,8 @@ const appLayout = {
     actions: { type: Function, default: () => [] },
   },
   setup(props, ctx) {
+    const uid = (prefix) => prefix + Math.random().toString(36).substr(2, 9);
+
     const view = reactive({
       ready: false,
       isMobile: false,
@@ -78,50 +80,90 @@ const appLayout = {
       ref: null,
       width: null,
       height: null,
-      items: computed(() => {
-        const items = [];
-        props.actions(scope()).map((item) => {
-          items.push(item);
-        });
+      items: [],
+      if(item) {
+        if (typeof item.if == "function") {
+          return item.if();
+        }
+        return true;
+      },
+      init() {
+        actions.ref = actionsRef.value;
+        actions.width = actionsRef.value.offsetWidth + "px";
+        actions.height = actionsRef.value.offsetHeight + "px";
 
-        if (view.isMobile) {
-          items.push({
+        actions.items = props.actions(scope());
+
+        if (actions.items.filter((o) => o.dataId === "drawer").length == 0) {
+          actions.items.push({
+            dataId: "drawer",
             text: "Drawer",
             icon: "system-uicons:menu-hamburger",
             onClick: () => {
               drawer.toggle();
             },
+            if() {
+              return view.isMobile;
+            },
           });
         }
-        return items;
-      }),
-      init() {
-        actions.ref = actionsRef.value;
-        actions.width = actionsRef.value.offsetWidth + "px";
-        actions.height = actionsRef.value.offsetHeight + "px";
+
+        actions.items.map((item) => {
+          if (typeof item.actions != "function") {
+            item.actions = (scope) => [];
+          }
+        });
       },
     });
 
     const snackbar = reactive({
       items: [],
       add(params = {}) {
-        snackbar.items.push({ actions: () => [], ...params });
+        snackbar.items.push({ actions: (scope) => [], ...params });
+        snackbar.init();
       },
-      remove(snack) {
-        const index = snackbar.items.indexOf(snack);
-        snackbar.items.splice(index, 1);
+      remove(item) {
+        const items = snackbar.items;
+        console.log(JSON.stringify({ item, items, snackbar }, null, 2));
+        // const index = snackbar.items.findIndex((o) => o.dataId === item.dataId);
+        // console.log({ index, item });
+        // const index = snackbar.items.indexOf(snack);
+        // snackbar.items.splice(index, 1);
+        // snackbar.init();
       },
-      actions(item) {
-        const actions = item.actions(scope({ item }));
-        actions.push({
-          text: "Ok",
-          onClick: () => {
-            snackbar.remove(item);
-          },
+      if(item) {
+        if (typeof item.if == "function") {
+          return item.if();
+        }
+        if (typeof item.if == "boolean") {
+          return item.if;
+        }
+        return true;
+      },
+      init() {
+        snackbar.items.map((item) => {
+          item.dataId = item.dataId || uid("item-");
+
+          if (typeof item.actions != "function") {
+            item.actions = (scope) => [];
+          }
         });
-        return actions;
       },
-      init() {},
+    });
+
+    const dialog = reactive({
+      items: [],
+      create(params = {}) {
+        dialog.items.push({
+          title: "",
+          text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum nobis omnis, incidunt ad voluptates eos! Esse, quos veritatis neque doloribus necessitatibus perferendis vero! Deserunt suscipit est animi nobis maxime atque!",
+          actions: [],
+          ...params,
+        });
+      },
+      close() {
+        dialog.items.splice(0, 1);
+      },
     });
 
     const scope = (merge = {}) => {
@@ -133,6 +175,7 @@ const appLayout = {
         footer,
         actions,
         snackbar,
+        dialog,
         ...merge,
       };
     };
@@ -161,6 +204,7 @@ const appLayout = {
       actions,
       actionsRef,
       snackbar,
+      dialog,
       scope,
     };
   },
@@ -213,18 +257,29 @@ const appLayout = {
 
         <div ref="actionsRef" class="flex items-center justify-center gap-2">
           <template v-for="o in actions.items">
-            <v-btn v-bind="o" stacked rounded="0" size="60"></v-btn>
+            <v-btn v-if="actions.if(o)" v-bind="o" stacked rounded="0" size="60"></v-btn>
           </template>
         </div>
 
-        <template v-for="o in snackbar.items">
-          <v-snackbar :model-value="true" :timeout="-1" v-bind="{ ...o, actions: undefined }">
-            <template #actions>
-              <template v-for="oo in snackbar.actions(o)">
-                <v-btn v-bind="oo"></v-btn>
-              </template>
+        <v-snackbar-queue v-model="snackbar.items">
+          <template #actions="{ item, props }">
+            <template v-for="oo in item.actions(scope({ item }))">
+              <v-btn v-bind="oo"></v-btn>
             </template>
-          </v-snackbar>
+            <v-btn v-bind="props">Ok</v-btn>
+          </template>
+        </v-snackbar-queue>
+        
+        <template v-for="o in dialog.items">
+          <v-dialog :model-value="true" max-width="600">
+            <v-card :title="o.title" :text="o.text">
+              <v-card-actions>
+                <template v-for="oo in o.actions">
+                  <v-btn v-bind="oo"></v-btn>
+                </template>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </template>
       </div>
     </div>
