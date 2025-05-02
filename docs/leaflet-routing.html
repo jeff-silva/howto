@@ -75,61 +75,15 @@
   </head>
   <body>
     <div id="app">
-      <app-layout
-        drawer-width="350px"
-        :actions="(scope) => [
-          {
-            text: 'Snackbar',
-            onClick() {
-              for(let i=1; i<=2; i++) {
-                scope.snackbar.add({
-                  text: `Snackbar ${i}`,
-                  actions: (scope) => [
-                    {
-                      text: '123',
-                      onClick() {
-                        console.log(scope.item)
-                      },
-                    },
-                  ],
-                });
-              }
-            },
-          },
-          {
-            text: 'Confirm',
-            onClick() {
-              scope.dialog.create({
-                title: 'Confirmação',
-                actions: [
-                  {
-                    text: 'Sim',
-                    color: 'success',
-                    onClick() {
-                      console.log('sim');
-                      scope.dialog.close();
-                    },
-                  },
-                  {
-                    text: 'Não',
-                    color: 'error',
-                    onClick() {
-                      console.log('não');
-                      scope.dialog.close();
-                    },
-                  },
-                ],
-              });
-            },
-          },
-        ]"
-      >
+      <app-layout drawer-width="350px" :actions="(scope) => []">
         <template #drawer>
           <v-list elevation="1">
             <template v-for="(o, i) in routing.markers">
               <v-list-item>
                 <template #default>
-                  <div class="text-disabled font-italic text-body-2">
+                  <div
+                    class="text-disabled font-italic text-body-2 text-capitalize"
+                  >
                     {{ o.type }}
                   </div>
                   <div class="font-weight-bold">{{ o.name }}</div>
@@ -349,7 +303,8 @@
               const index = routing.markers.indexOf(marker);
               routing.markers.splice(index, 1);
               marker.marker.remove();
-              routing.render();
+              // routing.render();
+              routing.routeCalculate();
             },
             markersSort() {
               const sortAlgorithm = (markerStart, markers) => {
@@ -444,12 +399,6 @@
               return earthRadius * c; // Distância em quilômetros
             },
             async routeCalculate() {
-              // map.eachLayer((layer) => {
-              //   if (layer instanceof L.Polyline) {
-              //     map.removeLayer(layer);
-              //   }
-              // });
-
               const services = {
                 async geoapify() {
                   const opts = coder.decode([
@@ -508,7 +457,7 @@
                   });
                   return polylineFull;
                 },
-                async tomtom() {
+                async tomtom(coords = []) {
                   if (routing.markers.length < 2) {
                     return [];
                   }
@@ -525,10 +474,7 @@
 
                   opts.url = opts.url.replace(
                     "{locations}",
-                    routing.markers
-                      .slice(0, 2)
-                      .map((o) => o.coords.join(","))
-                      .join(":")
+                    coords.map((coord) => coord.join(",")).join(":")
                   );
 
                   opts.data = {
@@ -553,19 +499,28 @@
                 },
               };
 
-              const polylineFull = await services.tomtom();
-              polylineFull.map((coord) => {
-                routing.polyline.push(coord);
-              });
+              const markerVehicle = routing.markers.at(0);
+              const markers = routing.markers.filter(
+                (o) => o.type != "vehicle"
+              );
 
-              const polyline = L.polyline(polylineFull, {
-                color: "#0066cc",
-                weight: 2,
-                opacity: 0.8,
-                lineJoin: "round",
-                // dashArray: "10, 10",
-                lineCap: "round",
-              }).addTo(map);
+              const nearest = turf.nearestPoint(
+                turf.point(markerVehicle.coords),
+                turf.featureCollection(
+                  markers.map((o) => {
+                    return turf.point(o.coords);
+                  })
+                )
+              );
+
+              const markerNear = markers.at(nearest.properties.featureIndex);
+              const polylineFull = await services.tomtom([
+                markerVehicle.coords,
+                markerNear.coords,
+              ]);
+
+              routing.polyline = polylineFull;
+              routing.render();
 
               driverSimulator.init();
             },
@@ -682,6 +637,9 @@
               //   });
               // }
             },
+
+            onStart() {},
+
             onUpdate() {
               const vehicle = routing.markers
                 .filter((o) => o.type == "vehicle")
@@ -742,17 +700,13 @@
               //   console.log("Out of route");
               // }
             },
+
+            onStop() {},
+
             init() {
               routing.markersSort();
               routing.render();
               routing.routeCalculate();
-
-              const updateHandle = () => {
-                routing.onUpdate();
-                requestAnimationFrame(updateHandle);
-              };
-
-              updateHandle();
             },
           });
 
@@ -771,10 +725,8 @@
           // Simulate driver
           const driverSimulator = reactive({
             onStart() {},
-            onUpdate({ progress }) {
-              // console.log({ progress });
-            },
-            onEnd() {},
+            onUpdate() {},
+            onStop() {},
             init() {
               const marker = routing.markers[0];
               const polylineLength = routing.polyline;
@@ -796,9 +748,6 @@
                 //   animateUpdate();
                 // }, updateTime);
               };
-
-              driverSimulator.onStart({ progress: 0, marker });
-              animateUpdate();
 
               const input = new GameInput();
               const vehicleSpeed = 0.000005;
@@ -830,7 +779,48 @@
             },
           });
 
-          return { humanize, routing, leafletHandle, driverSimulator };
+          const controller = reactive({
+            running: false,
+            start() {
+              controller.running = true;
+              controller.onStart();
+              controller.update();
+            },
+            update() {
+              if (!controller.running) return;
+              controller.onUpdate();
+              requestAnimationFrame(controller.update);
+            },
+            stop() {
+              controller.running = false;
+              controller.onStop();
+            },
+
+            onStart() {
+              routing.onStart();
+              driverSimulator.onStart();
+            },
+
+            onUpdate() {
+              routing.onUpdate();
+              driverSimulator.onUpdate();
+            },
+
+            onStop() {
+              routing.onStop();
+              driverSimulator.onStop();
+            },
+          });
+
+          controller.start();
+
+          return {
+            humanize,
+            routing,
+            leafletHandle,
+            driverSimulator,
+            controller,
+          };
         },
       });
 
