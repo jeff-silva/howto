@@ -142,9 +142,41 @@
                 marker.marker.addTo(scope.map);
               });
 
+              [
+                'road_motorway',
+                'road_major_rail',
+                'road_major_rail_hatching',
+                'road_minor_rail',
+                'road_oneway',
+                'road_oneway_opposite',
+                'road_label',
+              ].map(attr => {
+                scope.map.setPaintProperty(attr, 'line-width', 10);
+              });
+
+              
               routing.routeCalculate();
             }"
           ></maplibre>
+
+          <div style="position: relative">
+            <div
+              class="flex align-center justify-center"
+              style="position: absolute; bottom: 20px; left: 0; width: 100%"
+            >
+              <div>
+                <v-snackbar :model-value="true" :timeout="-1" color="success">
+                  {{ informer.message }}
+
+                  <template #actions>
+                    <template v-for="o in informer.actions">
+                      <v-btn v-bind="o"></v-btn>
+                    </template>
+                  </template>
+                </v-snackbar>
+              </div>
+            </div>
+          </div>
         </template>
 
         <!-- <template #footer>isso é o footer</template>
@@ -549,9 +581,22 @@
                 },
               };
 
-              const markers = routing.markers.filter(
-                (o) => o.type != "vehicle"
+              let markers = routing.markers.filter(
+                (o) => o.type == "passenger"
               );
+
+              if (markers.length == 0) {
+                markers = routing.markers.filter(
+                  (o) => o.type == "destination"
+                );
+              }
+
+              if (markers.length == 0) {
+                informer.setMessage(`Rotas concluídas`);
+                routing.polyline = [];
+                routing.render();
+                return;
+              }
 
               const nearest = turf.nearestPoint(
                 turf.point(vehicle.marker.coords),
@@ -563,12 +608,23 @@
               );
 
               const markerNear = markers.at(nearest.properties.featureIndex);
+
+              informer.setMessage(`Calculando rota para ${markerNear.name}`);
+
               routing.polyline = await services.tomtom([
                 [...vehicle.marker.coords].reverse(),
                 [...markerNear.coords].reverse(),
               ]);
 
               routing.render();
+              informer.setMessage(`Destino: ${markerNear.name}`, [
+                {
+                  text: "Concluir",
+                  onClick() {
+                    routing.markerRemove(markerNear);
+                  },
+                },
+              ]);
               // driverSimulator.init();
             },
             render() {
@@ -800,8 +856,8 @@
           const vehicle = reactive({
             marker: null,
             rotation: 0,
-            rotationSpeed: 1.5,
-            moveSpeed: 0.000002,
+            rotationSpeed: 1,
+            moveSpeed: 0.000005,
             init() {
               vehicle.marker = routing.markers.at(0);
 
@@ -879,6 +935,16 @@
             },
           });
 
+          const informer = reactive({
+            message: "Hello",
+            actions: [],
+            setMessage(message, actions = []) {
+              informer.message = message;
+              informer.actions = actions;
+            },
+            init() {},
+          });
+
           animator.on("start", () => {
             routing.onStart();
             driverSimulator.onStart();
@@ -933,12 +999,14 @@
 
           onMounted(() => {
             vehicle.init();
+            informer.init();
           });
 
           return {
             humanize,
             routing,
             driverSimulator,
+            informer,
             debuger,
           };
         },
@@ -1027,8 +1095,9 @@
                 zoom: mapData.zoom,
                 center: [mapData.lng, mapData.lat],
                 pitch: 70,
+                // style: "https://api.maptiler.com/maps/streets/style.json?key=dduuAwGpOKXxh2NGtYJR",
                 style:
-                  "https://api.maptiler.com/maps/streets/style.json?key=dduuAwGpOKXxh2NGtYJR",
+                  "https://api.maptiler.com/maps/satellite/style.json?key=dduuAwGpOKXxh2NGtYJR",
               }));
 
               map.on("load", () => {
