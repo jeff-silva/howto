@@ -117,7 +117,7 @@
               (routing.markers.length * 60)) }}
             </div>
           </template>
-          <pre>{{ routing.debug }}</pre>
+          <pre>{{ debuger }}</pre>
         </template>
 
         <!-- <template #header>isso é o header</template> -->
@@ -431,18 +431,6 @@
             }),
             polyline: [],
             response: { code: null, routes: [], waypoints: [] },
-            debug: computed(() => {
-              return {
-                busy: routing.busy,
-                markersNext: routing.markersNext.length,
-                // markers: routing.markers.map((o) => ({
-                //   id: o.id,
-                //   name: o.name,
-                //   coords: o.coords,
-                // })),
-                // response: routing.response.routes[0],
-              };
-            }),
             coordsDistance([lat1, lng1], [lat2, lng2]) {
               const degToRad = (deg) => deg * (Math.PI / 180);
               const earthRadius = 6371; // Raio da Terra em quilômetros
@@ -561,13 +549,12 @@
                 },
               };
 
-              const markerVehicle = routing.markers.at(0);
               const markers = routing.markers.filter(
                 (o) => o.type != "vehicle"
               );
 
               const nearest = turf.nearestPoint(
-                turf.point(markerVehicle.coords),
+                turf.point(vehicle.marker.coords),
                 turf.featureCollection(
                   markers.map((o) => {
                     return turf.point(o.coords);
@@ -577,11 +564,11 @@
 
               const markerNear = markers.at(nearest.properties.featureIndex);
               routing.polyline = await services.tomtom([
-                markerVehicle.coords.reverse(),
-                markerNear.coords.reverse(),
+                [...vehicle.marker.coords].reverse(),
+                [...markerNear.coords].reverse(),
               ]);
 
-              // routing.render();
+              routing.render();
               // driverSimulator.init();
             },
             render() {
@@ -636,15 +623,16 @@
                 map.removeSource("route_source");
               }
 
+              // console.log(routing.polyline);
               map.addSource("route_source", {
                 type: "geojson",
                 data: {
                   type: "Feature",
                   geometry: {
                     type: "LineString",
-                    coordinates: routing.polyline.map((coord) => {
-                      return [coord].reverse();
-                    }),
+                    coordinates: routing.polyline.map((coord) =>
+                      [...coord].reverse()
+                    ),
                   },
                   properties: {},
                 },
@@ -829,18 +817,18 @@
 
               gameInput.on(["w", "ArrowUp"], (ev) => {
                 const coords = vehicle.moveForward(1);
-                vehicle.marker.marker.setLngLat([...coords].reverse());
+                vehicle.marker.marker.setLngLat([...coords]);
                 routing.map.jumpTo({
-                  center: [...coords].reverse(),
+                  center: [...coords],
                   duration: 0,
                 });
               });
 
               gameInput.on(["s", "ArrowDown"], (ev) => {
                 const coords = vehicle.moveForward(-1);
-                vehicle.marker.marker.setLngLat([...coords].reverse());
+                vehicle.marker.marker.setLngLat([...coords]);
                 routing.map.jumpTo({
-                  center: [...coords].reverse(),
+                  center: [...coords],
                   duration: 0,
                 });
               });
@@ -850,14 +838,14 @@
               });
             },
             moveForward(direction) {
-              const directionRad = (vehicle.rotation * -1 * Math.PI) / 180;
+              const directionRad = (vehicle.rotation * Math.PI) / -180;
               const lat =
                 Math.cos(directionRad) * vehicle.moveSpeed * direction * 1;
               const lng =
                 Math.sin(directionRad) * vehicle.moveSpeed * direction * -1;
 
               const coords = vehicle.marker.coords;
-              vehicle.marker.coords = [coords[0] + lat, coords[1] + lng];
+              vehicle.marker.coords = [coords[0] + lng, coords[1] + lat];
               return vehicle.marker.coords;
             },
           });
@@ -933,6 +921,16 @@
           //   map.setView(marker.coords, mapZoom);
           // });
 
+          const debuger = computed(() => {
+            return {
+              vehicleCoords:
+                vehicle && vehicle.marker
+                  ? vehicle.marker.coords
+                  : [null, null],
+              routingPolyline: routing.polyline,
+            };
+          });
+
           onMounted(() => {
             vehicle.init();
           });
@@ -941,6 +939,7 @@
             humanize,
             routing,
             driverSimulator,
+            debuger,
           };
         },
       });
