@@ -29,7 +29,7 @@
     <script></script>
 
     <!-- Leaflet Routing Machine -->
-    <link
+    <!-- <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
     />
@@ -38,10 +38,17 @@
       href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"
     />
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script> -->
 
     <!-- Mapbox Polyline -->
     <!-- <script src="https://unpkg.com/@mapbox/polyline@1.1.1/src/polyline.js"></script> -->
+
+    <!-- Maplibre -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/maplibre-gl@5.4.0/dist/maplibre-gl.css"
+    />
+    <script src="https://unpkg.com/maplibre-gl@5.4.0/dist/maplibre-gl.js"></script>
 
     <!-- Turf.js -->
     <script src="https://unpkg.com/@turf/turf@7.0.0/turf.min.js"></script>
@@ -116,11 +123,28 @@
         <!-- <template #header>isso é o header</template> -->
 
         <template #default="scope">
-          <leaflet
+          <!-- <leaflet
             v-if="scope.view.ready"
             :style="{ width: '100%', height: scope.content.height, zIndex: 1 }"
             @ready="leafletHandle"
-          ></leaflet>
+          ></leaflet> -->
+          <maplibre
+            v-if="scope.view.ready"
+            :lat="-19.804979"
+            :lng="-43.925504"
+            :zoom="22"
+            :style="{ width: '100%', height: scope.content.height }"
+            @ready="(scope) => {
+              routing.setMap(scope.map);
+              routing.markers.map(marker => {
+                marker.marker = new scope.maplibregl.Marker();
+                marker.marker.setLngLat(marker.coords.reverse());
+                marker.marker.addTo(scope.map);
+              });
+
+              routing.routeCalculate();
+            }"
+          ></maplibre>
         </template>
 
         <!-- <template #footer>isso é o footer</template>
@@ -206,11 +230,48 @@
 
       const app = createApp({
         setup() {
-          let map = null;
+          const gameInput = new GameInput();
+
+          const animator = (() => {
+            const _events = [];
+            const r = reactive({
+              running: false,
+              init() {
+                const update = () => {
+                  r.dispatch("update");
+                  if (!r.running) return;
+                  requestAnimationFrame(update);
+                };
+
+                r.running = true;
+                r.dispatch("start");
+                update();
+              },
+              stop() {
+                r.running = false;
+              },
+              on(name, call) {
+                _events.push({ name, call });
+              },
+              dispatch(name, ...args) {
+                _events.map((o) => {
+                  if (o.name !== name) return;
+                  o.call(...args);
+                });
+              },
+            });
+
+            r.init();
+            return r;
+          })();
 
           const routing = reactive({
             busy: false,
             type: "driving",
+            map: null,
+            setMap(map) {
+              routing.map = map;
+            },
             markers: [
               {
                 id: faker.string.ulid(),
@@ -472,6 +533,7 @@
                     "fQ==",
                   ]);
 
+                  opts.cache = false;
                   opts.url = opts.url.replace(
                     "{locations}",
                     coords.map((coord) => coord.join(",")).join(":")
@@ -514,56 +576,93 @@
               );
 
               const markerNear = markers.at(nearest.properties.featureIndex);
-              const polylineFull = await services.tomtom([
-                markerVehicle.coords,
-                markerNear.coords,
+              routing.polyline = await services.tomtom([
+                markerVehicle.coords.reverse(),
+                markerNear.coords.reverse(),
               ]);
 
-              routing.polyline = polylineFull;
-              routing.render();
-
-              driverSimulator.init();
+              // routing.render();
+              // driverSimulator.init();
             },
             render() {
+              const { map } = routing;
               // map.eachLayer((layer) => {
               //   if (layer instanceof L.Marker) {
               //     map.removeLayer(layer);
               //   }
               // });
 
-              map.eachLayer((layer) => {
-                if (layer instanceof L.Polyline) {
-                  map.removeLayer(layer);
-                }
+              // map.eachLayer((layer) => {
+              //   if (layer instanceof L.Polyline) {
+              //     map.removeLayer(layer);
+              //   }
+              // });
+
+              // L.polyline(routing.polyline, {
+              //   color: "#0066cc",
+              //   weight: 2,
+              //   opacity: 0.8,
+              //   lineJoin: "round",
+              //   // dashArray: "10, 10",
+              //   lineCap: "round",
+              // }).addTo(map);
+
+              // routing.markers.map((item) => {
+              //   if (item.marker) return;
+              //   const icon = new L.Icon.Default();
+              //   icon.options.shadowSize = [0, 0];
+              //   item.marker = L.marker(item.coords, { draggable: true, icon });
+              //   item.marker
+              //     .bindPopup(item.name, {
+              //       autoClose: false,
+              //       closeOnClick: false,
+              //     })
+              //     .openPopup();
+              //   item.marker.addTo(map);
+              //   item.marker.on("dragend", (ev) => {
+              //     item.coords = Object.values(ev.target.getLatLng());
+              //     routing.markerCoord(item, item.coords);
+              //     // routing.routeCalculate();
+              //   });
+
+              //   return { ...item };
+              // });
+
+              if (map.getLayer("route_layer")) {
+                map.removeLayer("route_layer");
+              }
+
+              if (map.getSource("route_source")) {
+                map.removeSource("route_source");
+              }
+
+              map.addSource("route_source", {
+                type: "geojson",
+                data: {
+                  type: "Feature",
+                  geometry: {
+                    type: "LineString",
+                    coordinates: routing.polyline.map((coord) => {
+                      return [coord].reverse();
+                    }),
+                  },
+                  properties: {},
+                },
               });
 
-              L.polyline(routing.polyline, {
-                color: "#0066cc",
-                weight: 2,
-                opacity: 0.8,
-                lineJoin: "round",
-                // dashArray: "10, 10",
-                lineCap: "round",
-              }).addTo(map);
-
-              routing.markers.map((item) => {
-                if (item.marker) return;
-                const icon = new L.Icon.Default();
-                icon.options.shadowSize = [0, 0];
-                item.marker = L.marker(item.coords, { draggable: true, icon });
-                item.marker
-                  .bindPopup(item.name, {
-                    autoClose: false,
-                    closeOnClick: false,
-                  })
-                  .openPopup();
-                item.marker.addTo(map);
-                item.marker.on("dragend", (ev) => {
-                  item.coords = Object.values(ev.target.getLatLng());
-                  routing.markerCoord(item, item.coords);
-                  // routing.routeCalculate();
-                });
-                return { ...item };
+              map.addLayer({
+                id: "route_layer",
+                type: "line",
+                source: "route_source",
+                layout: {
+                  "line-join": "round",
+                  "line-cap": "round",
+                },
+                paint: {
+                  "line-color": "#007cbf",
+                  "line-width": 5,
+                  "line-opacity": 0.8,
+                },
               });
 
               // if (routing.response.routes.length > 0) {
@@ -710,17 +809,58 @@
             },
           });
 
-          const leafletHandle = (scope) => {
-            map = scope.map;
-            routing.init();
+          const vehicle = reactive({
+            marker: null,
+            rotation: 0,
+            rotationSpeed: 1.5,
+            moveSpeed: 0.000002,
+            init() {
+              vehicle.marker = routing.markers.at(0);
 
-            map.on("click", (ev) => {
-              const coords = Object.values(ev.latlng);
-              routing.markerAdd({ coords });
-              // routing.routeCalculate();
-              console.log(coords);
-            });
-          };
+              gameInput.on(["a", "ArrowLeft"], (ev) => {
+                vehicle.rotation -= vehicle.rotationSpeed;
+                routing.map.setBearing(vehicle.rotation);
+              });
+
+              gameInput.on(["d", "ArrowRight"], (ev) => {
+                vehicle.rotation += vehicle.rotationSpeed;
+                routing.map.setBearing(vehicle.rotation);
+              });
+
+              gameInput.on(["w", "ArrowUp"], (ev) => {
+                const coords = vehicle.moveForward(1);
+                vehicle.marker.marker.setLngLat([...coords].reverse());
+                routing.map.jumpTo({
+                  center: [...coords].reverse(),
+                  duration: 0,
+                });
+              });
+
+              gameInput.on(["s", "ArrowDown"], (ev) => {
+                const coords = vehicle.moveForward(-1);
+                vehicle.marker.marker.setLngLat([...coords].reverse());
+                routing.map.jumpTo({
+                  center: [...coords].reverse(),
+                  duration: 0,
+                });
+              });
+
+              animator.on("update", () => {
+                // console.log(vehicle.marker);
+              });
+            },
+            moveForward(direction) {
+              const directionRad = (vehicle.rotation * -1 * Math.PI) / 180;
+              const lat =
+                Math.cos(directionRad) * vehicle.moveSpeed * direction * 1;
+              const lng =
+                Math.sin(directionRad) * vehicle.moveSpeed * direction * -1;
+
+              const coords = vehicle.marker.coords;
+              vehicle.marker.coords = [coords[0] + lat, coords[1] + lng];
+              return vehicle.marker.coords;
+            },
+          });
 
           // Simulate driver
           const driverSimulator = reactive({
@@ -748,78 +888,59 @@
                 //   animateUpdate();
                 // }, updateTime);
               };
-
-              const input = new GameInput();
-              const vehicleSpeed = 0.000005;
-              const mapZoom = 19;
-
-              input.on(["w", "ArrowUp"], (ev) => {
-                marker.coords[0] += vehicleSpeed;
-                routing.markerCoord(marker, marker.coords);
-                map.setView(marker.coords, mapZoom);
-              });
-
-              input.on(["s", "ArrowDown"], (ev) => {
-                marker.coords[0] -= vehicleSpeed;
-                routing.markerCoord(marker, marker.coords);
-                map.setView(marker.coords, mapZoom);
-              });
-
-              input.on(["a", "ArrowLeft"], (ev) => {
-                marker.coords[1] -= vehicleSpeed;
-                routing.markerCoord(marker, marker.coords);
-                map.setView(marker.coords, mapZoom);
-              });
-
-              input.on(["d", "ArrowRight"], (ev) => {
-                marker.coords[1] += vehicleSpeed;
-                routing.markerCoord(marker, marker.coords);
-                map.setView(marker.coords, mapZoom);
-              });
             },
           });
 
-          const controller = reactive({
-            running: false,
-            start() {
-              controller.running = true;
-              controller.onStart();
-              controller.update();
-            },
-            update() {
-              if (!controller.running) return;
-              controller.onUpdate();
-              requestAnimationFrame(controller.update);
-            },
-            stop() {
-              controller.running = false;
-              controller.onStop();
-            },
-
-            onStart() {
-              routing.onStart();
-              driverSimulator.onStart();
-            },
-
-            onUpdate() {
-              routing.onUpdate();
-              driverSimulator.onUpdate();
-            },
-
-            onStop() {
-              routing.onStop();
-              driverSimulator.onStop();
-            },
+          animator.on("start", () => {
+            routing.onStart();
+            driverSimulator.onStart();
           });
 
-          controller.start();
+          animator.on("update", () => {
+            routing.onUpdate();
+            driverSimulator.onUpdate();
+          });
+
+          animator.on("stop", () => {
+            routing.onStop();
+            driverSimulator.onStop();
+          });
+
+          const vehicleSpeed = 0.000005;
+          const mapZoom = 19;
+
+          // input.on(["w", "ArrowUp"], (ev) => {
+          //   marker.coords[0] += vehicleSpeed;
+          //   routing.markerCoord(marker, marker.coords);
+          //   map.setView(marker.coords, mapZoom);
+          // });
+
+          // input.on(["s", "ArrowDown"], (ev) => {
+          //   marker.coords[0] -= vehicleSpeed;
+          //   routing.markerCoord(marker, marker.coords);
+          //   map.setView(marker.coords, mapZoom);
+          // });
+
+          // input.on(["a", "ArrowLeft"], (ev) => {
+          //   marker.coords[1] -= vehicleSpeed;
+          //   routing.markerCoord(marker, marker.coords);
+          //   map.setView(marker.coords, mapZoom);
+          // });
+
+          // input.on(["d", "ArrowRight"], (ev) => {
+          //   marker.coords[1] += vehicleSpeed;
+          //   routing.markerCoord(marker, marker.coords);
+          //   map.setView(marker.coords, mapZoom);
+          // });
+
+          onMounted(() => {
+            vehicle.init();
+          });
 
           return {
             humanize,
             routing,
-            leafletHandle,
             driverSimulator,
-            controller,
           };
         },
       });
@@ -883,6 +1004,49 @@
           });
 
           return { mapData, mapRef };
+        },
+      });
+
+      app.component("maplibre", {
+        template: `<div ref="mapRef" style="height:400px;"></div>`,
+        props: {
+          lat: { type: Number, default: 0 },
+          lng: { type: Number, default: 0 },
+          zoom: { type: Number, default: 10 },
+        },
+        setup(props, ctx) {
+          const mapRef = ref(null);
+          const mapData = reactive({
+            el: null,
+            lat: props.lat,
+            lng: props.lng,
+            zoom: props.zoom,
+            init() {
+              mapData.el = mapRef.value;
+              const map = (window.map = new maplibregl.Map({
+                container: mapRef.value,
+                zoom: mapData.zoom,
+                center: [mapData.lng, mapData.lat],
+                pitch: 70,
+                style:
+                  "https://api.maptiler.com/maps/streets/style.json?key=dduuAwGpOKXxh2NGtYJR",
+              }));
+
+              map.on("load", () => {
+                ctx.emit("ready", scope({ map }));
+              });
+            },
+          });
+
+          const scope = (merge = {}) => {
+            return { maplibregl, mapData, ...merge };
+          };
+
+          onMounted(() => {
+            mapData.init();
+          });
+
+          return { mapRef, mapData };
         },
       });
 
