@@ -28,21 +28,6 @@
     ></script>
     <script></script>
 
-    <!-- Leaflet Routing Machine -->
-    <!-- <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"
-    />
-    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script> -->
-
-    <!-- Mapbox Polyline -->
-    <!-- <script src="https://unpkg.com/@mapbox/polyline@1.1.1/src/polyline.js"></script> -->
-
     <!-- Maplibre -->
     <link
       rel="stylesheet"
@@ -138,11 +123,11 @@
               routing.setMap(scope.map);
               routing.markers.map(marker => {
                 marker.marker = new scope.maplibregl.Marker();
-                marker.marker.setLngLat(marker.coords.reverse());
+                marker.marker.setLngLat(marker.coords.toLngLatArray());
                 marker.marker.addTo(scope.map);
               });
 
-              [
+              /*[
                 'road_motorway',
                 'road_major_rail',
                 'road_major_rail_hatching',
@@ -152,8 +137,7 @@
                 'road_label',
               ].map(attr => {
                 scope.map.setPaintProperty(attr, 'line-width', 10);
-              });
-
+              });*/
               
               routing.routeCalculate();
             }"
@@ -178,79 +162,7 @@
             </div>
           </div>
         </template>
-
-        <!-- <template #footer>isso é o footer</template>
-        <template #actions>isso é o actions</template> -->
       </app-layout>
-      <!-- <div class="flex">
-        <div class="grow">
-          <leaflet
-            style="height: 100vh"
-            @ready="leafletHandle"
-            @change="(scope) => {
-              console.clear();
-              console.log(JSON.stringify(scope.mapData, null, 2));
-            }"
-          ></leaflet>
-        </div>
-        <div
-          class=""
-          style="
-            min-width: 400px;
-            max-width: 400px;
-            height: 100vh;
-            overflow: auto;
-          "
-        >
-          <v-list elevation="1">
-            <template v-for="(o, i) in routing.markers">
-              <v-list-item>
-                <template #default>
-                  <div class="text-disabled font-italic text-body-2">
-                    {{ o.type }}
-                  </div>
-                  <div class="font-weight-bold">{{ o.name }}</div>
-                </template>
-                <template #append>
-                  <v-btn
-                    v-if="['passenger', 'destination'].includes(o.type)"
-                    color="success"
-                    @click="() => {
-                      routing.markerRemove(o);
-                      routing.routeCalculate();
-                    }"
-                  >
-                    Ok
-                  </v-btn>
-                </template>
-              </v-list-item>
-            </template>
-          </v-list>
-          <br />
-          <template v-for="o in routing.response.routes">
-            <div>
-              Duração: {{ humanize.timeDuration(o.duration +
-              (routing.markers.length * 60)) }}
-            </div>
-          </template>
-          <pre>{{ routing.debug }}</pre>
-        </div>
-      </div>
-      <template v-for="o in routing.markersNext">
-        <v-snackbar :model-value="true" :timeout="-1">
-          Confirmar {{ o.name }}
-          <template #actions>
-            <v-btn
-              @click="() => {
-              routing.markerRemove(o);
-              routing.routeCalculate();
-            }"
-            >
-              Ok
-            </v-btn>
-          </template>
-        </v-snackbar>
-      </template> -->
     </div>
 
     <script type="module">
@@ -259,6 +171,34 @@
       const { createApp, ref, reactive, onMounted, computed, h } = Vue;
       const { createVuetify } = Vuetify;
       const { useGeolocation } = VueUse;
+
+      class Coord {
+        constructor(lat, lng) {
+          this.lat = lat;
+          this.lng = lng;
+        }
+        toLatLngArray() {
+          return [this.lng, this.lat];
+        }
+        toLngLatArray() {
+          return [this.lat, this.lng];
+        }
+        toLatLng() {
+          return { lat: this.lat, lng: this.lng };
+        }
+        toLatLng() {
+          return { lat: this.lat, lng: this.lng };
+        }
+        toLatLon() {
+          return { lat: this.lat, lon: this.lng };
+        }
+        toLatitudeLongitude() {
+          return { latitude: this.lat, longitude: this.lng };
+        }
+        static fromLatLngArray(arr = []) {
+          return new Coord(arr[0], arr[1]);
+        }
+      }
 
       const app = createApp({
         setup() {
@@ -310,75 +250,76 @@
                 name: "Van",
                 type: "vehicle",
                 distance: 0,
-                coords: [-19.804979, -43.925504],
+                coords: new Coord(-19.804979, -43.925504),
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
                 type: "passenger",
                 distance: 0,
-                coords: [-19.802916176446278, -43.92603278160095],
+                coords: new Coord(-19.802916176446278, -43.92603278160095),
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
                 type: "passenger",
                 distance: 0,
-                coords: [-19.805959600055854, -43.93649876117706],
+                coords: new Coord(-19.805959600055854, -43.93649876117706),
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
                 type: "passenger",
                 distance: 0,
-                coords: [-19.807403060882788, -43.928677439689636],
+                coords: new Coord(-19.807403060882788, -43.928677439689636),
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
                 type: "passenger",
                 distance: 0,
-                coords: [-19.800084680319518, -43.93029749393464],
+                coords: new Coord(-19.800084680319518, -43.93029749393464),
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
                 type: "passenger",
                 distance: 0,
-                coords: [-19.80209853033214, -43.927116394042976],
+                coords: new Coord(-19.80209853033214, -43.927116394042976),
               },
               {
                 id: faker.string.ulid(),
                 name: faker.person.firstName(),
                 type: "passenger",
                 distance: 0,
-                coords: [-19.810446398349715, -43.92901539802551],
+                coords: new Coord(-19.810446398349715, -43.92901539802551),
               },
               {
                 id: faker.string.ulid(),
                 name: "Escola Estadual Paschoal Comanducci",
                 type: "destination",
                 distance: 0,
-                coords: [-19.80267138777249, -43.93539637327194],
+                coords: new Coord(-19.80267138777249, -43.93539637327194),
               },
               {
                 id: faker.string.ulid(),
                 name: "Escola Municipal Acadêmico Vivaldi Moreira",
                 type: "destination",
                 distance: 0,
-                coords: [-19.805207582058472, -43.9400178194046],
+                coords: new Coord(-19.805207582058472, -43.9400178194046),
               },
               {
                 id: faker.string.ulid(),
                 name: "Escola Estadual Maria Coutinho",
                 type: "destination",
                 distance: 0,
-                coords: [-19.80400636472945, -43.94369781017304],
+                coords: new Coord(-19.80400636472945, -43.94369781017304),
               },
             ],
-            markerCoord(marker, coord) {
+            markerMove(marker, coord) {
+              coord = Coord.fromLatLngArray(coord);
               marker.coords = coord;
-              marker.marker.setLatLng(coord);
+              marker.marker.setLatLng(coord.toLatLngArray());
             },
             markerAdd(data = {}) {
               data = {
@@ -388,6 +329,7 @@
                 coords: [0, 0],
                 ...data,
               };
+              data.coords = Coord.fromLatLngArray(data.coords);
               routing.markers.splice(routing.markers.length - 1, 0, data);
               routing.markersSort();
               routing.render();
@@ -411,8 +353,8 @@
                   items = items
                     .map((item) => {
                       item.distance = routing.coordsDistance(
-                        [itemCurr.coords.lat, itemCurr.coords.lng],
-                        [...item.coords]
+                        itemCurr.coords.toLatLngArray(),
+                        item.coords.toLatLngArray()
                       );
                       return item;
                     })
@@ -455,8 +397,8 @@
                 .filter((o) => ["passenger", "destination"].includes(o.type))
                 .filter((o) => {
                   const distance = routing.coordsDistance(
-                    vehicle.coords,
-                    o.coords
+                    vehicle.coords.toLatLngArray(),
+                    o.coords.toLatLngArray()
                   );
                   return distance < 0.05;
                 });
@@ -522,7 +464,7 @@
                       routing.markers
                         .slice(0, 2)
                         .map((marker) => {
-                          return marker.coords.join(",");
+                          return marker.coords.toLatLngArray().join(",");
                         })
                         .join(";"),
                     params: {
@@ -599,10 +541,10 @@
               }
 
               const nearest = turf.nearestPoint(
-                turf.point(vehicle.marker.coords),
+                turf.point(vehicle.marker.coords.toLatLngArray()),
                 turf.featureCollection(
                   markers.map((o) => {
-                    return turf.point(o.coords);
+                    return turf.point(o.coords.toLatLngArray());
                   })
                 )
               );
@@ -612,8 +554,8 @@
               informer.setMessage(`Calculando rota para ${markerNear.name}`);
 
               routing.polyline = await services.tomtom([
-                [...vehicle.marker.coords].reverse(),
-                [...markerNear.coords].reverse(),
+                vehicle.marker.coords.toLngLatArray(),
+                markerNear.coords.toLngLatArray(),
               ]);
 
               routing.render();
@@ -625,51 +567,9 @@
                   },
                 },
               ]);
-              // driverSimulator.init();
             },
             render() {
               const { map } = routing;
-              // map.eachLayer((layer) => {
-              //   if (layer instanceof L.Marker) {
-              //     map.removeLayer(layer);
-              //   }
-              // });
-
-              // map.eachLayer((layer) => {
-              //   if (layer instanceof L.Polyline) {
-              //     map.removeLayer(layer);
-              //   }
-              // });
-
-              // L.polyline(routing.polyline, {
-              //   color: "#0066cc",
-              //   weight: 2,
-              //   opacity: 0.8,
-              //   lineJoin: "round",
-              //   // dashArray: "10, 10",
-              //   lineCap: "round",
-              // }).addTo(map);
-
-              // routing.markers.map((item) => {
-              //   if (item.marker) return;
-              //   const icon = new L.Icon.Default();
-              //   icon.options.shadowSize = [0, 0];
-              //   item.marker = L.marker(item.coords, { draggable: true, icon });
-              //   item.marker
-              //     .bindPopup(item.name, {
-              //       autoClose: false,
-              //       closeOnClick: false,
-              //     })
-              //     .openPopup();
-              //   item.marker.addTo(map);
-              //   item.marker.on("dragend", (ev) => {
-              //     item.coords = Object.values(ev.target.getLatLng());
-              //     routing.markerCoord(item, item.coords);
-              //     // routing.routeCalculate();
-              //   });
-
-              //   return { ...item };
-              // });
 
               if (map.getLayer("route_layer")) {
                 map.removeLayer("route_layer");
@@ -679,7 +579,6 @@
                 map.removeSource("route_source");
               }
 
-              // console.log(routing.polyline);
               map.addSource("route_source", {
                 type: "geojson",
                 data: {
@@ -708,77 +607,6 @@
                   "line-opacity": 0.8,
                 },
               });
-
-              // if (routing.response.routes.length > 0) {
-              //   routing.response.routes.map((route, routeIndex) => {
-              //     let routesFull = [];
-              //     let routesPart = [];
-
-              //     // geojson
-              //     if (
-              //       typeof route.geometry == "object" &&
-              //       Array.isArray(route.geometry.coordinates)
-              //     ) {
-              //       routesFull = route.geometry.coordinates.map(
-              //         ([lng, lat]) => [lat, lng]
-              //       );
-              //     } else {
-              //       route.legs.map((leg, legIndex) => {
-              //         leg.steps.map((step, stepIndex) => {
-              //           const distance = step.distance / 1000;
-              //           const duration = step.duration / 60;
-              //           step.intersections.map((inter, interIndex) => {
-              //             const [lat, lng] = Object.values(inter.location);
-              //             routesFull.push([lng, lat]);
-              //           });
-              //         });
-              //       });
-              //     }
-
-              //     if (routesFull.length > 0) {
-              //       routing.polylines.push(
-              //         L.polyline(routesFull, {
-              //           color: "#0066cc",
-              //           weight: 2,
-              //           opacity: 0.8,
-              //           lineJoin: "round",
-              //           // dashArray: "10, 10",
-              //           lineCap: "round",
-              //         }).addTo(map)
-              //       );
-
-              //       routesPart = (() => {
-              //         if (typeof routing.markers[1] == "undefined") return [];
-              //         const markerTargetCoords = routing.markers[1].coords;
-              //         const routesFullDistances = routesFull.map(([lat, lng]) =>
-              //           routing.coordsDistance(
-              //             [markerTargetCoords[0], markerTargetCoords[1]],
-              //             [lat, lng]
-              //           )
-              //         );
-              //         const routesFullLower = routesFullDistances.reduce(
-              //           (prev, curr) => (prev < curr ? prev : curr)
-              //         );
-              //         const routesFullLowerIndex =
-              //           routesFullDistances.indexOf(routesFullLower);
-              //         return routesFull.slice(0, routesFullLowerIndex);
-              //       })();
-
-              //       if (routesPart.length > 0) {
-              //         routing.polylines.push(
-              //           L.polyline(routesPart, {
-              //             color: "#00ff00",
-              //             weight: 4,
-              //             opacity: 0.8,
-              //             lineJoin: "round",
-              //             // dashArray: "10, 10",
-              //             lineCap: "round",
-              //           }).addTo(map)
-              //         );
-              //       }
-              //     }
-              //   });
-              // }
             },
 
             onStart() {},
@@ -790,58 +618,15 @@
 
               // Remove polyline parts
               routing.polyline.map((coord, coordIndex) => {
-                const distance = routing.coordsDistance(vehicle.coords, coord);
+                const distance = routing.coordsDistance(
+                  vehicle.coords.toLatLngArray(),
+                  coord
+                );
                 if (distance < 0.01) {
                   routing.polyline.splice(0, coordIndex);
                   routing.render();
                 }
               });
-
-              // const isOnroute = (() => {
-              //   return false;
-              //   const distanceMeters = 10; // Distance to route
-
-              //   if (routing.polyline.length == 0) return false;
-              //   const vehiclePoint = turf.point([...vehicle.coords].reverse());
-
-              //   const routingPolyline = routing.polyline.map((coords) =>
-              //     turf.point([...coords].reverse())
-              //   );
-
-              //   const polylinePoints = turf.featureCollection(routingPolyline);
-              //   const nearest = turf.nearestPoint(vehiclePoint, polylinePoints);
-
-              //   let pointDataSize = 3;
-              //   let pointsDataStart = nearest.properties.featureIndex - 1;
-              //   pointsDataStart = Math.max(0, pointsDataStart);
-              //   let pointsDataFinal = pointsDataStart + pointDataSize;
-              //   if (pointsDataFinal > routingPolyline.length) {
-              //     pointsDataFinal = routingPolyline.length;
-              //     pointsDataStart = routingPolyline.length - pointDataSize;
-              //   }
-              //   const pointsData = routingPolyline
-              //     .slice(pointsDataStart, pointsDataFinal)
-              //     .map((o, i) => {
-              //       if (typeof routingPolyline[i + 1] == "undefined") return 0;
-              //       const point1 = o.geometry.coordinates;
-              //       const point2 = routingPolyline[i + 1].geometry.coordinates;
-              //       const distance = turf.pointToLineDistance(
-              //         vehiclePoint,
-              //         [point1, point2],
-              //         {
-              //           units: "meters",
-              //         }
-              //       );
-              //       return distance;
-              //     })
-              //     .filter((n) => n <= distanceMeters);
-
-              //   return pointsData.length > 0;
-              // })();
-
-              // if (!isOnroute) {
-              //   console.log("Out of route");
-              // }
             },
 
             onStop() {},
@@ -873,18 +658,18 @@
 
               gameInput.on(["w", "ArrowUp"], (ev) => {
                 const coords = vehicle.moveForward(1);
-                vehicle.marker.marker.setLngLat([...coords]);
+                marker.markerMove(coords);
                 routing.map.jumpTo({
-                  center: [...coords],
+                  center: coords.toLatLngArray(),
                   duration: 0,
                 });
               });
 
               gameInput.on(["s", "ArrowDown"], (ev) => {
                 const coords = vehicle.moveForward(-1);
-                vehicle.marker.marker.setLngLat([...coords]);
+                marker.markerMove(coords);
                 routing.map.jumpTo({
-                  center: [...coords],
+                  center: coords.toLatLngArray(),
                   duration: 0,
                 });
               });
@@ -901,36 +686,9 @@
                 Math.sin(directionRad) * vehicle.moveSpeed * direction * -1;
 
               const coords = vehicle.marker.coords;
-              vehicle.marker.coords = [coords[0] + lng, coords[1] + lat];
-              return vehicle.marker.coords;
-            },
-          });
-
-          // Simulate driver
-          const driverSimulator = reactive({
-            onStart() {},
-            onUpdate() {},
-            onStop() {},
-            init() {
-              const marker = routing.markers[0];
-              const polylineLength = routing.polyline;
-              const updateTime = 500;
-              const animateUpdate = () => {
-                // if (typeof routing.polyline[1] == "undefined") {
-                //   driverSimulator.onUpdate({ progress: 100 });
-                //   driverSimulator.onEnd({ progress: 100, marker });
-                //   return;
-                // }
-                // const coordNext = routing.polyline[1];
-                // routing.markerCoord(marker, coordNext);
-                // const progress =
-                //   100 - (routing.polyline.length * 100) / polylineLength;
-                // driverSimulator.onUpdate({ progress, marker });
-                // marker.marker._icon.style.transition = `all ${updateTime}ms linear`;
-                // routing.polyline.splice(0, 1);
-                // setTimeout(() => {
-                //   animateUpdate();
-                // }, updateTime);
+              return {
+                lat: coords.lat + lat,
+                lng: coords.lng + lng,
               };
             },
           });
@@ -947,17 +705,14 @@
 
           animator.on("start", () => {
             routing.onStart();
-            driverSimulator.onStart();
           });
 
           animator.on("update", () => {
             routing.onUpdate();
-            driverSimulator.onUpdate();
           });
 
           animator.on("stop", () => {
             routing.onStop();
-            driverSimulator.onStop();
           });
 
           const vehicleSpeed = 0.000005;
@@ -965,25 +720,25 @@
 
           // input.on(["w", "ArrowUp"], (ev) => {
           //   marker.coords[0] += vehicleSpeed;
-          //   routing.markerCoord(marker, marker.coords);
+          //   routing.markerMove(marker, marker.coords);
           //   map.setView(marker.coords, mapZoom);
           // });
 
           // input.on(["s", "ArrowDown"], (ev) => {
           //   marker.coords[0] -= vehicleSpeed;
-          //   routing.markerCoord(marker, marker.coords);
+          //   routing.markerMove(marker, marker.coords);
           //   map.setView(marker.coords, mapZoom);
           // });
 
           // input.on(["a", "ArrowLeft"], (ev) => {
           //   marker.coords[1] -= vehicleSpeed;
-          //   routing.markerCoord(marker, marker.coords);
+          //   routing.markerMove(marker, marker.coords);
           //   map.setView(marker.coords, mapZoom);
           // });
 
           // input.on(["d", "ArrowRight"], (ev) => {
           //   marker.coords[1] += vehicleSpeed;
-          //   routing.markerCoord(marker, marker.coords);
+          //   routing.markerMove(marker, marker.coords);
           //   map.setView(marker.coords, mapZoom);
           // });
 
@@ -992,7 +747,7 @@
               vehicleCoords:
                 vehicle && vehicle.marker
                   ? vehicle.marker.coords
-                  : [null, null],
+                  : { lat: null, lng: null },
               routingPolyline: routing.polyline,
             };
           });
@@ -1005,7 +760,6 @@
           return {
             humanize,
             routing,
-            driverSimulator,
             informer,
             debuger,
           };
@@ -1014,6 +768,8 @@
 
       app.component("app-layout", appLayout);
 
+      // <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+      // <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"><\/script>
       app.component("leaflet", {
         template: `<div style="position:relative; height:400px;">
           <div ref="mapRef" style="height: 100%">leaflet</div>
