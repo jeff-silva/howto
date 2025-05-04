@@ -108,39 +108,13 @@
         <!-- <template #header>isso é o header</template> -->
 
         <template #default="scope">
-          <!-- <leaflet
-            v-if="scope.view.ready"
-            :style="{ width: '100%', height: scope.content.height, zIndex: 1 }"
-            @ready="leafletHandle"
-          ></leaflet> -->
           <maplibre
             v-if="scope.view.ready"
             :lat="-19.804979"
             :lng="-43.925504"
             :zoom="22"
             :style="{ width: '100%', height: scope.content.height }"
-            @ready="(scope) => {
-              routing.setMap(scope.map);
-              routing.markers.map(marker => {
-                marker.marker = new scope.maplibregl.Marker();
-                marker.marker.setLngLat(marker.coords.toLngLatArray());
-                marker.marker.addTo(scope.map);
-              });
-
-              /*[
-                'road_motorway',
-                'road_major_rail',
-                'road_major_rail_hatching',
-                'road_minor_rail',
-                'road_oneway',
-                'road_oneway_opposite',
-                'road_label',
-              ].map(attr => {
-                scope.map.setPaintProperty(attr, 'line-width', 10);
-              });*/
-              
-              routing.routeCalculate();
-            }"
+            @ready="maplibreReadyHandler"
           ></maplibre>
 
           <div style="position: relative">
@@ -237,6 +211,49 @@
             return r;
           })();
 
+          const maplibreReadyHandler = (scope) => {
+            routing.setMap(scope.map);
+            routing.markers.map((marker) => {
+              marker.marker = new scope.maplibregl.Marker({
+                element: Object.assign(document.createElement("div"), {
+                  // innerHTML: `<div style='border:solid 1px red; background:#fff; padding:10px;'>${marker.name}</div>`,
+                  innerHTML: `<div style="position:relative;">
+                    <div style="width:20px; height:20px; border-radius:50%; background:#fff;"></div>
+                    <div
+                      style="
+                        position: absolute;
+                        bottom: 50px;
+                        left: 50%;
+                        min-width: 100px;
+                        transform: translateX(-50%);
+                        background: #fff;
+                        text-align: center;
+                        padding: 5px;
+                        border-radius: 3px;
+                      "
+                    >${marker.name}</div>
+                  </div>`,
+                }),
+              });
+              marker.marker.setLngLat(marker.coords.toLatLngArray());
+              marker.marker.addTo(scope.map);
+            });
+
+            /*[
+                'road_motorway',
+                'road_major_rail',
+                'road_major_rail_hatching',
+                'road_minor_rail',
+                'road_oneway',
+                'road_oneway_opposite',
+                'road_label',
+              ].map(attr => {
+                scope.map.setPaintProperty(attr, 'line-width', 10);
+              });*/
+
+            routing.routeCalculate();
+          };
+
           const routing = reactive({
             busy: false,
             type: "driving",
@@ -317,9 +334,9 @@
               },
             ],
             markerMove(marker, coord) {
-              coord = Coord.fromLatLngArray(coord);
+              coord = new Coord(coord.lat, coord.lng);
               marker.coords = coord;
-              marker.marker.setLatLng(coord.toLatLngArray());
+              marker.marker.setLngLat(coord.toLatLngArray());
             },
             markerAdd(data = {}) {
               data = {
@@ -658,7 +675,7 @@
 
               gameInput.on(["w", "ArrowUp"], (ev) => {
                 const coords = vehicle.moveForward(1);
-                marker.markerMove(coords);
+                routing.markerMove(vehicle.marker, coords);
                 routing.map.jumpTo({
                   center: coords.toLatLngArray(),
                   duration: 0,
@@ -667,7 +684,7 @@
 
               gameInput.on(["s", "ArrowDown"], (ev) => {
                 const coords = vehicle.moveForward(-1);
-                marker.markerMove(coords);
+                routing.markerMove(vehicle.marker, coords);
                 routing.map.jumpTo({
                   center: coords.toLatLngArray(),
                   duration: 0,
@@ -686,10 +703,7 @@
                 Math.sin(directionRad) * vehicle.moveSpeed * direction * -1;
 
               const coords = vehicle.marker.coords;
-              return {
-                lat: coords.lat + lat,
-                lng: coords.lng + lng,
-              };
+              return new Coord(coords.lat + lat, coords.lng + lng);
             },
           });
 
@@ -758,6 +772,7 @@
           });
 
           return {
+            maplibreReadyHandler,
             humanize,
             routing,
             informer,
