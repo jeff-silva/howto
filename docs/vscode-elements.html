@@ -1,0 +1,446 @@
+<!-- https://vscode-elements.github.io/components/tree/ -->
+<!-- https://github.com/vscode-elements/webview-playground -->
+<!-- https://microsoft.github.io/vscode-codicons/dist/codicon.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VSCode Elements</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@vscode-elements/elements@1.9.0/dist/bundled.js"
+      type="module"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@vscode-elements/webview-playground/dist/index.js"
+      type="module"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://microsoft.github.io/vscode-codicons/dist/codicon.css"
+      id="vscode-codicon-stylesheet"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <vscode-demo fullscreen>
+        <div class="flex">
+          <div
+            class="flex flex-col gap-3 px-2"
+            style="
+              --vscode-button-background: transparent;
+              --vscode-button-hoverBackground: #ffffff22;
+            "
+          >
+            <vscode-button class="p-2">
+              <vscode-icon name="files" size="20"></vscode-icon>
+            </vscode-button>
+            <vscode-button class="p-2">
+              <vscode-icon name="search" size="20"></vscode-icon>
+            </vscode-button>
+            <vscode-button class="p-2">
+              <vscode-icon name="debug-alt" size="20"></vscode-icon>
+            </vscode-button>
+            <vscode-button class="p-2">
+              <vscode-icon name="extensions" size="20"></vscode-icon>
+            </vscode-button>
+          </div>
+          <div class="grow">
+            <vscode-split-layout
+              split="vertical"
+              initial-handle-position="200px"
+              style="height: 100vh"
+            >
+              <div slot="start" class="p-2 bg-zinc-900">
+                <vscode-tree ref="treeRef"></vscode-tree>
+              </div>
+              <vscode-split-layout
+                slot="end"
+                split="horizontal"
+                initial-handle-position="80%"
+              >
+                <div slot="start">
+                  <vscode-tabs selected-index="0" class="h-full bg-zinc-900">
+                    <vscode-tab-header slot="header">
+                      index.js
+                    </vscode-tab-header>
+                    <vscode-tab-panel class="h-full">index.js</vscode-tab-panel>
+
+                    <vscode-tab-header slot="header">
+                      index.html
+                    </vscode-tab-header>
+                    <vscode-tab-panel class="h-full">
+                      index.html
+                    </vscode-tab-panel>
+
+                    <vscode-tab-header slot="header">
+                      index.css
+                    </vscode-tab-header>
+                    <vscode-tab-panel class="h-full">
+                      index.css
+                    </vscode-tab-panel>
+                  </vscode-tabs>
+                </div>
+
+                <div slot="end">
+                  <vscode-tabs selected-index="4" class="h-full">
+                    <vscode-tab-header slot="header" class="p-2">
+                      PROBLEMS
+                    </vscode-tab-header>
+                    <vscode-tab-panel class="p-2">
+                      <div>PROBLEMS</div>
+                    </vscode-tab-panel>
+
+                    <vscode-tab-header slot="header" class="p-2">
+                      OUTPUT
+                    </vscode-tab-header>
+                    <vscode-tab-panel class="p-2">
+                      <div>OUTPUT</div>
+                    </vscode-tab-panel>
+
+                    <vscode-tab-header slot="header" class="p-2">
+                      DEBUG CONSOLE
+                    </vscode-tab-header>
+                    <vscode-tab-panel class="p-2">
+                      <div>DEBUG CONSOLE</div>
+                    </vscode-tab-panel>
+
+                    <vscode-tab-header slot="header" class="p-2">
+                      PORTS
+                    </vscode-tab-header>
+                    <vscode-tab-panel class="p-2">
+                      <div>PORTS</div>
+                    </vscode-tab-panel>
+
+                    <vscode-tab-header slot="header" class="p-2">
+                      TERMINAL
+                    </vscode-tab-header>
+                    <vscode-tab-panel class="p-2">
+                      <div>TERMINAL</div>
+                    </vscode-tab-panel>
+                  </vscode-tabs>
+                </div>
+              </vscode-split-layout>
+            </vscode-split-layout>
+          </div>
+        </div>
+      </vscode-demo>
+    </div>
+
+    <script>
+      const { createApp, ref, reactive, onMounted, computed, h } = Vue;
+
+      const useTree = (options = {}) => {
+        const r = reactive({
+          options,
+          init(elem) {
+            elem.data = options.data;
+            elem.addEventListener("vsc-tree-select", (event) => {
+              console.log(event.detail);
+            });
+          },
+        });
+        return r;
+      };
+
+      const app = createApp({
+        setup(props, ctx) {
+          const treeRef = ref(null);
+          const tree = useTree({
+            data: [
+              {
+                icons: {
+                  branch: "folder",
+                  leaf: "file",
+                  open: "folder-opened",
+                },
+                label: "node_modules",
+                value: "black hole",
+                subItems: [
+                  {
+                    icons: {
+                      branch: "folder",
+                      leaf: "file",
+                      open: "folder-opened",
+                    },
+                    label: ".bin",
+                    subItems: [
+                      {
+                        icons: {
+                          branch: "folder",
+                          leaf: "file",
+                          open: "folder-opened",
+                        },
+                        label: "_mocha_",
+                      },
+                      {
+                        icons: {
+                          branch: "folder",
+                          leaf: "file",
+                          open: "folder-opened",
+                        },
+                        label: "_mocha.cmd_",
+                      },
+                      {
+                        icons: {
+                          branch: "folder",
+                          leaf: "file",
+                          open: "folder-opened",
+                        },
+                        label: "_mocha.ps1_",
+                      },
+                      {
+                        icons: {
+                          branch: "folder",
+                          leaf: "file",
+                          open: "folder-opened",
+                        },
+                        label: "acorn",
+                      },
+                      {
+                        icons: {
+                          branch: "folder",
+                          leaf: "file",
+                          open: "folder-opened",
+                        },
+                        label: "acorn.cmd",
+                      },
+                      {
+                        icons: {
+                          branch: "folder",
+                          leaf: "file",
+                          open: "folder-opened",
+                        },
+                        label: "acorn.ps1",
+                      },
+                    ],
+                  },
+                  {
+                    icons: {
+                      branch: "folder",
+                      leaf: "file",
+                      open: "folder-opened",
+                    },
+                    label: "@11ty",
+                    open: true,
+                    subItems: [
+                      {
+                        icons: {
+                          branch: "folder",
+                          leaf: "file",
+                          open: "folder-opened",
+                        },
+                        label: "lorem.js",
+                      },
+                      {
+                        icons: {
+                          branch: "folder",
+                          leaf: "file",
+                          open: "folder-opened",
+                        },
+                        label: "ipsum.js",
+                      },
+                      {
+                        icons: {
+                          branch: "folder",
+                          leaf: "file",
+                          open: "folder-opened",
+                        },
+                        label: "dolor.js",
+                      },
+                    ],
+                  },
+                  {
+                    icons: {
+                      branch: "folder",
+                      leaf: "file",
+                      open: "folder-opened",
+                    },
+                    label: ".DS_Store",
+                  },
+                ],
+              },
+              {
+                icons: {
+                  branch: "folder",
+                  leaf: "file",
+                  open: "folder-opened",
+                },
+                label: "scripts",
+                subItems: [
+                  {
+                    icons: {
+                      branch: "folder",
+                      leaf: "file",
+                      open: "folder-opened",
+                    },
+                    label: "build.js",
+                  },
+                  {
+                    icons: {
+                      branch: "folder",
+                      leaf: "file",
+                      open: "folder-opened",
+                    },
+                    label: "start.js",
+                  },
+                ],
+              },
+              {
+                icons: {
+                  branch: "folder",
+                  leaf: "file",
+                  open: "folder-opened",
+                },
+                label: ".editorconfig",
+                selected: true,
+              },
+              {
+                icons: {
+                  branch: "folder",
+                  leaf: "file",
+                  open: "folder-opened",
+                },
+                label: "2021-01-18T22_10_20_535Z-debug.log",
+              },
+            ],
+          });
+
+          onMounted(() => {
+            tree.init(treeRef.value);
+          });
+
+          return { tree, treeRef };
+        },
+      });
+
+      app.mount("#app");
+    </script>
+
+    <!-- <script>
+      setTimeout(() => {
+        (() => {
+          const themeSelector = document.querySelector("#theme-selector");
+          console.log(themeSelector);
+        })();
+
+        // Treeview
+        (() => {
+          const tree = document.querySelector("#tree-basic-example");
+          const icons = {
+            branch: "folder",
+            leaf: "file",
+            open: "folder-opened",
+          };
+          const data = [
+            {
+              icons,
+              label: "node_modules",
+              value: "black hole",
+              subItems: [
+                {
+                  icons,
+                  label: ".bin",
+                  subItems: [
+                    { icons, label: "_mocha_" },
+                    { icons, label: "_mocha.cmd_" },
+                    { icons, label: "_mocha.ps1_" },
+                    { icons, label: "acorn" },
+                    { icons, label: "acorn.cmd" },
+                    { icons, label: "acorn.ps1" },
+                  ],
+                },
+                {
+                  icons,
+                  label: "@11ty",
+                  open: true,
+                  subItems: [
+                    { icons, label: "lorem.js" },
+                    { icons, label: "ipsum.js" },
+                    { icons, label: "dolor.js" },
+                  ],
+                },
+                { icons, label: ".DS_Store" },
+              ],
+            },
+            {
+              icons,
+              label: "scripts",
+              subItems: [
+                { icons, label: "build.js" },
+                { icons, label: "start.js" },
+              ],
+            },
+            { icons, label: ".editorconfig", selected: true },
+            { icons, label: "2021-01-18T22_10_20_535Z-debug.log" },
+          ];
+
+          tree.data = data;
+
+          tree.addEventListener("vsc-tree-select", (event) => {
+            console.log(event.detail);
+          });
+        })();
+      }, 1000);
+    </script>
+
+    <script>
+      const menu = document.querySelector("#context-menu");
+      const button = document.querySelector("#toggle-menu-button");
+
+      document.querySelector("#context-menu").data = [
+        {
+          label: "Command palette...",
+          keybinding: "Ctrl+Shift+A",
+          value: "menuitem1",
+        },
+        {
+          separator: true,
+        },
+        {
+          label: "Settings",
+          keybinding: "Ctrl+Comma",
+          value: "menuitem2",
+        },
+        {
+          label: "Extensions",
+          keybinding: "Ctrl+Shift+X",
+          value: "menuitem3",
+        },
+      ];
+
+      button.addEventListener("click", () => {
+        menu.show = !menu.show;
+      });
+
+      menu.addEventListener("vsc-context-menu-select", (event) => {
+        console.log(event);
+      });
+    </script>
+    <style>
+      .menu-wrapper {
+        overflow: visible;
+        position: relative;
+      }
+
+      .toggle-menu-button {
+        cursor: pointer;
+        display: block;
+      }
+
+      .context-menu {
+        left: 36px;
+        top: 16px;
+        position: absolute;
+        z-index: 2;
+      }
+    </style> -->
+  </body>
+</html>
