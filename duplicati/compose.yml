@@ -1,0 +1,16 @@
+services:
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - SETTINGS_ENCRYPTION_KEY=12345678
+      # - CLI_ARGS=
+      - DUPLICATI__WEBSERVICE_PASSWORD=app
+    volumes:
+      - ./duplicati/config:/config
+      - ./duplicati/backups:/backups
+      - ./duplicati/source:/source
+    ports:
+      - 8200:8200
