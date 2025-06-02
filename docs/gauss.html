@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gauss</title>
+
+    <!-- Vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- VueUse -->
+    <script src="https://unpkg.com/@vueuse/shared"></script>
+    <script src="https://unpkg.com/@vueuse/core"></script>
+
+    <!-- Vuetify -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vuetify@3.8.2/dist/vuetify.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.8.2/dist/vuetify.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <v-row>
+        <v-col cols="3">
+          <v-text-field
+            label="Tempo de obra (meses)"
+            v-model.number="calculator.months"
+            type="number"
+            @update:model-value="() => calculator.vacanciesGenerate()"
+          ></v-text-field>
+        </v-col>
+
+        <v-col cols="9" style="overflow: auto">
+          <v-card>
+            <v-table>
+              <template v-for="(cols, i) in calculator.vacancies">
+                <template v-if="i == 0">
+                  <thead>
+                    <tr>
+                      <template v-for="col in cols">
+                        <th style="width: 100px; min-width: 100px">
+                          {{ col.value }}
+                        </th>
+                      </template>
+                    </tr>
+                  </thead>
+                </template>
+
+                <template v-if="i > 0">
+                  <tbody>
+                    <tr>
+                      <template v-for="col in cols">
+                        <td>
+                          <div v-if="col.header" class="d-flex align-center">
+                            <div class="flex-grow-1">{{ col.value }}</div>
+                            <v-btn
+                              density="compact"
+                              @click="gaussDialog.setData(cols)"
+                            >
+                              Gauss
+                            </v-btn>
+                          </div>
+                          <input
+                            v-if="!col.header"
+                            type="number"
+                            v-model.number="col.value"
+                            style="width: 100%"
+                          />
+                        </td>
+                      </template>
+                    </tr>
+                  </tbody>
+                </template>
+              </template>
+            </v-table>
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <v-dialog v-model="gaussDialog.show" max-width="600" scrollable>
+        <v-card title="Curva de Gauss">
+          <v-card-text>
+            <v-text-field
+              v-model.number="gaussDialog.params.maxWorkers"
+              label="maxWorkers"
+              type="number"
+              @update:model-value="gaussDialog.generate()"
+            ></v-text-field>
+            <v-slider
+              v-model.number="gaussDialog.params.peakBias"
+              :min="0"
+              :max="1"
+              @update:model-value="gaussDialog.generate()"
+            ></v-slider>
+            <v-sparkline
+              v-model="gaussDialog.result.allocation"
+              :smooth="20"
+              class="bg-grey-lighten-3"
+            ></v-sparkline>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn @click="gaussDialog.generate()">Gerar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <pre>calculator: {{ calculator }}</pre>
+    </div>
+
+    <script type="module">
+      const { reactive } = Vue;
+
+      const app = Vue.createApp({
+        setup() {
+          const calculator = reactive({
+            months: 36,
+            areas: [
+              { name: "Pintores", employes: 0 },
+              { name: "Pedreiros", employes: 0 },
+              { name: "Eletricistas", employes: 0 },
+              { name: "Encanadores", employes: 0 },
+              { name: "Carpinteiros", employes: 0 },
+            ],
+            vacancies: [],
+            vacanciesGenerate() {
+              calculator.vacancies = [];
+
+              const cols = [{ header: true, value: "" }];
+              for (let month = 0; month < calculator.months; month++) {
+                cols.push({ header: true, value: `Mês ${month}` });
+              }
+
+              calculator.vacancies.push(cols);
+
+              calculator.areas.map((area) => {
+                const row = [{ header: true, value: area.name }];
+                for (let month = 0; month < calculator.months; month++) {
+                  row.push({ header: false, value: 0 });
+                }
+                calculator.vacancies.push(row);
+              });
+            },
+          });
+
+          const gaussDialog = reactive({
+            show: false,
+            toggle(value = null) {
+              gaussDialog.show = value === null ? !gaussDialog.show : value;
+            },
+            data: null,
+            setData(data) {
+              gaussDialog.toggle(!!data);
+              gaussDialog.data = data;
+            },
+            params: {
+              peakBias: 0.5,
+              maxWorkers: 5,
+            },
+            result: { allocation: [] },
+            generate() {
+              const { peakBias, maxWorkers } = gaussDialog.params;
+              const projectDurationMonths = calculator.months;
+              const allocation = [];
+
+              // 1. Definir o Ponto do Pico (mean)
+              // Se peakBias é 0, mean é 0. Se peakBias é 1, mean é projectDurationMonths - 1.
+              // Usamos (projectDurationMonths - 1) para que o pico possa estar no último mês (índice).
+              const mean = peakBias * (projectDurationMonths - 1);
+
+              // 2. Definir a Largura da Curva (stdDev)
+              // Garante que a curva se espalhe razoavelmente pela duração do projeto.
+              // Um stdDev = (duração/6) é uma boa heurística para cobrir 3 desvios para cada lado.
+              let stdDev = projectDurationMonths / 3;
+              if (stdDev < 0.1) stdDev = 0.1;
+
+              // 3. Gerar os pontos da Curva de Gauss (densidades de probabilidade)
+              const curveDataY = [];
+              const coefficient = 1 / (stdDev * Math.sqrt(2 * Math.PI));
+
+              for (
+                let monthIndex = 0;
+                monthIndex < projectDurationMonths;
+                monthIndex++
+              ) {
+                const exponent =
+                  -0.5 * Math.pow((monthIndex - mean) / stdDev, 2);
+                const y = coefficient * Math.exp(exponent);
+                curveDataY.push(y);
+              }
+
+              // 4. Encontrar o Pico Máximo da Densidade (Y) gerada
+              const peakYValue = Math.max(...curveDataY);
+              if (peakYValue === 0) {
+                // Proteção contra divisão por zero se todos os valores forem zero
+                return Array(projectDurationMonths).fill(0);
+              }
+
+              // 5. Escalar para o Número Real de Trabalhadores
+              for (let i = 0; i < projectDurationMonths; i++) {
+                const estimatedWorkers = Math.round(
+                  (curveDataY[i] / peakYValue) * maxWorkers
+                );
+                allocation.push(estimatedWorkers);
+              }
+
+              gaussDialog.result.allocation = allocation;
+
+              [null, ...allocation].map((value, index) => {
+                if (value === null) return;
+                const data = gaussDialog.data[index];
+                data.value = value;
+              });
+            },
+          });
+
+          calculator.vacanciesGenerate();
+
+          return { calculator, gaussDialog };
+        },
+      });
+
+      app.use(
+        Vuetify.createVuetify({
+          icons: {
+            defaultSet: "main",
+            sets: {
+              main: {
+                component: (props) => {
+                  return h("img", {
+                    src: `https://api.iconify.design/${props.icon}.svg`,
+                    style: {
+                      width: (props.size || 24) + "px",
+                      height: (props.size || 24) + "px",
+                    },
+                  });
+                },
+              },
+            },
+          },
+        })
+      );
+
+      app.mount("#app");
+    </script>
+  </body>
+</html>
