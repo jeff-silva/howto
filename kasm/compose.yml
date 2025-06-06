@@ -1,0 +1,14 @@
+# https://www.kasmweb.com/docs/latest/guide/custom_images.html
+
+services:
+  kasm_steam:
+    image: kasmweb/steam:1.17.0
+    privileged: true
+    shm_size: 512m
+    ports:
+      - 4902:4902
+      - 6901:6901
+      - 4443:4443
+    environment:
+      VNC_PW: kasm_user
+      KASM_PORT: 4443
