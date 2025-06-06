@@ -1,0 +1,58 @@
+services:
+  mysql:
+    build: ./mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: app
+      MYSQL_DATABASE: app
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    volumes:
+      - ./mysql/entrypoint.sql:/docker-entrypoint-initdb.d/entrypoint.sql
+    ports:
+      - 3306:3306
+    networks:
+      - mysql_network
+
+  cloudbeaver:
+    image: dbeaver/cloudbeaver
+    volumes:
+      - cloudbeaver_volume:/opt/cloudbeaver/workspace
+    ports:
+      - 3307:8978
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    networks:
+      - mysql_network
+
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - 3308:80
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: app
+      PMA_PASSWORD: app
+    depends_on:
+      - mysql
+    networks:
+      - mysql_network
+
+  # mysql_workbench:
+  #   image: lscr.io/linuxserver/mysql-workbench:latest
+  #   volumes:
+  #     - /mysql_workbench/config:/config
+  #   ports:
+  #     - 3309:3000
+  #     - 3310:3001
+  #   networks:
+  #     - mysql_network
+
+volumes:
+  cloudbeaver_volume:
+
+networks:
+  mysql_network:
