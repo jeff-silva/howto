@@ -7,6 +7,9 @@ services:
       - ./backend/app:/app
     ports:
       - 3000:3000
+      - 9000:9000
+    networks:
+      - main_network
 
   frontend:
     build: ./frontend
@@ -15,3 +18,9 @@ services:
       - ./frontend/app:/app
     ports:
       - 3001:3000
+    networks:
+      - main_network
+
+networks:
+  main_network:
+    driver: bridge
