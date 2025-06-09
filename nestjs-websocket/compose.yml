@@ -1,0 +1,17 @@
+services:
+  backend:
+    build: ./backend
+    environment:
+      CMD_START: "yarn install && yarn start:dev"
+    volumes:
+      - ./backend/app:/app
+    ports:
+      - 3000:3000
+
+  frontend:
+    build: ./frontend
+    command: bash -c "yarn install && yarn dev"
+    volumes:
+      - ./frontend/app:/app
+    ports:
+      - 3001:3000
