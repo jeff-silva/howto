@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Lodash -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios@1.9.0/dist/axios.min.js"></script>
+
+    <!-- Leaflet -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script></script>
+
+    <!-- Maplibre -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/maplibre-gl@5.4.0/dist/maplibre-gl.css"
+    />
+    <script src="https://unpkg.com/maplibre-gl@5.4.0/dist/maplibre-gl.js"></script>
+
+    <!-- Vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- VueUse -->
+    <script src="https://unpkg.com/@vueuse/shared"></script>
+    <script src="https://unpkg.com/@vueuse/core"></script>
+
+    <!-- Vuetify -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vuetify@3.8.2/dist/vuetify.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.8.2/dist/vuetify.min.js"></script>
+
+    <script src="./assets/app-layout.vue.js"></script>
+
+    <style>
+      [test],
+      [test] * {
+        outline: dashed 1px red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <app-layout drawer-width="350px" :actions="(scope) => []">
+        <template #drawer>
+          <div>aaa</div>
+        </template>
+
+        <template #default>
+          <a href="">refresh</a><br />
+          <video ref="videoRef" autoplay muted></video>
+          <audio ref="audioRef" controls></audio>
+          <div class="d-flex ga-3">
+            <v-btn text="Init" @click="recorder.init()"></v-btn>
+            <v-btn
+              text="Upload Backtrack"
+              @click="recorder.uploadBacktrack()"
+            ></v-btn>
+            <v-btn text="Record Start" @click="recorder.recordStart()"></v-btn>
+            <v-btn text="Record Stop" @click="recorder.recordStop()"></v-btn>
+            <v-btn
+              text="Download"
+              :href="recorder.recordedVideoUrl"
+              download="download.mp4"
+            ></v-btn>
+          </div>
+          <pre>{{ recorder }}</pre>
+        </template>
+      </app-layout>
+    </div>
+
+    <script type="module">
+      const { createApp, ref, reactive, onMounted, computed, h } = Vue;
+
+      const app = Vue.createApp({
+        setup() {
+          const videoRef = ref(null);
+          const audioRef = ref(null);
+
+          const meta = reactive({
+            mp3SourceNode: null,
+            micSourceNode: null,
+            audioContext: null,
+            mp3Source: null,
+            micSource: null,
+            mixedAudioDestination: null,
+            backtrackFile: null,
+            mediaStream: null,
+            mediaRecorder: null,
+            recordedChunks: [],
+          });
+
+          const recorder = reactive({
+            recording: false,
+            recordedVideoUrl: null,
+            async init() {
+              videoRef.value.srcObject = meta.mediaStream =
+                await navigator.mediaDevices.getUserMedia({
+                  video: true,
+                  audio: true,
+                });
+            },
+
+            uploadBacktrack() {
+              Object.assign(document.createElement("input"), {
+                type: "file",
+                onchange: (ev) => {
+                  const file = (meta.backtrackFile = ev.target.files[0]);
+                  Object.assign(new FileReader(), {
+                    onload: (ev) => {
+                      audioRef.value.src = ev.target.result;
+                    },
+                  }).readAsDataURL(file);
+                },
+              }).click();
+            },
+
+            recordStart() {
+              (() => {
+                meta.audioContext = new (window.AudioContext ||
+                  window.webkitAudioContext)();
+
+                meta.mp3Source = meta.audioContext.createMediaElementSource(
+                  audioRef.value
+                );
+
+                const micAudioTrack = meta.mediaStream.getAudioTracks()[0];
+                meta.micSource = meta.audioContext.createMediaStreamSource(
+                  new MediaStream([micAudioTrack])
+                );
+
+                meta.mixedAudioDestination =
+                  meta.audioContext.createMediaStreamDestination();
+
+                meta.mp3Source.connect(meta.mixedAudioDestination);
+                meta.micSource.connect(meta.mixedAudioDestination);
+
+                meta.mp3Source.connect(meta.audioContext.destination);
+                // meta.micSource.connect(meta.audioContext.destination);
+              })();
+
+              const finalStream = new MediaStream(
+                meta.mediaStream.getVideoTracks()
+              );
+
+              meta.mixedAudioDestination.stream
+                .getAudioTracks()
+                .forEach((track) => {
+                  finalStream.addTrack(track);
+                });
+
+              meta.mediaRecorder = new MediaRecorder(finalStream, {
+                mimeType: "video/webm; codecs=vp8,opus",
+              });
+
+              meta.recordedChunks = [];
+              meta.mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size <= 0) return;
+                meta.recordedChunks.push(event.data);
+              };
+
+              meta.mediaRecorder.onstop = () => {
+                recorder.recording = false;
+                recorder.recordedVideoUrl = URL.createObjectURL(
+                  new Blob(meta.recordedChunks, {
+                    type: "video/webm",
+                  })
+                );
+                meta.audioContext.close();
+              };
+
+              audioRef.value.play();
+              meta.mediaRecorder.start();
+              recorder.recording = true;
+            },
+
+            recordStop() {
+              audioRef.value.pause();
+              meta.mediaRecorder.stop();
+            },
+          });
+
+          return { recorder, videoRef, audioRef };
+        },
+      });
+
+      app.use(
+        Vuetify.createVuetify({
+          icons: {
+            defaultSet: "main",
+            sets: {
+              main: {
+                component: (props) => {
+                  return h("img", {
+                    src: `https://api.iconify.design/${props.icon}.svg`,
+                    style: {
+                      width: (props.size || 24) + "px",
+                      height: (props.size || 24) + "px",
+                    },
+                  });
+                },
+              },
+            },
+          },
+        })
+      );
+
+      app.component("app-layout", appLayout);
+      app.mount("#app");
+    </script>
+  </body>
+</html>
