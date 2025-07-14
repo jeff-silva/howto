@@ -1,0 +1,29 @@
+volumes:
+  cloudbeaver_volume:
+
+services:
+  backend:
+    image: bitnami/laravel:latest
+    env_file: ./backend/app/.env
+    command: sh -c "composer install && php artisan serve --host=0.0.0.0 --port=8000"
+    volumes:
+      - ./backend/app:/app
+    ports:
+      - 8000:8000
+
+  frontend:
+    image: node:22
+    working_dir: /app
+    command: bash -c "yarn install && yarn dev"
+    volumes:
+      - ./frontend/app:/app
+    ports:
+      - 3000:3000
+
+  cloudbeaver:
+    image: dbeaver/cloudbeaver
+    volumes:
+      - cloudbeaver_volume:/opt/cloudbeaver/workspace
+      - ./backend/app/database/database.sqlite:/app/database.sqlite:ro
+    ports:
+      - 8978:8978
