@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Auth\Http\Controllers;
 
-use Illuminate\Http\Request;
+use \App\Auth\Models\AppUser;
 use \App\Attributes\Route;
-use \App\Models\AppUser;
+use Illuminate\Http\Request;
+use \App\Http\Controllers\Controller;
 use \Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    #[Route(path: '/auth/login', methods: ['post'], name: 'auth.login')]
+    #[Route(path: '/api/auth/login', methods: ['post'], name: 'auth.login')]
     public function login(Request $request)
     {
         $user = AppUser::query()

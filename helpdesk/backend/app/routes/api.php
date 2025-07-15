@@ -6,7 +6,3 @@
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
-
-\App\Http\Controllers\AppController::register();
-\App\Http\Controllers\AppUserController::register();
-\App\Http\Controllers\AuthController::register();

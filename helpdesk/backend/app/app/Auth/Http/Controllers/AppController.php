@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Auth\Http\Controllers;
 
-use Illuminate\Http\Request;
 use \App\Attributes\Route;
-use \App\Models\AppUser;
-use \Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
+use \App\Http\Controllers\Controller;
 
 class AppController extends Controller
 {
-    #[Route(path: '/app/load', methods: ['get'], name: 'app.load')]
+    #[Route(path: '/api/app/load', methods: ['get'], name: 'app.load')]
     public function load(Request $request)
     {
         $token = $request->bearerToken();
