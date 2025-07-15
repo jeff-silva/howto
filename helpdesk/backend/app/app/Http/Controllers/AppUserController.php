@@ -4,36 +4,43 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\Attributes\Route;
+use \App\Models\AppUser;
+use \App\Http\Requests\AppUserStoreRequest;
+use \App\Http\Requests\AppUserUpdateRequest;
 
 class AppUserController extends Controller
 {
-    #[Route(path: '/app_user', methods: ['post'], name: 'app_user.create')]
-    public function create()
+    #[Route(path: '/app_user', methods: ['post'], middleware: ['auth:sanctum'], name: 'app_user.create')]
+    public function create(AppUserStoreRequest $request)
     {
-        return [123];
+        $entity = AppUser::create($request->validated());
+        return compact(['entity']);
     }
 
-    #[Route(path: '/app_user/:id', methods: ['put'], name: 'app_user.update')]
-    public function update()
+    #[Route(path: '/app_user/:id', methods: ['put'], middleware: ['auth:sanctum'], name: 'app_user.update')]
+    public function update(AppUserUpdateRequest $request, AppUser $entity)
     {
-        return [123];
+        $entity->update($request->validated());
+        return compact(['entity']);
     }
 
-    #[Route(path: '/app_user', methods: ['get'], name: 'app_user.index')]
-    public function index()
+    #[Route(path: '/app_user', methods: ['get'], middleware: ['auth:sanctum'], name: 'app_user.index')]
+    public function index(Request $request)
     {
-        return [123];
+        $data = AppUser::searchPaginated($request->all());
+        return compact(['data']);
     }
 
-    #[Route(path: '/app_user/:id', methods: ['get'], name: 'app_user.select')]
-    public function select()
+    #[Route(path: '/app_user/:id', methods: ['get'], middleware: ['auth:sanctum'], name: 'app_user.select')]
+    public function select(AppUser $entity)
     {
-        return [123];
+        return compact(['entity']);
     }
 
-    #[Route(path: '/app_user/:id', methods: ['delete'], name: 'app_user.delete')]
-    public function delete()
+    #[Route(path: '/app_user/:id', methods: ['delete'], middleware: ['auth:sanctum'], name: 'app_user.delete')]
+    public function delete(AppUser $entity)
     {
-        return [123];
+        $entity->delete();
+        return compact(['entity']);
     }
 }

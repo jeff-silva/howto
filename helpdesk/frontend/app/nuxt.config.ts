@@ -7,5 +7,6 @@ export default defineNuxtConfig({
     ["@nuxt/icon", {}],
     ["@nuxt/scripts", {}],
     ["vuetify-nuxt-module", {}],
+    ["@pinia/nuxt", {}],
   ],
 });

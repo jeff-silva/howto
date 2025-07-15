@@ -11,7 +11,7 @@
         <v-list-item to="/auth/password">Auth / Password</v-list-item>
       </v-list>
     </div>
-    <div class="flex-grow-1 overflow-auto pa-3">
+    <div class="flex-grow-1 overflow-auto pa-3 h-screen">
       <slot></slot>
     </div>
   </div>

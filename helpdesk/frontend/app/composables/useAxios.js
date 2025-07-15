@@ -42,6 +42,10 @@ export default (opts = {}) => {
 
       if (_opts.url.startsWith("/api")) {
         _opts.url = `http://localhost:8000${_opts.url}`;
+        const access_token = localStorage.getItem("access_token");
+        if (access_token) {
+          _opts.headers["Authorization"] = `Bearer ${access_token}`;
+        }
       }
 
       for (const attr in _opts) {
@@ -68,16 +72,18 @@ export default (opts = {}) => {
             const resp = await axios(r.axiosOptions());
             r.response = resp.data;
             resolve(resp);
+            r.onSuccess();
           } catch (err) {
             r.error = {};
             r.error.status = err.status;
             r.error.message = err.message;
             r.error.response = err.response?.data || null;
             reject(err);
+            r.onError();
           }
-        }, 1000);
 
-        r.busy = false;
+          r.busy = false;
+        }, 1000);
       });
     },
   });
