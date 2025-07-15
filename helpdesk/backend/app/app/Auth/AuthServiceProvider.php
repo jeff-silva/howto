@@ -19,8 +19,8 @@ class AuthServiceProvider extends ServiceProvider
         Sanctum::usePersonalAccessTokenModel(\App\Auth\Models\AppPersonalAccessToken::class);
 
         // Register routes
-        \App\Auth\Http\Controllers\AppController::register();
-        \App\Auth\Http\Controllers\AppUserController::register();
-        \App\Auth\Http\Controllers\AuthController::register();
+        \App\Auth\Http\Controllers\AppController::registerRoutes();
+        \App\Auth\Http\Controllers\AppUserController::registerRoutes();
+        \App\Auth\Http\Controllers\AuthController::registerRoutes();
     }
 }

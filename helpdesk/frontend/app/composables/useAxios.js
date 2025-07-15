@@ -56,7 +56,10 @@ export default (opts = {}) => {
     },
 
     fieldErrors(name) {
-      return [];
+      if (!r.error) return [];
+      if (!r.error.response) return [];
+      if (!r.error.response.errors) return [];
+      return r?.error?.response?.errors[name] || [];
     },
 
     submit() {

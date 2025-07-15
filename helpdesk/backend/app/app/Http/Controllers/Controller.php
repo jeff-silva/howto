@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 abstract class Controller
 {
-    static function register()
+    static function registerRoutes()
     {
         $classRef = new ReflectionClass(get_called_class());
         foreach ($classRef->getMethods() as $method) {

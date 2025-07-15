@@ -23,12 +23,6 @@
         />
       </div>
     </v-form>
-    <v-btn
-      text="AppUser Search"
-      :loading="appUserSearch.busy"
-      @click="appUserSearch.submit()"
-    />
-    <pre>{{ appUserSearch }}</pre>
   </nuxt-layout>
 </template>
 
@@ -40,11 +34,4 @@ const login = useAxios({
     localStorage.setItem("access_token", login.response.token.plainTextToken);
   },
 });
-
-const appUserSearch = useAxios({
-  method: "get",
-  url: "/api/app_user",
-});
-
-appUserSearch.submit();
 </script>

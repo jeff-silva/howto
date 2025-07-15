@@ -7,6 +7,7 @@ use \App\Attributes\Route;
 use Illuminate\Http\Request;
 use \App\Http\Controllers\Controller;
 use \Illuminate\Support\Facades\Hash;
+use \App\Auth\Http\Requests\AuthRegisterRequest;
 
 class AuthController extends Controller
 {
@@ -25,5 +26,12 @@ class AuthController extends Controller
 
         $token = $user->createToken('main');
         return compact(['token']);
+    }
+
+    #[Route(path: '/api/auth/register', methods: ['post'], name: 'auth.register')]
+    public function register(AuthRegisterRequest $request)
+    {
+        $entity = AppUser::create($request->validated());
+        return compact(['entity']);
     }
 }
