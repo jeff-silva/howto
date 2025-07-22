@@ -1,35 +1,47 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
-let mainWindow;
+class AppWindow {
+  instance = null;
 
-const createWindow = () => {
-  mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-    },
-  });
+  create() {
+    if (this.instance) return this.instance;
 
-  mainWindow.loadFile(path.join(__dirname, "index.html"));
+    const mainWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+      },
+    });
 
-  mainWindow.on("closed", () => {
-    mainWindow = null;
-  });
-};
+    mainWindow.loadFile(path.join(__dirname, "index.html"));
+    mainWindow.on("closed", () => {
+      this.destroy();
+    });
 
-app.on("ready", createWindow);
+    this.instance = mainWindow;
+    return this.instance;
+  }
+
+  destroy() {
+    this.instance = null;
+  }
+}
+
+const mainWindow = new AppWindow();
+
+app.on("ready", () => {
+  mainWindow.create();
+});
+
+app.on("activate", () => {
+  mainWindow.create();
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
-  }
-});
-
-app.on("activate", () => {
-  if (mainWindow === null) {
-    createWindow();
   }
 });
