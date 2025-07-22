@@ -3,8 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <title>Hello World</title>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';"
+    />
   </head>
   <body>
-    <h2>Hello World Aaa</h2>
+    <h2>Hello World</h2>
+    <webview
+      nodeintegration
+      src="https://www.github.com/"
+      style="display: block; width: 640px; height: 480px; border: solid 1px red"
+    ></webview>
   </body>
 </html>

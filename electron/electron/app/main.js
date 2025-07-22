@@ -1,5 +1,28 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, WebContentsView, Menu } = require("electron");
 const path = require("path");
+
+require("electron-reload")(__dirname, {
+  electron: path.join(__dirname, "node_modules", ".bin", "electron"),
+});
+
+const IS_MAC = process.platform === "darwin";
+
+// Menu.setApplicationMenu(
+//   Menu.buildFromTemplate([
+//     { label: "File" },
+//     {
+//       label: "Help",
+//       submenu: [
+//         {
+//           label: "About",
+//           click() {
+//             alert("aaaa");
+//           },
+//         },
+//       ],
+//     },
+//   ])
+// );
 
 class AppWindow {
   instance = null;
@@ -7,21 +30,31 @@ class AppWindow {
   create() {
     if (this.instance) return this.instance;
 
-    const mainWindow = new BrowserWindow({
+    const win = new BrowserWindow({
       width: 800,
       height: 600,
       webPreferences: {
-        nodeIntegration: false,
-        contextIsolation: true,
+        nodeIntegration: true,
+        contextIsolation: false,
       },
     });
 
-    mainWindow.loadFile(path.join(__dirname, "index.html"));
-    mainWindow.on("closed", () => {
+    win.webContents.setWindowOpenHandler(({ url }) => {
+      shell.openExternal(url);
+      return { action: "allow" };
+    });
+
+    // const view1 = new WebContentsView();
+    // win.contentView.addChildView(view1);
+    // view1.webContents.loadURL("https://electronjs.org");
+    // view1.setBounds({ x: 0, y: 0, width: 400, height: 400 });
+
+    win.loadFile(path.join(__dirname, "index.html"));
+    win.on("closed", () => {
       this.destroy();
     });
 
-    this.instance = mainWindow;
+    this.instance = win;
     return this.instance;
   }
 
@@ -41,7 +74,5 @@ app.on("activate", () => {
 });
 
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
+  if (!IS_MAC) app.quit();
 });

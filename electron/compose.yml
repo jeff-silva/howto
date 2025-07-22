@@ -5,7 +5,8 @@ services:
     environment:
       - DISPLAY=$DISPLAY
       - ELECTRON_DISABLE_SANDBOX=1
-      - DBUS_SESSION_BUS_ADDRESS=/dev/null
+      # - DBUS_SESSION_BUS_ADDRESS=/dev/null
+      # - ELECTRON_DISABLE_SECURITY_WARNINGS=true
     volumes:
       - ./electron/app:/home/hung/app
       - /tmp/.X11-unix:/tmp/.X11-unix
