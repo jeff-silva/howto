@@ -67,8 +67,110 @@
 
         <template #default>
           <a href="">refresh</a><br />
-          <video ref="videoRef" autoplay muted></video>
+
+          <v-container style="max-width: 600px">
+            <!-- Step 1: Initialize -->
+            <template v-if="recorder.step.value == 'permission'">
+              <p>
+                Primeiramente, vamos iniciar a aplicação. Apenas dê as
+                permissões ao navegador para capturar imagens da sua webcam.
+              </p>
+
+              <br />
+              <div class="d-flex justify-end ga-3">
+                <v-btn :loading="recorder.busy" @click="recorder.init()">
+                  Inicializar
+                </v-btn>
+
+                <v-btn
+                  color="primary"
+                  :disabled="!recorder.initialized ||
+                (recorder.initialized && recorder.busy)"
+                  @click="recorder.step.set('backtrack')"
+                >
+                  Próximo passo
+                </v-btn>
+              </div>
+            </template>
+
+            <!-- Step 2: Get Playback -->
+            <template v-if="recorder.step.value == 'backtrack'">
+              <p>Agora, envie o arquivo de backtrack.</p>
+              <audio
+                v-if="meta.backtrackFile"
+                controls
+                :src="meta.backtrackFile"
+              ></audio>
+
+              <br />
+              <div class="d-flex justify-end ga-3">
+                <v-btn @click="recorder.uploadBacktrack()">
+                  Enviar Backtrack
+                </v-btn>
+
+                <v-btn
+                  color="primary"
+                  :disabled="!meta.backtrackFile"
+                  @click="recorder.step.set('record')"
+                >
+                  Próximo passo
+                </v-btn>
+              </div>
+            </template>
+
+            <!-- Step 3: Iniciar gravação -->
+            <template v-if="recorder.step.value == 'record'">
+              <p>
+                Agora vamos começar a gravar. Antes de fazer a gravação
+                definitiva, faça um teste para ajustar o tempo de compensação,
+                pois por questões de hardware do navegador, a gravação nunca vai
+                ficar sincronizada entre a backtrack e o vídeo.
+              </p>
+
+              <app-video :src-object="() => meta.mediaStream"></app-video>
+
+              <audio
+                v-if="meta.backtrackFile"
+                ref="audioRef"
+                controls
+                :src="meta.backtrackFile"
+              ></audio>
+
+              <video
+                v-if="recorder.recordedVideoUrl"
+                :src="recorder.recordedVideoUrl"
+                controls
+              ></video>
+
+              <br />
+              <div class="d-flex justify-end ga-3">
+                <v-btn
+                  v-if="!recorder.recording"
+                  text="Iniciar Gravação"
+                  @click="recorder.recordStart()"
+                ></v-btn>
+                <v-btn
+                  v-if="recorder.recording"
+                  text="Parar Gravação"
+                  @click="recorder.recordStop()"
+                ></v-btn>
+                <v-btn
+                  v-if="!recorder.recording && recorder.recordedVideoUrl"
+                  text="Baixar Gravação"
+                  :href="recorder.recordedVideoUrl"
+                  download="video.mp4"
+                ></v-btn>
+              </div>
+            </template>
+          </v-container>
+
+          <!-- <video ref="videoRef" autoplay muted></video>
           <audio ref="audioRef" controls></audio>
+          <video
+            v-if="recorder.recordedVideoUrl"
+            :src="recorder.recordedVideoUrl"
+            controls
+          ></video>
           <div class="d-flex ga-3">
             <v-btn text="Init" @click="recorder.init()"></v-btn>
             <v-btn
@@ -82,8 +184,10 @@
               :href="recorder.recordedVideoUrl"
               download="download.mp4"
             ></v-btn>
-          </div>
+          </div> -->
+
           <pre>{{ recorder }}</pre>
+          <pre>meta: {{ meta }}</pre>
         </template>
       </app-layout>
     </div>
@@ -110,31 +214,42 @@
           });
 
           const recorder = reactive({
+            initialized: false,
             recording: false,
             recordedVideoUrl: null,
+            params: {
+              latencyCompensation: 1000,
+            },
+            busy: computed(() => {
+              if (recorder.initialized && !meta.mediaStream) return true;
+              return false;
+            }),
+            step: {
+              value: "permission",
+              set(value) {
+                recorder.step.value = value;
+              },
+            },
             async init() {
-              videoRef.value.srcObject = meta.mediaStream =
-                await navigator.mediaDevices.getUserMedia({
-                  video: true,
-                  audio: true,
-                });
+              recorder.initialized = true;
+              meta.mediaStream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true,
+              });
             },
 
             uploadBacktrack() {
               Object.assign(document.createElement("input"), {
                 type: "file",
                 onchange: (ev) => {
-                  const file = (meta.backtrackFile = ev.target.files[0]);
-                  Object.assign(new FileReader(), {
-                    onload: (ev) => {
-                      audioRef.value.src = ev.target.result;
-                    },
-                  }).readAsDataURL(file);
+                  meta.backtrackFile = URL.createObjectURL(ev.target.files[0]);
                 },
               }).click();
             },
 
             recordStart() {
+              recorder.recordedVideoUrl = null;
+
               (() => {
                 meta.audioContext = new (window.AudioContext ||
                   window.webkitAudioContext)();
@@ -188,9 +303,12 @@
                 meta.audioContext.close();
               };
 
-              audioRef.value.play();
-              meta.mediaRecorder.start();
               recorder.recording = true;
+              meta.mediaRecorder.start();
+
+              setTimeout(() => {
+                audioRef.value.play();
+              }, recorder.params.latencyCompensation);
             },
 
             recordStop() {
@@ -199,7 +317,7 @@
             },
           });
 
-          return { recorder, videoRef, audioRef };
+          return { recorder, meta, videoRef, audioRef };
         },
       });
 
@@ -225,6 +343,22 @@
       );
 
       app.component("app-layout", appLayout);
+
+      app.component("app-video", {
+        template: `<video ref="videoRef" autoplay></video>`,
+        props: {
+          srcObject: { type: Function, default: () => null },
+        },
+        setup($props, $ctx) {
+          const videoRef = ref(null);
+          console.log({ $props, $ctx });
+          onMounted(() => {
+            videoRef.value.srcObject = $props.srcObject();
+          });
+          return { videoRef };
+        },
+      });
+
       app.mount("#app");
     </script>
   </body>

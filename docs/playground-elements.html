@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- Playground Elements -->
+    <script type="module">
+      import "https://cdn.jsdelivr.net/npm/playground-elements@0.20.0/+esm";
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/playground-elements@0.20.0/themes/monokai.min.css"
+    />
+
+    <style>
+      #playground {
+        --playground-highlight-color: #ffffff;
+        --playground-tab-bar-background: #2e2e2e;
+        --playground-tab-bar-foreground-color: #b0b0b0;
+        --playground-preview-toolbar-background: #3d3d3d;
+        --playground-preview-toolbar-foreground-color: #ffffff;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <playground-ide
+      editable-file-system
+      line-numbers
+      resizable
+      id="playground"
+      class="playground-theme-monokai"
+    >
+      <script type="sample/html" filename="index.html">
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Document</title>
+          </head>
+          <body>
+            Hello World
+          </body>
+        </html>
+      </script>
+
+      <script type="sample/js" filename="index.js">
+        alert('aaa');
+      </script>
+    </playground-ide>
+  </body>
+</html>
+
+<!--
+https://google.github.io/playground-elements/?theme=monokai&lineNumbers=y&lineWrapping=y&highlight=ffffff&tabBarBackground=2e2e2e&tabBarForeground=b0b0b0&previewToolbarBackground=3d3d3d&previewToolbarForeground=ffffff
+-->
