@@ -11,7 +11,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->register(\App\Auth\AuthServiceProvider::class);
+        $this->app->register(\App\Modules\Auth\AuthServiceProvider::class);
     }
 
     /**
@@ -19,6 +19,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \App\Http\Controllers\AppController::registerRoutes();
     }
 }

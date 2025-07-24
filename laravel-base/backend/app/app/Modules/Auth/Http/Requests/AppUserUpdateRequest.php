@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Auth\Http\Requests;
+namespace App\Modules\Auth\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AppUserStoreRequest extends FormRequest
+class AppUserUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,6 @@ class AppUserStoreRequest extends FormRequest
         return [
             'name' => ['required'],
             'email' => ['email', 'unique:app_user'],
-            'password' => ['required', 'confirmed'],
         ];
     }
 }

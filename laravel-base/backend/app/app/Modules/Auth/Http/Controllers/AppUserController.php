@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Auth\Http\Controllers;
+namespace App\Modules\Auth\Http\Controllers;
 
 use \App\Attributes\Route;
 use Illuminate\Http\Request;
-use \App\Auth\Models\AppUser;
+use \App\Modules\Auth\Models\AppUser;
 use \App\Http\Controllers\Controller;
-use \App\Auth\Http\Requests\AppUserStoreRequest;
-use \App\Auth\Http\Requests\AppUserUpdateRequest;
+use \App\Modules\Auth\Http\Requests\AppUserStoreRequest;
+use \App\Modules\Auth\Http\Requests\AppUserUpdateRequest;
 
 class AppUserController extends Controller
 {
