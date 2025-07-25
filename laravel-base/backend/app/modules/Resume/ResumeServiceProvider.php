@@ -15,6 +15,6 @@ class ResumeServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // 
+        \Modules\Resume\Http\Controllers\ResumeProfileController::registerRoutes();
     }
 }

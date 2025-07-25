@@ -15,6 +15,6 @@ class TicketServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // 
+        \Modules\Ticket\Http\Controllers\TicketTaskController::registerRoutes();
     }
 }
