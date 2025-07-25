@@ -5,6 +5,7 @@ if [ ! -f "/app/.env" ]; then
 fi
 
 composer install
+php artisan optimize
 php artisan migrate
 php artisan db:seed
 
