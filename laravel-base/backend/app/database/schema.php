@@ -16,7 +16,8 @@ return [
 
   'app_password_reset_token' => [
     'fields' => [
-      'email' => fn ($table) => $table->string('email')->primary(),
+      // 'email' => fn ($table) => $table->string('email')->primary(),
+      'email' => fn ($table) => $table->string('email'),
       'token' => fn ($table) => $table->string('token'),
       'created_at' => fn ($table) => $table->timestamp('created_at')->nullable(),
     ],
@@ -91,7 +92,9 @@ return [
   'app_personal_access_token' => [
     'fields' => [
       'id' => fn ($table) => $table->id('id'),
-      'tokenable' => fn ($table) => $table->morphs('tokenable'),
+      // 'tokenable' => fn ($table) => $table->morphs('tokenable'),
+      'tokenable_type' => fn ($table) => $table->string('tokenable_type'),
+      'tokenable_id' => fn ($table) => $table->foreignId('tokenable_id')->nullable()->index(),
       'name' => fn ($table) => $table->text('name'),
       'token' => fn ($table) => $table->string('token', 64)->unique(),
       'abilities' => fn ($table) => $table->text('abilities')->nullable(),
@@ -99,6 +102,16 @@ return [
       'expires_at' => fn ($table) => $table->timestamp('expires_at')->nullable(),
       'created_at' => fn ($table) => $table->timestamp('created_at'),
       'updated_at' => fn ($table) => $table->timestamp('updated_at'),
+    ],
+  ],
+
+  'app_file' => [
+    'fields' => [
+      'id' => fn ($table) => $table->id(),
+      'name' => fn ($table) => $table->string('name'),
+      'mime' => fn ($table) => $table->string('mime'),
+      'size' => fn ($table) => $table->integer('size'),
+      'created_at' => fn ($table) => $table->timestamp('created_at'),
     ],
   ],
 ];

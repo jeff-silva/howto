@@ -35,7 +35,6 @@ class AppMigrateCommand extends Command
         // Create tables that not exists
         foreach($app_database_schema as $table_name => $table_data) {
             if (Schema::hasTable($table_name)) continue;
-            dump('create');
             Schema::create($table_name, function(Blueprint $table) use($table_data) {
                 foreach($table_data['fields'] as $field_name => $field_call) {
                     call_user_func($field_call, $table);
@@ -43,24 +42,28 @@ class AppMigrateCommand extends Command
             });
         }
 
-        // // Update tables if needed
-        // foreach($app_database_schema as $table_name => $table_data) {
-        //     Schema::table($table_name, function(Blueprint $table) use($table_name, $table_data) {
-        //         foreach($table_data['fields'] as $field_name => $field_call) {
-        //             try {
-        //                 if (Schema::hasColumn($table_name, $field_name)) {
-        //                     call_user_func($field_call, $table)->change();
-        //                 } else {
-        //                     call_user_func($field_call, $table);
-        //                 }
-        //             } catch (\Exception $e) {
-        //                 dump($e);
-        //             }
-                    
-        //             dump("{$table_name}.{$field_name}");
-        //         }
-        //     });
-        // }
+        // Update tables if needed
+        foreach($app_database_schema as $table_name => $table_data) {
+            Schema::table($table_name, function(Blueprint $table) use($table_name, $table_data) {
+                foreach(DB::select("SHOW INDEXES FROM {$table_name}") as $index) {
+                    if ($index->Column_name == 'id') continue;
+                    if ($index->Key_name == 'PRIMARY') {
+                        DB::statement("ALTER TABLE `{$table_name}` DROP PRIMARY KEY");
+                        continue;
+                    }
+                    DB::statement("ALTER TABLE `{$table_name}` DROP INDEX `{$index->Key_name}`");
+                }
+
+                foreach($table_data['fields'] as $field_name => $field_call) {
+                    if (Schema::hasColumn($table_name, $field_name)) {
+                        if ($field_name == 'id') continue;
+                        call_user_func($field_call, $table)->change();
+                    } else {
+                        call_user_func($field_call, $table);
+                    }
+                }
+            });
+        }
     }
 
     public function dropTables()
