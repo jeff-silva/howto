@@ -15,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->registerSchema(__DIR__ . '/../../database/schema.php');
         $this->registerModules([
             \Modules\Resume\ResumeServiceProvider::class,
             \Modules\Ticket\TicketServiceProvider::class,

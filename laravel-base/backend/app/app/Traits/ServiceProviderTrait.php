@@ -27,4 +27,12 @@ trait ServiceProviderTrait
         call_user_func($call);
       }
     }
+
+    public function registerSchema($file)
+    {
+      $schema = include $file;
+      $database_schema = config('app_database_schema', []);
+      $database_schema = array_merge($database_schema, $schema);
+      config(['app_database_schema' => $database_schema]);
+    }
 }

@@ -6,7 +6,8 @@ fi
 
 composer install
 php artisan optimize
-php artisan migrate
-php artisan db:seed
+# php artisan migrate
+# php artisan db:seed
+php artisan app:migrate
 
 exec /usr/bin/supervisord -n -c /etc/supervisord.conf
