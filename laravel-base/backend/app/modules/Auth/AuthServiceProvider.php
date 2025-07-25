@@ -3,13 +3,13 @@
 namespace Modules\Auth;
 
 use Laravel\Sanctum\Sanctum;
-use Illuminate\Support\ServiceProvider;
+use App\Base\ServiceProviderBase;
 
-class AuthServiceProvider extends ServiceProvider
+class AuthServiceProvider extends ServiceProviderBase
 {
     public function register(): void
     {
-        // dump('SsoServiceProvider::register');
+        $this->mergeConfigDeep(__DIR__ . '/config/app_config.php', 'app_config');
     }
 
 

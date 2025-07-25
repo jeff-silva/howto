@@ -13,6 +13,7 @@ class AppController extends Controller
     {
         $token = $request->bearerToken();
         $user = auth()->guard('sanctum')->user();
-        return compact(['user']);
+        $config = config('app_config.public');
+        return compact(['user', 'config']);
     }
 }
