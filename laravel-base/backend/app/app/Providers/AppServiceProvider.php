@@ -2,18 +2,23 @@
 
 namespace App\Providers;
 
+use App\Traits\ServiceProviderTrait;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    use ServiceProviderTrait;
+
     /**
      * Register any application services.
      */
     public function register(): void
     {
-        $this->app->register(\Modules\Auth\AuthServiceProvider::class);
-        $this->app->register(\Modules\Resume\ResumeServiceProvider::class);
-        $this->app->register(\Modules\Ticket\TicketServiceProvider::class);
+        $this->registerModules([
+            \Modules\Auth\AuthServiceProvider::class,
+            \Modules\Resume\ResumeServiceProvider::class,
+            \Modules\Ticket\TicketServiceProvider::class,
+        ]);
     }
 
     /**
@@ -21,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        \App\Http\Controllers\AppController::registerRoutes();
+        // \App\Http\Controllers\AppController::registerRoutes();
+
+        $this->bootControllers([
+            \App\Http\Controllers\AppController::class,
+        ]);
     }
 }
