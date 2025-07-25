@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\Auth\Http\Requests;
+namespace Modules\Auth\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AppUserStoreRequest extends FormRequest
+class AuthRegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
