@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Laravel\Sanctum\Sanctum;
 use App\Traits\ServiceProviderTrait;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,7 +16,6 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->registerModules([
-            \Modules\Auth\AuthServiceProvider::class,
             \Modules\Resume\ResumeServiceProvider::class,
             \Modules\Ticket\TicketServiceProvider::class,
         ]);
@@ -26,10 +26,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // \App\Http\Controllers\AppController::registerRoutes();
+        Sanctum::usePersonalAccessTokenModel(\App\Models\AppPersonalAccessToken::class);
 
         $this->bootControllers([
             \App\Http\Controllers\AppController::class,
+            \App\Http\Controllers\AppUserController::class,
+            \App\Http\Controllers\AuthController::class,
         ]);
     }
 }

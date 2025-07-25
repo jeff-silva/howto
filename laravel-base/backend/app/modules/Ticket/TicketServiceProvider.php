@@ -9,7 +9,7 @@ use Illuminate\Support\ServiceProvider;
 class TicketServiceProvider extends ServiceProvider
 {
     use ServiceProviderTrait;
-    
+
     public function register(): void
     {
         // 
@@ -18,6 +18,8 @@ class TicketServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        \Modules\Ticket\Http\Controllers\TicketTaskController::registerRoutes();
+        $this->bootControllers([
+            \Modules\Ticket\Http\Controllers\TicketTaskController::class,
+        ]);
     }
 }

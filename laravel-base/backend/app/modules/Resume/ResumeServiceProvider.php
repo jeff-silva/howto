@@ -9,7 +9,7 @@ use Illuminate\Support\ServiceProvider;
 class ResumeServiceProvider extends ServiceProvider
 {
     use ServiceProviderTrait;
-    
+
     public function register(): void
     {
         // 
@@ -18,6 +18,8 @@ class ResumeServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        \Modules\Resume\Http\Controllers\ResumeProfileController::registerRoutes();
+        $this->bootControllers([
+            \Modules\Resume\Http\Controllers\ResumeProfileController::class,
+        ]);
     }
 }

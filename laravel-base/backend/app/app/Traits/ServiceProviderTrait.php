@@ -23,7 +23,7 @@ trait ServiceProviderTrait
     {
       foreach($controllers as $controller) {
         $call = [$controller, 'registerRoutes'];
-        if (is_callable($call)) continue;
+        if (!is_callable($call)) continue;
         call_user_func($call);
       }
     }

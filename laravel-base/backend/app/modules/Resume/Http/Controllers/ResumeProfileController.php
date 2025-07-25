@@ -2,12 +2,12 @@
 
 namespace Modules\Resume\Http\Controllers;
 
-use App\Attributes\Route;
 use Illuminate\Http\Request;
-use Modules\Auth\Models\AppUser;
-use \App\Http\Controllers\Controller;
-use Modules\Auth\Http\Requests\AppUserStoreRequest;
-use Modules\Auth\Http\Requests\AppUserUpdateRequest;
+use App\Models\AppUser;
+use App\Attributes\Route;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\AppUserStoreRequest;
+use App\Http\Requests\AppUserUpdateRequest;
 
 class ResumeProfileController extends Controller
 {
