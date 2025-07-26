@@ -12,7 +12,7 @@ const $props = defineProps({
 
 const search = useAxios({
   method: "get",
-  url: `/api/v1/${$props.entity}`,
+  url: `/api/${$props.entity}`,
   params: { ...$props.params },
 });
 
