@@ -20,18 +20,12 @@
     </v-page-view>
 
     <v-page-view :query="{ view: 'edit' }">
-      <v-entity-edit entity="app_user">
+      <v-entity-edit
+        entity="app_user"
+        #default="scope"
+      >
         <v-form-field label="Nome">
-          <v-form-input-text />
-        </v-form-field>
-        <v-form-field label="Nome">
-          <v-form-input-text />
-        </v-form-field>
-        <v-form-field label="Nome">
-          <v-form-input-text />
-        </v-form-field>
-        <v-form-field label="Nome">
-          <v-form-input-text />
+          <v-form-input-text v-model="scope.data.name" />
         </v-form-field>
         <v-form-actions
           :actions="[

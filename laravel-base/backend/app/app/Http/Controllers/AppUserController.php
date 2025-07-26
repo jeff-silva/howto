@@ -18,7 +18,7 @@ class AppUserController extends Controller
         return compact(['entity']);
     }
 
-    #[Route(path: '/api/app_user/:id', methods: ['put'], middleware: ['auth:sanctum'], name: 'app_user.update')]
+    #[Route(path: '/api/app_user/{id}', methods: ['put'], middleware: ['auth:sanctum'], name: 'app_user.update')]
     public function update(AppUserUpdateRequest $request, AppUser $entity)
     {
         $entity->update($request->validated());
@@ -31,13 +31,14 @@ class AppUserController extends Controller
         return AppUser::searchPaginated($request->all());
     }
 
-    #[Route(path: '/api/app_user/:id', methods: ['get'], middleware: ['auth:sanctum'], name: 'app_user.select')]
-    public function select(AppUser $entity)
+    #[Route(path: '/api/app_user/{id}', methods: ['get'], middleware: ['auth:sanctum'], name: 'app_user.select')]
+    public function select($id)
     {
+        $entity = AppUser::find($id);
         return compact(['entity']);
     }
 
-    #[Route(path: '/api/app_user/:id', methods: ['delete'], middleware: ['auth:sanctum'], name: 'app_user.delete')]
+    #[Route(path: '/api/app_user/{id}', methods: ['delete'], middleware: ['auth:sanctum'], name: 'app_user.delete')]
     public function delete(AppUser $entity)
     {
         $entity->delete();

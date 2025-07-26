@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <v-form>
-      <slot></slot>
-    </v-form>
-    <pre>{{ { $props, select } }}</pre>
-  </div>
+  <v-form
+    @submit.prevent="save.submit()"
+    :disabled="find.busy"
+  >
+    <slot v-bind="scope()"></slot>
+    <pre>{{ { $props, data, find, save } }}</pre>
+  </v-form>
 </template>
 
 <script setup>
@@ -16,8 +17,18 @@ const $props = defineProps({
 });
 
 const $route = useRoute();
+const $router = useRouter();
 
-const select = useAxios({
+const data = reactive({
+  fill(fill = {}) {
+    for (const attr in fill) {
+      if (typeof fill[attr] == "function") continue;
+      data[attr] = fill[attr];
+    }
+  },
+});
+
+const find = useAxios({
   method: "get",
   url: "",
   params: { ...$props.params },
@@ -34,23 +45,43 @@ const select = useAxios({
     const id = $route.query[$props.queryId] || null;
     console.log({ id });
     if (id) {
-      select.url = `/api/${$props.entity}/${id}`;
-      // setTimeout(() => select.submit(), 1000);
-      select.submit();
+      find.url = `/api/${$props.entity}/${id}`;
+      find.submit();
     }
+  },
+  onSuccess() {
+    data.fill(find.response.entity);
+  },
+});
+
+const save = useAxios({
+  method: "post",
+  url: `/api/${$props.entity}`,
+  onSubmit() {
+    save.data = data;
+    save.method = "post";
+    save.url = `/api/${$props.entity}`;
+    if (data.id) {
+      save.method = "put";
+      save.url = `/api/${$props.entity}/${data.id}`;
+    }
+  },
+  onSuccess() {
+    const query = { ...$route.query, id: save.response.entity.id };
+    $router.push({ query });
   },
 });
 
 const scope = (merge = {}) => {
-  return { select, ...merge };
+  return { data, find, save, ...merge };
 };
 
-select.update();
+find.update();
 
 watch(
   () => $route.query,
   () => {
-    select.update();
+    find.update();
   }
 );
 </script>
