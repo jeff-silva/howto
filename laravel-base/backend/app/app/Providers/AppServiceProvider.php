@@ -3,8 +3,24 @@
 namespace App\Providers;
 
 use Laravel\Sanctum\Sanctum;
-use App\Traits\ServiceProviderTrait;
 use Illuminate\Support\ServiceProvider;
+
+use App\Traits\ServiceProviderTrait;
+
+class SchemaService
+{
+    public $schema = [];
+    public function register($file) {
+        $schema = include $file;
+        $this->schema = array_merge($this->schema, $schema);
+    }
+
+    public function getSchema()
+    {
+        return $this->schema;
+    }
+}
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,6 +31,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->singleton('schema', function ($app) {
+            return new SchemaService();
+        });
+        
         $this->registerSchema(__DIR__ . '/../../database/schema.php');
         $this->registerModules([
             \Modules\Resume\ResumeServiceProvider::class,

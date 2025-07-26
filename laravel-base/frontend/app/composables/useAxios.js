@@ -25,11 +25,16 @@ export default (opts = {}) => {
 
     axiosOptions() {
       const _opts = {
-        method: opts.method,
-        url: opts.url,
-        params: opts.params,
-        data: opts.data,
-        headers: opts.headers,
+        // method: opts.method,
+        // url: opts.url,
+        // params: opts.params,
+        // data: opts.data,
+        // headers: opts.headers,
+        method: r.method,
+        url: r.url,
+        params: r.params,
+        data: r.data,
+        headers: r.headers,
       };
 
       for (const attr in _opts) {
@@ -72,22 +77,30 @@ export default (opts = {}) => {
         if (meta.timeout) clearTimeout(meta.timeout);
         meta.timeout = setTimeout(async () => {
           try {
-            const resp = await axios(r.axiosOptions());
+            const opts = r.axiosOptions();
+            if (!opts.url) {
+              reject(r.throwError("url-invalid", "Invalid URL", null));
+              return;
+            }
+            const resp = await axios(opts);
             r.response = resp.data;
             resolve(resp);
             r.onSuccess();
           } catch (err) {
-            r.error = {};
-            r.error.status = err.status;
-            r.error.message = err.message;
-            r.error.response = err.response?.data || null;
-            reject(err);
-            r.onError();
+            reject(
+              r.throwError(err.status, err.message, err.response?.data || null)
+            );
           }
 
           r.busy = false;
         }, 1000);
       });
+    },
+
+    throwError(status, message, response) {
+      r.error = { status, message, response };
+      r.onError();
+      return r.error;
     },
   });
 

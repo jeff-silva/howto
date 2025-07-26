@@ -30,7 +30,7 @@ class AppMigrateCommand extends Command
     {
         // $this->dropTables();
         
-        $app_database_schema = config('app_database_schema', []);
+        $app_database_schema = app()->make('schema')->getSchema();
 
         // Create tables that not exists
         foreach($app_database_schema as $table_name => $table_data) {

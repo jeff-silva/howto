@@ -28,8 +28,7 @@ class AppUserController extends Controller
     #[Route(path: '/api/app_user', methods: ['get'], middleware: ['auth:sanctum'], name: 'app_user.index')]
     public function index(Request $request)
     {
-        $data = AppUser::searchPaginated($request->all());
-        return compact(['data']);
+        return AppUser::searchPaginated($request->all());
     }
 
     #[Route(path: '/api/app_user/:id', methods: ['get'], middleware: ['auth:sanctum'], name: 'app_user.select')]

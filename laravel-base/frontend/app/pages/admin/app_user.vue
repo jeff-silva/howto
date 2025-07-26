@@ -2,8 +2,17 @@
   <nuxt-layout name="main">
     <v-page-view :query="{ view: undefined }">
       <v-entity-search
-        entity="resume_profile"
-        :headers="[{ title: 'Nome' }]"
+        entity="app_user"
+        :headers="[{ key: 'name', title: 'Nome' }]"
+        :actions="
+          (scope: Record<string, any>) => [
+            {
+              text: 'Nome',
+              icon: 'mdi-home',
+              to: `/admin/app_user?view=edit&id=${scope.item.id}`,
+            },
+          ]
+        "
       />
       <v-form-actions
         :actions="[{ text: 'Novo', to: { query: { view: 'edit' } } }]"
@@ -11,7 +20,7 @@
     </v-page-view>
 
     <v-page-view :query="{ view: 'edit' }">
-      <v-form>
+      <v-entity-edit entity="app_user">
         <v-form-field label="Nome">
           <v-form-input-text />
         </v-form-field>
@@ -30,7 +39,7 @@
             { text: 'Salvar', color: 'primary', type: 'submit' },
           ]"
         />
-      </v-form>
+      </v-entity-edit>
     </v-page-view>
   </nuxt-layout>
 </template>
