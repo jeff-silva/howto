@@ -15,6 +15,8 @@ const $props = defineProps({
   actions: { type: Function, default: () => [] },
 });
 
+const $emit = defineEmits(["init"]);
+
 const $route = useRoute();
 const $router = useRouter();
 
@@ -50,6 +52,7 @@ const find = useAxios({
   },
   onSuccess() {
     data.fill(find.response.entity);
+    $emit("init", scope());
   },
 });
 
@@ -68,6 +71,7 @@ const save = useAxios({
   onSuccess() {
     const query = { ...$route.query, id: save.response.entity.id };
     $router.push({ query });
+    data.fill(save.response.entity);
   },
 });
 
@@ -76,6 +80,7 @@ const scope = (merge = {}) => {
 };
 
 find.update();
+$emit("init", scope());
 
 watch(
   () => $route.query,

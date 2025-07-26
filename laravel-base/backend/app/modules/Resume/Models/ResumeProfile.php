@@ -12,5 +12,9 @@ class ResumeProfile extends Model
     protected $table = 'resume_profile';
     protected $fillable = [
         'name',
+        'resume',
+    ];
+    protected $casts = [
+        'resume' => 'json',
     ];
 }

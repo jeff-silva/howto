@@ -23,6 +23,7 @@ class ResumeProfileRequest extends FormRequest
     {
         return [
             'name' => ['required'],
+            'resume' => ['sometimes'],
         ];
     }
 }

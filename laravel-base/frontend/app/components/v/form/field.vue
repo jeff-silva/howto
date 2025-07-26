@@ -6,7 +6,7 @@
     <v-col
       cols="12"
       :md="props.block ? 12 : 4"
-      class="d-flex align-start pt-3"
+      class="d-flex align-start py-3"
     >
       <div class="">
         <slot name="label">

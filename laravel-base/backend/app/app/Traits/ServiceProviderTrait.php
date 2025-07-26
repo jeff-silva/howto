@@ -30,6 +30,6 @@ trait ServiceProviderTrait
 
     public function registerSchema($file)
     {
-      $this->app->make('schema')->register(__DIR__ . '/../../database/schema.php');
+      $this->app->make('schema')->register($file);
     }
 }
