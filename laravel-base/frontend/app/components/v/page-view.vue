@@ -1,7 +1,6 @@
 <template>
   <div v-if="visible.value">
     <slot></slot>
-    <pre>{{ { visible, $props, query: $route.query } }}</pre>
   </div>
 </template>
 

@@ -1,12 +1,5 @@
 <template>
   <div>
-    <!-- <v-data-table-virtual
-      :headers="$props.headers"
-      :items="search.response.data"
-      height="400"
-      fixed-header
-    ></v-data-table-virtual> -->
-
     <v-data-table-server
       v-model:items-per-page="search.params.per_page"
       :headers="[...$props.headers, { key: 'actions', title: '', width: 0 }]"
@@ -19,8 +12,6 @@
         <v-table-actions :actions="$props.actions(scope({ item: ctx.item }))" />
       </template>
     </v-data-table-server>
-
-    <pre>{{ { $props, search } }}</pre>
   </div>
 </template>
 

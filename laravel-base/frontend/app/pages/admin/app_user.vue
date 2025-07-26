@@ -25,12 +25,38 @@
         #default="scope"
       >
         <v-form-field label="Nome">
-          <v-form-input-text v-model="scope.data.name" />
+          <v-form-input-text
+            v-model="scope.data.name"
+            :error-messages="scope.save.fieldErrors('name')"
+          />
+        </v-form-field>
+        <v-form-field label="E-mail">
+          <v-form-input-text
+            v-model="scope.data.email"
+            :error-messages="scope.save.fieldErrors('email')"
+          />
+        </v-form-field>
+        <v-form-field label="Senha">
+          <v-form-input-password
+            v-model="scope.data.password"
+            :error-messages="scope.save.fieldErrors('password')"
+          />
+        </v-form-field>
+        <v-form-field label="Confirmação de senha">
+          <v-form-input-password
+            v-model="scope.data.password_confirmation"
+            :error-messages="scope.save.fieldErrors('password_confirmation')"
+          />
         </v-form-field>
         <v-form-actions
           :actions="[
             { text: 'Cancelar', to: { query: {} } },
-            { text: 'Salvar', color: 'primary', type: 'submit' },
+            {
+              text: 'Salvar',
+              color: 'primary',
+              type: 'submit',
+              loading: scope.save.busy,
+            },
           ]"
         />
       </v-entity-edit>

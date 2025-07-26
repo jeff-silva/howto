@@ -6,21 +6,31 @@ use App\Models\AppUser;
 use App\Attributes\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AppUserStoreRequest;
-use App\Http\Requests\AppUserUpdateRequest;
+use App\Http\Requests\AppUserRequest;
 
 class AppUserController extends Controller
 {
-    #[Route(path: '/api/app_user', methods: ['post'], middleware: ['auth:sanctum'], name: 'app_user.create')]
-    public function create(AppUserStoreRequest $request)
+    #[Route(
+        path: '/api/app_user',
+        methods: ['post'],
+        middleware: ['auth:sanctum'],
+        name: 'app_user.create',
+    )]
+    public function create(AppUserRequest $request)
     {
         $entity = AppUser::create($request->validated());
         return compact(['entity']);
     }
 
-    #[Route(path: '/api/app_user/{id}', methods: ['put'], middleware: ['auth:sanctum'], name: 'app_user.update')]
-    public function update(AppUserUpdateRequest $request, AppUser $entity)
+    #[Route(
+        path: '/api/app_user/{id}',
+        methods: ['put'],
+        middleware: ['auth:sanctum'],
+        name: 'app_user.update',
+    )]
+    public function update(AppUserRequest $request, $id)
     {
+        $entity = AppUser::find($id);
         $entity->update($request->validated());
         return compact(['entity']);
     }

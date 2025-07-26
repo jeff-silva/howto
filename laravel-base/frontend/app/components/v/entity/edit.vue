@@ -4,7 +4,6 @@
     :disabled="find.busy"
   >
     <slot v-bind="scope()"></slot>
-    <pre>{{ { $props, data, find, save } }}</pre>
   </v-form>
 </template>
 
