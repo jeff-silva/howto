@@ -35,18 +35,18 @@
           v-if="scope.data.resume"
           direction="vertical"
           :tabs="{
-            basics: 'Contato',
-            work: 'Experiência',
-            volunteer: 'Voluntariado',
-            education: 'Educação',
-            awards: 'Prêmios',
-            certificates: 'Certificados',
-            publications: 'Publicações',
-            skills: 'Habilidades',
-            languages: 'Idiomas',
-            interests: 'Interesses',
-            references: 'Referências',
-            projects: 'Projetos',
+            basics: `Contato`,
+            work: `Experiência (${scope.data.resume.work.length})`,
+            volunteer: `Voluntariado (${scope.data.resume.volunteer.length})`,
+            education: `Educação (${scope.data.resume.education.length})`,
+            awards: `Prêmios (${scope.data.resume.awards.length})`,
+            certificates: `Certificados (${scope.data.resume.certificates.length})`,
+            publications: `Publicações (${scope.data.resume.publications.length})`,
+            skills: `Habilidades (${scope.data.resume.skills.length})`,
+            languages: `Idiomas (${scope.data.resume.languages.length})`,
+            interests: `Interesses (${scope.data.resume.interests.length})`,
+            references: `Referências (${scope.data.resume.references.length})`,
+            projects: `Projetos (${scope.data.resume.projects.length})`,
           }"
         >
           <template #tab:basics>
@@ -94,42 +94,330 @@
                 v-model="scope.data.resume.basics.summary"
               />
             </v-form-field>
-            <!-- <pre>{{ scope.data.resume.basics }}</pre> -->
+
+            <br />
+            <app-resume-profile-section
+              name="Profiles"
+              title-field="network"
+              v-model="scope.data.resume.basics.profiles"
+              :default="{ network: null, username: null, url: null }"
+            >
+              <template #item="ctx">
+                <v-row>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      v-model="ctx.item.network"
+                      label="Network (Ex.: Twitter, Instagram, Website)"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      v-model="ctx.item.username"
+                      label="Username"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      v-model="ctx.item.url"
+                      label="URL"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                </v-row>
+              </template>
+            </app-resume-profile-section>
           </template>
+
           <template #tab:work>
-            <pre>{{ scope.data.resume.work }}</pre>
+            <app-resume-profile-section
+              name="Experiencia"
+              :title-field="(o) => `${o.position || '--'} em ${o.name || '--'}`"
+              v-model="scope.data.resume.work"
+              :default="{
+                name: '',
+                position: '',
+                url: '',
+                startDate: '',
+                endDate: '',
+                summary: '',
+                highlights: [],
+                meta: {
+                  summaryShort: '',
+                },
+              }"
+            >
+              <template #item="ctx">
+                <v-form-input-text
+                  label="Nome"
+                  v-model="ctx.item.name"
+                />
+                <v-form-input-text
+                  label="Cargo"
+                  v-model="ctx.item.position"
+                />
+                <v-form-input-text
+                  label="URL"
+                  v-model="ctx.item.url"
+                />
+                <v-form-input-text
+                  label="Data de início"
+                  v-model="ctx.item.startDate"
+                />
+                <v-form-input-text
+                  label="Data de fim"
+                  v-model="ctx.item.endDate"
+                />
+                <v-form-input-textarea
+                  label="Descrição"
+                  v-model="ctx.item.summary"
+                />
+                <v-combobox
+                  label="Destaques"
+                  v-model="ctx.item.highlights"
+                  multiple
+                >
+                  <template v-slot:selection="{ item, index }">
+                    <v-chip
+                      :text="item.title"
+                      size="small"
+                      closable
+                      label
+                      @click:close="
+                        () => {
+                          ctx.item.highlights.splice(index, 1);
+                        }
+                      "
+                    />
+                  </template>
+                </v-combobox>
+              </template>
+            </app-resume-profile-section>
+            <!-- <pre>{{ scope.data.resume.work }}</pre> -->
           </template>
+
           <template #tab:volunteer>
-            <pre>{{ scope.data.resume.volunteer }}</pre>
+            <app-resume-profile-section
+              name="Voluntariado"
+              :title-field="(o) => o.meta.uuid"
+              v-model="scope.data.resume.volunteer"
+              :default="{}"
+            >
+              <template #item="ctx">
+                <v-row>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Instituição"
+                      v-model="ctx.item.institution"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                </v-row>
+              </template>
+            </app-resume-profile-section>
+            <!-- <pre>{{ scope.data.resume.volunteer }}</pre> -->
           </template>
+
           <template #tab:education>
-            <pre>{{ scope.data.resume.education }}</pre>
+            <app-resume-profile-section
+              name="Educação"
+              :title-field="(o) => o.meta.uuid"
+              v-model="scope.data.resume.education"
+              :default="{}"
+            >
+              <template #item="ctx">
+                <v-row>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Instituição"
+                      v-model="ctx.item.institution"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                </v-row>
+              </template>
+            </app-resume-profile-section>
+            <!-- <pre>{{ scope.data.resume.education }}</pre> -->
           </template>
+
           <template #tab:awards>
-            <pre>{{ scope.data.resume.awards }}</pre>
+            <app-resume-profile-section
+              name="Prêmios"
+              :title-field="(o) => o.meta.uuid"
+              v-model="scope.data.resume.awards"
+              :default="{}"
+            >
+              <template #item="ctx">
+                <v-row>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Instituição"
+                      v-model="ctx.item.institution"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                </v-row>
+              </template>
+            </app-resume-profile-section>
+            <!-- <pre>{{ scope.data.resume.awards }}</pre> -->
           </template>
+
           <template #tab:certificates>
-            <pre>{{ scope.data.resume.certificates }}</pre>
+            <app-resume-profile-section
+              name="Certificados"
+              :title-field="(o) => o.meta.uuid"
+              v-model="scope.data.resume.certificates"
+              :default="{}"
+            >
+              <template #item="ctx">
+                <v-row>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Instituição"
+                      v-model="ctx.item.institution"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                </v-row>
+              </template>
+            </app-resume-profile-section>
+            <!-- <pre>{{ scope.data.resume.certificates }}</pre> -->
           </template>
+
           <template #tab:publications>
-            <pre>{{ scope.data.resume.publications }}</pre>
+            <app-resume-profile-section
+              name="Publicações"
+              :title-field="(o) => o.meta.uuid"
+              v-model="scope.data.resume.publications"
+              :default="{}"
+            >
+              <template #item="ctx">
+                <v-row>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Instituição"
+                      v-model="ctx.item.institution"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                </v-row>
+              </template>
+            </app-resume-profile-section>
+            <!-- <pre>{{ scope.data.resume.publications }}</pre> -->
           </template>
+
           <template #tab:skills>
-            <pre>{{ scope.data.resume.skills }}</pre>
+            <app-resume-profile-section
+              name="Habilidades"
+              :title-field="(o) => o.meta.uuid"
+              v-model="scope.data.resume.skills"
+              :default="{}"
+            >
+              <template #item="ctx">
+                <v-row>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Instituição"
+                      v-model="ctx.item.institution"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                </v-row>
+              </template>
+            </app-resume-profile-section>
+            <!-- <pre>{{ scope.data.resume.skills }}</pre> -->
           </template>
+
           <template #tab:languages>
-            <pre>{{ scope.data.resume.languages }}</pre>
+            <app-resume-profile-section
+              name="Idiomas"
+              :title-field="(o) => o.meta.uuid"
+              v-model="scope.data.resume.languages"
+              :default="{}"
+            >
+              <template #item="ctx">
+                <v-row>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Instituição"
+                      v-model="ctx.item.institution"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                </v-row>
+              </template>
+            </app-resume-profile-section>
+            <!-- <pre>{{ scope.data.resume.languages }}</pre> -->
           </template>
+
           <template #tab:interests>
-            <pre>{{ scope.data.resume.interests }}</pre>
+            <app-resume-profile-section
+              name="Interesses"
+              :title-field="(o) => o.meta.uuid"
+              v-model="scope.data.resume.interests"
+              :default="{}"
+            >
+              <template #item="ctx">
+                <v-row>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Instituição"
+                      v-model="ctx.item.institution"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                </v-row>
+              </template>
+            </app-resume-profile-section>
+            <!-- <pre>{{ scope.data.resume.interests }}</pre> -->
           </template>
+
           <template #tab:references>
-            <pre>{{ scope.data.resume.references }}</pre>
+            <app-resume-profile-section
+              name="Referências"
+              :title-field="(o) => o.meta.uuid"
+              v-model="scope.data.resume.references"
+              :default="{}"
+            >
+              <template #item="ctx">
+                <v-row>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Instituição"
+                      v-model="ctx.item.institution"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                </v-row>
+              </template>
+            </app-resume-profile-section>
+            <!-- <pre>{{ scope.data.resume.references }}</pre> -->
           </template>
+
           <template #tab:projects>
-            <pre>{{ scope.data.resume.projects }}</pre>
+            <app-resume-profile-section
+              name="Projetos"
+              :title-field="(o) => o.meta.uuid"
+              v-model="scope.data.resume.projects"
+              :default="{}"
+            >
+              <template #item="ctx">
+                <v-row>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Instituição"
+                      v-model="ctx.item.institution"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                </v-row>
+              </template>
+            </app-resume-profile-section>
+            <!-- <pre>{{ scope.data.resume.projects }}</pre> -->
           </template>
         </v-tabs2>
+        <br />
         <v-form-actions
           :actions="[
             { text: 'Cancelar', to: { query: {} } },
@@ -147,126 +435,146 @@
 </template>
 
 <script setup>
+import _ from "lodash";
+
 const onEditInit = (scope) => {
   if (typeof scope.data.resume != "object" || scope.data.resume === null) {
     scope.data.resume = {};
   }
 
-  scope.data.resume = {
-    $schema:
-      "https://raw.githubusercontent.com/jsonresume/resume-schema/refs/heads/v1.0.0/schema.json",
-    meta: {
-      version: "v1.0.0",
-      canonical:
-        "https://github.com/jsonresume/resume-schema/blob/v1.0.0/schema.json",
-      updatedAt: {
-        date: "2023-12-06T14:20:14-03:00",
-        formatted: "Dec 2023",
+  scope.data.resume = _.merge(
+    {
+      $schema:
+        "https://raw.githubusercontent.com/jsonresume/resume-schema/refs/heads/v1.0.0/schema.json",
+      meta: {
+        version: "v1.0.0",
+        canonical:
+          "https://github.com/jsonresume/resume-schema/blob/v1.0.0/schema.json",
+        updatedAt: {
+          date: "2023-12-06T14:20:14-03:00",
+          formatted: "Dec 2023",
+        },
       },
-    },
-    basics: {
-      name: scope.data.name || "",
-      label: "",
-      image: "",
-      email: "",
-      phone: "",
-      url: "",
-      summary: "",
-      location: {
-        address: "",
-        postalCode: "",
-        city: "",
-        region: "",
-        countryCode: "",
+      basics: {
+        name: scope.data.name || "",
+        label: "",
+        image: "",
+        email: "",
+        phone: "",
+        url: "",
+        summary: "",
+        location: {
+          address: "",
+          postalCode: "",
+          city: "",
+          region: "",
+          countryCode: "",
+        },
+        profiles: [
+          // {
+          //   network: "Website",
+          //   username: "jeff-silva",
+          //   url: "https://jeff-silva.github.io/",
+          // },
+        ],
       },
-      profiles: [
+      work: [
         // {
-        //   network: "Website",
-        //   username: "jeff-silva",
-        //   url: "https://jeff-silva.github.io/",
+        //   name: "Company",
+        //   position: "President",
+        //   url: "https://company.com",
+        //   startDate: "2013-01-01",
+        //   endDate: "2014-01-01",
+        //   summary: "Description…",
+        //   highlights: ["Started the company"],
+        // },
+      ],
+      volunteer: [
+        // {
+        //   organization: "Organization",
+        //   position: "Volunteer",
+        //   url: "https://organization.com/",
+        //   startDate: "2012-01-01",
+        //   endDate: "2013-01-01",
+        //   summary: "Description…",
+        //   highlights: ["Awarded 'Volunteer of the Month'"],
+        // },
+      ],
+      education: [
+        // {
+        //   institution: "University",
+        //   url: "https://institution.com/",
+        //   area: "Software Development",
+        //   studyType: "Bachelor",
+        //   startDate: "2011-01-01",
+        //   endDate: "2013-01-01",
+        //   score: "4.0",
+        //   courses: ["DB1101 - Basic SQL"],
+        // },
+      ],
+      awards: [
+        // {
+        //   title: "Award",
+        //   date: "2014-11-01",
+        //   awarder: "Company",
+        //   summary: "There is no spoon.",
+        // },
+      ],
+      certificates: [
+        // {
+        //   name: "Certificate",
+        //   date: "2021-11-07",
+        //   issuer: "Company",
+        //   url: "https://certificate.com",
+        // },
+      ],
+      publications: [
+        // {
+        //   name: "Publication",
+        //   publisher: "Company",
+        //   releaseDate: "2014-10-01",
+        //   url: "https://publication.com",
+        //   summary: "Description…",
+        // },
+      ],
+      skills: [
+        // {
+        //   name: "Web Development",
+        //   level: "Master",
+        //   keywords: ["HTML", "CSS", "JavaScript"],
+        // },
+      ],
+      languages: [
+        // {
+        //   language: "English",
+        //   fluency: "Native speaker",
+        // },
+      ],
+      interests: [
+        // {
+        //   name: "Wildlife",
+        //   keywords: ["Ferrets", "Unicorns"],
+        // },
+      ],
+      references: [
+        // {
+        //   name: "Jane Doe",
+        //   reference: "Reference…",
+        // },
+      ],
+      projects: [
+        // {
+        //   name: "Project",
+        //   startDate: "2019-01-01",
+        //   endDate: "2021-01-01",
+        //   description: "Description...",
+        //   highlights: ["Won award at AIHacks 2016"],
+        //   url: "https://project.com/",
         // },
       ],
     },
-    work: [
-      // {
-      //   institution: "",
-      //   area: "",
-      //   studyType: "",
-      //   score: "",
-      //   courses: [],
-      //   name: "",
-      //   position: "",
-      //   url: "",
-      //   summary: "",
-      //   startDate: "",
-      //   endDate: "",
-      //   meta: {
-      //     summaryShort: "",
-      //   },
-      // },
-    ],
-    volunteer: [],
-    education: [
-      // {
-      //   institution: "WebBH Escola de Informática",
-      //   area: "Desenvolvimento Web",
-      //   studyType: "Ensino Técnico",
-      //   score: "",
-      //   courses: [
-      //     "PHP",
-      //     "MySQL",
-      //     "SQL Server",
-      //     "CSS",
-      //     "Javascript",
-      //     "HTML5",
-      //     "Tableless",
-      //     "Action script",
-      //   ],
-      //   startDate: "2009-03-31",
-      //   endDate: "2010-09-30",
-      // },
-    ],
-    awards: [],
-    certificates: [],
-    publications: [],
-    skills: [
-      // {
-      //   name: "Vue 3",
-      //   level: "",
-      //   keywords: ["Frontend", "Main Stack"],
-      // },
-    ],
-    languages: [
-      // {
-      //   language: "Português Brasileiro",
-      //   fluency: "Nativo",
-      // },
-    ],
-    interests: [],
-    references: [],
-    projects: [
-      // {
-      //   name: "Corapost",
-      //   description: '',
-      //   highlights: ["Labscript.dev"],
-      //   meta: {
-      //     images: [],
-      //   },
-      //   url: "https://corapost.com",
-      //   startDate: "2024-07-01",
-      //   endDate: "2024-04-30",
-      //   meta: {
-      //     images: [
-      //       {
-      //         file: "https://jeff-silva.github.io/jeff-silva/assets/projects/blog-banco-da-amazonia.jpg",
-      //         name: "",
-      //       },
-      //     ],
-      //   },
-      // },
-    ],
-    ...scope.data.resume,
-  };
+    scope.data.resume
+  );
 
   console.log({ scope });
 };
