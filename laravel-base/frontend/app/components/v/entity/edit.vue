@@ -44,7 +44,6 @@ const find = useAxios({
   },
   update() {
     const id = $route.query[$props.queryId] || null;
-    console.log({ id });
     if (id) {
       find.url = `/api/${$props.entity}/${id}`;
       find.submit();

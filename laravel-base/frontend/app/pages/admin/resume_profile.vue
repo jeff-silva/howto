@@ -38,7 +38,7 @@
             basics: `Contato`,
             work: `Experiência (${scope.data.resume.work.length})`,
             volunteer: `Voluntariado (${scope.data.resume.volunteer.length})`,
-            education: `Educação (${scope.data.resume.education.length})`,
+            education: `Formação (${scope.data.resume.education.length})`,
             awards: `Prêmios (${scope.data.resume.awards.length})`,
             certificates: `Certificados (${scope.data.resume.certificates.length})`,
             publications: `Publicações (${scope.data.resume.publications.length})`,
@@ -221,7 +221,7 @@
 
           <template #tab:education>
             <app-resume-profile-section
-              name="Educação"
+              name="Formação"
               :title-field="(o) => o.meta.uuid"
               v-model="scope.data.resume.education"
               :default="{}"
@@ -232,6 +232,41 @@
                     <v-form-input-text
                       label="Instituição"
                       v-model="ctx.item.institution"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="URL"
+                      v-model="ctx.item.url"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Curso"
+                      v-model="ctx.item.area"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Grau de instrução"
+                      v-model="ctx.item.studyType"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="6">
+                    <v-form-input-text
+                      label="Data de início"
+                      v-model="ctx.item.startDate"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="6">
+                    <v-form-input-text
+                      label="Data de fim"
+                      v-model="ctx.item.endDate"
                       hide-details="auto"
                     />
                   </v-col>
@@ -575,7 +610,5 @@ const onEditInit = (scope) => {
     },
     scope.data.resume
   );
-
-  console.log({ scope });
 };
 </script>
