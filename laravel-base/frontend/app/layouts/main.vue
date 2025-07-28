@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex">
     <div
-      class="d-none d-md-block h-screen bg-grey-lighten-4"
+      class="d-none d-md-block h-screen bg-surface"
       style="min-width: 300px; max-width: 300px"
     >
       <v-nav

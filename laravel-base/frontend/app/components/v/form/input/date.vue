@@ -1,16 +1,51 @@
 <template>
-  <v-text-field
-    v-bind="$attrs"
-    :model-value="$props.modelValue"
-    v-mask="'cpf'"
-    @update:modelValue="$emit('update:modelValue', $event || '')"
-  />
+  <v-dialog max-width="350">
+    <template #activator="scope">
+      <v-text-field
+        prepend-inner-icon="material-symbols:alarm-on-outline"
+        :model-value="$props.modelValue"
+        readonly
+        v-bind="{ ...$attrs, ...scope.props }"
+      />
+    </template>
+
+    <template #default="scope">
+      <v-card>
+        <v-card-text>
+          <v-date-picker
+            :model-value="$props.modelValue"
+            width="100%"
+          />
+        </v-card-text>
+        <div class="d-flex">
+          <v-btn
+            class="flex-grow-1"
+            rounded="0"
+            text="Limpar"
+            @click="$emit('update:modelValue', null)"
+          />
+          <v-btn
+            class="flex-grow-1"
+            color="primary"
+            rounded="0"
+            text="Ok"
+            @click="
+              () => {
+                scope.isActive.value = false;
+                $emit('update:modelValue', $props.modelValue);
+              }
+            "
+          />
+        </div>
+      </v-card>
+    </template>
+  </v-dialog>
 </template>
 
 <script setup>
-const $emit = defineEmits(["update:modelValue"]);
-
 const $props = defineProps({
-  modelValue: { type: [Number, String], default: null },
+  modelValue: { type: String, default: null },
 });
+
+const $emit = defineEmits(["update:modelValue"]);
 </script>

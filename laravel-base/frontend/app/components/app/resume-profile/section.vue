@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column ga-4">
-    <v-card color="grey-lighten-3">
+    <v-card color="surface">
       <v-card-title>{{ $props.name }} ({{ items.value.length }})</v-card-title>
     </v-card>
 
@@ -8,7 +8,7 @@
       <v-card
         :title="items.titleField(o)"
         :style="{ opacity: o.meta.active ? 1 : 0.5 }"
-        color="grey-lighten-3"
+        color="surface"
       >
         <v-card-text>
           <slot
@@ -39,7 +39,7 @@
       </v-card>
     </template>
 
-    <v-card color="grey-lighten-3">
+    <v-card color="surface">
       <v-card-actions class="justify-end">
         <v-form-actions
           :actions="[

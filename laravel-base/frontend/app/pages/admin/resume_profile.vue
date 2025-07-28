@@ -30,6 +30,7 @@
         <v-form-field label="Nome do Perfil">
           <v-form-input-text v-model="scope.data.name" />
         </v-form-field>
+        <br />
 
         <v-tabs2
           v-if="scope.data.resume"
@@ -149,34 +150,63 @@
               }"
             >
               <template #item="ctx">
-                <v-form-input-text
-                  label="Nome"
-                  v-model="ctx.item.name"
-                />
-                <v-form-input-text
-                  label="Cargo"
-                  v-model="ctx.item.position"
-                />
-                <v-form-input-text
-                  label="URL"
-                  v-model="ctx.item.url"
-                />
-                <v-form-input-text
-                  label="Data de início"
-                  v-model="ctx.item.startDate"
-                />
-                <v-form-input-text
-                  label="Data de fim"
-                  v-model="ctx.item.endDate"
-                />
-                <v-form-input-textarea
-                  label="Descrição"
-                  v-model="ctx.item.summary"
-                />
-                <v-form-input-tags
-                  label="Destaques"
-                  v-model="ctx.item.highlights"
-                />
+                <v-row>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Nome"
+                      v-model="ctx.item.name"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Cargo"
+                      v-model="ctx.item.position"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="URL"
+                      v-model="ctx.item.url"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-form-input-date
+                      label="Data de início"
+                      v-model="ctx.item.startDate"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-form-input-date
+                      label="Data de fim"
+                      v-model="ctx.item.endDate"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-textarea
+                      label="Descrição"
+                      v-model="ctx.item.summary"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-tags
+                      label="Destaques"
+                      v-model="ctx.item.highlights"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                </v-row>
               </template>
             </app-resume-profile-section>
             <!-- <pre>{{ scope.data.resume.work }}</pre> -->

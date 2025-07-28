@@ -41,9 +41,3 @@ const props = defineProps({
   block: { type: Boolean, default: false },
 });
 </script>
-
-<style>
-.app-field:hover {
-  background: #ffffff05;
-}
-</style>
