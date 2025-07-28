@@ -38,6 +38,7 @@ import cpf from "./cpf.vue";
 import cnpj from "./cnpj.vue";
 import money from "./money.vue";
 import phone from "./phone.vue";
+import tags from "./tags.vue";
 import file from "./file.vue";
 import filePreview from "./file-preview.vue";
 import html from "./html.vue";
@@ -61,6 +62,7 @@ export const types = Object.fromEntries(
     cnpj: { name: "CNPJ", return: "string", component: cnpj },
     money: { name: "Dinheiro", return: "string", component: money },
     phone: { name: "Telefone", return: "string", component: phone },
+    tags: { name: "Tags", return: "array", component: tags },
     file: { name: "Arquivo", return: "object", component: file },
     filePreview: {
       name: "Arquivo Preview",

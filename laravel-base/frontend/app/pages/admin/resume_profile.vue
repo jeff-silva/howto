@@ -104,14 +104,14 @@
             >
               <template #item="ctx">
                 <v-row>
-                  <v-col cols="12">
+                  <v-col cols="6">
                     <v-form-input-text
                       v-model="ctx.item.network"
                       label="Network (Ex.: Twitter, Instagram, Website)"
                       hide-details="auto"
                     />
                   </v-col>
-                  <v-col cols="12">
+                  <v-col cols="6">
                     <v-form-input-text
                       v-model="ctx.item.username"
                       label="Username"
@@ -173,25 +173,10 @@
                   label="Descrição"
                   v-model="ctx.item.summary"
                 />
-                <v-combobox
+                <v-form-input-tags
                   label="Destaques"
                   v-model="ctx.item.highlights"
-                  multiple
-                >
-                  <template v-slot:selection="{ item, index }">
-                    <v-chip
-                      :text="item.title"
-                      size="small"
-                      closable
-                      label
-                      @click:close="
-                        () => {
-                          ctx.item.highlights.splice(index, 1);
-                        }
-                      "
-                    />
-                  </template>
-                </v-combobox>
+                />
               </template>
             </app-resume-profile-section>
             <!-- <pre>{{ scope.data.resume.work }}</pre> -->
@@ -200,7 +185,9 @@
           <template #tab:volunteer>
             <app-resume-profile-section
               name="Voluntariado"
-              :title-field="(o) => o.meta.uuid"
+              :title-field="
+                (o) => `${o.position || '--'} em ${o.organization || '--'}`
+              "
               v-model="scope.data.resume.volunteer"
               :default="{}"
             >
@@ -208,8 +195,43 @@
                 <v-row>
                   <v-col cols="12">
                     <v-form-input-text
-                      label="Instituição"
-                      v-model="ctx.item.institution"
+                      label="Organização"
+                      v-model="ctx.item.organization"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="Cargo"
+                      v-model="ctx.item.position"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="URL"
+                      v-model="ctx.item.url"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="6">
+                    <v-form-input-date
+                      label="Data de início"
+                      v-model="ctx.item.startDate"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="6">
+                    <v-form-input-date
+                      label="Data de fim"
+                      v-model="ctx.item.endDate"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-tags
+                      label="Destaques"
+                      v-model="ctx.item.highlights"
                       hide-details="auto"
                     />
                   </v-col>
