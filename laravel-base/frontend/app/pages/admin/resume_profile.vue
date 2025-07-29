@@ -151,14 +151,20 @@
             >
               <template #item="ctx">
                 <v-row>
-                  <v-col cols="12">
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
                     <v-form-input-text
                       label="Nome"
                       v-model="ctx.item.name"
                       hide-details="auto"
                     />
                   </v-col>
-                  <v-col cols="12">
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
                     <v-form-input-text
                       label="Cargo"
                       v-model="ctx.item.position"
@@ -209,7 +215,6 @@
                 </v-row>
               </template>
             </app-resume-profile-section>
-            <!-- <pre>{{ scope.data.resume.work }}</pre> -->
           </template>
 
           <template #tab:volunteer>
@@ -223,14 +228,20 @@
             >
               <template #item="ctx">
                 <v-row>
-                  <v-col cols="12">
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
                     <v-form-input-text
                       label="Organização"
                       v-model="ctx.item.organization"
                       hide-details="auto"
                     />
                   </v-col>
-                  <v-col cols="12">
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
                     <v-form-input-text
                       label="Cargo"
                       v-model="ctx.item.position"
@@ -268,7 +279,6 @@
                 </v-row>
               </template>
             </app-resume-profile-section>
-            <!-- <pre>{{ scope.data.resume.volunteer }}</pre> -->
           </template>
 
           <template #tab:education>
@@ -280,28 +290,40 @@
             >
               <template #item="ctx">
                 <v-row>
-                  <v-col cols="12">
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
                     <v-form-input-text
                       label="Instituição"
                       v-model="ctx.item.institution"
                       hide-details="auto"
                     />
                   </v-col>
-                  <v-col cols="12">
-                    <v-form-input-text
-                      label="URL"
-                      v-model="ctx.item.url"
-                      hide-details="auto"
-                    />
-                  </v-col>
-                  <v-col cols="12">
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
                     <v-form-input-text
                       label="Curso"
                       v-model="ctx.item.area"
                       hide-details="auto"
                     />
                   </v-col>
-                  <v-col cols="12">
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-form-input-text
+                      label="URL"
+                      v-model="ctx.item.url"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
                     <v-form-input-text
                       label="Grau de instrução"
                       hint="Técnico, Bacharel, Mestrado, Doutorado, etc"
@@ -381,7 +403,7 @@
           <template #tab:certificates>
             <app-resume-profile-section
               name="Certificados"
-              :title-field="(o) => o.meta.uuid"
+              :title-field="(o) => o.name || '--'"
               v-model="scope.data.resume.certificates"
               :default="{}"
             >
@@ -394,14 +416,20 @@
                       hide-details="auto"
                     />
                   </v-col>
-                  <v-col cols="12">
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
                     <v-form-input-date
                       label="Data"
                       v-model="ctx.item.date"
                       hide-details="auto"
                     />
                   </v-col>
-                  <v-col cols="12">
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
                     <v-form-input-text
                       label="Emissora"
                       v-model="ctx.item.issuer"
