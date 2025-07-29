@@ -2,6 +2,7 @@
   <v-combobox
     v-model="model.value"
     multiple
+    @update:model-value="model.emit()"
   >
     <template #selection="{ item, index }">
       <v-chip
@@ -11,7 +12,8 @@
         label
         @click:close="
           () => {
-            ctx.item.highlights.splice(index, 1);
+            model.value.splice(index, 1);
+            model.emit();
           }
         "
       />
