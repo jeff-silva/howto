@@ -10,7 +10,6 @@ const $props = defineProps({
 });
 
 const $route = useRoute();
-console.clear();
 
 const visible = reactive({
   value: true,

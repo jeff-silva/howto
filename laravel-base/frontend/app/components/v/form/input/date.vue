@@ -3,7 +3,7 @@
     <template #activator="scope">
       <v-text-field
         prepend-inner-icon="material-symbols:alarm-on-outline"
-        :model-value="$props.modelValue"
+        :model-value="model.valueFormatted()"
         readonly
         v-bind="{ ...$attrs, ...scope.props }"
       />
@@ -13,8 +13,14 @@
       <v-card>
         <v-card-text>
           <v-date-picker
-            :model-value="$props.modelValue"
+            :model-value="model.value"
             width="100%"
+            @update:model-value="
+              (value) => {
+                model.setValue(value);
+                model.emit();
+              }
+            "
           />
         </v-card-text>
         <div class="d-flex">
@@ -32,7 +38,7 @@
             @click="
               () => {
                 scope.isActive.value = false;
-                $emit('update:modelValue', $props.modelValue);
+                model.emit();
               }
             "
           />
@@ -44,8 +50,33 @@
 
 <script setup>
 const $props = defineProps({
-  modelValue: { type: String, default: null },
+  modelValue: { type: [String, Date], default: null },
 });
 
 const $emit = defineEmits(["update:modelValue"]);
+
+const model = reactive({
+  value: null,
+  setValue(value) {
+    if (value instanceof Date) value = value.toISOString();
+    model.value = value;
+  },
+  valueFormatted() {
+    if (!model.value) return "";
+    const [y, m, d, h, i, s] = model.value.split(/[^0-9]/g);
+    return `${d}/${m}/${y}`;
+  },
+  emit() {
+    $emit("update:modelValue", model.value);
+  },
+});
+
+model.setValue($props.modelValue);
+
+watch(
+  () => $props.modelValue,
+  (modelValue) => {
+    model.value = modelValue;
+  }
+);
 </script>
