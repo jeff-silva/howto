@@ -520,16 +520,29 @@
           <template #tab:languages>
             <app-resume-profile-section
               name="Idiomas"
-              :title-field="(o) => o.meta.uuid"
+              :title-field="(o) => o.language || '--'"
               v-model="scope.data.resume.languages"
               :default="{}"
             >
               <template #item="ctx">
                 <v-row>
-                  <v-col cols="12">
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
                     <v-form-input-text
-                      label="Instituição"
-                      v-model="ctx.item.institution"
+                      label="Nome do idioma"
+                      v-model="ctx.item.language"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-form-input-text
+                      label="Fluência"
+                      v-model="ctx.item.fluency"
                       hide-details="auto"
                     />
                   </v-col>
