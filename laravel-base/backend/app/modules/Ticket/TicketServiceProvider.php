@@ -3,7 +3,7 @@
 namespace Modules\Ticket;
 
 use Laravel\Sanctum\Sanctum;
-use App\Traits\ServiceProviderTrait;
+use Modular\Traits\ServiceProviderTrait;
 use Illuminate\Support\ServiceProvider;
 
 class TicketServiceProvider extends ServiceProvider
@@ -18,7 +18,7 @@ class TicketServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->bootControllers([
+        $this->bootRoutes([
             \Modules\Ticket\Http\Controllers\TicketTaskController::class,
         ]);
     }

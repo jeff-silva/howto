@@ -4,7 +4,7 @@ namespace Modules\Ticket\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AppUser;
-use App\Attributes\Route;
+use Modular\Attributes\Route;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AppUserStoreRequest;
 use App\Http\Requests\AppUserUpdateRequest;

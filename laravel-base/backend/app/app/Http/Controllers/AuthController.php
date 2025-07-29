@@ -3,15 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\AppUser;
-use App\Attributes\Route;
 use Illuminate\Http\Request;
+use Modular\Attributes\Route;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\AuthRegisterRequest;
 
 class AuthController extends Controller
 {
-    #[Route(path: '/api/auth/login', methods: ['post'], name: 'auth.login')]
+    #[Route(
+        path: '/api/auth/login',
+        methods: ['post'],
+        name: 'auth.login',
+        params: [
+            'email' => ['in' => 'body'],
+            'password' => ['in' => 'body'],
+        ],
+    )]
     public function login(Request $request)
     {
         $user = AppUser::query()

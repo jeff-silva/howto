@@ -17,9 +17,9 @@ abstract class Controller
         foreach ($classRef->getMethods() as $method) {
             if ($method->isStatic()) continue;
             if (!$method->isPublic()) continue;
-            $attributes = $method->getAttributes(\App\Attributes\Route::class);
+            $attributes = $method->getAttributes(\Modular\Attributes\Route::class);
             if (empty($attributes)) continue;
-            foreach($attributes as $attr) {
+            foreach ($attributes as $attr) {
                 $args = $attr->getArguments();
                 // $args['call'] = [new $classRef->name(), $method->getName()];
                 $args['call'] = [$classRef->name, $method->getName()];

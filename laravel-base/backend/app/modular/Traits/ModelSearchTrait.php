@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace Modular\Traits;
 
 trait ModelSearchTrait
 {

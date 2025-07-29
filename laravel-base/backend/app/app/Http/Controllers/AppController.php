@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use \App\Attributes\Route;
 use Illuminate\Http\Request;
-use \App\Http\Controllers\Controller;
+use Modular\Attributes\Route;
+use App\Http\Controllers\Controller;
 
 class AppController extends Controller
 {
@@ -15,5 +15,11 @@ class AppController extends Controller
         $user = auth()->guard('sanctum')->user();
         $config = config('app_config.public');
         return compact(['user', 'config']);
+    }
+
+    #[Route(path: '/api/app/openapi', methods: ['get'], name: 'app.openapi')]
+    public function openapi(Request $request)
+    {
+        return app()->make('modular')->getOpenapi();
     }
 }

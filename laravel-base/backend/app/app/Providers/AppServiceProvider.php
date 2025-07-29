@@ -4,22 +4,24 @@ namespace App\Providers;
 
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
-use App\Traits\ServiceProviderTrait;
+use Modular\Traits\ServiceProviderTrait;
 
-class SchemaService
-{
-    public $schema = [];
-    public function register($file) {
-        $schema = include $file;
-        $this->schema = array_merge($this->schema, $schema);
-    }
+// class SchemaService
+// {
+//     public $schema = [];
+//     public function register($file)
+//     {
+//         $schema = include $file;
+//         $this->schema = array_merge($this->schema, $schema);
+//     }
 
-    public function getSchema()
-    {
-        return $this->schema;
-    }
-}
+//     public function getSchema()
+//     {
+//         return $this->schema;
+//     }
+// }
 
 
 class AppServiceProvider extends ServiceProvider
@@ -31,15 +33,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton('schema', function ($app) {
-            return new SchemaService();
-        });
-        
-        $this->registerSchema(__DIR__ . '/../../database/schema.php');
-        $this->registerModules([
-            \Modules\Resume\ResumeServiceProvider::class,
-            \Modules\Ticket\TicketServiceProvider::class,
-        ]);
+        $this->app->register(\Modular\Providers\ModularServiceProvider::class);
+
+        // $this->app->singleton('schema', function ($app) {
+        //     return new SchemaService();
+        // });
+
+        // $this->registerSchema(__DIR__ . '/../../database/schema.php');
+        // $this->registerModules([
+        //     \Modules\Resume\ResumeServiceProvider::class,
+        //     \Modules\Ticket\TicketServiceProvider::class,
+        // ]);
     }
 
     /**
@@ -49,10 +53,16 @@ class AppServiceProvider extends ServiceProvider
     {
         Sanctum::usePersonalAccessTokenModel(\App\Models\AppPersonalAccessToken::class);
 
-        $this->bootControllers([
-            \App\Http\Controllers\AppController::class,
-            \App\Http\Controllers\AppUserController::class,
-            \App\Http\Controllers\AuthController::class,
-        ]);
+        // $this->app->make('route')->bootControllers([
+        //     \App\Http\Controllers\AppController::class,
+        //     \App\Http\Controllers\AppUserController::class,
+        //     \App\Http\Controllers\AuthController::class,
+        // ]);
+
+        // $this->bootControllers([
+        //     \App\Http\Controllers\AppController::class,
+        //     \App\Http\Controllers\AppUserController::class,
+        //     \App\Http\Controllers\AuthController::class,
+        // ]);
     }
 }

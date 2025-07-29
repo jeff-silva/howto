@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use \App\Traits\ModelSearchTrait;
+use Illuminate\Database\Eloquent\Model;
+use Modular\Traits\ModelSearchTrait;
 
-class AppFile extends Authenticatable
+class AppFile extends Model
 {
     use ModelSearchTrait;
 

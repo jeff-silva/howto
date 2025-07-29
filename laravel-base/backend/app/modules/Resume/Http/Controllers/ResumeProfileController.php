@@ -4,7 +4,7 @@ namespace Modules\Resume\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Modules\Resume\Models\ResumeProfile;
-use App\Attributes\Route;
+use Modular\Attributes\Route;
 use App\Http\Controllers\Controller;
 use Modules\Resume\Http\Requests\ResumeProfileRequest;
 

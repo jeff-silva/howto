@@ -2,8 +2,8 @@
 
 namespace Modules\Resume\Models;
 
-use \App\Traits\ModelSearchTrait;
 use Illuminate\Database\Eloquent\Model;
+use Modular\Traits\ModelSearchTrait;
 
 class ResumeProfile extends Model
 {

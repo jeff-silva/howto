@@ -7,7 +7,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use \App\Traits\ModelSearchTrait;
+use Modular\Traits\ModelSearchTrait;
 
 class AppUser extends Authenticatable
 {
