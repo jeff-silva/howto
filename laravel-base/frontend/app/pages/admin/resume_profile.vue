@@ -633,7 +633,6 @@
                 </v-row>
               </template>
             </app-resume-profile-section>
-            <!-- <pre>{{ scope.data.resume.references }}</pre> -->
           </template>
 
           <template #tab:projects>
@@ -647,8 +646,55 @@
                 <v-row>
                   <v-col cols="12">
                     <v-form-input-text
-                      label="Instituição"
-                      v-model="ctx.item.institution"
+                      label="Nome"
+                      v-model="ctx.item.name"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-form-input-date
+                      label="Data de início"
+                      v-model="ctx.item.startDate"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-form-input-date
+                      label="Data de fim"
+                      v-model="ctx.item.endDate"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-form-input-tags
+                      label="Tags"
+                      v-model="ctx.item.highlights"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-form-input-text
+                      label="URL"
+                      v-model="ctx.item.url"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-textarea
+                      label="Descrição"
+                      v-model="ctx.item.description"
                       hide-details="auto"
                     />
                   </v-col>
