@@ -397,7 +397,6 @@
                 </v-row>
               </template>
             </app-resume-profile-section>
-            <!-- <pre>{{ scope.data.resume.awards }}</pre> -->
           </template>
 
           <template #tab:certificates>
@@ -583,7 +582,7 @@
           <template #tab:interests>
             <app-resume-profile-section
               name="Interesses"
-              :title-field="(o) => o.meta.uuid"
+              :title-field="(o) => o.name"
               v-model="scope.data.resume.interests"
               :default="{}"
             >
@@ -591,8 +590,15 @@
                 <v-row>
                   <v-col cols="12">
                     <v-form-input-text
-                      label="Instituição"
-                      v-model="ctx.item.institution"
+                      label="Nome"
+                      v-model="ctx.item.name"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-tags
+                      label="Tags"
+                      v-model="ctx.item.keywords"
                       hide-details="auto"
                     />
                   </v-col>
