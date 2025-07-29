@@ -21,11 +21,7 @@ trait ServiceProviderTrait
 
   public function bootRoutes($controllers = [])
   {
-    foreach ($controllers as $controller) {
-      // $call = [$controller, 'registerRoutes'];
-      // if (!is_callable($call)) continue;
-      // call_user_func($call);
-    }
+    $this->app->make('modular')->bootRoutes($controllers);
   }
 
   // public function registerSchema($file)

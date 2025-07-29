@@ -101,7 +101,7 @@ class ModularService
     return $this->openapi;
   }
 
-  public function bootControllers($controllers = [])
+  public function bootRoutes($controllers = [])
   {
     foreach ($controllers as $controller) {
       foreach ((new \ReflectionClass($controller))->getMethods() as $method) {

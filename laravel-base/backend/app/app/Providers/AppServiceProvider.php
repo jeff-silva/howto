@@ -35,10 +35,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->register(\Modular\Providers\ModularServiceProvider::class);
 
-        // $this->app->singleton('schema', function ($app) {
-        //     return new SchemaService();
-        // });
-
         // $this->registerSchema(__DIR__ . '/../../database/schema.php');
         // $this->registerModules([
         //     \Modules\Resume\ResumeServiceProvider::class,
@@ -53,16 +49,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Sanctum::usePersonalAccessTokenModel(\App\Models\AppPersonalAccessToken::class);
 
-        // $this->app->make('route')->bootControllers([
-        //     \App\Http\Controllers\AppController::class,
-        //     \App\Http\Controllers\AppUserController::class,
-        //     \App\Http\Controllers\AuthController::class,
-        // ]);
-
-        // $this->bootControllers([
-        //     \App\Http\Controllers\AppController::class,
-        //     \App\Http\Controllers\AppUserController::class,
-        //     \App\Http\Controllers\AuthController::class,
-        // ]);
+        $this->bootRoutes([
+            \App\Http\Controllers\AppController::class,
+            \App\Http\Controllers\AppUserController::class,
+            \App\Http\Controllers\AuthController::class,
+        ]);
     }
 }

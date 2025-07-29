@@ -35,6 +35,6 @@ class ModularServiceProvider extends ServiceProvider
       ]);
     }
 
-    $this->app->make('modular')->bootControllers($this->modules['controllers']);
+    // $this->app->make('modular')->bootControllers($this->modules['controllers']);
   }
 }
