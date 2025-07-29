@@ -418,13 +418,12 @@
                 </v-row>
               </template>
             </app-resume-profile-section>
-            <!-- <pre>{{ scope.data.resume.certificates }}</pre> -->
           </template>
 
           <template #tab:publications>
             <app-resume-profile-section
               name="Publicações"
-              :title-field="(o) => o.meta.uuid"
+              :title-field="(o) => `${o.name || '--'}`"
               v-model="scope.data.resume.publications"
               :default="{}"
             >
@@ -432,8 +431,42 @@
                 <v-row>
                   <v-col cols="12">
                     <v-form-input-text
-                      label="Instituição"
-                      v-model="ctx.item.institution"
+                      label="Título"
+                      v-model="ctx.item.name"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-form-input-text
+                      label="Editora/Veículo de publicação"
+                      v-model="ctx.item.publisher"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-form-input-date
+                      label="Data de publicação"
+                      v-model="ctx.item.releaseDate"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-text
+                      label="URL"
+                      v-model="ctx.item.url"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-textarea
+                      label="Descrição"
+                      v-model="ctx.item.summary"
                       hide-details="auto"
                     />
                   </v-col>
