@@ -100,4 +100,18 @@ class ModularService
   {
     return $this->openapi;
   }
+
+  public function bootControllers($controllers = [])
+  {
+    foreach ($controllers as $controller) {
+      foreach ((new \ReflectionClass($controller))->getMethods() as $method) {
+        if (!$method->isPublic() || $method->isStatic()) continue;
+        foreach ($method->getAttributes(\Modular\Attributes\Route::class) as $attr) {
+          $args = $attr->getArguments();
+          $args['call'] = [$method->class, $method->getName()];
+          $this->route(...$args);
+        }
+      }
+    }
+  }
 }

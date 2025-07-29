@@ -7,6 +7,7 @@ use Modular\Services\ModularService;
 
 class ModularServiceProvider extends ServiceProvider
 {
+  public $modules = [];
   /**
    * Register any application services.
    */
@@ -16,10 +17,10 @@ class ModularServiceProvider extends ServiceProvider
       return new ModularService();
     });
 
-    // $modules = include base_path('/modular/modules.php');
-    // foreach ($modules['serviceProviders'] as $provider) {
-    //   $this->app->register($provider);
-    // }
+    $this->modules = include base_path('/modular/modules.php');
+    foreach ($this->modules['serviceProviders'] as $provider) {
+      $this->app->register($provider);
+    }
   }
 
   /**
@@ -30,7 +31,10 @@ class ModularServiceProvider extends ServiceProvider
     if ($this->app->runningInConsole()) {
       $this->commands([
         \Modular\Console\Commands\ModularInitCommand::class,
+        ...$this->modules['commands']
       ]);
     }
+
+    $this->app->make('modular')->bootControllers($this->modules['controllers']);
   }
 }

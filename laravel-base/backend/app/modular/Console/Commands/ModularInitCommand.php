@@ -19,7 +19,7 @@ class ModularInitCommand extends Command
    *
    * @var string
    */
-  protected $description = 'Modular Init';
+  protected $description = 'Generate module includes files';
 
   /**
    * Execute the console command.
@@ -46,16 +46,14 @@ class ModularInitCommand extends Command
     ];
 
     foreach ($sections as $sectionName => $sectionSuffix) {
-      $content[] = "";
       $content[] = "\t'{$sectionName}' => [";
       foreach ($files as $file) {
         if (!Str::endsWith($file, $sectionSuffix)) continue;
-        $class = $file->getFilenameWithoutExtension() . '::class';
-        $class = $file->getRelativePath() . '/' . $class;
-        $class = '\Modules\\' . str_replace('/', '\\', $class) . ',';
-        $content[] = "\t\t{$class}";
+        $class = $this->getClassName($file);
+        $content[] = "\t\t{$class}::class,";
       }
       $content[] = "\t],";
+      $content[] = '';
     }
 
     $content[] = '];';
@@ -65,5 +63,12 @@ class ModularInitCommand extends Command
       filename: base_path('/modular/modules.php'),
       data: join("\n", $content)
     );
+  }
+
+  public function getClassName($file)
+  {
+    $class = $file->getFilenameWithoutExtension();
+    $class = $file->getRelativePath() . '/' . $class;
+    return '\Modules\\' . str_replace('/', '\\', $class);
   }
 }

@@ -6,7 +6,6 @@
 */
 
 return [
-
 	'serviceProviders' => [
 		\Modules\Resume\ResumeServiceProvider::class,
 		\Modules\Ticket\TicketServiceProvider::class,
@@ -20,4 +19,5 @@ return [
 		\Modules\Resume\Http\Controllers\ResumeProfileController::class,
 		\Modules\Ticket\Http\Controllers\TicketTaskController::class,
 	],
+
 ];
