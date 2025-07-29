@@ -304,19 +304,20 @@
                   <v-col cols="12">
                     <v-form-input-text
                       label="Grau de instrução"
+                      hint="Técnico, Bacharel, Mestrado, Doutorado, etc"
                       v-model="ctx.item.studyType"
                       hide-details="auto"
                     />
                   </v-col>
                   <v-col cols="6">
-                    <v-form-input-text
+                    <v-form-input-date
                       label="Data de início"
                       v-model="ctx.item.startDate"
                       hide-details="auto"
                     />
                   </v-col>
                   <v-col cols="6">
-                    <v-form-input-text
+                    <v-form-input-date
                       label="Data de fim"
                       v-model="ctx.item.endDate"
                       hide-details="auto"
@@ -325,7 +326,6 @@
                 </v-row>
               </template>
             </app-resume-profile-section>
-            <!-- <pre>{{ scope.data.resume.education }}</pre> -->
           </template>
 
           <template #tab:awards>
@@ -339,9 +339,37 @@
                 <v-row>
                   <v-col cols="12">
                     <v-form-input-text
-                      label="Instituição"
-                      v-model="ctx.item.institution"
+                      label="Título"
+                      v-model="ctx.item.title"
                       hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-form-input-date
+                      label="Data"
+                      v-model="ctx.item.date"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-form-input-text
+                      label="Instituição que premiou"
+                      v-model="ctx.item.awarder"
+                      hide-details="auto"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-form-input-textarea
+                      label="Descrição"
+                      v-model="ctx.item.summary"
+                      hide-details="auto"
+                      auto-grow
                     />
                   </v-col>
                 </v-row>
