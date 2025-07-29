@@ -28,30 +28,35 @@ class ModularInitCommand extends Command
   {
     $files = \Illuminate\Support\Facades\File::allFiles(base_path('/modules'));
 
-    $content = ['<?php', '', 'return ['];
+    $sections = [
+      'serviceProviders' => 'ServiceProvider.php',
+      'commands' => 'Command.php',
+      'controllers' => 'Controller.php',
+    ];
 
-    // serviceProviders
-    $content[] = "\t'serviceProviders' => [";
-    foreach ($files as $file) {
-      if (!Str::endsWith($file, 'ServiceProvider.php')) continue;
-      $name = $file->getFilenameWithoutExtension() . '::class';
-      $name = $file->getRelativePath() . '/' . $name;
-      $name = '\Modules\\' . str_replace('/', '\\', $name) . ',';
-      $content[] = "\t\t{$name}";
+    $content = [
+      '<?php',
+      '',
+      '/*',
+      ' * File generated automatically, do not edit!',
+      ' * Run "php artisan modular:init" to generate this file.',
+      '*/',
+      '',
+      'return ['
+    ];
+
+    foreach ($sections as $sectionName => $sectionSuffix) {
+      $content[] = "";
+      $content[] = "\t'{$sectionName}' => [";
+      foreach ($files as $file) {
+        if (!Str::endsWith($file, $sectionSuffix)) continue;
+        $class = $file->getFilenameWithoutExtension() . '::class';
+        $class = $file->getRelativePath() . '/' . $class;
+        $class = '\Modules\\' . str_replace('/', '\\', $class) . ',';
+        $content[] = "\t\t{$class}";
+      }
+      $content[] = "\t],";
     }
-
-    $content[] = "\t],";
-
-    // commands
-    $content[] = "\t'commands' => [";
-    foreach ($files as $file) {
-      if (!Str::endsWith($file, 'Command.php')) continue;
-      $name = $file->getFilenameWithoutExtension() . '::class';
-      $name = $file->getRelativePath() . '/' . $name;
-      $name = '\Modules\\' . str_replace('/', '\\', $name);
-      $content[] = "\t\t{$name}";
-    }
-    $content[] = "\t],";
 
     $content[] = '];';
     $content[] = '';

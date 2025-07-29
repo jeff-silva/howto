@@ -16,10 +16,10 @@ class ModularServiceProvider extends ServiceProvider
       return new ModularService();
     });
 
-    $modules = include base_path('/modular/modules.php');
-    foreach ($modules['serviceProviders'] as $provider) {
-      $this->app->register($provider);
-    }
+    // $modules = include base_path('/modular/modules.php');
+    // foreach ($modules['serviceProviders'] as $provider) {
+    //   $this->app->register($provider);
+    // }
   }
 
   /**
