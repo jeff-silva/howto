@@ -284,7 +284,9 @@
           <template #tab:education>
             <app-resume-profile-section
               name="Formação"
-              :title-field="(o) => o.meta.uuid"
+              :title-field="
+                (o) => `${o.area || '--'} em ${o.institution || '--'}`
+              "
               v-model="scope.data.resume.education"
               :default="{}"
             >
@@ -353,7 +355,7 @@
           <template #tab:awards>
             <app-resume-profile-section
               name="Prêmios"
-              :title-field="(o) => o.meta.uuid"
+              :title-field="(o) => o.title || '--'"
               v-model="scope.data.resume.awards"
               :default="{}"
             >
@@ -500,13 +502,20 @@
                 </v-row>
               </template>
             </app-resume-profile-section>
-            <!-- <pre>{{ scope.data.resume.publications }}</pre> -->
           </template>
 
           <template #tab:skills>
             <app-resume-profile-section
               name="Habilidades"
-              :title-field="(o) => o.name || '--'"
+              :title-field="
+                (o) => {
+                  let str = o.name || '--';
+                  if (o.keywords && o.keywords.length) {
+                    str += ' (' + o.keywords.join(', ') + ')';
+                  }
+                  return str;
+                }
+              "
               v-model="scope.data.resume.skills"
               :default="{}"
             >
@@ -638,7 +647,7 @@
           <template #tab:projects>
             <app-resume-profile-section
               name="Projetos"
-              :title-field="(o) => o.meta.uuid"
+              :title-field="(o) => o.name || '--'"
               v-model="scope.data.resume.projects"
               :default="{}"
             >
@@ -701,7 +710,6 @@
                 </v-row>
               </template>
             </app-resume-profile-section>
-            <!-- <pre>{{ scope.data.resume.projects }}</pre> -->
           </template>
         </v-tabs2>
         <br />

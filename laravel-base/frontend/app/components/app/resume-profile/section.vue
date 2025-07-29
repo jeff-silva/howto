@@ -4,40 +4,41 @@
       <v-card-title>{{ $props.name }} ({{ items.value.length }})</v-card-title>
     </v-card>
 
-    <template v-for="o in items.value">
-      <v-card
-        :title="items.titleField(o)"
-        :style="{ opacity: o.meta.active ? 1 : 0.5 }"
-        color="surface"
-      >
-        <v-card-text>
-          <slot
-            name="item"
-            v-bind="scope({ item: o })"
-          ></slot>
-        </v-card-text>
-        <v-card-actions class="justify-end">
-          <v-form-actions
-            :actions="[
-              {
-                text: o.meta.active ? 'Desativar' : 'Ativar',
-                class: 'bg-warning',
-                onClick() {
-                  o.meta.active = !o.meta.active;
-                },
-              },
-              {
-                text: 'Deletar',
-                class: 'bg-error',
-                onClick() {
-                  items.remove(o);
-                },
-              },
-            ]"
-          />
-        </v-card-actions>
-      </v-card>
-    </template>
+    <v-expansion-panels variant="accordion">
+      <template v-for="o in items.value">
+        <v-expansion-panel
+          :title="items.titleField(o)"
+          :style="{ opacity: o.meta.active ? 1 : 0.5 }"
+        >
+          <v-expansion-panel-text>
+            <slot
+              name="item"
+              v-bind="scope({ item: o })"
+            ></slot>
+            <v-card-actions class="justify-end">
+              <v-form-actions
+                :actions="[
+                  {
+                    text: o.meta.active ? 'Desativar' : 'Ativar',
+                    class: 'bg-warning',
+                    onClick() {
+                      o.meta.active = !o.meta.active;
+                    },
+                  },
+                  {
+                    text: 'Deletar',
+                    class: 'bg-error',
+                    onClick() {
+                      items.remove(o);
+                    },
+                  },
+                ]"
+              />
+            </v-card-actions>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+      </template>
+    </v-expansion-panels>
 
     <v-card color="surface">
       <v-card-actions class="justify-end">
