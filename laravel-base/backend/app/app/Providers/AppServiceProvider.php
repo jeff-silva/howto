@@ -36,10 +36,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->register(\Modular\Providers\ModularServiceProvider::class);
 
         // $this->registerSchema(__DIR__ . '/../../database/schema.php');
-        // $this->registerModules([
-        //     \Modules\Resume\ResumeServiceProvider::class,
-        //     \Modules\Ticket\TicketServiceProvider::class,
-        // ]);
     }
 
     /**

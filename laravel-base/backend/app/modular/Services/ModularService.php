@@ -18,6 +18,8 @@ class ModularService
     ],
   ];
 
+  public $schema = [];
+
   public function route(
     $path = '/',
     $methods = ['get'],
@@ -113,5 +115,11 @@ class ModularService
         }
       }
     }
+  }
+
+  public function registerSchema($file)
+  {
+    $schema = include $file;
+    $this->schema = array_merge($this->schema, $schema);
   }
 }

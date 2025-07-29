@@ -12,7 +12,7 @@ class ResumeServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        // $this->registerSchema(__DIR__ . '/database/schema.php');
+        $this->registerSchema(__DIR__ . '/database/schema.php');
     }
 
 

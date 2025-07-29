@@ -12,20 +12,13 @@ trait ServiceProviderTrait
     return $config;
   }
 
-  public function registerModules($modules = [])
-  {
-    foreach ($modules as $module) {
-      $this->app->register($module);
-    }
-  }
-
   public function bootRoutes($controllers = [])
   {
     $this->app->make('modular')->bootRoutes($controllers);
   }
 
-  // public function registerSchema($file)
-  // {
-  //   $this->app->make('schema')->register($file);
-  // }
+  public function registerSchema($file)
+  {
+    $this->app->make('modular')->registerSchema($file);
+  }
 }
