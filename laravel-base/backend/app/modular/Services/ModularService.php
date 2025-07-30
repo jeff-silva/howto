@@ -20,16 +20,20 @@ class ModularService
 
   public $schema = [];
 
-  public function route(
-    $path = '/',
-    $methods = ['get'],
-    $name = null,
-    $call = [],
-    $middleware = [],
-    $params = []
-  ) {
-    foreach ($params as $paramName => $paramData) {
-      $params[$paramName] = array_merge([
+  public function route($params = [])
+  {
+    $params = array_merge([
+      'path' => '/',
+      'methods' => ['get'],
+      'name' => null,
+      'call' => [],
+      'middleware' => [],
+      'params' => [],
+      'tags' => [],
+    ], $params);
+
+    foreach ($params['params'] as $paramName => $paramData) {
+      $params['params'][$paramName] = array_merge([
         'in' => 'query', // query, path, body, header
         'default' => '',
         'example' => '',
@@ -39,63 +43,87 @@ class ModularService
       ], $paramData);
     }
 
-    if (!isset($this->openapi['paths'][$path])) {
-      $this->openapi['paths'][$path] = [];
-    }
+    dump($params);
 
-    foreach ($methods as $method) {
-      $item = [
-        'operationId' => $name,
-        'parameters' => [],
-        'responses' => [
-          200 => ['description' => 'OK'],
-          400 => ['description' => 'Bad Request'],
-          401 => ['description' => 'Unauthorized'],
-        ],
-      ];
+    // if (!isset($this->openapi['paths'][$path])) {
+    //   $this->openapi['paths'][$path] = [];
+    // }
 
-      $schema = [
-        'type' => 'object',
-        'properties' => [],
-      ];
-      foreach ($params as $paramName => $paramData) {
-        if ($paramData['in'] != 'body') continue;
-        $schema['properties'][$paramName] = [
-          'type' => $paramData['type'],
-        ];
-      }
+    // foreach ($methods as $method) {
+    //   $item = [
+    //     'operationId' => $name,
+    //     'parameters' => [],
+    //     'responses' => [
+    //       200 => ['description' => 'OK'],
+    //       400 => ['description' => 'Bad Request'],
+    //       401 => ['description' => 'Unauthorized'],
+    //     ],
+    //   ];
 
-      if (!empty($schema['properties'])) {
-        $this->openapi['components']['schemas'][$name] = $schema;
-      }
+    //   $item['parameters'] = array_map(function ($params) {
+    //     return array_merge([
+    //       'in' => 'query',
+    //       'type' => 'string',
+    //       'default' => null,
+    //       'required' => false,
+    //       'description' => '',
+    //       'example' => '',
+    //     ], $params);
+    //   }, $item['parameters']);
 
-      foreach ($params as $paramName => $paramData) {
-        if ($paramData['in'] == 'body') {
-          $item['requestBody'] = [
-            'required' => true,
-            'content' => [
-              'application/json' => [
-                'schema' => [
-                  '$ref' => "#/components/schemas/{$name}",
-                ],
-              ],
-            ],
-          ];
-        } else {
-          $item['parameters'][] = [
-            'name' => $paramName,
-            'in' => $paramData['in'],
-            'required' => $paramData['required'],
-          ];
-        }
-      }
+    //   $schema = [
+    //     'type' => 'object',
+    //     'properties' => [],
+    //   ];
+    //   foreach ($params as $paramName => $paramData) {
+    //     if ($paramData['in'] != 'body') continue;
+    //     $schema['properties'][$paramName] = [
+    //       'type' => $paramData['type'],
+    //     ];
+    //   }
 
-      $this->openapi['paths'][$path][$method] = $item;
-    }
+    //   if (!empty($schema['properties'])) {
+    //     $this->openapi['components']['schemas'][$name] = $schema;
+    //   }
 
-    Route::match($methods, $path, $call)
-      ->name($name)
-      ->middleware($middleware);
+    //   $body = [];
+    //   foreach ($params as $paramName => $paramData) {
+    //     if ($paramData['in'] == 'body') {
+    //       $body[$paramName] = [
+    //         'type' => $paramData['type'],
+    //       ];
+    //     } else {
+    //       $item['parameters'][] = [
+    //         'name' => $paramName,
+    //         'in' => $paramData['in'],
+    //         'required' => $paramData['required'],
+    //         'schema' => [
+    //           'type' => $paramData['type'],
+    //         ],
+    //       ];
+    //     }
+    //   }
+
+    //   if (!empty($body)) {
+    //     $item['requestBody'] = [
+    //       'required' => true,
+    //       'content' => [
+    //         'application/json' => [
+    //           'schema' => [
+    //             'type' => 'object',
+    //             'properties' => $body,
+    //           ],
+    //         ],
+    //       ],
+    //     ];
+    //   }
+
+    //   $this->openapi['paths'][$path][$method] = $item;
+    // }
+
+    // Route::match($methods, $path, $call)
+    //   ->name($name)
+    //   ->middleware($middleware);
   }
 
   public function getOpenapi()
@@ -110,7 +138,10 @@ class ModularService
         if (!$method->isPublic() || $method->isStatic()) continue;
         foreach ($method->getAttributes(\Modular\Attributes\Route::class) as $attr) {
           $args = $attr->getArguments();
-          $args['call'] = [$method->class, $method->getName()];
+          $args = array_map(function ($arg) use ($method) {
+            $arg['call'] = [$method->class, $method->getName()];
+            return $arg;
+          }, $args);
           $this->route(...$args);
         }
       }

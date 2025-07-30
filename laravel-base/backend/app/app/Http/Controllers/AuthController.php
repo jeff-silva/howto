@@ -11,15 +11,15 @@ use App\Http\Requests\AuthRegisterRequest;
 
 class AuthController extends Controller
 {
-    #[Route(
-        path: '/api/auth/login',
-        methods: ['post'],
-        name: 'auth.login',
-        params: [
+    #[Route([
+        'path' => '/api/auth/login',
+        'methods' => ['post'],
+        'name' => 'auth.login',
+        'params' => [
             'email' => ['in' => 'body'],
             'password' => ['in' => 'body'],
         ],
-    )]
+    ])]
     public function login(Request $request)
     {
         $user = AppUser::query()
@@ -36,21 +36,33 @@ class AuthController extends Controller
         return compact(['token']);
     }
 
-    #[Route(path: '/api/auth/register', methods: ['post'], name: 'auth.register')]
+    #[Route([
+        'path' => '/api/auth/register',
+        'methods' => ['post'],
+        'name' => 'auth.register',
+    ])]
     public function register(AuthRegisterRequest $request)
     {
         $entity = AppUser::create($request->validated());
         return compact(['entity']);
     }
 
-    #[Route(path: '/api/auth/password/request', methods: ['post'], name: 'auth.password.request')]
+    #[Route([
+        'path' => '/api/auth/password/request',
+        'methods' => ['post'],
+        'name' => 'auth.password.request',
+    ])]
     public function passwordRequest(AuthRegisterRequest $request)
     {
         $entity = AppUser::create($request->validated());
         return compact(['entity']);
     }
 
-    #[Route(path: '/api/auth/password/update', methods: ['post'], name: 'auth.password.update')]
+    #[Route([
+        'path' => '/api/auth/password/update',
+        'methods' => ['post'],
+        'name' => 'auth.password.update',
+    ])]
     public function passwordUpdate(AuthRegisterRequest $request)
     {
         $entity = AppUser::create($request->validated());

@@ -10,14 +10,27 @@ use Modules\Resume\Http\Requests\ResumeProfileRequest;
 
 class ResumeProfileController extends Controller
 {
-    #[Route(path: '/api/resume_profile', methods: ['post'], middleware: ['auth:sanctum'], name: 'resume_profile.create')]
+    #[Route([
+        'path' => '/api/resume_profile',
+        'methods' => ['post'],
+        'middleware' => ['auth:sanctum'],
+        'name' => 'resume_profile.create',
+    ])]
     public function create(ResumeProfileRequest $request)
     {
         $entity = ResumeProfile::create($request->validated());
         return compact(['entity']);
     }
 
-    #[Route(path: '/api/resume_profile/{id}', methods: ['put'], middleware: ['auth:sanctum'], name: 'resume_profile.update')]
+    #[Route([
+        'path' => '/api/resume_profile/{id}',
+        'methods' => ['put'],
+        'middleware' => ['auth:sanctum'],
+        'name' => 'resume_profile.update',
+        'params' => [
+            'id' => ['in' => 'path', 'required' => true],
+        ],
+    ])]
     public function update(ResumeProfileRequest $request, $id)
     {
         $entity = ResumeProfile::find($id);
@@ -25,25 +38,41 @@ class ResumeProfileController extends Controller
         return compact(['entity']);
     }
 
-    #[Route(path: '/api/resume_profile', methods: ['get'], middleware: ['auth:sanctum'], name: 'resume_profile.index')]
+    #[Route([
+        'path' => '/api/resume_profile',
+        'methods' => ['get'],
+        'middleware' => ['auth:sanctum'],
+        'name' => 'resume_profile.index',
+    ])]
     public function index(Request $request)
     {
         return ResumeProfile::searchPaginated($request->all());
     }
 
-    #[Route(
-        path: '/api/resume_profile/{id}',
-        methods: ['get'],
-        middleware: ['auth:sanctum'],
-        name: 'resume_profile.select',
-    )]
+    #[Route([
+        'path' => '/api/resume_profile/{id}',
+        'methods' => ['get'],
+        'middleware' => ['auth:sanctum'],
+        'name' => 'resume_profile.select',
+        'params' => [
+            'id' => ['in' => 'path', 'required' => true],
+        ],
+    ])]
     public function select($id)
     {
         $entity = ResumeProfile::find($id);
         return compact(['entity']);
     }
 
-    #[Route(path: '/api/resume_profile/{id}', methods: ['delete'], middleware: ['auth:sanctum'], name: 'resume_profile.delete')]
+    #[Route([
+        'path' => '/api/resume_profile/{id}',
+        'methods' => ['delete'],
+        'middleware' => ['auth:sanctum'],
+        'name' => 'resume_profile.delete',
+        'params' => [
+            'id' => ['in' => 'path', 'required' => true],
+        ],
+    ])]
     public function delete(ResumeProfile $entity)
     {
         $entity->delete();
