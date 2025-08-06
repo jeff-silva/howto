@@ -1,35 +1,53 @@
-volumes:
-  cloudbeaver_volume:
-
+# volumes:
+#   cloudbeaver_volume:
 
 services:
-  database:
-    build: ./database
-    ports:
-      - 3306:3306
+  # database:
+  #   build: ./database
+  #   ports:
+  #     - 3306:3306
 
-  backend:
-    build: ./backend
-    volumes:
-      - ./backend/app:/app
-    ports:
-      - 8000:8000
-    depends_on:
-      - database
+  # backend:
+  #   build: ./backend
+  #   volumes:
+  #     - ./backend/app:/app
+  #   ports:
+  #     - 8000:8000
+  #   depends_on:
+  #     - database
 
-  frontend:
+  # frontend:
+  #   image: node:22
+  #   working_dir: /app
+  #   command: bash -c "yarn install && yarn dev"
+  #   volumes:
+  #     - ./frontend/app:/app
+  #   ports:
+  #     - 3000:3000
+
+  # cloudbeaver:
+  #   image: dbeaver/cloudbeaver
+  #   volumes:
+  #     - cloudbeaver_volume:/opt/cloudbeaver/workspace
+  #     - ./backend/app/database/database.sqlite:/app/database.sqlite:ro
+  #   ports:
+  #     - 8978:8978
+
+  # apicur:
+  #   image: quay.io/apicurio/apicurio-studio:1.0.0.Beta1
+  #   ports:
+  #     - 8080:8080
+
+  # apicur_ui:
+  #   image: quay.io/apicurio/apicurio-studio-ui:1.0.0.Beta1
+  #   ports:
+  #     - 8888:8080
+
+  codegen:
     image: node:22
     working_dir: /app
     command: bash -c "yarn install && yarn dev"
     volumes:
-      - ./frontend/app:/app
+      - ./codegen/app:/app
     ports:
-      - 3000:3000
-
-  cloudbeaver:
-    image: dbeaver/cloudbeaver
-    volumes:
-      - cloudbeaver_volume:/opt/cloudbeaver/workspace
-      - ./backend/app/database/database.sqlite:/app/database.sqlite:ro
-    ports:
-      - 8978:8978
+      - 3001:3000
