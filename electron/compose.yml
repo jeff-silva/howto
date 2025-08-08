@@ -1,14 +1,10 @@
 services:
-  electron:
+  electronjs:
+    image: electronjs
     build: ./electron
-    working_dir: /home/hung/app
     environment:
-      - DISPLAY=$DISPLAY
-      - ELECTRON_DISABLE_SANDBOX=1
-      # - DBUS_SESSION_BUS_ADDRESS=/dev/null
-      # - ELECTRON_DISABLE_SECURITY_WARNINGS=true
+      DISPLAY: ${DISPLAY}
+      # ELECTRON_DISABLE_SECURITY_WARNINGS: false
     volumes:
-      - ./electron/app:/home/hung/app
+      - ./electron/app:/app
       - /tmp/.X11-unix:/tmp/.X11-unix
-      # - /home/hung/app/node_modules
-    command: bash -c "yarn install && yarn dev"

@@ -3,17 +3,37 @@
   <head>
     <meta charset="utf-8" />
     <title>Hello World</title>
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';"
-    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+    </style>
   </head>
   <body>
-    <h2>Hello World</h2>
     <webview
-      nodeintegration
-      src="https://www.github.com/"
-      style="display: block; width: 640px; height: 480px; border: solid 1px red"
+      id="wplace"
+      src="https://wplace.live/"
+      style="width: 100%; height: 100vh"
     ></webview>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const webview = document.getElementById("wplace");
+        webview.openDevTools();
+        webview.addEventListener("dom-ready", () => {
+          let script = () => {
+            const element = document.elementFromPoint(200, 100);
+            console.log(element);
+          };
+
+          webview.executeJavaScript("(" + script.toString() + ")();");
+        });
+      });
+    </script>
   </body>
 </html>

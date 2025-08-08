@@ -31,23 +31,15 @@ class AppWindow {
     if (this.instance) return this.instance;
 
     const win = new BrowserWindow({
-      width: 800,
-      height: 600,
+      width: 1024,
+      height: 768,
       webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
+        webviewTag: true,
+        // preload: path.join(__dirname, "preload.js"),
       },
     });
 
-    win.webContents.setWindowOpenHandler(({ url }) => {
-      shell.openExternal(url);
-      return { action: "allow" };
-    });
-
-    // const view1 = new WebContentsView();
-    // win.contentView.addChildView(view1);
-    // view1.webContents.loadURL("https://electronjs.org");
-    // view1.setBounds({ x: 0, y: 0, width: 400, height: 400 });
+    // win.webContents.openDevTools({ mode: "bottom" });
 
     win.loadFile(path.join(__dirname, "index.html"));
     win.on("closed", () => {
