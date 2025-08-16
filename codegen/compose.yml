@@ -1,0 +1,4 @@
+services:
+  # Base application
+  codegen:
+    build: ./codegen/

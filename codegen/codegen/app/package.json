@@ -1,0 +1,9 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "type": "module",
+  "license": "MIT",
+  "devDependencies": {
+    "edge.js": "^6.3.0"
+  }
+}
