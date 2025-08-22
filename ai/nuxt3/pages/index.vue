@@ -28,9 +28,9 @@
           v-model="game.theme"
           :hide-details="true"
           :items="[
-            'Personagens de desenho animado',
             'Personagens de série',
-            'Prato culinário',
+            'Personagens de desenho animado',
+            'Personagens de anime',
           ]"
           @update:modelValue="game.init()"
         />
@@ -82,6 +82,14 @@
             @click="rules.characterChange()"
           /> -->
           <v-btn
+            text="Desistir"
+            @click="
+              () => {
+                game.giveUp();
+              }
+            "
+          />
+          <v-btn
             text="Tentar outro"
             :loading="game.aiInit.busy"
             @click="game.init()"
@@ -98,6 +106,7 @@
 
 <script setup>
 import { marked } from "marked";
+const _alert = alert;
 
 const app = useApp();
 
@@ -116,26 +125,24 @@ const game = reactive({
     this.quest = "";
     this.try = 0;
     // this.character = "Mickey Mouse";
-    this.aiInit.prompt = `Para um jogo estilo Akinator, preciso que
-      você me dê apenas o nome limpo (mais nada) de um ${this.theme}
-      aleatório.
+    this.aiInit.prompt = `
+      Para um jogo de adivinhação de personagem, me dê o nome de ${this.theme}, apenas um.
+      Preciso somente do nome como resposta, mais nada.
 
-      Varie entre os anos 80 e hoje.
+      Regras:
 
-      Personagens secundários e terciários são bem vindos.
+      - Seja criativo e aleatório, você repete muito personagens de Braking Bad;
 
-      Filmes também são muito bem vindos.
-      
-      Precisa ser algo famoso, para que não seja tão difícil
-      de adivinhar, mas também não pode ser nada tão lógico Precisa ser desafiador.
-      
-      Se for o nome de um personagem e tiver sobrenome, informe-o.
-      
-      Se fizer parte de um filme ou série, informe também o nome da mesma
-      nesse formato: Fulano - A Vida de Fulano
-      
-      Programas brasileiros que se passavam em canais abertos como Globo, SBT,
-      TV Cultura e MTV são bem vindos.`;
+      - O personagem precisa ser conhecido;
+
+      - Não precisa ser o personagem principal, só precisa ser conhecido;
+
+      - Informe o sobrenome, se o mesmo existir;
+
+      - Detalhe de onde vem o personagem, nesse formato de exemplo: "Fulano - A Vida de Fulano"
+
+      - Os programas podem ser de qualquer país do mundo, só é importante o personagem ser conhecido;
+    `;
     this.aiInit.submit().then((resp) => {
       resp.response.candidates.map((candidate) => {
         candidate.content.parts.map((part) => {
@@ -150,29 +157,31 @@ const game = reactive({
   aiGuess: useAi(),
 
   guess() {
-    this.aiGuess.options.context = `Isso é um jogo tipo Akinator,
-      onde você vai ser um personagem e o usuário deve adivinhar quem é.
+    this.aiGuess.options.context = `
+      Estamos em um jogo onde você é um personagem secreto e
+      é preciso adivinhar quem você é.
 
-      As perguntas devem ser respondidas sobre o personagem hoje em dia
-      (ou como estava antes de morrer, em caso de já ter morrido).
+      - As perguntas só podem ser respondidas com sim ou não, mais nada.
+
+      - Se for perguntado algo onde "sim" e "não" não caibam como resposta,
+      diga apenas: "Só posso responder sim ou não."
+
+      - Se o usuário disser "desisto", diga o nome do personagem e informe
+      que a pessoa perdeu o jogo.
 
       As perguntas são feitas exclusivamente sobre o personagem, e não
       sobre o ator que o interpreta (caso tenha um).
 
-      Atenção ao fato do personagem ser humano ou não. Constantemente
-      é perguntado, por exemplo, se o Mickey é humano e você diz sim.
-      Se é um animal, então não é humano.
+      - Perguntas sobre o personagem ser um humano, fazem referência ao fato de ele ser ou não baseado em um animal.
+      Personagens baseados em animais não são humanos.
 
-      Responda apenas sim ou não. Se o usuário perguntar algo que não
-      pode ser respondido com sim ou não, responda
-      "Só posso responder sim ou não".
-
-      Se o usuário adivinhar quem é você, dê uma resposta
+      - Se o usuário adivinhar quem é você, dê uma resposta
       divertida comemorando por ele ter acertado, mencione também
       quantas tentativas ele levou para acertar.
       
       Você é ${this.character} e esta é a tentativa número ${this.try}.
-    ---`;
+      ---
+    `;
 
     this.aiGuess.prompt = this.quest;
     this.quest = "";
@@ -185,6 +194,11 @@ const game = reactive({
         });
       });
     });
+  },
+
+  giveUp() {
+    alert(`O personagem é ${game.character}`);
+    game.init();
   },
 });
 
