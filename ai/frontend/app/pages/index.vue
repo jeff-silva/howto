@@ -15,7 +15,7 @@ const nav = reactive({
   items: [
     { title: "Início", to: "/" },
     { title: "Game", to: "/game" },
-    { title: "Langchain + Openrouter", to: "/langchain-openrouter" },
+    { title: "Openrouter", to: "/openrouter" },
   ],
 });
 </script>

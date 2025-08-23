@@ -24,10 +24,12 @@
       </v-app-bar>
 
       <v-main style="height: 100vh">
-        <slot
-          name="default"
-          v-bind="slotBind()"
-        ></slot>
+        <div class="px-3 py-4">
+          <slot
+            name="default"
+            v-bind="slotBind()"
+          ></slot>
+        </div>
       </v-main>
     </v-layout>
   </div>
