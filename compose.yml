@@ -1,0 +1,7 @@
+services:
+  docs:
+    build: ./docs-src/
+    volumes:
+      - ./docs-src/app:/app
+    ports:
+      - 3000:3000
