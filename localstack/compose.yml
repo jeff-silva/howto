@@ -1,0 +1,13 @@
+services:
+  localstack:
+    image: localstack/localstack:latest
+    environment:
+      - SERVICES=lambda,s3,dynamodb,apigateway,logs,iam,cloudwatch,sts
+      - EDGE_PORT=4566
+      - DEBUG=1
+    ports:
+      - "4566:4566"
+      - "4510-4559:4510-4559"
+    volumes:
+      - "./localstack/app:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
