@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   ssr: false,
+  app: { baseURL: "/howto/" },
   modules: [
     ["@nuxt/icon", {}],
     ["@nuxt/scripts", {}],
