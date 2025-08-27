@@ -1,7 +1,7 @@
 <template>
-  <v-app-layout>
+  <v-ext-layout>
     <template #drawer>
-      <v-nav
+      <v-ext-nav
         :items="[
           { title: 'index', to: '/' },
           {
@@ -11,7 +11,6 @@
               { title: 'OFX', to: '/tool/ofx' },
             ],
           },
-          // { title: '/test', to: '/test' },
         ]"
       />
     </template>
@@ -19,5 +18,5 @@
     <div class="pa-3">
       <slot></slot>
     </div>
-  </v-app-layout>
+  </v-ext-layout>
 </template>

@@ -1,1 +1,0 @@
-import{_ as e,I as _,C as a,y as s,z as c,B as r,J as p}from"./yzeuuPxe.js";import{_ as m}from"./CtWYVzsD.js";const u={};function x(f,o){const t=p,n=m;return s(),_(n,{name:"app"},{default:a(()=>[o[0]||(o[0]=c("h1",null,"Tools",-1)),r(t)]),_:1})}const i=e(u,[["render",x]]);export{i as default};

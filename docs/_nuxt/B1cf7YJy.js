@@ -1,1 +1,0 @@
-import{_ as n,x as r,z as t,y as a}from"./yzeuuPxe.js";const o={};function s(c,e){return a(),r("div",null,[...e[0]||(e[0]=[t("h2",null,"Selecione uma ferramenta",-1)])])}const f=n(o,[["render",s]]);export{f as default};

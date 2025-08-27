@@ -3355,6 +3355,13 @@ fast-npm-meta@^0.4.6:
   resolved "https://registry.yarnpkg.com/fast-npm-meta/-/fast-npm-meta-0.4.6.tgz#ad38f0d7689ccb24f09622a1eed2d43689d50575"
   integrity sha512-zbBBOAOlzxfrU4WSnbCHk/nR6Vf32lSEPxDEvNOR08Z5DSZ/A6qJu0rqrHVcexBTd1hc2gim998xnqF/R1PuEw==
 
+fast-xml-parser@^3.18.0:
+  version "3.21.1"
+  resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-3.21.1.tgz#152a1d51d445380f7046b304672dd55d15c9e736"
+  integrity sha512-FTFVjYoBOZTJekiUsawGsSYV9QL0A+zDYCRj7y34IO6Jg+2IMYEtQa+bbictpdpV8dHxXywqU7C0gRDEOFtBFg==
+  dependencies:
+    strnum "^1.0.4"
+
 fastq@^1.6.0:
   version "1.19.1"
   resolved "https://registry.yarnpkg.com/fastq/-/fastq-1.19.1.tgz#d50eaba803c8846a883c16492821ebcd2cda55f5"
@@ -4512,6 +4519,13 @@ node-mock-http@^1.0.1, node-mock-http@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/node-mock-http/-/node-mock-http-1.0.2.tgz#e66ec4ac6a76521f0f0f438c8f9285abc691b255"
   integrity sha512-zWaamgDUdo9SSLw47we78+zYw/bDr5gH8pH7oRRs8V3KmBtu8GLgGIbV2p/gRPd3LWpEOpjQj7X1FOU3VFMJ8g==
+
+node-ofx-parser@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/node-ofx-parser/-/node-ofx-parser-0.5.1.tgz#46f1b284e7fd8832469150bbc8e1689aff9e9e51"
+  integrity sha512-YEOf61PPoOt6SvBVMunaxItUBi4TnhODrvc/afoYG8OIN8b63kFJz2u0UcVRcSyyIHOoY/sO+Rf7sA+KgpofJw==
+  dependencies:
+    fast-xml-parser "^3.18.0"
 
 node-releases@^2.0.19:
   version "2.0.19"
@@ -5848,6 +5862,11 @@ strip-literal@^3.0.0:
   integrity sha512-TcccoMhJOM3OebGhSBEmp3UZ2SfDMZUEBdRA/9ynfLi8yYajyWX3JiXArcJt4Umh4vISpspkQIY8ZZoCqjbviA==
   dependencies:
     js-tokens "^9.0.1"
+
+strnum@^1.0.4:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/strnum/-/strnum-1.1.2.tgz#57bca4fbaa6f271081715dbc9ed7cee5493e28e4"
+  integrity sha512-vrN+B7DBIoTTZjnPNewwhx6cBA/H+IS7rfW68n7XxC1y7uoiGQBxaKzqucGUgavX15dJgiGztLJ8vxuEzwqBdA==
 
 structured-clone-es@^1.0.0:
   version "1.0.0"
