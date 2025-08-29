@@ -1035,28 +1035,32 @@
           "id": {
             "type": "integer",
             "format": "int64",
-            "example": 10
+            "example": 10,
+            "x-relation": "app_order.id"
           },
-          "petId": {
+          "pet_id": {
             "type": "integer",
             "format": "int64",
-            "example": 198772
+            "example": 198772,
+            "description": "app_pet relation",
+            "x-relation": "app_pet.id"
           },
           "quantity": {
             "type": "integer",
             "format": "int32",
-            "example": 7
+            "example": 7,
+            "description": "Quantidade"
           },
-          "shipDate": {
+          "shipped_at": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "description": "Data da entrega"
           },
           "status": {
             "type": "string",
             "description": "Order Status",
             "example": "approved",
             "enum": [
-              "placed",
               "approved",
               "delivered"
             ]
@@ -1067,7 +1071,8 @@
         },
         "xml": {
           "name": "order"
-        }
+        },
+        "x-entity": "app_order"
       },
       "app_category": {
         "type": "object",
@@ -1098,11 +1103,11 @@
             "type": "string",
             "example": "theUser"
           },
-          "firstName": {
+          "first_name": {
             "type": "string",
             "example": "John"
           },
-          "lastName": {
+          "last_name": {
             "type": "string",
             "example": "James"
           },
@@ -1118,7 +1123,7 @@
             "type": "string",
             "example": "12345"
           },
-          "userStatus": {
+          "user_status": {
             "type": "integer",
             "description": "User Status",
             "format": "int32",
@@ -1127,7 +1132,8 @@
         },
         "xml": {
           "name": "user"
-        }
+        },
+        "x-entity": "app_user"
       },
       "app_tag": {
         "type": "object",

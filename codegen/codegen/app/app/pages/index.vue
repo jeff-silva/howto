@@ -13,6 +13,7 @@
       <div class="pa-3">
         <v-form @submit.prevent="openapi.save()">
           <nuxt-page v-model="openapi.value" />
+          <br />
           <v-ext-form-actions
             :actions="[
               {
@@ -26,13 +27,10 @@
         </v-form>
 
         <br /><br />
-        <div
-          class="bg-blue-grey-darken-4 pa-2 rounded d-flex ga-3"
-          style="font: 13px 'Courier New', Courier, monospace"
-        >
-          <pre>{{ Object.keys(openapi.value.components.schemas) }}</pre>
-          <pre class="flex-grow-1">{{ openapi.value.components.schemas }}</pre>
-        </div>
+        <dump
+          v-model="openapi.value.components.schemas"
+          style="height: 400px"
+        />
       </div>
     </template>
   </v-ext-layout>
