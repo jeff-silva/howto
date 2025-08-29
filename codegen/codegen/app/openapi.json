@@ -1072,7 +1072,10 @@
         "xml": {
           "name": "order"
         },
-        "x-entity": "app_order"
+        "x-entity": "app_order",
+        "required": [
+          "pet_id"
+        ]
       },
       "app_category": {
         "type": "object",
@@ -1133,7 +1136,11 @@
         "xml": {
           "name": "user"
         },
-        "x-entity": "app_user"
+        "x-entity": "app_user",
+        "required": [
+          "email",
+          "username"
+        ]
       },
       "app_tag": {
         "type": "object",
@@ -1202,7 +1209,8 @@
         },
         "xml": {
           "name": "pet"
-        }
+        },
+        "x-entity": "app_pet"
       },
       "api_response": {
         "type": "object",

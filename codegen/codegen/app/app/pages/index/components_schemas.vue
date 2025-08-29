@@ -46,6 +46,14 @@
                       v-model="schema.value.data['x-entity']"
                     />
                   </v-col>
+                  <v-col cols="4">
+                    <v-autocomplete
+                      label="required"
+                      v-model="schema.value.data['required']"
+                      :items="Object.keys(schema.value.data.properties)"
+                      multiple
+                    />
+                  </v-col>
                 </v-row>
               </div>
 
