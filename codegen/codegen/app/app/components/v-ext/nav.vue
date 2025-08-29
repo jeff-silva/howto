@@ -26,7 +26,7 @@
                 />
               </template>
 
-              <v-nav
+              <v-ext-nav
                 v-bind="{ ...props, layout: 'vertical', items: _item.children }"
               />
             </v-menu>
@@ -34,7 +34,7 @@
         </div>
 
         <!-- Vertical -->
-        <v-nav
+        <v-ext-nav
           v-else
           v-bind="{ ...props, items, deep: props.deep + 1 }"
           :style="`width:${props.width};`"
@@ -76,7 +76,7 @@
                   />
                 </template>
 
-                <v-nav
+                <v-ext-nav
                   v-bind="{
                     ...props,
                     items: _item.children,

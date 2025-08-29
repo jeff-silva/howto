@@ -1,12 +1,20 @@
 <template>
   <div>
     <v-text-field
+      v-model="model.value.info.version"
+      label="Version"
+    />
+    <v-text-field
       v-model="model.value.info.title"
       label="Application Name"
     />
     <v-textarea
       v-model="model.value.info.description"
       label="Description"
+    />
+    <v-text-field
+      v-model="model.value.info.contact.email"
+      label="Contact e-mail"
     />
   </div>
 </template>
@@ -24,4 +32,12 @@ const model = reactive({
     $emit("update:modelValue", model.value);
   },
 });
+
+watch(
+  () => model.value,
+  () => {
+    model.emit();
+  },
+  { deep: true }
+);
 </script>
