@@ -11,6 +11,7 @@
         margin: 0;
         padding: 0;
         height: 100%;
+        border: solid 5px red;
       }
     </style>
   </head>
@@ -18,6 +19,7 @@
     <webview
       id="wplace"
       src="https://wplace.live/"
+      partition="persist:main"
       style="width: 100%; height: 100vh"
     ></webview>
 

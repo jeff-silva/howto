@@ -1,6 +1,8 @@
 const { app, BrowserWindow, WebContentsView, Menu } = require("electron");
 const path = require("path");
 
+// app.setPath("userData", path.join(__dirname, "user-data"));
+
 require("electron-reload")(__dirname, {
   electron: path.join(__dirname, "node_modules", ".bin", "electron"),
 });
@@ -41,7 +43,7 @@ class AppWindow {
 
     // win.webContents.openDevTools({ mode: "bottom" });
 
-    win.loadFile(path.join(__dirname, "index.html"));
+    win.loadFile(path.join(__dirname, "pages/linkedin.html"));
     win.on("closed", () => {
       this.destroy();
     });
