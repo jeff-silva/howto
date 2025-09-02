@@ -9,6 +9,7 @@
             children: [
               { title: 'Index', to: '/tool' },
               { title: 'OFX', to: '/tool/ofx' },
+              { title: 'Playback Rec', to: '/tool/playback-rec' },
             ],
           },
         ]"
