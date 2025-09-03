@@ -17,7 +17,13 @@
     </template>
 
     <template v-if="type == 'array'">
-      <div :class="codeClass">{{ type }}: {{ $props.modelValue }}</div>
+      <pre
+        :class="codeClass"
+        style="height: 100%; overflow: auto"
+        >{{ type }} ({{ $props.modelValue.length }}): {{
+          $props.modelValue
+        }}</pre
+      >
     </template>
 
     <template v-if="type == 'object'">

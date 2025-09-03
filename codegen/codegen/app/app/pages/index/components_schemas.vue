@@ -10,7 +10,7 @@
                 <template #append>
                   <v-btn
                     text="Edit"
-                    @click="schema.edit(o)"
+                    @click="schema.edit.set(o)"
                   />
                 </template>
               </v-list-item>
@@ -38,19 +38,19 @@
               <div class="pa-4">
                 <v-row>
                   <v-col cols="6">
-                    <v-text-field v-model="schema.value.name" />
+                    <v-text-field v-model="schema.edit.value.name" />
                   </v-col>
                   <v-col cols="6">
                     <v-text-field
                       label="x-entity"
-                      v-model="schema.value.data['x-entity']"
+                      v-model="schema.edit.value.data['x-entity']"
                     />
                   </v-col>
                   <v-col cols="4">
                     <v-autocomplete
                       label="required"
-                      v-model="schema.value.data['required']"
-                      :items="Object.keys(schema.value.data.properties)"
+                      v-model="schema.edit.value.data['required']"
+                      :items="Object.keys(schema.edit.value.data.properties)"
                       multiple
                     />
                   </v-col>
@@ -138,10 +138,14 @@
             </v-card-text>
           </v-card>
 
-          <!-- <dump
+          <dump
+            v-model="schema.items"
+            style="height: 400px"
+          />
+          <dump
             v-model="schemaProp"
             style="height: 400px"
-          /> -->
+          />
         </v-col>
       </v-row>
     </v-defaults-provider>
@@ -167,6 +171,8 @@ const useObjectEdit = (opts = {}) => {
     items: [],
     onEdit: (value) => value,
     onChange: () => null,
+    onItemAdd: () => null,
+    onItemRemove: () => null,
     ...opts,
   };
 
@@ -174,30 +180,57 @@ const useObjectEdit = (opts = {}) => {
     value: null,
     items: [],
 
-    setItems(items) {
+    itemsSet(items) {
       if (items !== null && typeof items == "object" && !Array.isArray(items)) {
         r.items = Object.entries(items || {}).map(([name, data]) => ({
           name,
           data,
         }));
       }
+      r.event.dispatch("itemsSet", { items });
       return r.items;
     },
 
     itemAdd(item = {}) {
       r.items.push(item);
-      r.save();
-      r.edit(item);
+      r.edit.set(item);
+      r.event.dispatch("itemAdd", { item });
     },
 
     itemRemove(item) {
       const index = r.items.indexOf(item);
       r.items.splice(index, 1);
-      r.save();
+      r.event.dispatch("itemRemove", { index, item });
     },
 
-    edit(value) {
-      r.value = opts.onEdit(value);
+    // edit(value) {
+    //   r.value = opts.onEdit(value);
+    // },
+
+    edit: {
+      value: null,
+      set(value) {
+        r.edit.value = value;
+        r.event.dispatch("edit.set", { value });
+      },
+    },
+
+    event: {
+      items: [],
+      on(names, call) {
+        names = Array.isArray(names) ? names : [names];
+        names.map((name) => {
+          r.event.items.push({ name, call });
+        });
+      },
+      dispatch(name, scope = {}) {
+        r.event.items.map((ev) => {
+          if (ev.name != name) return;
+          scope = { event: name, ...scope };
+          ev.call(scope);
+          console.log(scope);
+        });
+      },
     },
 
     getObject() {
@@ -205,13 +238,13 @@ const useObjectEdit = (opts = {}) => {
     },
   });
 
-  r.setItems(opts.items);
-  r.edit(r.items.at(0) || null);
+  r.itemsSet(opts.items);
+  r.edit.set(r.items.at(0) || null);
 
   watch(
-    () => [r.value, r.items],
-    (value) => {
-      opts.onChange(value);
+    () => r.edit,
+    ({ value }) => {
+      r.event.dispatch("edit.change", { value });
     },
     { deep: true }
   );
@@ -220,19 +253,22 @@ const useObjectEdit = (opts = {}) => {
 
 const schemaProp = useObjectEdit({
   onChange(value) {
-    schema.value.data.properties = schemaProp.getObject();
+    schema.edit.value.data.properties = schemaProp.getObject();
+    console.log("schemaProp.onChange", schema.edit.value);
   },
+});
+
+schemaProp.event.on("edit.change", (data) => {
+  console.log(data);
 });
 
 const schema = useObjectEdit({
   items: model.value.components.schemas,
-  onEdit(value) {
-    schemaProp.setItems(value.data.properties);
-    return value;
-  },
-  onChange(value) {
-    console.log("schema");
-  },
+});
+
+schema.event.on(["edit.set", "edit.change"], (scope) => {
+  const { value } = scope;
+  schemaProp.itemsSet(value.data.properties);
 });
 
 const relationList = (except = []) => {
