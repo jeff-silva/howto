@@ -22,22 +22,55 @@ export default () => {
             numeric_range: { min: null, max: null },
             exists: { entity: null, field: null },
           },
-          modules: {},
+          module: {},
           globals: {},
         };
         return data;
       },
 
+      dataValidate() {
+        const deepParse = (data, call, parentPath = "") => {
+          if (data !== null && typeof data === "object") {
+            for (const key in data) {
+              const value = data[key];
+              const path = parentPath ? `${parentPath}.${key}` : key;
+              data[key] = call(key, value, path);
+              deepParse(value, call, path);
+            }
+          }
+        };
+
+        console.clear();
+        deepParse(r.data, (key, value, path) => {
+          if (path == "module.app") {
+            value = {
+              name: "",
+              version: "0.0.1",
+              description: "",
+              entity: {},
+              route: {},
+              ...value,
+            };
+            console.log({ path, value });
+          }
+
+          return value;
+        });
+      },
+
       create() {
         r.dataSet(r.dataDefault());
+        r.dataValidate();
       },
 
       open() {
         r.dataSet(JSON.parse(localStorage.getItem("useProject.data") || "{}"));
+        r.dataValidate();
       },
 
       save() {
         localStorage.setItem("useProject.data", JSON.stringify(r.data));
+        r.dataValidate();
       },
 
       jsonItems(attribute, def = {}) {
@@ -70,5 +103,7 @@ export default () => {
       },
     });
   })();
+
+  r.dataValidate();
   return r;
 };

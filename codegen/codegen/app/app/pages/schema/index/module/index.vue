@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-ext-table
-      :items="modules.items"
+      :items="module.items"
       :headers="[
         { key: 'attr', title: 'attr' },
         { key: 'data.name', title: 'Nome' },
@@ -17,7 +17,7 @@
             text: 'Deletar',
             icon: 'mdi-delete',
             onClick() {
-              modules.remove(ctx.item);
+              module.remove(ctx.item);
             },
           },
         ]
@@ -28,7 +28,7 @@
           v-model="scope.item.attr"
           density="compact"
           hide-details
-          @input="modules.save()"
+          @input="module.save()"
         />
       </template>
 
@@ -37,7 +37,7 @@
           v-model="scope.item.data.name"
           density="compact"
           hide-details
-          @input="modules.save()"
+          @input="module.save()"
         />
       </template>
     </v-ext-table>
@@ -47,17 +47,17 @@
         {
           text: 'Inserir',
           onClick() {
-            modules.add({ attr: '', data: {} });
+            module.add({ attr: '', data: {} });
           },
         },
       ]"
     />
 
-    <pre>{{ modules }}</pre>
+    <pre>{{ module }}</pre>
   </div>
 </template>
 
 <script setup>
 const project = useProject();
-const modules = project.jsonItems("modules");
+const module = project.jsonItems("module");
 </script>
