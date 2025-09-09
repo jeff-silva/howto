@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
+import _ from "lodash";
 
 export default () => {
   const r = defineStore("useProject", () => {
     return reactive({
-      data: null,
+      data: JSON.parse(localStorage.getItem("useProject.data") || "{}"),
 
       dataSet(data) {
         r.data = data;
@@ -40,16 +41,17 @@ export default () => {
       },
 
       jsonItems(attribute, def = {}) {
-        const items = Object.entries(r.data[attribute] || {}).map(
+        const items = Object.entries(_.get(r.data, attribute, def)).map(
           ([attr, data]) => {
             return { attr, data };
           }
         );
 
         const rr = reactive({
+          attribute,
           items,
           add(item) {
-            rr.items.push(item);
+            rr.items.push({ attr: "", data: {}, ...item });
             rr.save();
           },
           remove(item) {

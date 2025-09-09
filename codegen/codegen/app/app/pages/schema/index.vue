@@ -26,7 +26,15 @@
               { text: 'Salvar', color: 'primary', onClick: project.save },
             ]"
           />
-          <pre v-if="project.data">{{ project }}</pre>
+          <div
+            class="bg-red pa-2"
+            style="font: 14px monospace"
+          >
+            <!-- <div>{{ project.data }}</div> -->
+            <!-- <hr class="my-4 border" /> -->
+            <pre>{{ project }}</pre>
+          </div>
+          <!-- <pre>{{ project }}</pre> -->
         </div>
       </template>
 
@@ -35,6 +43,7 @@
           :items="[
             { title: 'home', to: '/schema' },
             { title: 'validations', to: '/schema/validations' },
+            { title: 'module', to: '/schema/module' },
           ]"
         />
       </template>

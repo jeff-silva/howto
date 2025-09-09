@@ -1,15 +1,5 @@
 <template>
   <div>
-    <v-ext-form-actions
-      :actions="[
-        {
-          text: 'Inserir',
-          onClick() {
-            validations.add({ attr: '', data: {} });
-          },
-        },
-      ]"
-    />
     <v-ext-table
       :items="validations.items"
       :headers="[{ key: 'attr', title: 'attr' }]"
@@ -34,6 +24,17 @@
         />
       </template>
     </v-ext-table>
+
+    <v-ext-form-actions
+      :actions="[
+        {
+          text: 'Inserir',
+          onClick() {
+            validations.add({ attr: '', data: {} });
+          },
+        },
+      ]"
+    />
   </div>
 </template>
 
