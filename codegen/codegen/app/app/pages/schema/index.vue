@@ -1,0 +1,48 @@
+<template>
+  <div>
+    <v-ext-layout>
+      <template #default>
+        <div class="pa-3">
+          <div v-if="!project.data">
+            <v-btn
+              text="project.create()"
+              @click="project.create()"
+            />
+            <v-btn
+              text="project.open()"
+              @click="project.open()"
+            />
+          </div>
+
+          <nuxt-page v-if="project.data" />
+          <v-ext-form-actions
+            :actions="[
+              {
+                text: 'Recarregar',
+                onClick() {
+                  location.reload();
+                },
+              },
+              { text: 'Salvar', color: 'primary', onClick: project.save },
+            ]"
+          />
+          <pre v-if="project.data">{{ project }}</pre>
+        </div>
+      </template>
+
+      <template #drawer>
+        <v-ext-nav
+          :items="[
+            { title: 'home', to: '/schema' },
+            { title: 'validations', to: '/schema/validations' },
+          ]"
+        />
+      </template>
+    </v-ext-layout>
+  </div>
+</template>
+
+<script setup>
+const location = window.location;
+const project = useProject();
+</script>

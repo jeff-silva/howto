@@ -29,12 +29,43 @@ const helpers = {
 };
 
 export const schemaFormat = (schema) => {
+  console.clear();
+
+  const parsers = {
+    _extends(objValue, srcValue) {
+      if (_.isObject(srcValue)) {
+        if (_.isObject(srcValue._extends)) {
+          const _extends = srcValue._extends;
+          delete srcValue._extends;
+          for (const extName in _extends) {
+            const extMerge = _.get(schema, extName, {});
+            const extOpts = {
+              except: [],
+              only: [],
+              ..._extends[extName],
+            };
+            for (const attrName in extMerge) {
+              if (extOpts.only.length && !extOpts.only.includes(attrName)) {
+                delete extMerge[attrName];
+              }
+              if (extOpts.except.includes(attrName)) {
+                delete extMerge[attrName];
+              }
+            }
+            _.merge(srcValue, extMerge);
+          }
+        }
+      }
+    },
+  };
+
   schema = {
     name: "",
     version: "",
     description: "",
     validations: {},
     modules: {},
+    globals: {},
     ...schema,
   };
 
@@ -61,10 +92,11 @@ export const schemaFormat = (schema) => {
           description: "",
           nullable: false,
           default: null,
+          relations: {},
+          validations: {},
           ...field,
         };
 
-        field.relations = helpers.forceObject(field.relations, {});
         field.relations = jsonMap(field.relations, ([relName, relData]) => {
           relData = {
             type: "many-to-one",
@@ -85,31 +117,12 @@ export const schemaFormat = (schema) => {
   });
 
   return _.mergeWith({}, schema, (objValue, srcValue) => {
-    if (_.isObject(srcValue)) {
-      if (_.isObject(srcValue._extends)) {
-        const _extends = srcValue._extends;
-        delete srcValue._extends;
-        for (const extName in _extends) {
-          const extMerge = _.get(schema, extName, {});
-          const extOpts = {
-            except: [],
-            only: [],
-            ..._extends[extName],
-          };
-          for (const attrName in extMerge) {
-            if (extOpts.only.length && !extOpts.only.includes(attrName)) {
-              delete extMerge[attrName];
-            }
-            if (extOpts.except.includes(attrName)) {
-              delete extMerge[attrName];
-            }
-          }
-          _.merge(srcValue, extMerge);
-        }
-      }
+    for (const name in parsers) {
+      parsers[name](objValue, srcValue);
     }
   });
 };
+
 export const schema = schemaFormat({
   version: "0.0.1",
   name: "App Name",
@@ -119,6 +132,9 @@ export const schema = schemaFormat({
     email: { dns: true },
     numeric_range: { min: null, max: null },
     exists: { entity: null, field: null },
+  },
+  globals: {
+    pagination: { page: 1, per_page: 20, order: "updated_at:desc", q: null },
   },
   modules: {
     app: {
@@ -232,6 +248,11 @@ export const schema = schemaFormat({
         "app_user.search": {
           url: "/api/v1/app_user",
           method: "get",
+          params: {
+            _extends: {
+              "globals.pagination": {},
+            },
+          },
         },
         "app_user.delete": {
           url: "/api/v1/app_user/{id}",
@@ -252,6 +273,11 @@ export const schema = schemaFormat({
         "app_user_group.search": {
           url: "/api/v1/app_user_group",
           method: "get",
+          params: {
+            _extends: {
+              "globals.pagination": {},
+            },
+          },
         },
         "app_user_group.delete": {
           url: "/api/v1/app_user_group/{id}",
@@ -299,6 +325,11 @@ export const schema = schemaFormat({
         "shop_category.search": {
           url: "/api/v1/shop_category",
           method: "get",
+          params: {
+            _extends: {
+              "globals.pagination": {},
+            },
+          },
         },
         "shop_category.select": {
           url: "/api/v1/shop_category/{id}",
@@ -319,6 +350,11 @@ export const schema = schemaFormat({
         "shop_product.search": {
           url: "/api/v1/shop_product",
           method: "get",
+          params: {
+            _extends: {
+              "globals.pagination": {},
+            },
+          },
         },
         "shop_product.select": {
           url: "/api/v1/shop_product/{id}",
