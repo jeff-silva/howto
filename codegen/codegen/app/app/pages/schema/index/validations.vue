@@ -40,5 +40,5 @@
 
 <script setup>
 const project = useProject();
-const validations = project.jsonItems("validations");
+const validations = project.getAsList("validations");
 </script>

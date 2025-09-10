@@ -28,13 +28,13 @@ export default () => {
       },
 
       dataValidate() {
-        const deepParse = (data, call, parentPath = "") => {
+        const deepParse = (data, call, parentPath = "", parent = null) => {
           if (data !== null && typeof data === "object") {
             for (const key in data) {
               const value = data[key];
               const path = parentPath ? `${parentPath}.${key}` : key;
-              data[key] = call(key, value, path);
-              deepParse(value, call, path);
+              data[key] = call(key, value, path, data);
+              deepParse(value, call, path, data);
             }
           }
         };
@@ -53,7 +53,11 @@ export default () => {
         };
 
         console.clear();
-        deepParse(r.data, (key, value, path) => {
+        deepParse(r.data, (key, value, path, parent) => {
+          if (key.match(/\./g)) {
+            delete parent[key];
+          }
+
           if (pathMatch(path, "module.*")) {
             value = {
               name: "",
@@ -65,13 +69,21 @@ export default () => {
             };
           }
 
-          if (pathMatch(path, "module.*.entity")) {
+          if (pathMatch(path, "module.*.entity.*")) {
             value = {
               name: "",
               field: {},
               ...value,
             };
           }
+
+          // if (pathMatch(path, "module.*.entity")) {
+          //   value = {
+          //     name: "",
+          //     field: {},
+          //     ...value,
+          //   };
+          // }
 
           return value;
         });
@@ -93,7 +105,11 @@ export default () => {
         r.dataValidate();
       },
 
-      jsonItems(attribute, def = {}) {
+      get(attribute, def = {}) {
+        return _.get(r.data, attribute, def);
+      },
+
+      getAsList(attribute, def = {}) {
         const raw = _.get(r.data, attribute, def);
         const items = Object.entries(raw).map(([attr, data]) => {
           return { attr, data };
@@ -113,13 +129,14 @@ export default () => {
             rr.save();
           },
           save() {
-            r.data[attribute] = Object.fromEntries(
+            const data = Object.fromEntries(
               items
                 .filter((item) => !!item.attr)
                 .map((item) => [item.attr, item.data])
             );
+            _.set(r.data, attribute, data);
             r.dataValidate();
-            rr.raw = r.data[attribute];
+            rr.raw = data;
           },
         });
 

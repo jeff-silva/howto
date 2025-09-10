@@ -28,5 +28,5 @@
 
 <script setup>
 const project = useProject();
-const module = project.jsonItems("module");
+const module = project.getAsList("module");
 </script>
