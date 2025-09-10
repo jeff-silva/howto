@@ -6,6 +6,19 @@ export default () => {
     return reactive({
       data: null,
 
+      event: {
+        items: [],
+        on(evt, call) {
+          r.event.items.push({ evt, call });
+        },
+        dispatch(evt) {
+          r.event.items.map((item) => {
+            if (item.evt != evt) return;
+            item.call();
+          });
+        },
+      },
+
       dataSet(data) {
         r.data = data;
       },
@@ -17,6 +30,9 @@ export default () => {
           description: "",
           updated_at: "",
           global: {
+            config: {
+              minify: true,
+            },
             validation: {
               required: {},
               alphanumeric: {},
@@ -53,6 +69,8 @@ export default () => {
           const regex = new RegExp(`^${esc}$`);
           return regex.test(path);
         };
+
+        r.data = _.merge(r.dataDefault(), r.data);
 
         deepParse(r.data, (key, value, path, parent) => {
           if (key.match(/\./g)) {
@@ -124,6 +142,7 @@ export default () => {
         } catch (err) {}
 
         r.dataValidate();
+        r.event.dispatch("open");
       },
 
       async save() {
@@ -143,14 +162,43 @@ export default () => {
         }
 
         const writable = await r.fs.handle.createWritable();
-        await writable.write(JSON.stringify(r.data));
-        // await writable.write(JSON.stringify(r.data, null, 2));
+        await writable.write(
+          r.data.global.config.minify
+            ? JSON.stringify(r.data)
+            : JSON.stringify(r.data, null, 2)
+        );
         await writable.close();
+        r.event.dispatch("save");
       },
 
       get(attribute, def = {}) {
         return _.get(r.data, attribute, def);
       },
+
+      // get(attribute, def = {}) {
+      //   const rr = reactive({
+      //     data: {},
+      //     init() {
+      //       rr.data = _.get(r.data, attribute, def);
+      //     },
+      //   });
+
+      //   rr.init();
+
+      //   watch(
+      //     () => [rr.data],
+      //     () => {
+      //       _.set(r.data, attribute, rr.data);
+      //     },
+      //     { deep: true }
+      //   );
+
+      //   r.event.on("open", () => {
+      //     rr.init();
+      //   });
+
+      //   return rr.data;
+      // },
 
       getAsList(attribute, def = {}) {
         const rr = reactive({
@@ -182,20 +230,30 @@ export default () => {
                 .filter((item) => !!item.attr)
                 .map((item) => [item.attr, item.data])
             );
-
             _.set(r.data, attribute, data);
-            r.dataValidate();
             rr.raw = data;
           },
         });
 
         rr.init();
 
+        r.event.on("open", () => {
+          rr.init();
+        });
+
+        // watch(
+        //   () => r.data[attribute],
+        //   () => {
+        //     console.log(`${attribute} updated`);
+        //     rr.init();
+        //   }
+        // );
+
         watch(
-          () => r.data[attribute],
+          () => rr.items,
           () => {
-            console.log("getAsList.init watch");
-            rr.init();
+            console.log("watch items");
+            rr.save();
           },
           { deep: true }
         );

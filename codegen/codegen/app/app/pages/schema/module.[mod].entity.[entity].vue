@@ -30,7 +30,6 @@
             v-model="scope.item.attr"
             density="compact"
             hide-details
-            @input="field.save()"
           />
         </template>
 
@@ -39,7 +38,6 @@
             v-model="scope.item.data.name"
             density="compact"
             hide-details
-            @input="field.save()"
           />
         </template>
 
@@ -54,7 +52,6 @@
                 title: item[1],
               }))
             "
-            @input="field.save()"
           />
         </template>
       </v-ext-table>

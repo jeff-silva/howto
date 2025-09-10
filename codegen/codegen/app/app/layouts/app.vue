@@ -47,6 +47,7 @@
         <v-ext-nav
           :items="[
             { title: 'home', to: '/schema' },
+            { title: 'config', to: '/schema/global.config' },
             { title: 'validations', to: '/schema/global.validation' },
           ]"
         />

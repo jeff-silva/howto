@@ -60,7 +60,6 @@
             v-model="scope.item.attr"
             density="compact"
             hide-details
-            @input="entity.save()"
           />
         </template>
 
@@ -69,7 +68,6 @@
             v-model="scope.item.data.name"
             density="compact"
             hide-details
-            @input="entity.save()"
           />
         </template>
       </v-ext-table>
