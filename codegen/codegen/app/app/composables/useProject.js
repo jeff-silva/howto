@@ -11,7 +11,7 @@ export default () => {
       },
 
       dataDefault() {
-        const data = {
+        return {
           name: "",
           version: "",
           description: "",
@@ -25,7 +25,6 @@ export default () => {
           module: {},
           globals: {},
         };
-        return data;
       },
 
       dataValidate() {
@@ -40,18 +39,38 @@ export default () => {
           }
         };
 
+        const pathMatch = (path, match) => {
+          const esc = match
+            .split(/\./g)
+            .map((part) => {
+              if (part === "*") return "([a-zA-Z0-9_]+)";
+              return `(${part})`;
+            })
+            .join("\\.");
+
+          const regex = new RegExp(`^${esc}$`);
+          return regex.test(path);
+        };
+
         console.clear();
         deepParse(r.data, (key, value, path) => {
-          if (path == "module.app") {
+          if (pathMatch(path, "module.*")) {
             value = {
               name: "",
               version: "0.0.1",
               description: "",
               entity: {},
-              route: {},
+              endpoint: {},
               ...value,
             };
-            console.log({ path, value });
+          }
+
+          if (pathMatch(path, "module.*.entity")) {
+            value = {
+              name: "",
+              field: {},
+              ...value,
+            };
           }
 
           return value;
@@ -61,6 +80,7 @@ export default () => {
       create() {
         r.dataSet(r.dataDefault());
         r.dataValidate();
+        r.save();
       },
 
       open() {
@@ -74,14 +94,14 @@ export default () => {
       },
 
       jsonItems(attribute, def = {}) {
-        const items = Object.entries(_.get(r.data, attribute, def)).map(
-          ([attr, data]) => {
-            return { attr, data };
-          }
-        );
+        const raw = _.get(r.data, attribute, def);
+        const items = Object.entries(raw).map(([attr, data]) => {
+          return { attr, data };
+        });
 
         const rr = reactive({
           attribute,
+          raw,
           items,
           add(item) {
             rr.items.push({ attr: "", data: {}, ...item });
@@ -94,8 +114,12 @@ export default () => {
           },
           save() {
             r.data[attribute] = Object.fromEntries(
-              items.map((item) => [item.attr, item.data])
+              items
+                .filter((item) => !!item.attr)
+                .map((item) => [item.attr, item.data])
             );
+            r.dataValidate();
+            rr.raw = r.data[attribute];
           },
         });
 

@@ -18,6 +18,12 @@
           <v-ext-form-actions
             :actions="[
               {
+                text: 'Limpar',
+                onClick() {
+                  project.create();
+                },
+              },
+              {
                 text: 'Recarregar',
                 onClick() {
                   location.reload();

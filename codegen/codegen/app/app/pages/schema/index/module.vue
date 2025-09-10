@@ -1,5 +1,18 @@
 <template>
   <div>
+    <v-navigation-drawer>
+      <v-ext-nav
+        :items="[
+          { title: 'Módulos', to: '/schema/module' },
+          ...module.items.map((mod) => {
+            return {
+              title: mod.data.name || mod.attr,
+              to: `/schema/module/${mod.attr}`,
+            };
+          }),
+        ]"
+      />
+    </v-navigation-drawer>
     <v-ext-form-actions
       :actions="[
         {
@@ -15,5 +28,5 @@
 
 <script setup>
 const project = useProject();
-const modules = project.jsonItems("modules");
+const module = project.jsonItems("module");
 </script>
