@@ -63,6 +63,7 @@ export default () => {
               name: "",
               version: "0.0.1",
               description: "",
+              depends_on: [],
               entity: {},
               endpoint: {},
               ...value,
@@ -77,13 +78,16 @@ export default () => {
             };
           }
 
-          // if (pathMatch(path, "module.*.entity")) {
-          //   value = {
-          //     name: "",
-          //     field: {},
-          //     ...value,
-          //   };
-          // }
+          if (pathMatch(path, "module.*.entity.*.field")) {
+            value = {
+              name: "",
+              type: "string",
+              nullable: false,
+              default: null,
+              relation: { entity: "", field: "" },
+              ...value,
+            };
+          }
 
           return value;
         });

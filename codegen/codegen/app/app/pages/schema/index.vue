@@ -15,6 +15,7 @@
           </div>
 
           <nuxt-page v-if="project.data" />
+          <br />
           <v-ext-form-actions
             :actions="[
               {

@@ -1,25 +1,13 @@
 <template>
   <div>
-    <v-text-field
-      label="Nome"
-      v-model="mod.name"
-    />
-    <v-text-field
-      label="Versão"
-      v-model="mod.version"
-    />
-    <v-textarea
-      label="Descrição"
-      v-model="mod.description"
-    />
-
-    <v-card subtitle="Entidades">
+    <v-card subtitle="Campos">
       <v-card-text>
         <v-ext-table
-          :items="entity.items"
+          :items="field.items"
           :headers="[
             { key: 'attr', title: 'Slug' },
             { key: 'name', title: 'Nome' },
+            { key: 'type', title: 'Tipo' },
           ]"
           :actions="
             (ctx) => [
@@ -27,7 +15,7 @@
                 text: 'Deletar',
                 icon: 'mdi-delete',
                 onClick() {
-                  entity.remove(ctx.item);
+                  field.remove(ctx.item);
                 },
               },
             ]
@@ -38,15 +26,33 @@
               v-model="scope.item.attr"
               density="compact"
               hide-details
-              @input="entity.save()"
+              @input="field.save()"
             />
           </template>
+
           <template #item.name="scope">
             <v-text-field
               v-model="scope.item.data.name"
               density="compact"
               hide-details
-              @input="entity.save()"
+              @input="field.save()"
+            />
+          </template>
+
+          <template #item.type="scope">
+            <v-autocomplete
+              v-model="scope.item.data.type"
+              density="compact"
+              hide-details
+              :items="[
+                { value: 'integer', title: 'Inteiro' },
+                { value: 'float', title: 'Flutuante' },
+                { value: 'string', title: 'String' },
+                { value: 'date', title: 'Data' },
+                { value: 'time', title: 'Hora' },
+                { value: 'datetime', title: 'Data e hora' },
+              ]"
+              @input="field.save()"
             />
           </template>
         </v-ext-table>
@@ -58,7 +64,7 @@
               text: 'Inserir',
               class: 'bg-primary',
               onClick() {
-                entity.add({ attr: '', data: {} });
+                field.add({ attr: '', data: {} });
               },
             },
           ]"
@@ -69,10 +75,12 @@
 </template>
 
 <script setup>
-import _ from "lodash";
 const route = useRoute();
 const project = useProject();
-const mod = project.get(`module.${route.params.slug}`);
-const entity = project.getAsList(`module.${route.params.slug}.entity`);
-// const endpoint = project.getAsList(`module.${route.params.slug}.endpoint`);
+const entity = project.get(
+  `module.${route.params.slug}.entity.${route.params.entity}`
+);
+const field = project.getAsList(
+  `module.${route.params.slug}.entity.${route.params.entity}.field`
+);
 </script>
