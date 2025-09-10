@@ -1,23 +1,23 @@
 <template>
-  <div>
+  <nuxt-layout name="app">
     <v-ext-table
-      :items="module.items"
+      :items="mod.items"
       :headers="[
-        { key: 'attr', title: 'attr' },
-        { key: 'data.name', title: 'Nome' },
+        { key: 'attr', title: 'Slug', width: 200 },
+        { key: 'name', title: 'Nome' },
       ]"
       :actions="
         (ctx) => [
           {
             text: 'Editar',
             icon: 'mdi-pen',
-            to: `/schema/module/${ctx.item.attr}`,
+            to: `/schema/module.${ctx.item.attr}`,
           },
           {
             text: 'Deletar',
             icon: 'mdi-delete',
             onClick() {
-              module.remove(ctx.item);
+              mod.remove(ctx.item);
             },
           },
         ]
@@ -28,36 +28,35 @@
           v-model="scope.item.attr"
           density="compact"
           hide-details
-          @input="module.save()"
+          @input="mod.save()"
         />
       </template>
 
-      <template #item.data.name="scope">
+      <template #item.name="scope">
         <v-text-field
           v-model="scope.item.data.name"
           density="compact"
           hide-details
-          @input="module.save()"
+          @input="mod.save()"
         />
       </template>
     </v-ext-table>
-
-    <v-ext-form-actions
-      :actions="[
-        {
-          text: 'Inserir',
-          onClick() {
-            module.add({ attr: '', data: {} });
-          },
-        },
-      ]"
-    />
-
-    <pre>{{ module }}</pre>
-  </div>
+  </nuxt-layout>
 </template>
 
 <script setup>
 const project = useProject();
-const module = project.getAsList("module");
+const mod = project.getAsList("module");
+
+const app = useApp();
+app.title.set("Módulos");
+app.actions.set([
+  {
+    text: "Inserir",
+    color: "primary",
+    onClick() {
+      mod.add({ attr: "", data: {} });
+    },
+  },
+]);
 </script>

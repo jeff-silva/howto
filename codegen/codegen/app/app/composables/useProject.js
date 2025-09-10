@@ -78,7 +78,7 @@ export default () => {
             };
           }
 
-          if (pathMatch(path, "module.*.entity.*.field")) {
+          if (pathMatch(path, "module.*.entity.*.field.*")) {
             value = {
               name: "",
               type: "string",
@@ -145,6 +145,53 @@ export default () => {
         });
 
         return rr;
+      },
+
+      fieldTypes() {
+        return {
+          string: "Texto",
+          text: "Texto Longo",
+          integer: "Número Inteiro",
+          float: "Número Decimal",
+          boolean: "Booleano",
+          date: "Data",
+          time: "Hora",
+          datetime: "Data e Hora",
+          json: "JSON",
+          relation: "Relacionamento",
+        };
+      },
+
+      moduleList() {
+        return Object.entries(r.data.module).map(([slug, data]) => ({
+          path: `module.${slug}`,
+          slug,
+          data,
+        }));
+      },
+
+      entityList() {
+        const items = [];
+        this.moduleList().map((mod) => {
+          for (const slug in mod.data.entity) {
+            const path = `module.${mod.slug}.entity.${slug}`;
+            const data = mod.data.entity[slug];
+            items.push({ path, slug, data, module: mod });
+          }
+        });
+        return items;
+      },
+
+      entityFieldList() {
+        const items = [];
+        this.entityList().map((entity) => {
+          for (const slug in entity.data.field) {
+            const path = `module.${entity.module.slug}.entity.${entity.slug}.field.${slug}`;
+            const data = entity.data.field[slug];
+            items.push({ path, slug, data, entity });
+          }
+        });
+        return items;
       },
     });
   })();
