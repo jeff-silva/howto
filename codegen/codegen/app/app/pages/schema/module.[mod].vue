@@ -26,7 +26,7 @@
           })
           .map(([name, data]) => ({
             value: name,
-            title: data.name,
+            title: data.name || name,
           }))
       "
     />
@@ -98,11 +98,6 @@ const mod = project.get(`module.${route.params.mod}`);
 const entity = project.getAsList(`module.${route.params.mod}.entity`);
 
 const app = useApp();
-app.title.set(`Módulo: ${mod.name}`);
-app.actions.set([
-  {
-    text: "Módulos",
-    to: "/schema/module",
-  },
-]);
+app.title.set(`Módulo: ${mod.name || route.params.mod}`);
+app.actions.set([]);
 </script>

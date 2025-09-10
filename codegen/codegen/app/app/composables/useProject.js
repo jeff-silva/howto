@@ -4,7 +4,7 @@ import _ from "lodash";
 export default () => {
   const r = defineStore("useProject", () => {
     return reactive({
-      data: JSON.parse(localStorage.getItem("useProject.data") || "{}"),
+      data: null,
 
       dataSet(data) {
         r.data = data;
@@ -15,15 +15,17 @@ export default () => {
           name: "",
           version: "",
           description: "",
-          validations: {
-            required: {},
-            alphanumeric: {},
-            email: { dns: true },
-            numeric_range: { min: null, max: null },
-            exists: { entity: null, field: null },
+          updated_at: "",
+          global: {
+            validation: {
+              required: {},
+              alphanumeric: {},
+              email: { dns: true },
+              numeric_range: { min: null, max: null },
+              exists: { entity: null, field: null },
+            },
           },
           module: {},
-          globals: {},
         };
       },
 
@@ -52,7 +54,6 @@ export default () => {
           return regex.test(path);
         };
 
-        console.clear();
         deepParse(r.data, (key, value, path, parent) => {
           if (key.match(/\./g)) {
             delete parent[key];
@@ -99,14 +100,52 @@ export default () => {
         r.save();
       },
 
-      open() {
-        r.dataSet(JSON.parse(localStorage.getItem("useProject.data") || "{}"));
+      fs: {
+        handle: null,
+      },
+
+      async open() {
+        if (!r.fs.handle) {
+          const [handle] = await window.showOpenFilePicker({
+            types: [
+              {
+                description: "Arquivos JSON",
+                accept: { "application/json": [".json"] },
+              },
+            ],
+          });
+
+          r.fs.handle = handle;
+        }
+
+        const file = await r.fs.handle.getFile();
+        try {
+          r.data = JSON.parse((await file.text()) || "{}");
+        } catch (err) {}
+
         r.dataValidate();
       },
 
-      save() {
-        localStorage.setItem("useProject.data", JSON.stringify(r.data));
+      async save() {
         r.dataValidate();
+        r.data.updated_at = new Date().toISOString();
+
+        if (!r.fs.handle) {
+          r.fs.handle = await window.showSaveFilePicker({
+            suggestedName: "schema.json",
+            types: [
+              {
+                description: "Arquivos JSON",
+                accept: { "application/json": [".json"] },
+              },
+            ],
+          });
+        }
+
+        const writable = await r.fs.handle.createWritable();
+        await writable.write(JSON.stringify(r.data));
+        // await writable.write(JSON.stringify(r.data, null, 2));
+        await writable.close();
       },
 
       get(attribute, def = {}) {
@@ -114,35 +153,52 @@ export default () => {
       },
 
       getAsList(attribute, def = {}) {
-        const raw = _.get(r.data, attribute, def);
-        const items = Object.entries(raw).map(([attr, data]) => {
-          return { attr, data };
-        });
-
         const rr = reactive({
           attribute,
-          raw,
-          items,
+          raw: {},
+          items: [],
+
+          init() {
+            rr.raw = _.get(r.data, attribute, def);
+            rr.items = Object.entries(rr.raw).map(([attr, data]) => {
+              return { attr, data };
+            });
+          },
+
           add(item) {
             rr.items.push({ attr: "", data: {}, ...item });
             rr.save();
           },
+
           remove(item) {
-            const index = items.indexOf(item);
+            const index = rr.items.indexOf(item);
             rr.items.splice(index, 1);
             rr.save();
           },
+
           save() {
             const data = Object.fromEntries(
-              items
+              rr.items
                 .filter((item) => !!item.attr)
                 .map((item) => [item.attr, item.data])
             );
+
             _.set(r.data, attribute, data);
             r.dataValidate();
             rr.raw = data;
           },
         });
+
+        rr.init();
+
+        watch(
+          () => r.data[attribute],
+          () => {
+            console.log("getAsList.init watch");
+            rr.init();
+          },
+          { deep: true }
+        );
 
         return rr;
       },
@@ -195,6 +251,10 @@ export default () => {
       },
     });
   })();
+
+  if (r.data === null) {
+    r.data = r.dataDefault();
+  }
 
   r.dataValidate();
   return r;

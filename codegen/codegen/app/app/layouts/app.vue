@@ -9,12 +9,19 @@
           </template>
           <slot></slot>
           <br />
+
           <v-ext-form-actions
             :actions="[
               {
                 text: 'Limpar',
                 onClick() {
                   project.create();
+                },
+              },
+              {
+                text: 'Abrir',
+                onClick() {
+                  project.open();
                 },
               },
               {
@@ -26,7 +33,13 @@
               { text: 'Salvar', color: 'primary', onClick: project.save },
             ]"
           />
-          <!-- <pre>{{ project }}</pre> -->
+          <small
+            v-if="project.data.updated_at"
+            class="d-block text-right pa-2 text-disabled"
+          >
+            Alterado pela última vez em {{ project.data.updated_at }}
+          </small>
+          <pre>{{ project }}</pre>
         </div>
       </template>
 
@@ -34,8 +47,7 @@
         <v-ext-nav
           :items="[
             { title: 'home', to: '/schema' },
-            { title: 'validations', to: '/schema/validations' },
-            { title: 'module', to: '/schema/module' },
+            { title: 'validations', to: '/schema/global.validation' },
           ]"
         />
       </template>

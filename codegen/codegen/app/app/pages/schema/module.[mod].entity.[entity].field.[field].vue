@@ -6,17 +6,6 @@
     />
 
     <v-autocomplete
-      label="Tipo"
-      v-model="field.type"
-      :items="
-        Object.entries(project.fieldTypes()).map((item) => ({
-          value: item[0],
-          title: item[1],
-        }))
-      "
-    />
-
-    <v-autocomplete
       label="Aceita valor nulo"
       v-model="field.nullable"
       :items="[
@@ -28,6 +17,17 @@
     <v-text-field
       label="Valor padrão"
       v-model="field.default"
+    />
+
+    <v-autocomplete
+      label="Tipo"
+      v-model="field.type"
+      :items="
+        Object.entries(project.fieldTypes()).map((item) => ({
+          value: item[0],
+          title: item[1],
+        }))
+      "
     />
 
     <template v-if="field.type == 'relation'">
@@ -73,7 +73,9 @@ const field = project.get(
 
 const app = useApp();
 app.title.set(
-  `Módulo: ${mod.name} | Entidade: ${entity.name} | Campo: ${field.name}`
+  `Módulo: ${mod.name || route.params.mod} | Entidade: ${
+    entity.name || route.params.entity
+  } | Campo: ${field.name || route.params.field}`
 );
 app.actions.set([
   {

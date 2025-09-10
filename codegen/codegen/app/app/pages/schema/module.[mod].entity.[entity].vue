@@ -88,7 +88,11 @@ const field = project.getAsList(
 );
 
 const app = useApp();
-app.title.set(`Módulo: ${mod.name} | Entidade: ${entity.name}`);
+app.title.set(
+  `Módulo: ${mod.name || route.params.mod} | Entidade: ${
+    entity.name || route.params.entity
+  }`
+);
 app.actions.set([
   {
     text: "Voltar",
