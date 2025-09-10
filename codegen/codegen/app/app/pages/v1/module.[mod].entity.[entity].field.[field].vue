@@ -80,7 +80,7 @@ app.title.set(
 app.actions.set([
   {
     text: "Voltar",
-    to: `/schema/module.${route.params.mod}.entity.${route.params.entity}`,
+    to: `/v1/module.${route.params.mod}.entity.${route.params.entity}`,
   },
 ]);
 </script>

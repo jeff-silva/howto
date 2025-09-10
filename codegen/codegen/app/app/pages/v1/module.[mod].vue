@@ -1,25 +1,55 @@
 <template>
   <nuxt-layout name="app">
-    <v-card>
+    <v-text-field
+      v-model="mod.name"
+      label="Nome"
+    />
+
+    <v-text-field
+      v-model="mod.version"
+      label="Versão"
+    />
+
+    <v-textarea
+      v-model="mod.description"
+      label="Descrição"
+    />
+
+    <v-autocomplete
+      multiple
+      label="Dependente de"
+      v-model="mod.depends_on"
+      :items="
+        Object.entries(project.data.module)
+          .filter(([name]) => {
+            return name != route.params.mod;
+          })
+          .map(([name, data]) => ({
+            value: name,
+            title: data.name || name,
+          }))
+      "
+    />
+
+    <v-card title="Entidades">
       <v-ext-table
-        :items="field.items"
+        :items="entity.items"
         :headers="[
           { key: 'attr', title: 'Slug', width: 200 },
           { key: 'name', title: 'Nome' },
-          { key: 'type', title: 'Tipo', width: 200 },
         ]"
         :actions="
           (ctx) => [
             {
               text: 'Editar',
               icon: 'mdi-pen',
-              to: `/schema/module.${route.params.mod}.entity.${route.params.entity}.field.${ctx.item.attr}`,
+              to: `/v1/module.${route.params.mod}.entity.${ctx.item.attr}`,
             },
             {
               text: 'Deletar',
               icon: 'mdi-delete',
               onClick() {
-                field.remove(ctx.item);
+                entity.remove(ctx.item);
               },
             },
           ]
@@ -40,20 +70,6 @@
             hide-details
           />
         </template>
-
-        <template #item.type="scope">
-          <v-autocomplete
-            v-model="scope.item.data.type"
-            density="compact"
-            hide-details
-            :items="
-              Object.entries(project.fieldTypes()).map((item) => ({
-                value: item[0],
-                title: item[1],
-              }))
-            "
-          />
-        </template>
       </v-ext-table>
       <v-card-actions class="justify-end">
         <v-ext-form-actions
@@ -62,7 +78,7 @@
               text: 'Inserir',
               class: 'bg-primary',
               onClick() {
-                field.add({ attr: '', data: {} });
+                entity.add({ attr: '', data: {} });
               },
             },
           ]"
@@ -77,23 +93,9 @@ const route = useRoute();
 
 const project = useProject();
 const mod = project.get(`module.${route.params.mod}`);
-const entity = project.get(
-  `module.${route.params.mod}.entity.${route.params.entity}`
-);
-const field = project.getAsList(
-  `module.${route.params.mod}.entity.${route.params.entity}.field`
-);
+const entity = project.getAsList(`module.${route.params.mod}.entity`);
 
 const app = useApp();
-app.title.set(
-  `Módulo: ${mod.name || route.params.mod} | Entidade: ${
-    entity.name || route.params.entity
-  }`
-);
-app.actions.set([
-  {
-    text: "Voltar",
-    to: `/schema/module.${route.params.mod}`,
-  },
-]);
+app.title.set(`Módulo: ${mod.name || route.params.mod}`);
+app.actions.set([]);
 </script>

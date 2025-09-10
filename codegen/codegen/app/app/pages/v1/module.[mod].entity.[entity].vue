@@ -1,39 +1,25 @@
 <template>
   <nuxt-layout name="app">
-    <v-text-field
-      v-model="project.data.version"
-      label="Version"
-    />
-
-    <v-text-field
-      v-model="project.data.name"
-      label="Nome da aplicação"
-    />
-
-    <v-textarea
-      v-model="project.data.description"
-      label="Descrição"
-    />
-
-    <v-card title="Módulos">
+    <v-card>
       <v-ext-table
-        :items="mod.items"
+        :items="field.items"
         :headers="[
           { key: 'attr', title: 'Slug', width: 200 },
           { key: 'name', title: 'Nome' },
+          { key: 'type', title: 'Tipo', width: 200 },
         ]"
         :actions="
           (ctx) => [
             {
               text: 'Editar',
               icon: 'mdi-pen',
-              to: `/schema/module.${ctx.item.attr}`,
+              to: `/v1/module.${route.params.mod}.entity.${route.params.entity}.field.${ctx.item.attr}`,
             },
             {
               text: 'Deletar',
               icon: 'mdi-delete',
               onClick() {
-                mod.remove(ctx.item);
+                field.remove(ctx.item);
               },
             },
           ]
@@ -54,6 +40,20 @@
             hide-details
           />
         </template>
+
+        <template #item.type="scope">
+          <v-autocomplete
+            v-model="scope.item.data.type"
+            density="compact"
+            hide-details
+            :items="
+              Object.entries(project.fieldTypes()).map((item) => ({
+                value: item[0],
+                title: item[1],
+              }))
+            "
+          />
+        </template>
       </v-ext-table>
       <v-card-actions class="justify-end">
         <v-ext-form-actions
@@ -62,22 +62,38 @@
               text: 'Inserir',
               class: 'bg-primary',
               onClick() {
-                mod.add({ attr: '', data: {} });
+                field.add({ attr: '', data: {} });
               },
             },
           ]"
         />
       </v-card-actions>
     </v-card>
-    <!-- <pre>{{ mod.items }}</pre> -->
   </nuxt-layout>
 </template>
 
 <script setup>
+const route = useRoute();
+
 const project = useProject();
-const mod = project.getAsList("module");
+const mod = project.get(`module.${route.params.mod}`);
+const entity = project.get(
+  `module.${route.params.mod}.entity.${route.params.entity}`
+);
+const field = project.getAsList(
+  `module.${route.params.mod}.entity.${route.params.entity}.field`
+);
 
 const app = useApp();
-app.title.set("Home");
-app.actions.set([]);
+app.title.set(
+  `Módulo: ${mod.name || route.params.mod} | Entidade: ${
+    entity.name || route.params.entity
+  }`
+);
+app.actions.set([
+  {
+    text: "Voltar",
+    to: `/v1/module.${route.params.mod}`,
+  },
+]);
 </script>

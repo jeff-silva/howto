@@ -1,39 +1,23 @@
 <template>
   <nuxt-layout name="app">
     <v-text-field
-      v-model="mod.name"
-      label="Nome"
+      v-model="project.data.version"
+      label="Version"
     />
 
     <v-text-field
-      v-model="mod.version"
-      label="Versão"
+      v-model="project.data.name"
+      label="Nome da aplicação"
     />
 
     <v-textarea
-      v-model="mod.description"
+      v-model="project.data.description"
       label="Descrição"
     />
 
-    <v-autocomplete
-      multiple
-      label="Dependente de"
-      v-model="mod.depends_on"
-      :items="
-        Object.entries(project.data.module)
-          .filter(([name]) => {
-            return name != route.params.mod;
-          })
-          .map(([name, data]) => ({
-            value: name,
-            title: data.name || name,
-          }))
-      "
-    />
-
-    <v-card title="Entidades">
+    <v-card title="Módulos">
       <v-ext-table
-        :items="entity.items"
+        :items="mod.items"
         :headers="[
           { key: 'attr', title: 'Slug', width: 200 },
           { key: 'name', title: 'Nome' },
@@ -43,13 +27,13 @@
             {
               text: 'Editar',
               icon: 'mdi-pen',
-              to: `/schema/module.${route.params.mod}.entity.${ctx.item.attr}`,
+              to: `/v1/module.${ctx.item.attr}`,
             },
             {
               text: 'Deletar',
               icon: 'mdi-delete',
               onClick() {
-                entity.remove(ctx.item);
+                mod.remove(ctx.item);
               },
             },
           ]
@@ -78,24 +62,22 @@
               text: 'Inserir',
               class: 'bg-primary',
               onClick() {
-                entity.add({ attr: '', data: {} });
+                mod.add({ attr: '', data: {} });
               },
             },
           ]"
         />
       </v-card-actions>
     </v-card>
+    <!-- <pre>{{ mod.items }}</pre> -->
   </nuxt-layout>
 </template>
 
 <script setup>
-const route = useRoute();
-
 const project = useProject();
-const mod = project.get(`module.${route.params.mod}`);
-const entity = project.getAsList(`module.${route.params.mod}.entity`);
+const mod = project.getAsList("module");
 
 const app = useApp();
-app.title.set(`Módulo: ${mod.name || route.params.mod}`);
+app.title.set("Home");
 app.actions.set([]);
 </script>
