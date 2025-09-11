@@ -1,0 +1,5 @@
+services:
+  twint:
+    build: ./twint
+    volumes:
+      - ./twint/app:/app
