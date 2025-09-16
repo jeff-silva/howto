@@ -1,5 +1,5 @@
-# volumes:
-#   cloudbeaver_volume:
+volumes:
+  cloudbeaver_volume:
 
 services:
   database:
