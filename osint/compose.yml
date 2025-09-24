@@ -1,0 +1,5 @@
+services:
+  github-monitor:
+    build: ./github_monitor
+    volumes:
+      - ./github_monitor:/app
