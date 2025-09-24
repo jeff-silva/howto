@@ -30,6 +30,37 @@ class AppOpenapiCommand extends Command
         $this->writeSwaggerHtml($controllers);
     }
 
+    public function getControllers()
+    {
+        $files = glob(app_path('/Http/Controllers/*.php'));
+
+        $files = array_map(function ($file) {
+            if (in_array($file, [app_path('/Http/Controllers/Controller.php')])) {
+                return null;
+            }
+
+            $item = new \stdClass;
+            $item->file = $file;
+            $item->namespace = null;
+
+            $item->class = 'App/' . str_replace(app_path(), '', $file);
+            $item->class = str_replace('.php', '', $item->class);
+            $item->class = preg_split('/[^a-zA-Z0-9]/', $item->class);
+            $item->class = array_filter($item->class, fn($value) => !!$value);
+            $item->class = join('\\', $item->class);
+
+            $item->instance = app($item->class);
+
+            $reflection = new \ReflectionClass($item->instance);
+            $item->namespace = $reflection->getNamespaceName();
+            $item->id = $reflection->getShortName();
+
+            return $item;
+        }, $files);
+
+        return array_values(array_filter($files));
+    }
+
     public function writeRoutesApiFile($controllers)
     {
         $content = ['<?php', ''];
@@ -39,15 +70,10 @@ class AppOpenapiCommand extends Command
 
         foreach ($controllers as $controller) {
             $instance = $controller->instance;
-            $content[] = "Route::{$instance->method}('{$instance->route}', {$controller->class}::class);";
+            $content[] = "Route::{$instance->method}('{$instance->route}', {$controller->class}::class)->name('{$controller->id}');";
         }
 
         file_put_contents(base_path('routes/api.php'), join("\n", $content));
-
-        // <?php
-
-        // use Illuminate\Http\Request;
-        // use Illuminate\Support\Facades\Route;
 
         // Route::get('/user', function (Request $request) {
         //     return $request->user();
@@ -81,8 +107,9 @@ class AppOpenapiCommand extends Command
             $instance = $controller->instance;
 
             $route = array_merge([
+                'operationId' => "{$controller->id}",
                 'summary' => '',
-                'operationId' => '',
+                'description' => '',
                 'tags' => [],
                 'parameters' => [],
                 'responses' => [
@@ -94,6 +121,23 @@ class AppOpenapiCommand extends Command
                     ],
                 ],
             ], $instance->openapi());
+
+            $requestBody = [];
+            foreach ($instance->openapiParams() as $param) {
+                $param = array_merge([
+                    'name' => '',
+                    'in' => 'query',
+                    'description' => '',
+                    'required' => false,
+                    'schema' => ['type' => 'string'],
+                ], $param);
+
+                if ($param['in'] == 'body') {
+                    continue;
+                }
+
+                $route['parameters'][] = $param;
+            }
 
             $instance->route = '/' . trim($instance->route, '/');
 
@@ -121,10 +165,11 @@ class AppOpenapiCommand extends Command
         <head>
             <meta charset="UTF-8">
             <title>{$openapi['info']['title']} | Swagger UI</title>
-            <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css">
             <link rel="icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/favicon-32x32.png" sizes="32x32" />
             <link rel="icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/favicon-16x16.png" sizes="16x16" />
-            <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+            <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-themes@1.4.3/themes/dark.min.css">
+            <style>html, body { margin: 0; padding: 0; }</style>
         </head>
 
         <body>
@@ -155,35 +200,5 @@ class AppOpenapiCommand extends Command
         EOF;
 
         file_put_contents(public_path('swagger.html'), $content);
-    }
-
-    public function getControllers()
-    {
-        $files = glob(app_path('/Http/Controllers/*.php'));
-
-        $files = array_map(function ($file) {
-            if (in_array($file, [app_path('/Http/Controllers/Controller.php')])) {
-                return null;
-            }
-
-            $item = new \stdClass;
-            $item->file = $file;
-            $item->namespace = null;
-
-            $item->class = 'App/' . str_replace(app_path(), '', $file);
-            $item->class = str_replace('.php', '', $item->class);
-            $item->class = preg_split('/[^a-zA-Z0-9]/', $item->class);
-            $item->class = array_filter($item->class, fn($value) => !!$value);
-            $item->class = join('\\', $item->class);
-
-            $item->instance = app($item->class);
-
-            $reflection = new \ReflectionClass($item->instance);
-            $item->namespace = $reflection->getNamespaceName();
-
-            return $item;
-        }, $files);
-
-        return array_values(array_filter($files));
     }
 }

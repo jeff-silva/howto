@@ -11,4 +11,9 @@ abstract class Controller
     {
         return [];
     }
+
+    public function openapiParams()
+    {
+        return [];
+    }
 }

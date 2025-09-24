@@ -11,14 +11,23 @@ class AppTestGetController extends Controller
 
     public function __invoke(Request $request)
     {
-        return ['123'];
+        $all = $request->all();
+        return compact(['all']);
     }
 
     public function openapi()
     {
         return [
-            'summary' => 'Teste da aplicação',
             'tags' => ['app', 'test'],
+        ];
+    }
+
+    public function openapiParams()
+    {
+        return [
+            ['in' => 'query', 'name' => 'page', 'description' => 'Página'],
+            ['in' => 'query', 'name' => 'per_page', 'description' => 'Ítens por página'],
+            ['in' => 'query', 'name' => 'order', 'description' => 'Ordem'],
         ];
     }
 }
