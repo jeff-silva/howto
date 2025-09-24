@@ -1,0 +1,19 @@
+services:
+  waha:
+    build: ./waha/
+    ports:
+      - 3000:3000
+
+  frontend:
+    build: ./frontend/
+    volumes:
+      - ./frontend/app:/app
+    ports:
+      - 3010:3000
+
+  backend:
+    build: ./backend
+    volumes:
+      - ./backend/app:/app
+    ports:
+      - 8000:8000
