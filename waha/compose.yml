@@ -3,6 +3,11 @@ services:
     build: ./waha/
     ports:
       - 3000:3000
+    volumes:
+      - ./waha/.sessions:/app/.sessions
+    # environment:
+    #   WAHA_APPS_ENABLED: true
+    #   WAHA_API_KEY: abcde
 
   frontend:
     build: ./frontend/
@@ -17,5 +22,3 @@ services:
       - ./backend/app:/app
     ports:
       - 8000:8000
-    environment:
-      PHP_ENABLE_OPCACHE: "0"

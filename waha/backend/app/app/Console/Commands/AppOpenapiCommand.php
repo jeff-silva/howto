@@ -25,9 +25,11 @@ class AppOpenapiCommand extends Command
      */
     public function handle()
     {
+        $this->call('optimize');
         $controllers = $this->getControllers();
         $this->writeRoutesApiFile($controllers);
         $this->writeSwaggerHtml($controllers);
+        $this->call('route:list');
     }
 
     public function getControllers()
@@ -70,7 +72,8 @@ class AppOpenapiCommand extends Command
 
         foreach ($controllers as $controller) {
             $instance = $controller->instance;
-            $content[] = "Route::{$instance->method}('{$instance->route}', {$controller->class}::class)->name('{$controller->id}');";
+            $middleware = str_replace('"', "'", json_encode($instance->middleware));
+            $content[] = "Route::{$instance->method}('{$instance->route}', {$controller->class}::class)->name('{$controller->id}')->middleware({$middleware});";
         }
 
         $content[] = '';
@@ -107,6 +110,7 @@ class AppOpenapiCommand extends Command
 
         foreach ($controllers as $controller) {
             $instance = $controller->instance;
+            if (!$instance->openapi) continue;
 
             $route = array_merge([
                 'operationId' => "{$controller->id}",
