@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>app | Swagger UI</title>
+    <title>Laravel | Swagger UI</title>
     <link rel="icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/favicon-16x16.png" sizes="16x16" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css">
@@ -33,7 +33,7 @@
                     "openapi": "3.0.0",
                     "info": {
                         "version": "1.0.0",
-                        "title": "app",
+                        "title": "Laravel",
                         "license": {
                             "name": "MIT"
                         }
@@ -139,6 +139,124 @@
                                                         "required": false,
                                                         "format": "",
                                                         "example": "user@mail.com",
+                                                        "type": "string"
+                                                    },
+                                                    "password": {
+                                                        "description": "Senha",
+                                                        "required": false,
+                                                        "format": "",
+                                                        "example": "12345",
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "\/auth\/password": {
+                            "post": {
+                                "operationId": "AuthPasswordPostController",
+                                "summary": "",
+                                "description": "",
+                                "tags": [
+                                    "auth"
+                                ],
+                                "parameters": [],
+                                "responses": {
+                                    "200": {
+                                        "description": "Success",
+                                        "content": {
+                                            "application\/json": {}
+                                        }
+                                    },
+                                    "400": {
+                                        "description": "Invalid",
+                                        "content": {
+                                            "application\/json": {}
+                                        }
+                                    }
+                                },
+                                "requestBody": {
+                                    "description": "",
+                                    "required": true,
+                                    "content": {
+                                        "application\/json": {
+                                            "schema": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "email": {
+                                                        "description": "E-mail",
+                                                        "required": false,
+                                                        "format": "",
+                                                        "example": "user@mail.com",
+                                                        "type": "string"
+                                                    },
+                                                    "code": {
+                                                        "description": "C\u00f3digo recebido por e-mail",
+                                                        "required": false,
+                                                        "format": "",
+                                                        "example": "12345",
+                                                        "type": "string"
+                                                    },
+                                                    "password": {
+                                                        "description": "Nova senha",
+                                                        "required": false,
+                                                        "format": "",
+                                                        "example": "12345",
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "\/auth\/register": {
+                            "post": {
+                                "operationId": "AuthRegisterPostController",
+                                "summary": "",
+                                "description": "",
+                                "tags": [
+                                    "auth"
+                                ],
+                                "parameters": [],
+                                "responses": {
+                                    "200": {
+                                        "description": "Success",
+                                        "content": {
+                                            "application\/json": {}
+                                        }
+                                    },
+                                    "400": {
+                                        "description": "Invalid",
+                                        "content": {
+                                            "application\/json": {}
+                                        }
+                                    }
+                                },
+                                "requestBody": {
+                                    "description": "",
+                                    "required": true,
+                                    "content": {
+                                        "application\/json": {
+                                            "schema": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "name": {
+                                                        "description": "Nome",
+                                                        "required": false,
+                                                        "format": "",
+                                                        "example": "John Doe",
+                                                        "type": "string"
+                                                    },
+                                                    "email": {
+                                                        "description": "E-mail",
+                                                        "required": false,
+                                                        "format": "",
+                                                        "example": "john.doe@mail.com",
                                                         "type": "string"
                                                     },
                                                     "password": {

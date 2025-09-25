@@ -66,7 +66,13 @@ class AppOpenapiCommand extends Command
     public function writeRoutesApiFile($controllers)
     {
         $content = ['<?php', ''];
-        $content[] = 'use Illuminate\Http\Request;';
+        $content[] = '/**';
+        $content[] = ' * FILE AUTOMATICALLY GENERATED, DO NOT EDIT!!';
+        $content[] = ' * To generate this file content, edit controllers';
+        $content[] = ' * at Http/Controllers then run "php artisan app:openapi".';
+        $content[] = ' * File generated at ' . date('Y-m-d H:i:s');
+        $content[] = ' */';
+        $content[] = '';
         $content[] = 'use Illuminate\Support\Facades\Route;';
         $content[] = '';
 
@@ -92,7 +98,7 @@ class AppOpenapiCommand extends Command
             'openapi' => '3.0.0',
             'info' => [
                 'version' => '1.0.0',
-                'title' => 'app',
+                'title' => config('app.name'),
                 'license' => [
                     'name' => 'MIT',
                 ],
