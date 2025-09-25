@@ -18,7 +18,7 @@ class AppTestGetController extends Controller
     public function openapi()
     {
         return [
-            'tags' => ['app', 'test'],
+            'tags' => ['app'],
         ];
     }
 

@@ -73,6 +73,8 @@ class AppOpenapiCommand extends Command
             $content[] = "Route::{$instance->method}('{$instance->route}', {$controller->class}::class)->name('{$controller->id}');";
         }
 
+        $content[] = '';
+
         file_put_contents(base_path('routes/api.php'), join("\n", $content));
 
         // Route::get('/user', function (Request $request) {
@@ -119,6 +121,12 @@ class AppOpenapiCommand extends Command
                             'application/json' => new \stdClass,
                         ],
                     ],
+                    '400' => [
+                        'description' => 'Invalid',
+                        'content' => [
+                            'application/json' => new \stdClass,
+                        ],
+                    ],
                 ],
             ], $instance->openapi());
 
@@ -129,14 +137,35 @@ class AppOpenapiCommand extends Command
                     'in' => 'query',
                     'description' => '',
                     'required' => false,
+                    'format' => '',
+                    'example' => '',
                     'schema' => ['type' => 'string'],
                 ], $param);
 
                 if ($param['in'] == 'body') {
+                    $param_name = $param['name'];
+                    $param['type'] = $param['schema']['type'];
+                    unset($param['in'], $param['schema'], $param['name']);
+                    $requestBody[$param_name] = $param;
                     continue;
                 }
 
                 $route['parameters'][] = $param;
+            }
+
+            if (! empty($requestBody)) {
+                $route['requestBody'] = [
+                    'description' => '',
+                    'required' => true,
+                    'content' => [
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => $requestBody,
+                            ],
+                        ],
+                    ],
+                ];
             }
 
             $instance->route = '/' . trim($instance->route, '/');
@@ -156,7 +185,8 @@ class AppOpenapiCommand extends Command
     public function writeSwaggerHtml($controllers)
     {
         $openapi = $this->getOpenapiData($controllers);
-        $openapi_json = json_encode($openapi);
+        $openapi_json = json_encode($openapi, JSON_PRETTY_PRINT);
+        $openapi_json = str_replace("\n", "\n                ", $openapi_json);
 
         $content = <<<EOF
         <!DOCTYPE html>

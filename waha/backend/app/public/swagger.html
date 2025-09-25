@@ -29,7 +29,162 @@
                     SwaggerUIBundle.plugins.DownloadUrl
                 ],
                 layout: "StandaloneLayout",
-                spec: {"openapi":"3.0.0","info":{"version":"1.0.0","title":"app","license":{"name":"MIT"}},"servers":[{"url":"http:\/\/localhost:8000\/api"}],"paths":{"\/app\/test":{"get":{"operationId":"AppTestGetController","summary":"","description":"","tags":["app","test"],"parameters":[{"name":"page","in":"query","description":"P\u00e1gina","required":false,"schema":{"type":"string"}},{"name":"per_page","in":"query","description":"\u00cdtens por p\u00e1gina","required":false,"schema":{"type":"string"}},{"name":"order","in":"query","description":"Ordem","required":false,"schema":{"type":"string"}}],"responses":{"200":{"description":"Success","content":{"application\/json":{}}}}}}},"components":{"schemas":[]}},
+                spec: {
+                    "openapi": "3.0.0",
+                    "info": {
+                        "version": "1.0.0",
+                        "title": "app",
+                        "license": {
+                            "name": "MIT"
+                        }
+                    },
+                    "servers": [
+                        {
+                            "url": "http:\/\/localhost:8000\/api"
+                        }
+                    ],
+                    "paths": {
+                        "\/app\/test": {
+                            "get": {
+                                "operationId": "AppTestGetController",
+                                "summary": "",
+                                "description": "",
+                                "tags": [
+                                    "app"
+                                ],
+                                "parameters": [
+                                    {
+                                        "name": "page",
+                                        "in": "query",
+                                        "description": "P\u00e1gina",
+                                        "required": false,
+                                        "format": "",
+                                        "example": "",
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    {
+                                        "name": "per_page",
+                                        "in": "query",
+                                        "description": "\u00cdtens por p\u00e1gina",
+                                        "required": false,
+                                        "format": "",
+                                        "example": "",
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    {
+                                        "name": "order",
+                                        "in": "query",
+                                        "description": "Ordem",
+                                        "required": false,
+                                        "format": "",
+                                        "example": "",
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    }
+                                ],
+                                "responses": {
+                                    "200": {
+                                        "description": "Success",
+                                        "content": {
+                                            "application\/json": {}
+                                        }
+                                    },
+                                    "400": {
+                                        "description": "Invalid",
+                                        "content": {
+                                            "application\/json": {}
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "\/auth\/login": {
+                            "post": {
+                                "operationId": "AuthLoginPostController",
+                                "summary": "",
+                                "description": "",
+                                "tags": [
+                                    "auth"
+                                ],
+                                "parameters": [],
+                                "responses": {
+                                    "200": {
+                                        "description": "Success",
+                                        "content": {
+                                            "application\/json": {}
+                                        }
+                                    },
+                                    "400": {
+                                        "description": "Invalid",
+                                        "content": {
+                                            "application\/json": {}
+                                        }
+                                    }
+                                },
+                                "requestBody": {
+                                    "description": "",
+                                    "required": true,
+                                    "content": {
+                                        "application\/json": {
+                                            "schema": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "email": {
+                                                        "description": "E-mail",
+                                                        "required": false,
+                                                        "format": "",
+                                                        "example": "user@mail.com",
+                                                        "type": "string"
+                                                    },
+                                                    "password": {
+                                                        "description": "Senha",
+                                                        "required": false,
+                                                        "format": "",
+                                                        "example": "12345",
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "\/waha\/webhook": {
+                            "post": {
+                                "operationId": "WahaWebhookPostController",
+                                "summary": "",
+                                "description": "",
+                                "tags": [
+                                    "waha"
+                                ],
+                                "parameters": [],
+                                "responses": {
+                                    "200": {
+                                        "description": "Success",
+                                        "content": {
+                                            "application\/json": {}
+                                        }
+                                    },
+                                    "400": {
+                                        "description": "Invalid",
+                                        "content": {
+                                            "application\/json": {}
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "components": {
+                        "schemas": []
+                    }
+                },
             });
         });
     </script>
