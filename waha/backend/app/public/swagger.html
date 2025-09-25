@@ -44,6 +44,31 @@
                         }
                     ],
                     "paths": {
+                        "\/app\/load": {
+                            "get": {
+                                "operationId": "AppLoadGetController",
+                                "summary": "",
+                                "description": "",
+                                "tags": [
+                                    "app"
+                                ],
+                                "parameters": [],
+                                "responses": {
+                                    "200": {
+                                        "description": "Success",
+                                        "content": {
+                                            "application\/json": {}
+                                        }
+                                    },
+                                    "400": {
+                                        "description": "Invalid",
+                                        "content": {
+                                            "application\/json": {}
+                                        }
+                                    }
+                                }
+                            }
+                        },
                         "\/app\/test": {
                             "get": {
                                 "operationId": "AppTestGetController",

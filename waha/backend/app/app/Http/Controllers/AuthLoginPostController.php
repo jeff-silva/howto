@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class AuthLoginPostController extends Controller
 {
-    public $method = 'post';
+    public $methods = ['post'];
     public $route = 'auth/login';
 
     public function __invoke(Request $request)

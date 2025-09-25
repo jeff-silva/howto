@@ -79,7 +79,10 @@ class AppOpenapiCommand extends Command
         foreach ($controllers as $controller) {
             $instance = $controller->instance;
             $middleware = str_replace('"', "'", json_encode($instance->middleware));
-            $content[] = "Route::{$instance->method}('{$instance->route}', {$controller->class}::class)->name('{$controller->id}')->middleware({$middleware});";
+            $methods = str_replace('"', "'", json_encode($instance->methods));
+            $line = "Route::match({$methods}, '{$instance->route}', {$controller->class}::class)";
+            $line .= "->name('{$controller->id}')->middleware({$middleware});";
+            $content[] = $line;
         }
 
         $content[] = '';
@@ -184,8 +187,10 @@ class AppOpenapiCommand extends Command
                 $openapi['paths'][$instance->route] = [];
             }
 
-            if (!isset($openapi['paths'][$instance->route][$instance->method])) {
-                $openapi['paths'][$instance->route][$instance->method] = $route;
+            foreach ($instance->methods as $method) {
+                if (!isset($openapi['paths'][$instance->route][$method])) {
+                    $openapi['paths'][$instance->route][$method] = $route;
+                }
             }
         }
 

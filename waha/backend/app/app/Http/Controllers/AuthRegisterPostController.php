@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class AuthRegisterPostController extends Controller
 {
-    public $method = 'post';
+    public $methods = ['post'];
     public $route = 'auth/register';
 
     public function __invoke(Request $request)

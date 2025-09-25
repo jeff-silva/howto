@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class WahaWebhookPostController extends Controller
 {
     public $openapi = false;
-    public $method = 'post';
+    public $methods = ['post'];
     public $route = 'waha/webhook';
 
     public function __invoke(Request $request)

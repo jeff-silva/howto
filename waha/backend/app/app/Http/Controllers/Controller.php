@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 abstract class Controller
 {
     public $openapi = true;
-    public $method = 'get';
+    public $methods = ['get'];
     public $route = '';
     public $middleware = [];
 

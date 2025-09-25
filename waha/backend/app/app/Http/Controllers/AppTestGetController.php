@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class AppTestGetController extends Controller
 {
-    public $method = 'get';
+    public $methods = ['get'];
     public $route = 'app/test';
 
     public function __invoke(Request $request)

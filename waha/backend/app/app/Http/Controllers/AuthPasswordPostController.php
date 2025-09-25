@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class AuthPasswordPostController extends Controller
 {
-    public $method = 'post';
+    public $methods = ['post'];
     public $route = 'auth/password';
 
     public function __invoke(Request $request)

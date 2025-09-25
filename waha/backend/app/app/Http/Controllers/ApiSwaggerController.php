@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class ApiSwaggerController extends Controller
 {
     public $openapi = false;
-    public $method = 'get';
+    public $methods = ['get'];
     public $route = '/';
 
     public function __invoke(Request $request)
