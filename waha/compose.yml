@@ -1,13 +1,35 @@
+volumes:
+  database_volume:
+  cloudbeaver_volume:
+
+networks:
+  main_network:
+
 services:
-  waha:
-    build: ./waha/
+  database:
+    build: ./database
+    environment:
+      MARIADB_ROOT_PASSWORD: app
+      MARIADB_PASSWORD: app
+      MARIADB_USER: app
     ports:
-      - 3000:3000
+      - 3306:3306
     volumes:
-      - ./waha/.sessions:/app/.sessions
-    # environment:
-    #   WAHA_APPS_ENABLED: true
-    #   WAHA_API_KEY: abcde
+      - ./database/entrypoint.sql:/docker-entrypoint-initdb.d/entrypoint.sql
+
+  backend:
+    build: ./backend
+    volumes:
+      - ./backend/app:/app
+    ports:
+      - 8000:8000
+
+  dbmanager:
+    image: dbeaver/cloudbeaver
+    volumes:
+      - cloudbeaver_volume:/opt/cloudbeaver/workspace
+    ports:
+      - 3307:8978
 
   frontend:
     build: ./frontend/
@@ -16,9 +38,9 @@ services:
     ports:
       - 3010:3000
 
-  backend:
-    build: ./backend
-    volumes:
-      - ./backend/app:/app
+  waha:
+    build: ./waha/
     ports:
-      - 8000:8000
+      - 3000:3000
+    volumes:
+      - ./waha/.sessions:/app/.sessions

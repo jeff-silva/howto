@@ -4,7 +4,7 @@
  * FILE AUTOMATICALLY GENERATED, DO NOT EDIT!!
  * To generate this file content, edit controllers
  * at Http/Controllers then run "php artisan app:openapi".
- * File generated at 2025-09-25 18:14:28
+ * File generated at 2025-09-25 21:02:00
  */
 
 use Illuminate\Support\Facades\Route;
