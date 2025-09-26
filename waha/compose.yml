@@ -23,6 +23,8 @@ services:
       - ./backend/app:/app
     ports:
       - 8000:8000
+    depends_on:
+      - database
 
   dbmanager:
     image: dbeaver/cloudbeaver
@@ -30,6 +32,8 @@ services:
       - cloudbeaver_volume:/opt/cloudbeaver/workspace
     ports:
       - 3307:8978
+    depends_on:
+      - database
 
   frontend:
     build: ./frontend/

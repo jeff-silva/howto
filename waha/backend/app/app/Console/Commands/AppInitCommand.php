@@ -25,8 +25,8 @@ class AppInitCommand extends Command
      */
     public function handle()
     {
-        $this->call('optimize');
-        $this->call('migrate');
-        $this->call('db:seed');
+        // $this->call('optimize');
+        // $this->call('migrate');
+        // $this->call('db:seed');
     }
 }
