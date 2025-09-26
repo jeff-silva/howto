@@ -1,46 +1,50 @@
-volumes:
-  mongodb_data: { driver: local }
+version: "3.8"
 
 services:
   rocketchat:
-    image: ${IMAGE:-registry.rocket.chat/rocketchat/rocket.chat}:${RELEASE:-latest}
-    restart: always
-    labels:
-      traefik.enable: "true"
-      traefik.http.routers.rocketchat.rule: Host(`${DOMAIN:-}`)
-      traefik.http.routers.rocketchat.tls: "true"
-      traefik.http.routers.rocketchat.entrypoints: https
-      traefik.http.routers.rocketchat.tls.certresolver: le
+    image: registry.rocket.chat/rocketchat/rocket.chat:latest
+    restart: unless-stopped
     environment:
-      MONGO_URL: "${MONGO_URL:-\
-        mongodb://${MONGODB_ADVERTISED_HOSTNAME:-mongodb}:${MONGODB_INITIAL_PRIMARY_PORT_NUMBER:-27017}/\
-        ${MONGODB_DATABASE:-rocketchat}?replicaSet=${MONGODB_REPLICA_SET_NAME:-rs0}}"
-      MONGO_OPLOG_URL: "${MONGO_OPLOG_URL:\
-        -mongodb://${MONGODB_ADVERTISED_HOSTNAME:-mongodb}:${MONGODB_INITIAL_PRIMARY_PORT_NUMBER:-27017}/\
-        local?replicaSet=${MONGODB_REPLICA_SET_NAME:-rs0}}"
-      ROOT_URL: ${ROOT_URL:-http://localhost:${HOST_PORT:-3000}}
-      PORT: ${PORT:-3000}
+      MONGO_URL: "mongodb://mongodb:27017/rocketchat?replicaSet=rs01"
+      MONGO_OPLOG_URL: "mongodb://mongodb:27017/local?replicaSet=rs01"
+      ROOT_URL: "http://localhost:3000"
+      PORT: 3000
       DEPLOY_METHOD: docker
-      DEPLOY_PLATFORM: ${DEPLOY_PLATFORM:-}
-      REG_TOKEN: ${REG_TOKEN:-}
+    ports:
+      - "3000:3000"
     depends_on:
       - mongodb
-    expose:
-      - ${PORT:-3000}
-    ports:
-      - "${BIND_IP:-0.0.0.0}:${HOST_PORT:-3000}:${PORT:-3000}"
+      - mongo-init-replica
+    volumes:
+      - rocketchat_uploads:/app/uploads
 
   mongodb:
-    image: docker.io/bitnami/mongodb:${MONGODB_VERSION:-6.0}
-    restart: always
+    image: docker.io/library/mongo:5.0
+    restart: unless-stopped
+    command: mongod --replSet rs01 --oplogSize 128 --bind_ip_all
     volumes:
-      - ${MONGODB_HOST_PATH:-mongodb_data}:/bitnami/mongodb
-    environment:
-      MONGODB_REPLICA_SET_MODE: primary
-      MONGODB_REPLICA_SET_NAME: ${MONGODB_REPLICA_SET_NAME:-rs0}
-      MONGODB_PORT_NUMBER: ${MONGODB_PORT_NUMBER:-27017}
-      MONGODB_INITIAL_PRIMARY_HOST: ${MONGODB_INITIAL_PRIMARY_HOST:-mongodb}
-      MONGODB_INITIAL_PRIMARY_PORT_NUMBER: ${MONGODB_INITIAL_PRIMARY_PORT_NUMBER:-27017}
-      MONGODB_ADVERTISED_HOSTNAME: ${MONGODB_ADVERTISED_HOSTNAME:-mongodb}
-      MONGODB_ENABLE_JOURNAL: ${MONGODB_ENABLE_JOURNAL:-true}
-      ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD:-yes}
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+
+  mongo-init-replica:
+    image: docker.io/library/mongo:5.0
+    command: >
+      bash -c "
+        for i in \`seq 1 30\`; do
+          mongo mongodb/rocketchat --eval \"
+            rs.initiate({
+              _id: 'rs01',
+              members: [ { _id: 0, host: 'mongodb:27017' } ]
+            });
+          \" && break;
+          echo 'Waiting for mongo to start...';
+          sleep 1;
+        done;
+      "
+    depends_on:
+      - mongodb
+
+volumes:
+  mongodb_data:
+  rocketchat_uploads:
