@@ -5,8 +5,7 @@ namespace Database\Seeders;
 use App\Models\AppUser;
 use App\Models\ShopCategory;
 use App\Models\ShopProduct;
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use MongoDB\BSON\ObjectId;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -54,17 +53,17 @@ class DatabaseSeeder extends Seeder
         $scope->shopCategoryList[] = ShopProduct::firstOrCreate(['slug' => 'lencol-frenesi'], [])->update([
             'name' => 'Lençol Frenesi Casal',
             'price' => 129.90,
-            'category_ids' => [
-                $scope->shopCategoryList[0]['_id'],
+            'shop_category_ids' => [
+                new ObjectId($scope->shopCategoryList[0]['_id']),
             ],
         ]);
 
         $scope->shopCategoryList[] = ShopProduct::firstOrCreate(['slug' => 'celular-xiamoi'], [])->update([
             'name' => 'Celular Xiaomi S25 Ultra Pro',
             'price' => 2999.90,
-            'category_ids' => [
-                $scope->shopCategoryList[1]['_id'],
-                $scope->shopCategoryList[3]['_id'],
+            'shop_category_ids' => [
+                new ObjectId($scope->shopCategoryList[1]['_id']),
+                new ObjectId($scope->shopCategoryList[3]['_id']),
             ],
         ]);
 

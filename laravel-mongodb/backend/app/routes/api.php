@@ -17,7 +17,7 @@ Route::get('/test', function (Request $request) {
     //     'price' => 15.90,
     // ]);
 
-    $scope->productList = ShopProduct::all();
+    $scope->productList = ShopProduct::with(['shop_category_list'])->get()->toArray();
 
     dump($scope);
 });
