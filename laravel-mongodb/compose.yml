@@ -3,8 +3,8 @@
 #     driver: local
 #   cloudbeaver_volume:
 
-# networks:
-#   main_network:
+networks:
+  main_network:
 
 services:
   backend:
@@ -13,9 +13,21 @@ services:
       - ./backend/app:/var/www/html
     ports:
       - 8000:8000
-    # depends_on:
-    #   - database
+    depends_on:
+      - database
+    networks:
+      - main_network
     # links:
     #   - database
-    # networks:
-    #   - main_network
+
+  database:
+    build: ./database
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: app
+      MONGO_INITDB_ROOT_PASSWORD: app
+    volumes:
+      - ./database/.volume:/data/db
+    networks:
+      - main_network

@@ -2,12 +2,10 @@ FROM php:8.4-apache
 WORKDIR /var/www/html
 
 RUN apt-get update && apt-get install -y \
-  git \
-  unzip \
-  libpq-dev \
-  libzip-dev \
-  libpng-dev \
-  supervisor \
+  git unzip libpq-dev libzip-dev libpng-dev \
+  supervisor libssl-dev pkg-config \
+  && pecl install mongodb \
+  && docker-php-ext-enable mongodb \
   && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql zip exif bcmath opcache
