@@ -16,7 +16,10 @@ fi
 
 composer install
 
-php artisan optimize
+php artisan route:clear
+php artisan config:clear
+php artisan cache:clear
+rm -f /var/www/html/bootstrap/cache/*.php
 # php artisan migrate
 php artisan db:seed
 

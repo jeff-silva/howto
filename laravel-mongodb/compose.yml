@@ -17,8 +17,6 @@ services:
       - database
     networks:
       - main_network
-    # links:
-    #   - database
 
   database:
     build: ./database
