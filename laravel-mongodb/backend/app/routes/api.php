@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use App\Models\AppUser;
 use App\Models\CineCast;
 use App\Models\CineMovie;
@@ -17,6 +18,10 @@ use MongoDB\BSON\ObjectId;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
+
+Controller::register(App\Http\Controllers\CineCastCreateController::class);
+Controller::register(App\Http\Controllers\CineCastUpdateController::class);
+Controller::register(App\Http\Controllers\CineCastDeleteController::class);
 
 
 Route::get('/test', function (Request $request) {
