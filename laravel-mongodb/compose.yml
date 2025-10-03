@@ -46,3 +46,10 @@ services:
       - database
     networks:
       - main_network
+
+  frontend:
+    build: ./frontend/
+    volumes:
+      - ./frontend/app:/app
+    ports:
+      - 3000:3000
