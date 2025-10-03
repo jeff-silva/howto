@@ -1,0 +1,38 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime
+    @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+type Query {
+    cine_cast(id: ID @eq): CineCast @find
+
+    cine_cast_search(name: String @where(operator: "like")): [CineCast!]!
+        @paginate(defaultCount: 10)
+
+    cine_movie(id: ID @eq): CineMovie @find
+
+    cine_movie_search(name: String @where(operator: "like")): [CineMovie!]!
+        @paginate(defaultCount: 10)
+}
+
+type CineCast {
+    id: ID!
+    name: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type CineMovie {
+    id: ID!
+    name: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type CineMovieCast {
+    id: ID!
+    name: String!
+    cine_cast_id: String!
+    cine_movie_id: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
