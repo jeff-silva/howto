@@ -1,0 +1,21 @@
+# volumes:
+#   database_volume:
+#     driver: local
+#   cloudbeaver_volume:
+
+# networks:
+#   main_network:
+
+services:
+  backend:
+    build: ./backend
+    volumes:
+      - ./backend/app:/var/www/html
+    ports:
+      - 8000:8000
+    # depends_on:
+    #   - database
+    # links:
+    #   - database
+    # networks:
+    #   - main_network
