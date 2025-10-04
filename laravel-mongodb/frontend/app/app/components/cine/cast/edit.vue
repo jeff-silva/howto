@@ -30,7 +30,7 @@ const props = defineProps({
   entityId: { type: String, default: null },
 });
 
-const emit = defineEmits([]);
+const emit = defineEmits(["on-success"]);
 
 const cineCast = useCrud({
   entity: "cine_cast",
@@ -44,12 +44,9 @@ const cineCast = useCrud({
       }
     }`;
   },
-  // onSuccess(ctx) {
-  //   if (ctx.action == "save") {
-  //     search.submit();
-  //     cineCastDialog.toggle(false);
-  //   }
-  // },
+  onSuccess(ctx) {
+    emit("on-success", { ...ctx, ...cineCast });
+  },
 });
 
 cineCast.select(props.entityId);

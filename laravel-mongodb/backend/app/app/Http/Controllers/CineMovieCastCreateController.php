@@ -12,11 +12,11 @@ class CineMovieCastCreateController extends Controller
 
     public function __invoke(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'name' => ['required'],
         ]);
 
-        $entity = CineMovieCast::create($data);
+        $entity = CineMovieCast::create($request->all());
         return compact(['entity']);
     }
 }

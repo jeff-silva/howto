@@ -86,8 +86,8 @@
           </v-card-text>
           <v-card-actions class="justify-end">
             <v-btn
-              text="Editar"
-              @click="cineMovieDialog.toggle()"
+              text="Criar"
+              @click="cineMovieDialog.edit(null)"
             />
           </v-card-actions>
         </v-card>
@@ -99,7 +99,17 @@
       max-width="600"
       scrollable
     >
-      <cine-cast-edit :entity-id="cineCastDialog.id" />
+      <cine-cast-edit
+        :entity-id="cineCastDialog.id"
+        @on-success="
+          (ctx) => {
+            if (ctx.action == 'save') {
+              cineCastDialog.toggle(false);
+              search.submit();
+            }
+          }
+        "
+      />
     </v-dialog>
 
     <v-dialog
@@ -107,7 +117,17 @@
       max-width="600"
       scrollable
     >
-      <cine-movie-edit :entity-id="cineMovieDialog.id" />
+      <cine-movie-edit
+        :entity-id="cineMovieDialog.id"
+        @on-success="
+          (ctx) => {
+            if (ctx.action == 'save') {
+              cineMovieDialog.toggle(false);
+              search.submit();
+            }
+          }
+        "
+      />
     </v-dialog>
 
     <!-- <pre>{{ search }}</pre> -->

@@ -15,6 +15,7 @@ export default (opts = {}) => {
       },
       opts,
       {
+        busy: false,
         status: null,
 
         fill(data = {}) {
@@ -26,6 +27,7 @@ export default (opts = {}) => {
         },
 
         async select(id) {
+          r.busy = true;
           r.status = "select";
 
           let query = await r.selectGraphql();
@@ -48,10 +50,12 @@ export default (opts = {}) => {
             r.onError({ ...r, error });
           }
 
+          r.busy = false;
           r.status = null;
         },
 
         async save() {
+          r.busy = true;
           r.status = "save";
 
           const axiosParams = {
@@ -73,6 +77,7 @@ export default (opts = {}) => {
             r.onError({ ...r, error });
           }
 
+          r.busy = false;
           r.status = null;
         },
 

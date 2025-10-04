@@ -30,7 +30,7 @@ const props = defineProps({
   entityId: { type: String, default: null },
 });
 
-const emit = defineEmits([]);
+const emit = defineEmits(["on-success"]);
 
 const cineMovie = useCrud({
   entity: "cine_movie",
@@ -39,6 +39,9 @@ const cineMovie = useCrud({
     return `{
       id slug name
     }`;
+  },
+  onSuccess(ctx) {
+    emit("on-success", { ...ctx, ...cineMovie });
   },
 });
 
