@@ -19,15 +19,19 @@ use MongoDB\BSON\ObjectId;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Controller::register(App\Http\Controllers\CineCastCreateController::class);
-Controller::register(App\Http\Controllers\CineCastDeleteController::class);
-Controller::register(App\Http\Controllers\CineCastUpdateController::class);
-Controller::register(App\Http\Controllers\CineMovieCastCreateController::class);
-Controller::register(App\Http\Controllers\CineMovieCastDeleteController::class);
-Controller::register(App\Http\Controllers\CineMovieCastUpdateController::class);
-Controller::register(App\Http\Controllers\CineMovieCreateController::class);
-Controller::register(App\Http\Controllers\CineMovieDeleteController::class);
-Controller::register(App\Http\Controllers\CineMovieUpdateController::class);
+Controller::register([
+    App\Http\Controllers\CineCastCreateController::class,
+    App\Http\Controllers\CineCastDeleteController::class,
+    App\Http\Controllers\CineCastUpdateController::class,
+    App\Http\Controllers\CineMovieCastCreateController::class,
+    App\Http\Controllers\CineMovieCastDeleteController::class,
+    App\Http\Controllers\CineMovieCastUpdateController::class,
+    App\Http\Controllers\CineMovieCreateController::class,
+    App\Http\Controllers\CineMovieDeleteController::class,
+    App\Http\Controllers\CineMovieUpdateController::class,
+]);
+
+
 
 Route::get('/test', function (Request $request) {
     // return phpinfo();

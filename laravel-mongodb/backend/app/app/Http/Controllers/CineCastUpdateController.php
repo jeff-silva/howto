@@ -17,9 +17,37 @@ class CineCastUpdateController extends Controller
         ]);
 
         $entity = CineCast::find($id);
-        if (!$entity) return null;
+        if (!$entity) return $this->error(400, 'Not found');
 
         $entity->update($data);
-        return compact(['id', 'entity']);
+        return compact(['entity']);
+    }
+
+    public function openApiModel()
+    {
+        return CineCast::class;
+    }
+
+    public function openApiData()
+    {
+        return [
+            'tags' => ['cine_cast'],
+        ];
+    }
+
+    public function openApiParams()
+    {
+        return [
+            [
+                'name' => 'id',
+                'in' => 'path',
+                'example' => 123,
+            ],
+            [
+                'name' => 'name',
+                'in' => 'body',
+                'example' => 'John Doe',
+            ],
+        ];
     }
 }

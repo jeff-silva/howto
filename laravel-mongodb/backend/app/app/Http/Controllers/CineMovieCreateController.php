@@ -19,4 +19,27 @@ class CineMovieCreateController extends Controller
         $entity = CineMovie::create($data);
         return compact(['entity']);
     }
+
+    public function openApiModel()
+    {
+        return CineMovie::class;
+    }
+
+    public function openApiData()
+    {
+        return [
+            'tags' => ['cine_movie'],
+        ];
+    }
+
+    public function openApiParams()
+    {
+        return [
+            [
+                'name' => 'name',
+                'in' => 'body',
+                'example' => 'John Doe',
+            ],
+        ];
+    }
 }

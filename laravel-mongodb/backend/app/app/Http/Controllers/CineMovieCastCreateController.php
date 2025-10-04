@@ -19,4 +19,37 @@ class CineMovieCastCreateController extends Controller
         $entity = CineMovieCast::create($request->all());
         return compact(['entity']);
     }
+
+    public function openApiModel()
+    {
+        return CineMovieCast::class;
+    }
+
+    public function openApiData()
+    {
+        return [
+            'tags' => ['cine_movie_cast'],
+        ];
+    }
+
+    public function openApiParams()
+    {
+        return [
+            [
+                'name' => 'name',
+                'in' => 'body',
+                'example' => 'John Doe',
+            ],
+            [
+                'name' => 'cine_cast_id',
+                'in' => 'body',
+                'example' => 123,
+            ],
+            [
+                'name' => 'cine_movie_id',
+                'in' => 'body',
+                'example' => 123,
+            ],
+        ];
+    }
 }

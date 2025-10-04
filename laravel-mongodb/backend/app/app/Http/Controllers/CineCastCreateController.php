@@ -19,4 +19,27 @@ class CineCastCreateController extends Controller
         $entity = CineCast::create($data);
         return compact(['entity']);
     }
+
+    public function openApiModel()
+    {
+        return CineCast::class;
+    }
+
+    public function openApiData()
+    {
+        return [
+            'tags' => ['cine_cast'],
+        ];
+    }
+
+    public function openApiParams()
+    {
+        return [
+            [
+                'name' => 'name',
+                'in' => 'body',
+                'example' => 'John Doe',
+            ],
+        ];
+    }
 }
