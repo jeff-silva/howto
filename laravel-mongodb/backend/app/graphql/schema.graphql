@@ -12,27 +12,41 @@ type Query {
 
     cine_movie_search(name: String @where(operator: "like")): [CineMovie!]!
         @paginate(defaultCount: 10)
+
+    cine_movie_cast(id: ID @eq): CineMovieCast @find
+
+    cine_movie_cast_search(
+        name: String @where(operator: "like")
+        cine_cast_id: ID @eq
+        cine_movie_id: ID @eq
+    ): [CineMovieCast!]! @paginate(defaultCount: 10)
 }
 
 type CineCast {
     id: ID!
-    name: String!
+    slug: String
+    name: String
+    cine_movie_list: [CineMovieCast!]! @hasMany
     created_at: DateTime!
     updated_at: DateTime!
 }
 
 type CineMovie {
     id: ID!
-    name: String!
+    slug: String
+    name: String
+    cine_movie_cast: [CineMovieCast!]! @hasMany
     created_at: DateTime!
     updated_at: DateTime!
 }
 
 type CineMovieCast {
     id: ID!
-    name: String!
-    cine_cast_id: String!
-    cine_movie_id: String!
+    name: String
+    cine_cast_id: String
+    cine_movie_id: String
+    cine_cast: CineCast @belongsTo
+    cine_movie: CineMovie @belongsTo
     created_at: DateTime!
     updated_at: DateTime!
 }

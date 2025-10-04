@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CineCast;
+use App\Models\CineMovie;
 use Illuminate\Http\Request;
 
-class CineCastUpdateController extends Controller
+class CineMovieUpdateController extends Controller
 {
     public $methods = ['put'];
-    public $route = '/cine_cast/{id}';
+    public $route = '/cine_movie/{id}';
 
     public function __invoke($id, Request $request)
     {
@@ -16,7 +16,7 @@ class CineCastUpdateController extends Controller
             'name' => ['required'],
         ]);
 
-        $entity = CineCast::find($id);
+        $entity = CineMovie::find($id);
         if (!$entity) return null;
 
         $entity->update($data);

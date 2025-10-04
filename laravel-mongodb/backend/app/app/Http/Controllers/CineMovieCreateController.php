@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CineCast;
+use App\Models\CineMovie;
 use Illuminate\Http\Request;
 
-class CineCastCreateController extends Controller
+class CineMovieCreateController extends Controller
 {
     public $methods = ['post'];
-    public $route = '/cine_cast';
+    public $route = '/cine_movie';
 
     public function __invoke(Request $request)
     {
@@ -16,7 +16,7 @@ class CineCastCreateController extends Controller
             'name' => ['required'],
         ]);
 
-        $entity = CineCast::create($data);
+        $entity = CineMovie::create($data);
         return compact(['entity']);
     }
 }

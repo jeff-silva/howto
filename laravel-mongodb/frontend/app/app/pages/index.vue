@@ -32,10 +32,29 @@
           <v-card-text class="pa-0">
             <v-list>
               <template v-for="o in search.response.data.cine_cast_search.data">
-                <v-list-item>{{ o.name }}</v-list-item>
+                <v-list-item>
+                  {{ o.name }}
+
+                  <template #append>
+                    <v-btn
+                      text="Editar"
+                      @click="
+                        async () => {
+                          cineCastDialog.edit(o.id);
+                        }
+                      "
+                    />
+                  </template>
+                </v-list-item>
               </template>
             </v-list>
           </v-card-text>
+          <v-card-actions class="justify-end">
+            <v-btn
+              text="Criar"
+              @click="cineCastDialog.edit(null)"
+            />
+          </v-card-actions>
         </v-card>
       </v-col>
       <v-col
@@ -48,18 +67,70 @@
               <template
                 v-for="o in search.response.data.cine_movie_search.data"
               >
-                <v-list-item>{{ o.name }}</v-list-item>
+                <v-list-item>
+                  {{ o.name }}
+
+                  <template #append>
+                    <v-btn
+                      text="Editar"
+                      @click="
+                        () => {
+                          cineMovieDialog.edit(o.id);
+                        }
+                      "
+                    />
+                  </template>
+                </v-list-item>
               </template>
             </v-list>
           </v-card-text>
-        </v-card></v-col
-      >
+          <v-card-actions class="justify-end">
+            <v-btn
+              text="Editar"
+              @click="cineMovieDialog.toggle()"
+            />
+          </v-card-actions>
+        </v-card>
+      </v-col>
     </v-row>
-    <pre>{{ search }}</pre>
+
+    <v-dialog
+      v-model="cineCastDialog.value"
+      max-width="600"
+      scrollable
+    >
+      <cine-cast-edit :entity-id="cineCastDialog.id" />
+    </v-dialog>
+
+    <v-dialog
+      v-model="cineMovieDialog.value"
+      max-width="600"
+      scrollable
+    >
+      <cine-movie-edit :entity-id="cineMovieDialog.id" />
+    </v-dialog>
+
+    <!-- <pre>{{ search }}</pre> -->
   </v-container>
 </template>
 
 <script setup>
+const cineCastDialog = useDialog({
+  id: null,
+  edit(id) {
+    cineCastDialog.id = id;
+    cineCastDialog.toggle(true);
+  },
+});
+
+const cineMovieDialog = useDialog({
+  id: null,
+  edit(id) {
+    cineMovieDialog.id = id;
+    cineMovieDialog.toggle(true);
+  },
+});
+
 const search = useGraphql({
   name: "",
   page: 1,
@@ -106,4 +177,6 @@ const search = useGraphql({
     },
   },
 });
+
+search.submit();
 </script>
