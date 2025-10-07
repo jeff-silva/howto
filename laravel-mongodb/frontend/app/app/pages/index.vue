@@ -1,5 +1,11 @@
 <template>
   <v-container>
+    <v-btn
+      text="upload"
+      @click="upload.submit()"
+    />
+    <br />
+    <br />
     <v-row>
       <v-col cols="4">
         <v-text-field
@@ -199,4 +205,35 @@ const search = useGraphql({
 });
 
 search.submit();
+
+import axios from "axios";
+const upload = reactive({
+  async submit() {
+    Object.assign(document.createElement("input"), {
+      type: "file",
+      multiple: true,
+      async onchange(ev) {
+        const formData = new FormData();
+
+        for (const i in ev.target.files) {
+          const file = ev.target.files[i];
+          formData.append(`file_${i}`, file);
+        }
+
+        const resp = await axios({
+          method: "post",
+          url: "http://localhost:8000/api/app_file",
+          data: formData,
+          headers: { "Content-Type": "multipart/form-data" },
+          onUploadProgress: (p) => {
+            console.log(p.loaded / p.total, p);
+          },
+        });
+
+        console.clear();
+        console.log(JSON.stringify(resp.data, null, 2));
+      },
+    }).click();
+  },
+});
 </script>
