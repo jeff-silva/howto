@@ -1,0 +1,40 @@
+volumes:
+  service_portainer_volume:
+  service_npm_volume:
+
+networks:
+  main-network:
+    driver: bridge
+
+services:
+  service-portainer:
+    image: portainer/portainer-ce:alpine
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - service_portainer_volume:/data
+
+  service-app:
+    build: ./service-app
+    restart: unless-stopped
+    networks: [main-network]
+    ports:
+      - 8000:80
+    volumes:
+      - ./service-app/src:/app
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  service-npm:
+    image: jc21/nginx-proxy-manager:latest
+    restart: unless-stopped
+    networks: [main-network]
+    ports:
+      - 80:80
+      - 81:81
+      - 443:443
+    volumes:
+      - service_npm_volume:/data
+      - ./service-npm-volume/letsencrypt:/etc/letsencrypt

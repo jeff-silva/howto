@@ -1,0 +1,4 @@
+services:
+  # Base application
+  kestra:
+    build: ./kestra/

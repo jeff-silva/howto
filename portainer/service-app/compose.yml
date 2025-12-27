@@ -1,0 +1,18 @@
+# As configurações vistas aqui são de exemplo, e não
+# funcionarão nesta pasta. Ajuste estas configurações
+# para no compose.yml um nível acima.
+
+networks:
+  main_network:
+
+services:
+  service-app:
+    build: ./service-app
+    restart: unless-stopped
+    networks: [main_network]
+    ports:
+      - 80:80
+    volumes:
+      - ./service-app/src:/app
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
