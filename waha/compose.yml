@@ -6,34 +6,34 @@ networks:
   main_network:
 
 services:
-  database:
-    build: ./database
-    environment:
-      MARIADB_ROOT_PASSWORD: app
-      MARIADB_PASSWORD: app
-      MARIADB_USER: app
-    ports:
-      - 3306:3306
-    volumes:
-      - ./database/entrypoint.sql:/docker-entrypoint-initdb.d/entrypoint.sql
+  # database:
+  #   build: ./database
+  #   environment:
+  #     MARIADB_ROOT_PASSWORD: app
+  #     MARIADB_PASSWORD: app
+  #     MARIADB_USER: app
+  #   ports:
+  #     - 3306:3306
+  #   volumes:
+  #     - ./database/entrypoint.sql:/docker-entrypoint-initdb.d/entrypoint.sql
 
-  backend:
-    build: ./backend
-    volumes:
-      - ./backend/app:/app
-    ports:
-      - 8000:8000
-    depends_on:
-      - database
+  # backend:
+  #   build: ./backend
+  #   volumes:
+  #     - ./backend/app:/app
+  #   ports:
+  #     - 8000:8000
+  #   depends_on:
+  #     - database
 
-  dbmanager:
-    image: dbeaver/cloudbeaver
-    volumes:
-      - cloudbeaver_volume:/opt/cloudbeaver/workspace
-    ports:
-      - 3307:8978
-    depends_on:
-      - database
+  # dbmanager:
+  #   image: dbeaver/cloudbeaver
+  #   volumes:
+  #     - cloudbeaver_volume:/opt/cloudbeaver/workspace
+  #   ports:
+  #     - 3307:8978
+  #   depends_on:
+  #     - database
 
   frontend:
     build: ./frontend/
@@ -44,6 +44,8 @@ services:
 
   waha:
     build: ./waha/
+    env_file:
+      - ./waha/.env
     ports:
       - 3000:3000
     volumes:
