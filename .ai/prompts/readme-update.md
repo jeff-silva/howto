@@ -1,28 +1,47 @@
-# Tarefa: Atualização do README Principal
+# Tarefa: Padronização e Atualização das Documentações
 
 ## Objetivo
-Você deve atuar como um agente de documentação. Seu objetivo é atualizar o arquivo `README.md` localizado na raiz do repositório para que ele sirva como um índice unificado e descritivo de todos os exemplos de serviços para estudo contidos nas subpastas.
+Você deve atuar como um agente focado em padronização e documentação técnica. Seu objetivo é garantir que todas as documentações secundárias (os `README.md` dentro de cada subpasta de serviço) sigam uma mesma estrutura. Após padronizá-las, você deve utilizar essas informações para gerar um índice unificado no `README.md` da raiz.
 
-## Instruções de Execução
+## 1. Padronização das Documentações Secundárias (`*/README.md`)
+Percorra todas as subpastas do repositório. Para cada serviço que contiver alguma explicação/descrição técnica, certifique-se de que o arquivo `README.md` dessa pasta obedeça **exatamente** a este template estrutural:
 
-1. **Escanear Diretórios:** 
-   Percorra todas as pastas do diretório raiz. Procure por arquivos `README.md` localizados imediatamente dentro de cada subpasta (padrão `*/README.md`).
+```markdown
+# [Nome do Serviço]
 
-2. **Extrair Informações:**
-   - Leia o conteúdo de cada `README.md` encontrado.
-   - Identifique o nome do serviço (geralmente o título `#` no topo do arquivo).
-   - Extraia a breve descrição do serviço (frequentemente contida na seção "O que é...?" ou logo abaixo do título). 
-   - Extraia as instruções de como executar o serviço (geralmente sob o título "How to run:", mostrando o comando como `cd ./pasta && yarn dev`).
+**Site Oficial:** [URL](URL) *(apenas se houver/for aplicável)*
 
-3. **Filtragem de Serviços:**
-   - **MUITO IMPORTANTE:** Se o `README.md` do serviço **não possuir uma descrição/explicação real** (por exemplo, se o texto contiver apenas o comando de execução ou estiver vazio), **IGNORE** este serviço e **NÃO** o adicione ao índice. Só devem aparecer na documentação os serviços que tiverem uma explicação.
+## O que é?
+[Explicação clara e breve de 1 a 3 frases sobre o serviço].
 
-4. **Atualizar o README.md Raiz:**
-   - Abra o arquivo `README.md` na raiz do projeto (`/README.md`).
-   - Atualize a seção chamada `## 📚 Índice de Estudos e Serviços`.
-   - Gere uma lista estruturada apenas com os serviços válidos. O formato obrigatório para cada item é:
-     - **[Nome do Serviço](./pasta)**: *Breve explicação do que é.*
-       - **Como rodar:** `cd ./pasta && yarn dev` (adicione o comando extraído).
+How to run:
 
-5. **Regra de Segurança:**
-   - Não apague outras seções ou instruções que já existam no `README.md` raiz. Atualize apenas a área do índice.
+```bash
+cd ./pasta_do_servico && npm run dev
+```
+```
+
+*Regras para as documentações secundárias:*
+- Se o `README.md` não contiver uma explicação do serviço (ou estiver vazio), ignore a pasta e não a modifique.
+- Se já existir explicação, mas estiver formatada de outra forma, reestruture o arquivo para se encaixar no template acima (ajustando a posição do site oficial, o título "## O que é?" e os comandos de execução).
+
+## 2. Atualização do README Principal (`/README.md`)
+Após garantir a padronização das subpastas, você deve ler as informações e injetá-las no `README.md` da raiz.
+
+1. Localize a seção `## 📚 Índice de Estudos e Serviços`.
+2. Para cada serviço que possui uma explicação válida, adicione um bloco com cabeçalho `H3 (###)`. O formato obrigatório é:
+
+```markdown
+### [Nome do Serviço](./pasta_do_servico)
+
+[Explicação extraída da seção "## O que é?" do README secundário].
+
+- **Como rodar:** `cd ./pasta_do_servico && npm run dev`
+- **Site Oficial:** [URL](URL) *(adicionar apenas se a linha existir no README secundário)*
+
+---
+```
+
+## Regras de Segurança
+- Serviços **sem explicação** nos seus READMEs secundários devem ser totalmente ignorados e não aparecerão no índice raiz.
+- No `README.md` raiz, **não apague** outras seções (como o título principal "# HowTo" ou tutoriais extras). Substitua unicamente o bloco abaixo de `## 📚 Índice de Estudos e Serviços`.

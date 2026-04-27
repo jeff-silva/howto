@@ -1,5 +1,8 @@
 # wwebjs
 
+**Site Oficial:** [https://wwebjs.dev/](https://wwebjs.dev/)
+
+
 ## O que é o WhatsApp Web JS?
 
 O WhatsApp Web JS (`whatsapp-web.js`) é uma biblioteca não-oficial para Node.js que permite criar clientes e bots para o WhatsApp. Ele funciona rodando o próprio WhatsApp Web em um navegador "invisível" (headless, usando Puppeteer) e automatizando as interações de forma programática.

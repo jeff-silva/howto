@@ -1,5 +1,13 @@
 # nuxt-capacitor
 
+**Site Oficial:** [https://capacitorjs.com/](https://capacitorjs.com/)
+
+
+## O que é?
+
+Exemplo de integração entre o Nuxt.js (framework Vue) e o Capacitor (da Ionic) para criar aplicativos móveis híbridos (Android/iOS) usando web.
+
+
 How to run:
 
 ```bash

@@ -1,5 +1,10 @@
 # helpdesk
 
+## O que é?
+
+Uma instalação base do framework PHP Laravel, configurada como um boilerplate (ponto de partida) para acelerar o desenvolvimento de novas aplicações.
+
+
 How to run:
 
 ```bash
