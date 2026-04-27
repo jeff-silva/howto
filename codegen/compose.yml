@@ -1,8 +1,0 @@
-services:
-  # Base application
-  codegen:
-    build: ./codegen/
-    volumes:
-      - ./codegen/app:/app
-    ports:
-      - 3000:3000
