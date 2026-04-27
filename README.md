@@ -100,32 +100,6 @@ O Keycloak é uma solução open-source robusta de Gerenciamento de Identidade e
 
 ---
 
-### [helpdesk](./laravel-base)
-
-Uma instalação base do framework PHP Laravel, configurada como um boilerplate (ponto de partida) para acelerar o desenvolvimento de novas aplicações.
-
-- **Como rodar:** `cd ./helpdesk && npm run dev`
-
----
-
-### [Laravel + MongoDB](./laravel-mongodb)
-
-Exemplo de integração do framework Laravel com o banco de dados NoSQL MongoDB, mostrando como configurar modelos e conexões não-relacionais. Read the Laravel Documentation: <br /> https://laravel.com/docs/12.x/mongodb Laravel MongoDB Documentation: <br /> https://www.mongodb.com/docs/drivers/php/laravel-mongodb/current/
-
-- **Como rodar:** `cd ./laravel-mongodb && npm run dev`
-- **Site Oficial:** [https://www.mongodb.com/docs/drivers/php/laravel-mongodb/](https://www.mongodb.com/docs/drivers/php/laravel-mongodb/)
-
----
-
-### [laravel](./laravel)
-
-Ambiente para testes e desenvolvimento utilizando o Laravel, o popular framework PHP moderno focado em elegância e velocidade de desenvolvimento.
-
-- **Como rodar:** `cd ./laravel && npm run dev`
-- **Site Oficial:** [https://laravel.com/](https://laravel.com/)
-
----
-
 ### [localstack](./localstack)
 
 O LocalStack é um emulador de nuvem open-source que roda localmente no seu computador através de contêineres Docker. Ele recria um ambiente quase idêntico à nuvem da AWS (Amazon Web Services). Em resumo: - **Desenvolvimento Offline:** Permite criar, testar e debugar aplicações em nuvem e serverless sem precisar de conexão com a internet ou gastar com recursos da AWS. - **Emulação de Serviços:** Ele emula dezenas de serviços conhecidos da AWS, como S3 (armazenamento de arquivos), Lambda (funções), DynamoDB (banco NoSQL) e SQS (filas). - **Pronto para CI/CD:** Muito utilizado em pipelines de testes automatizados para validar fluxos complexos antes de subir para a nuvem de verdade. [Homepage](https://github.com/localstack/localstack)
@@ -193,6 +167,15 @@ Estudos sobre OSM (OpenStreetMap) ou serviços geográficos. Relacionado a rende
 Ambiente Dockerizado configurado com PHP e Apache, demonstrando como hospedar múltiplos projetos ou configurar virtual hosts em um único container.
 
 - **Como rodar:** `cd ./php-apache-multi && npm run dev`
+
+---
+
+### [php](./php)
+
+Exemplo básico de um servidor web rodando PHP nativo com Apache ("Hello World"). Serve como um ambiente de desenvolvimento rápido para rodar e testar scripts PHP locais.
+
+- **Como rodar:** `cd ./php && npm run dev`
+- **Site Oficial:** [https://www.php.net/](https://www.php.net/)
 
 ---
 
