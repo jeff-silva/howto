@@ -104,7 +104,7 @@ O Keycloak é uma solução open-source robusta de Gerenciamento de Identidade e
 
 Uma instalação base do framework PHP Laravel, configurada como um boilerplate (ponto de partida) para acelerar o desenvolvimento de novas aplicações.
 
-- **Como rodar:** `cd ./laravel-base && npm run dev`
+- **Como rodar:** `cd ./helpdesk && npm run dev`
 
 ---
 
@@ -148,7 +148,7 @@ O n8n é uma ferramenta de automação de fluxo de trabalho (workflow) open-sour
 
 Demonstração de como compilar e empacotar uma aplicação Node.js (JavaScript) em um único arquivo executável binário (usando nexe ou ferramentas similares).
 
-- **Como rodar:** `cd ./node2exe && npm run dev`
+- **Como rodar:** `cd ./nexe && npm run dev`
 - **Site Oficial:** [https://github.com/nexe/nexe](https://github.com/nexe/nexe)
 
 ---
@@ -209,7 +209,7 @@ O Portainer é uma interface gráfica web leve e amigável para gerenciar e moni
 
 Projeto em Python que implementa um Keylogger (registrador de teclas), voltado para estudos de segurança da informação e interceptação de eventos.
 
-- **Como rodar:** `cd ./pyklogger && npm run dev`
+- **Como rodar:** `cd ./py-klogger && npm run dev`
 
 ---
 
@@ -239,13 +239,3 @@ Ambiente básico preparado para rodar e testar o WordPress, o Sistema de Gerenci
 - **Site Oficial:** [https://wordpress.org/](https://wordpress.org/)
 
 ---
-
-### [wwebjs](./wwebjs)
-
-O WhatsApp Web JS (`whatsapp-web.js`) é uma biblioteca não-oficial para Node.js que permite criar clientes e bots para o WhatsApp. Ele funciona rodando o próprio WhatsApp Web em um navegador "invisível" (headless, usando Puppeteer) e automatizando as interações de forma programática. Em resumo: - **Automação e Bots:** Permite criar chatbots complexos, respostas automáticas e disparos de mensagens sem intervenção humana. - **Alternativa à API Oficial:** Como a API oficial do WhatsApp Business é paga e tem regras estritas, essa biblioteca é usada como alternativa gratuita (porém com o risco de banimento de número por ser não-oficial). - **Recursos Totais:** Suporta quase tudo que o WhatsApp normal faz: enviar texto, imagens, localização, arquivos, ler status e gerenciar grupos. Documentation: https://wwebjs.dev
-
-- **Como rodar:** `cd ./wwebjs && npm run dev`
-- **Site Oficial:** [https://wwebjs.dev/](https://wwebjs.dev/)
-
----
-
