@@ -6,17 +6,17 @@ use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
 use App\Http\Controllers\Controller;
 
-#[OA\Get(
+#[OA\Post(
     path: '/mdb_movie',
-    operationId: 'mdb_movie.search',
-    summary: 'Buscar filmes',
+    operationId: 'mdb_movie.upsert',
+    summary: 'Criar/Alterar filme',
     tags: ['Mdb'],
     responses: [
         new OA\Response(response: 200, description: 'Resultado')
     ]
 )]
 
-class MdbMovieSearchController extends Controller
+class MdbMovieUpsertController extends Controller
 {
     public function __invoke(Request $request)
     {
