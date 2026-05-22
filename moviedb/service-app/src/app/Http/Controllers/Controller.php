@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
-abstract class Controller
+class Controller
 {
-    //
+    static function apis(array $classes = [])
+    {
+        foreach ($classes as $class) {
+            // dump($class);
+        }
+    }
 }
