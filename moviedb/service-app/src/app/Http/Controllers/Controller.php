@@ -26,6 +26,10 @@ class Controller
         }
 
         Route::get('/openapi', function () use ($files) {
+            $files = array_merge($files, [
+                app_path('Models')
+            ]);
+
             $openapi = (new \OpenApi\Generator())->generate($files);
             return $openapi->toJson();
         });
