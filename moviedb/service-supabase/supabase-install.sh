@@ -9,7 +9,8 @@ if [ -d "$SERVICE_DIR/$SUPABASE_DIR" ]; then
     exit 1
 fi
 
-npx supabase init
+npx -y supabase init
+npx -y supabase telemetry disable
 
 mkdir -m 0777 "$SERVICE_DIR/$SUPABASE_DIR"
 
