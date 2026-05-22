@@ -11,7 +11,7 @@ if [ -d "$SERVICE_DIR/$LARAVEL_DIR" ]; then
     exit 1
 fi
 
-docker run --rm -v "$SERVICE_DIR:/app" -w /app laravelsail/php84-composer:latest /bin/bash -c "{
+docker run -it --rm -v "$SERVICE_DIR:/app" -w /app laravelsail/php84-composer:latest /bin/bash -c "{
     composer global require laravel/installer
     laravel new $LARAVEL_DIR
     cd $LARAVEL_DIR
