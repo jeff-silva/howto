@@ -1,14 +1,11 @@
 #!/bin/sh
 
 CURRENT_DIR=$(cd "$(dirname "$0")" && pwd)
-PROJECT_ROOT=$(cd "$CURRENT_DIR/.." && pwd)
+MIGRATION_NAME=$(date +"%Y-%m-%d-%H-%m-%S")
+cd $CURRENT_DIR
 
-sh "$CURRENT_DIR/init.sh"
-. "$CURRENT_DIR/src/.env"
+# Load required environment variables safely from .env without being affected by spaces in other variables
+eval "$(grep -E "^(POSTGRES_|POOLER_)" "$CURRENT_DIR/src/.env" | sed 's/\r$//')"
 
-DB_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' codewe-db-1)
-DB_URL="postgresql://postgres:$POSTGRES_PASSWORD@$DB_IP:$POSTGRES_PORT/$POSTGRES_DB?sslmode=disable"
-MIGRATION_NAME=$(date +"%Y_%m_%d")
-
-npx -y supabase db diff --db-url "$DB_URL" -f "$MIGRATION_NAME"
-echo $MIGRATION_NAME
+DB_URL="postgresql://postgres.$POOLER_TENANT_ID:$POSTGRES_PASSWORD@localhost:$POSTGRES_PORT/$POSTGRES_DB?sslmode=disable"
+npx -y supabase db diff --db-url "$DB_URL" -f "schema"
