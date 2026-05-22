@@ -5,8 +5,6 @@ SERVICE_DIR=$(cd "$(dirname "$0")" && pwd)
 read -p "folder name [src]: " NUXT_DIR
 NUXT_DIR=${NUXT_DIR:-src}
 
-# # sudo rm -rf "$SERVICE_DIR/$NUXT_DIR"
-
 if [ -d "$SERVICE_DIR/$NUXT_DIR" ]; then
     exit 1
 fi
