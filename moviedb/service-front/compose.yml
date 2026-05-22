@@ -1,0 +1,6 @@
+services:
+  service-front:
+    build: .
+    expose: [3000]
+    volumes:
+      - ./src:/app

@@ -1,0 +1,29 @@
+services:
+  service-app:
+    build: .
+    expose: [80]
+    depends_on: [kong]
+    volumes:
+      - ./src:/app
+      - ./Caddyfile:/app/Caddyfile
+    environment:
+      SERVICE_APP_INIT: ${SERVICE_APP_INIT}
+      SERVICE_APP_RUN_MIGRATIONS: "true"
+      SERVICE_APP_INSTALL: 1
+
+  service-app-schedule:
+    extends: service-app
+    healthcheck:
+      disable: true
+    environment:
+      SERVICE_APP_INIT: php artisan schedule:work
+      SERVICE_APP_RUN_MIGRATIONS: "false"
+
+  service-app-queue:
+    extends: service-app
+    depends_on: [service-app]
+    healthcheck:
+      disable: true
+    environment:
+      SERVICE_APP_INIT: php artisan queue:work
+      SERVICE_APP_RUN_MIGRATIONS: "false"
