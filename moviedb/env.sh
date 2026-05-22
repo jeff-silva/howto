@@ -45,6 +45,9 @@ env_insert "$ROOT_DIR/.env" "SERVICE_APP_ENV" "local"
 env_insert "$ROOT_DIR/.env" "SERVICE_APP_URL" "http://moviedb.localhost"
 env_insert "$ROOT_DIR/.env" "SERVICE_SUPABASE_URL" "http://supabase.moviedb.localhost"
 
+# Service Front
+env_create "$ROOT_DIR/service-front/src"
+
 # Service App
 env_create "$ROOT_DIR/service-app/src"
 
