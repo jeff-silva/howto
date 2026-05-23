@@ -31,7 +31,14 @@ class Controller
             ]);
 
             $openapi = (new \OpenApi\Generator())->generate($files);
-            return $openapi->toJson();
+            $openapi = json_decode($openapi->toJson(), true);
+            $openapi['info']['title'] = env('APP_NAME');
+            $openapi['servers'] = [[
+                'url' => url('/api'),
+                'description' => 'URL Principal',
+            ]];
+
+            return $openapi;
         });
     }
 }
