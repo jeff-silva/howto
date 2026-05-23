@@ -66,8 +66,7 @@
         <div
           v-for="movie in mdbMovieSearch.response?.data || []"
           :key="movie.id"
-          @click="navigateTo(`/movie/${movie.id}`)"
-          class="bg-slate-900 border border-white/5 rounded-sm overflow-hidden hover:border-purple-500/30 transition-all duration-300 shadow-xl flex flex-col justify-between cursor-pointer group"
+          class="bg-slate-900 border border-white/5 rounded-sm overflow-hidden hover:border-purple-500/30 transition-all duration-300 shadow-xl flex flex-col justify-between group"
         >
           <!-- Informações do Filme -->
           <div class="p-5 text-left">
@@ -89,20 +88,25 @@
                 }}
               </span>
             </div>
-            <h2
-              class="text-lg font-bold text-white mb-2 leading-tight line-clamp-1 group-hover:text-purple-400 transition-colors duration-300"
+            <nuxt-link
+              :to="`/movie/${movie.id}`"
+              class="group/title block"
             >
-              {{
-                [
-                  movie.original_title,
-                  movie.release_date
-                    ? "(" + new Date(movie.release_date).getFullYear() + ")"
-                    : null,
-                ]
-                  .filter((v) => !!v)
-                  .join(" ")
-              }}
-            </h2>
+              <h2
+                class="text-lg font-bold text-white mb-2 leading-tight line-clamp-1 group-hover/title:text-purple-400 transition-colors duration-300"
+              >
+                {{
+                  [
+                    movie.original_title,
+                    movie.release_date
+                      ? "(" + new Date(movie.release_date).getFullYear() + ")"
+                      : null,
+                  ]
+                    .filter((v) => !!v)
+                    .join(" ")
+                }}
+              </h2>
+            </nuxt-link>
             <p class="text-slate-400 text-xs line-clamp-3 mb-2 leading-relaxed">
               {{ movie.overview || "Sem sinopse disponível." }}
             </p>
@@ -110,7 +114,7 @@
               v-if="formatGenres(movie.genres).length > 0"
               class="text-purple-400/60 text-[11px] font-medium line-clamp-1"
             >
-              {{ formatGenres(movie.genres).join(', ') }}
+              {{ formatGenres(movie.genres).join(", ") }}
             </div>
           </div>
 
@@ -118,7 +122,6 @@
           <div
             class="px-5 pb-5 pt-3 border-t border-white/5 bg-slate-950/40 text-xs text-slate-400 flex flex-col gap-2"
           >
-
             <div class="flex justify-between items-center">
               <span class="font-semibold text-slate-300">Duração:</span>
               <span>{{
@@ -127,58 +130,52 @@
                   : "N/A"
               }}</span>
             </div>
-            <div class="flex justify-between items-center">
-              <span class="font-semibold text-slate-300">Orçamento:</span>
-              <span>{{
-                movie.budget ? `$${movie.budget.toLocaleString()}` : "N/A"
-              }}</span>
-            </div>
 
             <!-- Ações -->
             <div class="mt-3 pt-3 border-t border-white/5 flex justify-end gap-2">
-                <!-- Google Search -->
-                <a
-                  :href="`https://www.google.com/search?q=${encodeURIComponent(
-                    [
-                      movie.original_title,
-                      movie.release_date
-                        ? '(' + new Date(movie.release_date).getFullYear() + ')'
-                        : null,
-                    ]
-                      .filter((v) => !!v)
-                      .join(' ')
-                  )}`"
-                  target="_blank"
-                  title="Pesquisar no Google"
-                  class="btn btn-circle btn-xs bg-white/5 hover:bg-purple-500/20 border-none text-slate-300 hover:text-purple-400 transition-all duration-300"
-                  @click.stop
-                >
-                  <Icon name="mdi:google" class="h-3.5 w-3.5" />
-                </a>
+              <!-- Google Search -->
+              <a
+                :href="`https://www.google.com/search?q=${encodeURIComponent(
+                  [
+                    movie.original_title,
+                    movie.release_date
+                      ? '(' + new Date(movie.release_date).getFullYear() + ')'
+                      : null,
+                  ]
+                    .filter((v) => !!v)
+                    .join(' '),
+                )}`"
+                target="_blank"
+                title="Pesquisar no Google"
+                class="btn btn-circle btn-xs bg-white/5 hover:bg-purple-500/20 border-none text-slate-300 hover:text-purple-400 transition-all duration-300"
+                @click.stop
+              >
+                <Icon name="mdi:google" class="h-3.5 w-3.5" />
+              </a>
 
-                <!-- YouTube Search (Trailer) -->
-                <a
-                  :href="`https://www.youtube.com/results?search_query=${encodeURIComponent(
-                    [
-                      movie.original_title,
-                      movie.release_date
-                        ? '(' + new Date(movie.release_date).getFullYear() + ')'
-                        : null,
-                    ]
-                      .filter((v) => !!v)
-                      .join(' ') + ' trailer'
-                  )}`"
-                  target="_blank"
-                  title="Pesquisar Trailer no YouTube"
-                  class="btn btn-circle btn-xs bg-white/5 hover:bg-red-500/20 border-none text-slate-300 hover:text-red-500 transition-all duration-300"
-                  @click.stop
-                >
-                  <Icon name="mdi:youtube" class="h-3.5 w-3.5" />
-                </a>
-              </div>
+              <!-- YouTube Search (Trailer) -->
+              <a
+                :href="`https://www.youtube.com/results?search_query=${encodeURIComponent(
+                  [
+                    movie.original_title,
+                    movie.release_date
+                      ? '(' + new Date(movie.release_date).getFullYear() + ')'
+                      : null,
+                  ]
+                    .filter((v) => !!v)
+                    .join(' ') + ' trailer',
+                )}`"
+                target="_blank"
+                title="Pesquisar Trailer no YouTube"
+                class="btn btn-circle btn-xs bg-white/5 hover:bg-red-500/20 border-none text-slate-300 hover:text-red-500 transition-all duration-300"
+                @click.stop
+              >
+                <Icon name="mdi:youtube" class="h-3.5 w-3.5" />
+              </a>
             </div>
           </div>
         </div>
+      </div>
 
       <!-- Paginação Simples e Elegante -->
       <div

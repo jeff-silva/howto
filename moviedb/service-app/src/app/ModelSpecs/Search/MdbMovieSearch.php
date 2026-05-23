@@ -27,7 +27,16 @@ class MdbMovieSearch extends Search
         if ($params->search) {
             $params->search = $this->translate($params->search);
             $search = $supabaseService->embedding($params->search);
-            $query->whereRaw('(embedding OPERATOR(extensions.<=>) ?::extensions.vector) < 0.2', [$search]);
+            $query->where(function ($q) use ($search, $params) {
+                $q->whereRaw('(embedding OPERATOR(extensions.<=>) ?::extensions.vector) < 0.3', [$search]);
+                $words = preg_split('/[^a-zA-Z0-9]+/', $params->search);
+                $words = array_filter($words, function ($word) {
+                    return strlen($word) > 2;
+                });
+                foreach ($words as $word) {
+                    $q->orWhere('embedding_text', 'ilike', "%{$word}%");
+                }
+            });
             $query->orderByRaw('embedding OPERATOR(extensions.<=>) ?::extensions.vector asc', [$search]);
             // file_put_contents(storage_path('logs/laravel.log'), json_encode($params, JSON_PRETTY_PRINT));
         }

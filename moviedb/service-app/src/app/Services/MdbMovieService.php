@@ -20,10 +20,8 @@ class MdbMovieService extends Service
             $embedding = [];
             $embedding[] = "Title: {$data->original_title} (" . date('Y', strtotime($data->release_date)) . ")";
             $embedding[] = "Genres: " . collect($data->genres)->pluck('name')->implode(', ');
-            $embedding[] = "Vote Avarage: {$data->vote_average} / 10";
-            $embedding[] = "Popularity: {$data->popularity}";
-            $embedding[] = "Original Language: {$data->original_language}";
             $embedding[] = "Keywords: " . collect($data->keywords)->pluck('name')->implode(', ');
+            $embedding[] = "Vote Avarage: {$data->vote_average} / 10";
             $embedding[] = "Overview: {$data->overview}";
 
             if (!empty($model->credit->cast)) {
@@ -42,7 +40,12 @@ class MdbMovieService extends Service
                 }
             }
 
-            $data['embedding'] = $supabaseService->embedding(join("\n", $embedding));
+
+            $embedding[] = "Popularity: {$data->popularity}";
+            $embedding[] = "Original Language: {$data->original_language}";
+
+            $data['embedding_text'] = join("\n", $embedding);
+            $data['embedding'] = $supabaseService->embedding($data['embedding_text']);
         }
 
         return parent::upsert($data->toArray(), $params);

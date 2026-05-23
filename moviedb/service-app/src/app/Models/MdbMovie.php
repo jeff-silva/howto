@@ -65,6 +65,7 @@ class MdbMovie extends Model
         'production_countries',
         'spoken_languages',
         'embedding',
+        'embedding_text',
     ];
 
     protected $casts = [
@@ -84,6 +85,7 @@ class MdbMovie extends Model
 
     protected $hidden = [
         'embedding',
+        'embedding_text',
     ];
 
     public function credit()
