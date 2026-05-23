@@ -8,6 +8,11 @@ env_insert() {
   local chave=$2
   local valor=$3
 
+  # Garante que o arquivo termina com uma quebra de linha antes de anexar
+  if [ -f "$arquivo" ] && [ -n "$(tail -c1 "$arquivo" 2>/dev/null)" ]; then
+    echo "" >> "$arquivo"
+  fi
+
   if grep -q "^[# ]*${chave}=" "$arquivo"; then
     sed -i "s|^[# ]*${chave}=.*|${chave}=${valor}|" "$arquivo"
   else
@@ -20,6 +25,11 @@ env_update() {
   local arquivo=$1
   local chave=$2
   local valor=$3
+
+  # Garante que o arquivo termina com uma quebra de linha antes de anexar
+  if [ -f "$arquivo" ] && [ -n "$(tail -c1 "$arquivo" 2>/dev/null)" ]; then
+    echo "" >> "$arquivo"
+  fi
 
   if grep -q "^[# ]*${chave}=" "$arquivo"; then
     sed -i "s|^[# ]*${chave}=.*|${chave}=${valor}|" "$arquivo"
@@ -44,6 +54,7 @@ env_create "$ROOT_DIR"
 env_insert "$ROOT_DIR/.env" "SERVICE_APP_ENV" "local"
 env_insert "$ROOT_DIR/.env" "SERVICE_APP_URL" "http://moviedb.localhost"
 env_insert "$ROOT_DIR/.env" "SERVICE_SUPABASE_URL" "http://supabase.moviedb.localhost"
+env_insert "$ROOT_DIR/.env" "SERVICE_SUPABASE_STORAGE_BUCKET" "app"
 
 # Service Front
 env_create "$ROOT_DIR/service-front/src"
@@ -68,6 +79,11 @@ env_update "$ROOT_DIR/service-app/src/.env" "DB_PORT" "5432"
 env_update "$ROOT_DIR/service-app/src/.env" "DB_DATABASE" "postgres"
 env_update "$ROOT_DIR/service-app/src/.env" "DB_USERNAME" "postgres"
 env_update "$ROOT_DIR/service-app/src/.env" "DB_PASSWORD" $(env_value "$ROOT_DIR/service-supabase/src/.env" "POSTGRES_PASSWORD")
+
+env_update "$ROOT_DIR/service-app/src/.env" "SERVICE_SUPABASE_JWT_SECRET" $(env_value "$ROOT_DIR/service-supabase/src/.env" "JWT_SECRET")
+env_update "$ROOT_DIR/service-app/src/.env" "SERVICE_SUPABASE_SERVICE_ROLE_KEY" $(env_value "$ROOT_DIR/service-supabase/src/.env" "SERVICE_ROLE_KEY")
+env_update "$ROOT_DIR/service-app/src/.env" "SERVICE_SUPABASE_ANON_KEY" $(env_value "$ROOT_DIR/service-supabase/src/.env" "ANON_KEY")
+env_update "$ROOT_DIR/service-app/src/.env" "SERVICE_SUPABASE_STORAGE_BUCKET" $(env_value "$ROOT_DIR/.env" "SERVICE_SUPABASE_STORAGE_BUCKET")
 
 # env_update "$ROOT_DIR/service-app/src/.env" "REDIS_CLIENT" "predis"
 # env_update "$ROOT_DIR/service-app/src/.env" "QUEUE_CONNECTION" "redis"
