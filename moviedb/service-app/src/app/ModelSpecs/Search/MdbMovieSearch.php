@@ -28,13 +28,19 @@ class MdbMovieSearch extends Search
             $params->search = $this->translate($params->search);
             $search = $supabaseService->embedding($params->search);
             $query->where(function ($q) use ($search, $params) {
-                $q->whereRaw('(embedding OPERATOR(extensions.<=>) ?::extensions.vector) < 0.3', [$search]);
+                $q->whereRaw('(embedding OPERATOR(extensions.<=>) ?::extensions.vector) < 0.22', [$search]);
+
                 $words = preg_split('/[^a-zA-Z0-9]+/', $params->search);
                 $words = array_filter($words, function ($word) {
-                    return strlen($word) > 2;
+                    return strlen($word) >= 3;
                 });
-                foreach ($words as $word) {
-                    $q->orWhere('embedding_text', 'ilike', "%{$word}%");
+
+                if (!empty($words)) {
+                    $q->orWhere(function ($subQuery) use ($words) {
+                        foreach ($words as $word) {
+                            $subQuery->where('embedding_text', 'ilike', "%{$word}%");
+                        }
+                    });
                 }
             });
             $query->orderByRaw('embedding OPERATOR(extensions.<=>) ?::extensions.vector asc', [$search]);
@@ -62,6 +68,6 @@ class MdbMovieSearch extends Search
         } catch (\Exception $e) {
         }
 
-        return '';
+        return $text;
     }
 }

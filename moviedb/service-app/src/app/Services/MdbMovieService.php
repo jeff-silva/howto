@@ -22,7 +22,12 @@ class MdbMovieService extends Service
             $embedding[] = "Genres: " . collect($data->genres)->pluck('name')->implode(', ');
             $embedding[] = "Keywords: " . collect($data->keywords)->pluck('name')->implode(', ');
             $embedding[] = "Vote Avarage: {$data->vote_average} / 10";
-            $embedding[] = "Overview: {$data->overview}";
+
+            if ($data->overview) {
+                $embedding[] = '';
+                $embedding[] = 'Overview:';
+                $embedding[] = $data->overview;
+            }
 
             if (!empty($model->credit->cast)) {
                 $embedding[] = '';
@@ -40,7 +45,7 @@ class MdbMovieService extends Service
                 }
             }
 
-
+            $embedding[] = '';
             $embedding[] = "Popularity: {$data->popularity}";
             $embedding[] = "Original Language: {$data->original_language}";
 
