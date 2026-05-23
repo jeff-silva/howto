@@ -19,11 +19,11 @@ services:
       SERVICE_APP_INIT: php artisan schedule:work
       SERVICE_APP_RUN_MIGRATIONS: "false"
 
-  service-app-queue:
-    extends: service-app
-    depends_on: [service-app]
-    healthcheck:
-      disable: true
-    environment:
-      SERVICE_APP_INIT: php artisan queue:work
-      SERVICE_APP_RUN_MIGRATIONS: "false"
+  # service-app-queue:
+  #   extends: service-app
+  #   depends_on: [service-app]
+  #   healthcheck:
+  #     disable: true
+  #   environment:
+  #     SERVICE_APP_INIT: php artisan queue:work
+  #     SERVICE_APP_RUN_MIGRATIONS: "false"

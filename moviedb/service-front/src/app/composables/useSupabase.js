@@ -1,7 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
 
 export default () => {
-  const supabase = createClient("http://supabase.moviedb.localhost", "xxx");
+  const conf = useRuntimeConfig();
+  const supabase = createClient(
+    conf.public.SERVICE_SUPABASE_URL,
+    conf.public.SERVICE_SUPABASE_ANON_KEY,
+  );
 
   const scope = reactive({
     //
@@ -22,7 +26,6 @@ export default () => {
       .select("*", { count: "exact" })
       .range(from, to);
 
-    console.log({ data, count });
     if (error) return { data: [], count: 0 };
     return { data, count };
   };

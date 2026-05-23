@@ -3,6 +3,16 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   ssr: false,
+
+  runtimeConfig: {
+    public: {
+      SERVICE_APP_ENV: process.env.SERVICE_APP_ENV,
+      SERVICE_APP_URL: process.env.SERVICE_APP_URL,
+      SERVICE_SUPABASE_URL: process.env.SERVICE_SUPABASE_URL,
+      SERVICE_SUPABASE_ANON_KEY: process.env.SERVICE_SUPABASE_ANON_KEY,
+    },
+  },
+
   modules: [
     ["@nuxt/icon", {}],
     ["@nuxt/scripts", {}],

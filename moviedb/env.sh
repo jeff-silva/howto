@@ -48,6 +48,11 @@ env_insert "$ROOT_DIR/.env" "SERVICE_SUPABASE_URL" "http://supabase.moviedb.loca
 # Service Front
 env_create "$ROOT_DIR/service-front/src"
 
+env_update "$ROOT_DIR/service-front/.env" "SERVICE_APP_ENV" $(env_value "$ROOT_DIR/.env" "SERVICE_APP_ENV")
+env_update "$ROOT_DIR/service-front/.env" "SERVICE_APP_URL" $(env_value "$ROOT_DIR/.env" "SERVICE_APP_URL")
+env_update "$ROOT_DIR/service-front/.env" "SERVICE_SUPABASE_URL" $(env_value "$ROOT_DIR/.env" "SERVICE_SUPABASE_URL")
+env_update "$ROOT_DIR/service-front/.env" "SERVICE_SUPABASE_ANON_KEY" $(env_value "$ROOT_DIR/service-supabase/src/.env" "ANON_KEY")
+
 # Service App
 env_create "$ROOT_DIR/service-app/src"
 

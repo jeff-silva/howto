@@ -2,5 +2,6 @@ services:
   service-front:
     build: .
     expose: [3000]
+    env_file: [./.env]
     volumes:
       - ./src:/app
