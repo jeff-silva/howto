@@ -50,7 +50,8 @@
         <div
           v-for="movie in mdbMovieSearch.response?.data || []"
           :key="movie.id"
-          class="bg-slate-900 border border-white/5 rounded-sm overflow-hidden hover:border-purple-500/30 transition-all duration-300 shadow-xl flex flex-col justify-between"
+          @click="navigateTo(`/movie/${movie.id}`)"
+          class="bg-slate-900 border border-white/5 rounded-sm overflow-hidden hover:border-purple-500/30 transition-all duration-300 shadow-xl flex flex-col justify-between cursor-pointer group"
         >
           <!-- Informações do Filme -->
           <div class="p-5 text-left">
@@ -72,7 +73,7 @@
               </span>
             </div>
             <h2
-              class="text-lg font-bold text-white mb-2 leading-tight line-clamp-1"
+              class="text-lg font-bold text-white mb-2 leading-tight line-clamp-1 group-hover:text-purple-400 transition-colors duration-300"
             >
               {{ movie.title }}
             </h2>
@@ -150,7 +151,7 @@
 
         <div class="flex items-center gap-2">
           <button
-            @click="mdbMovieSearch.loadPage(mdbMovieSearch.params.page - 1)"
+            @click="mdbMovieSearch.pageGoto('-')"
             :disabled="mdbMovieSearch.params.page === 1"
             class="px-4 py-2 text-xs font-bold rounded-sm border border-white/10 bg-slate-900 text-slate-300 hover:text-white hover:border-purple-500/30 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-300 flex items-center gap-1.5 cursor-pointer"
           >
@@ -163,7 +164,7 @@
           </span>
 
           <button
-            @click="mdbMovieSearch.loadPage(mdbMovieSearch.params.page + 1)"
+            @click="mdbMovieSearch.pageGoto('+')"
             :disabled="
               mdbMovieSearch.params.page >=
               (mdbMovieSearch.response?.pagination?.pages || 0)
@@ -179,7 +180,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+const route = useRoute();
 
 const formatGenres = (genres) => {
   if (!genres) return [];
@@ -198,6 +199,7 @@ const mdbMovieSearch = useAxios(
     params: {
       per_page: 12,
       page: 1,
+      ...route.query,
     },
   },
   {
@@ -206,12 +208,21 @@ const mdbMovieSearch = useAxios(
       params: { page: 1 },
       data: [],
     },
-    loadPage(page) {
-      mdbMovieSearch.params.page = page;
-      mdbMovieSearch.submit();
+    pageGoto(page) {
+      if (page == "+") {
+        mdbMovieSearch.params.page = Number(mdbMovieSearch.params.page) + 1;
+      } else if (page == "-") {
+        mdbMovieSearch.params.page = Number(mdbMovieSearch.params.page) - 1;
+      }
+      mdbMovieSearch.run();
+    },
+    async run() {
+      const resp = await mdbMovieSearch.submit();
+      const query = resp.data.params;
+      navigateTo({ query });
     },
   },
 );
 
-mdbMovieSearch.submit();
+mdbMovieSearch.run();
 </script>
