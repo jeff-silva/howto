@@ -16,6 +16,22 @@
         </p>
       </header>
 
+      <!-- Busca Semântica -->
+      <div class="relative w-full max-w-2xl mb-12">
+        <span
+          class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none"
+        >
+          <Icon name="lucide:search" class="h-5 w-5 text-purple-400" />
+        </span>
+        <input
+          v-model="mdbMovieSearch.params.search"
+          type="text"
+          placeholder="Digite sinopse, gênero ou tema"
+          class="input input-bordered w-full pl-12 pr-4 py-6 bg-slate-900/40 border-purple-500/20 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 shadow-xl rounded"
+          @input="mdbMovieSearch.submit()"
+        />
+      </div>
+
       <!-- Grid de Filmes -->
       <div
         v-if="
@@ -75,7 +91,7 @@
             <h2
               class="text-lg font-bold text-white mb-2 leading-tight line-clamp-1 group-hover:text-purple-400 transition-colors duration-300"
             >
-              {{ movie.title }}
+              {{ movie.original_title }}
             </h2>
             <p class="text-slate-400 text-xs line-clamp-3 mb-4 leading-relaxed">
               {{ movie.overview || "Sem sinopse disponível." }}

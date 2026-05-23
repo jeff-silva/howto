@@ -18,4 +18,17 @@ export default defineNuxtConfig({
     ["@nuxt/scripts", {}],
     ["@nuxtjs/tailwindcss", {}],
   ],
+
+  app: {
+    head: {
+      htmlAttrs: { "data-theme": "dark", class: "dark" },
+      link: [
+        {
+          key: "daisyui",
+          rel: "stylesheet",
+          href: "https://cdn.jsdelivr.net/npm/daisyui@5",
+        },
+      ],
+    },
+  },
 });

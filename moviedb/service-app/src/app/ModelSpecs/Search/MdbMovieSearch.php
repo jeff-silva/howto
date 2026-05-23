@@ -14,14 +14,19 @@ class MdbMovieSearch extends Search
     {
         return [
             'order' => 'id:asc',
+            'search' => null,
         ];
     }
 
     public function onQuery($query, $params)
     {
-        // if ($params->type) {
-        //     $query->where('type', $params->type);
-        // }
+        $supabaseService = app(\App\Services\SupabaseService::class);
+
+        if ($params->search) {
+            $search = $supabaseService->embedding($params->search);
+            $query->whereRaw('(embedding OPERATOR(extensions.<=>) ?::extensions.vector) < 0.3', [$search]);
+            $query->orderByRaw('embedding OPERATOR(extensions.<=>) ?::extensions.vector asc', [$search]);
+        }
 
         return $query;
     }

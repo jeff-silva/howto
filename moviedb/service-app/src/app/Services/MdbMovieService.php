@@ -15,12 +15,12 @@ class MdbMovieService extends Service
 
         $embedding = [];
         $embedding[] = "Title: {$data->original_title} (" . date('Y', strtotime($data->release_date)) . ")";
-        $embedding[] = "Overview: {$data->overview}";
-        $embedding[] = "Tagline: {$data->tagline}";
+        $embedding[] = "Genres: " . collect($data->genres)->pluck('name')->implode(', ');
         $embedding[] = "Vote Avarage: {$data->vote_average} / 10";
         $embedding[] = "Popularity: {$data->popularity}";
-        $embedding[] = "Genres: " . collect($data->genres)->pluck('name')->implode(', ');
         $embedding[] = "Keywords: " . collect($data->keywords)->pluck('name')->implode(', ');
+        $embedding[] = "Overview: {$data->overview}";
+        $embedding[] = "Tagline: {$data->tagline}";
         $embedding[] = "Production Countries: " . collect($data->production_countries)->pluck('name')->implode(', ');
         $embedding[] = "Spoken Languages: " . collect($data->spoken_languages)->pluck('name')->implode(', ');
         $data['embedding'] = $supabaseService->embedding(join("\n", $embedding));

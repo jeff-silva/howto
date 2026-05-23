@@ -16,11 +16,12 @@ class AppTestCommand extends Command
         // $resp = $supabaseService->embedding('Olá mundo');
         // dump($resp);
 
-        $mdbMovie = \App\ModelSpecs\Search\MdbMovieSearch::first(['only' => 5]);
-
         $mdbMovieService = app(\App\Services\MdbMovieService::class);
-        $mdbMovie = $mdbMovieService->upsert($mdbMovie->toArray());
 
-        dump($mdbMovie);
+        $mdbMovies = \App\ModelSpecs\Search\MdbMovieSearch::all();
+        foreach ($mdbMovies as $i => $mdbMovie) {
+            $mdbMovie = $mdbMovieService->upsert($mdbMovie->toArray());
+            dump("{$i}: {$mdbMovie->title}");
+        }
     }
 }
