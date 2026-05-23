@@ -53,6 +53,7 @@ env_create "$ROOT_DIR/service-app/src"
 
 env_update "$ROOT_DIR/service-app/src/.env" "APP_ENV" $(env_value "$ROOT_DIR/.env" "SERVICE_APP_ENV")
 env_update "$ROOT_DIR/service-app/src/.env" "APP_URL" $(env_value "$ROOT_DIR/.env" "SERVICE_APP_URL")
+env_update "$ROOT_DIR/service-app/src/.env" "QUEUE_CONNECTION" "file"
 env_update "$ROOT_DIR/service-app/src/.env" "SESSION_DRIVER" "file"
 env_update "$ROOT_DIR/service-app/src/.env" "CACHE_STORE" "file"
 
@@ -61,7 +62,7 @@ env_update "$ROOT_DIR/service-app/src/.env" "DB_HOST" "db"
 env_update "$ROOT_DIR/service-app/src/.env" "DB_PORT" "5432"
 env_update "$ROOT_DIR/service-app/src/.env" "DB_DATABASE" "postgres"
 env_update "$ROOT_DIR/service-app/src/.env" "DB_USERNAME" "postgres"
-env_update "$ROOT_DIR/service-app/src/.env" "DB_PASSWORD" "app"
+env_update "$ROOT_DIR/service-app/src/.env" "DB_PASSWORD" $(env_value "$ROOT_DIR/service-supabase/src/.env" "POSTGRES_PASSWORD")
 
 # env_update "$ROOT_DIR/service-app/src/.env" "REDIS_CLIENT" "predis"
 # env_update "$ROOT_DIR/service-app/src/.env" "QUEUE_CONNECTION" "redis"
