@@ -271,6 +271,7 @@ class Search extends ModelSpecs
             $scope->data->push($item);
         }
 
+        $scope->sql = $query->toRawSql();
         return $scope;
     }
 }

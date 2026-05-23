@@ -38,13 +38,13 @@ class MdbMovie extends Model
 {
     protected $table = 'mdb_movie';
     protected $primaryKey = 'id';
-    public $incrementing = false;
     protected $keyType = 'int';
 
     const UPDATED_AT = null;
 
     protected $fillable = [
         'id',
+        'slug',
         'title',
         'original_title',
         'original_language',
@@ -66,6 +66,7 @@ class MdbMovie extends Model
         'spoken_languages',
         'embedding',
         'embedding_text',
+        'image',
     ];
 
     protected $casts = [

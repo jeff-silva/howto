@@ -28,9 +28,16 @@
           type="text"
           placeholder="Digite sinopse, gênero ou tema"
           class="input input-bordered w-full pl-12 pr-4 py-6 bg-slate-900/40 border-purple-500/20 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 shadow-xl rounded"
-          @input="mdbMovieSearch.run()"
+          @input="
+            () => {
+              mdbMovieSearch.params.page = 1;
+              mdbMovieSearch.run();
+            }
+          "
         />
       </div>
+
+      <!-- <div>{{ mdbMovieSearch.response.sql }}</div> -->
 
       <!-- Grid de Filmes -->
       <div
@@ -66,19 +73,45 @@
         <div
           v-for="movie in mdbMovieSearch.response?.data || []"
           :key="movie.id"
-          class="bg-slate-900 border border-white/5 rounded-sm overflow-hidden hover:border-purple-500/30 transition-all duration-300 shadow-xl flex flex-col justify-between group"
+          class="bg-slate-900 border border-white/5 rounded-sm overflow-hidden hover:border-purple-500/30 hover:-translate-y-0.5 transition-all duration-300 shadow-xl flex flex-col justify-between group"
         >
-          <!-- Informações do Filme -->
-          <div class="p-5 text-left">
-            <div class="flex items-center justify-between gap-2 mb-3">
+          <!-- Capa do Filme -->
+          <div
+            class="relative h-48 w-full bg-slate-950/80 overflow-hidden border-b border-white/5 flex items-center justify-center group/image"
+          >
+            <img
+              v-if="movie.image"
+              :src="movie.image"
+              :alt="movie.original_title"
+              class="w-full h-full object-cover group-hover/image:scale-[1.04] transition-transform duration-500 ease-out"
+            />
+            <div
+              v-else
+              class="w-full h-full flex flex-col items-center justify-center text-slate-700 gap-1.5 bg-gradient-to-b from-slate-900 to-slate-950"
+            >
+              <Icon name="lucide:image" class="h-8 w-8 text-slate-800" />
+              <span
+                class="text-[9px] uppercase font-bold tracking-wider text-slate-600"
+                >Sem Imagem</span
+              >
+            </div>
+
+            <!-- Badges Flutuantes -->
+            <div
+              class="absolute top-2.5 inset-x-2.5 flex justify-between items-center pointer-events-none"
+            >
+              <!-- Ano -->
               <span
                 v-if="movie.release_date"
-                class="text-[11px] font-semibold text-slate-500 tracking-wider"
+                class="bg-slate-950/85 backdrop-blur-md text-[10px] font-bold text-slate-300 px-2 py-0.5 rounded-sm border border-white/5 tracking-wider shadow-md"
               >
                 {{ new Date(movie.release_date).getFullYear() }}
               </span>
+              <span v-else></span>
+
+              <!-- Média de Votos -->
               <span
-                class="flex items-center gap-1 text-xs font-bold text-amber-400"
+                class="bg-slate-950/85 backdrop-blur-md text-[10px] font-bold text-amber-400 px-2 py-0.5 rounded-sm border border-white/5 flex items-center gap-1 shadow-md"
               >
                 ★
                 {{
@@ -88,33 +121,31 @@
                 }}
               </span>
             </div>
-            <nuxt-link
-              :to="`/movie/${movie.id}`"
-              class="group/title block"
-            >
-              <h2
-                class="text-lg font-bold text-white mb-2 leading-tight line-clamp-1 group-hover/title:text-purple-400 transition-colors duration-300"
+          </div>
+
+          <!-- Informações do Filme -->
+          <div class="p-5 text-left flex-1 flex flex-col justify-between">
+            <div>
+              <nuxt-link :to="`/movie/${movie.id}`" class="group/title block">
+                <h2
+                  class="text-base font-bold text-white mb-2 leading-tight line-clamp-1 group-hover/title:text-purple-400 transition-colors duration-300"
+                  :title="movie.original_title"
+                >
+                  {{ movie.original_title }}
+                </h2>
+              </nuxt-link>
+              <p
+                class="text-slate-400 text-xs line-clamp-3 mb-4 leading-relaxed"
               >
-                {{
-                  [
-                    movie.original_title,
-                    movie.release_date
-                      ? "(" + new Date(movie.release_date).getFullYear() + ")"
-                      : null,
-                  ]
-                    .filter((v) => !!v)
-                    .join(" ")
-                }}
-              </h2>
-            </nuxt-link>
-            <p class="text-slate-400 text-xs line-clamp-3 mb-2 leading-relaxed">
-              {{ movie.overview || "Sem sinopse disponível." }}
-            </p>
+                {{ movie.overview || "Sem sinopse disponível." }}
+              </p>
+            </div>
+
             <div
               v-if="formatGenres(movie.genres).length > 0"
-              class="text-purple-400/60 text-[11px] font-medium line-clamp-1"
+              class="text-purple-400/60 text-[10px] font-semibold tracking-wide uppercase line-clamp-1 border-t border-white/5 pt-3"
             >
-              {{ formatGenres(movie.genres).join(", ") }}
+              {{ formatGenres(movie.genres).join(" • ") }}
             </div>
           </div>
 
@@ -132,7 +163,9 @@
             </div>
 
             <!-- Ações -->
-            <div class="mt-3 pt-3 border-t border-white/5 flex justify-end gap-2">
+            <div
+              class="mt-3 pt-3 border-t border-white/5 flex justify-end gap-2"
+            >
               <!-- Google Search -->
               <a
                 :href="`https://www.google.com/search?q=${encodeURIComponent(

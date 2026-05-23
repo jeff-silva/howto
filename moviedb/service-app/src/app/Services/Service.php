@@ -63,7 +63,12 @@ abstract class Service
         }
 
         $data = new Fluent($data);
-        $model = $this->model->firstOrNew(['id' => $data->id], $data->toArray());
+
+        $model = $this->model->newInstance();
+        if ($data->id) {
+            $model = $this->model->find($data->id);
+        }
+
         $model->fill($data->toArray())->save();
         return $this->select($model->id, $model);
     }

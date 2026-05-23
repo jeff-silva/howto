@@ -219,15 +219,29 @@
             </div>
           </div>
 
-          <!-- Informações Técnicas Lateral -->
-          <div
-            class="bg-slate-950/40 border border-white/5 rounded-sm p-5 space-y-4 text-sm text-slate-400"
-          >
-            <h2
-              class="text-white font-bold text-sm border-b border-white/5 pb-2 uppercase tracking-wider"
+          <!-- Coluna Lateral (Poster + Ficha Técnica) -->
+          <div class="space-y-6">
+            <!-- Poster do Filme -->
+            <div
+              v-if="movie.image"
+              class="bg-slate-900 border border-white/5 rounded-sm overflow-hidden shadow-lg aspect-[2/3] w-full"
             >
-              Ficha Técnica
-            </h2>
+              <img
+                :src="movie.image"
+                :alt="movie.title"
+                class="w-full h-full object-cover"
+              />
+            </div>
+
+            <!-- Ficha Técnica -->
+            <div
+              class="bg-slate-950/40 border border-white/5 rounded-sm p-5 space-y-4 text-sm text-slate-400"
+            >
+              <h2
+                class="text-white font-bold text-sm border-b border-white/5 pb-2 uppercase tracking-wider"
+              >
+                Ficha Técnica
+              </h2>
 
             <div class="space-y-3">
               <div
@@ -374,6 +388,7 @@
               </span>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>
