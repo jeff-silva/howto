@@ -64,6 +64,7 @@ class MdbMovie extends Model
         'production_companies',
         'production_countries',
         'spoken_languages',
+        'embedding',
     ];
 
     protected $casts = [
@@ -79,5 +80,9 @@ class MdbMovie extends Model
         'production_companies' => 'array',
         'production_countries' => 'array',
         'spoken_languages' => 'array',
+    ];
+
+    protected $hidden = [
+        'embedding',
     ];
 }

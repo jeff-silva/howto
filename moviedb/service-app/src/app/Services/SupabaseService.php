@@ -25,7 +25,7 @@ class SupabaseService extends Service
     public function embedding(string $text)
     {
         $response = $this->request()->post('/functions/v1/embedding', ['text' => $text]);
-        if ($response->successful()) return $response->json('embedding', null);
+        if ($response->successful()) return json_encode($response->json('embedding', []));
         return null;
     }
 
