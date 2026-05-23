@@ -17,6 +17,13 @@ abstract class Service
         return app(static::class);
     }
 
+    public function __construct()
+    {
+        if ($this->model) {
+            $this->model = app($this->model);
+        }
+    }
+
     public function makeModel(array $data = [])
     {
         return $this->model->make($data);
@@ -74,32 +81,5 @@ abstract class Service
             return $entity;
         }
         return null;
-    }
-
-    // public function select(string $id, array $params = [], $default = null)
-    // {
-    //   dd($this);
-    //   if (!property_exists($this, 'model')) return null;
-    //   $params['only'] = $id;
-    //   return FactoryStageSearch::first($params) ?? $default;
-    // }
-
-    protected function searchExport($query, $params, $options)
-    {
-        $headers = [];
-        foreach ($this->model->getFillable() as $field) {
-            $headers[$field] = $field;
-        }
-        $download_data = [$headers];
-
-        foreach ($query->get() as $item) {
-            $item_data = [];
-            foreach ($this->model->getFillable() as $field) {
-                $item_data[$field] = $item->$field;
-            }
-            $download_data[] = $item_data;
-        }
-
-        return $download_data;
     }
 }

@@ -12,8 +12,15 @@ class AppTestCommand extends Command
 {
     public function handle()
     {
-        $supabaseService = app(\App\Services\SupabaseService::class);
-        $resp = $supabaseService->embedding('Olá mundo');
-        dump($resp);
+        // $supabaseService = app(\App\Services\SupabaseService::class);
+        // $resp = $supabaseService->embedding('Olá mundo');
+        // dump($resp);
+
+        $mdbMovie = \App\ModelSpecs\Search\MdbMovieSearch::first(['only' => 5]);
+
+        $mdbMovieService = app(\App\Services\MdbMovieService::class);
+        $mdbMovie = $mdbMovieService->upsert($mdbMovie->toArray());
+
+        dump($mdbMovie);
     }
 }

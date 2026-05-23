@@ -13,7 +13,7 @@ class MdbMovieSearch extends Search
     public function onParams()
     {
         return [
-            // 'type' => null,
+            'order' => 'id:asc',
         ];
     }
 

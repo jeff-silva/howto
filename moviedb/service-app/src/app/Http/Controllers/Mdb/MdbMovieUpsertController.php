@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Mdb;
 use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
 use App\Http\Controllers\Controller;
+use App\Services\MdbMovieService;
 
 #[OA\Post(
     path: '/mdb_movie',
@@ -20,6 +21,12 @@ class MdbMovieUpsertController extends Controller
 {
     public function __invoke(Request $request)
     {
-        return response()->json(['message' => 'sucesso']);
+        $scope = (object) [];
+
+        $mdbMovieService = app(MdbMovieService::class);
+        $scope->entity = $mdbMovieService->upsert($request->post());
+        $scope->message = 'Filme Salvo';
+
+        return $scope;
     }
 }
