@@ -63,11 +63,12 @@ class Search extends ModelSpecs
                 if (empty($only_items)) return;
 
                 foreach ($only_items as $only) {
-                    if (Str::isUuid($only)) {
-                        $query->orWhere('id', $only);
-                    } elseif (in_array('slug', $this->model->getFillable())) {
-                        $query->orWhere('slug', $only);
-                    }
+                    $query->orWhere('id', $only);
+                    // if (Str::isUuid($only)) {
+                    //     $query->orWhere('id', $only);
+                    // } elseif (in_array('slug', $this->model->getFillable())) {
+                    //     $query->orWhere('slug', $only);
+                    // }
                 }
             });
         }

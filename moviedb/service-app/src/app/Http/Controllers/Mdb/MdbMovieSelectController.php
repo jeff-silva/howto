@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Mdb;
 use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
 use App\Http\Controllers\Controller;
-use App\Models\MdbMovie;
+use App\ModelSpecs\Search\MdbMovieSearch;
 
 #[OA\Get(
     path: '/mdb_movie/{id}',
@@ -19,8 +19,14 @@ use App\Models\MdbMovie;
 
 class MdbMovieSelectController extends Controller
 {
-    public function __invoke(MdbMovie $id, Request $request)
+    public function __invoke($id, Request $request)
     {
-        return [$id];
+        $scope = (object) [];
+
+        $scope->entity = MdbMovieSearch::first(
+            array_merge($request->query(), ['only' => $id])
+        );
+
+        return $scope;
     }
 }

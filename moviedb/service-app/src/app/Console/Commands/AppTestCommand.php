@@ -19,9 +19,10 @@ class AppTestCommand extends Command
         $mdbMovieService = app(\App\Services\MdbMovieService::class);
 
         $mdbMovies = \App\ModelSpecs\Search\MdbMovieSearch::all();
+        $mdbMoviesTotal = $mdbMovies->count() - 1;
         foreach ($mdbMovies as $i => $mdbMovie) {
             $mdbMovie = $mdbMovieService->upsert($mdbMovie->toArray());
-            dump("{$i}: {$mdbMovie->title}");
+            dump("{$i} / {$mdbMoviesTotal}: {$mdbMovie->title}");
         }
     }
 }

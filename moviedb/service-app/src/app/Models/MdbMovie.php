@@ -85,4 +85,9 @@ class MdbMovie extends Model
     protected $hidden = [
         'embedding',
     ];
+
+    public function credit()
+    {
+        return $this->hasOne(MdbMovieCredit::class, 'movie_id', 'id');
+    }
 }

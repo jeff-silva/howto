@@ -73,9 +73,10 @@
           <div class="p-5 text-left">
             <div class="flex items-center justify-between gap-2 mb-3">
               <span
-                class="px-2.5 py-1 bg-purple-500/10 border border-purple-500/25 rounded-sm text-[10px] font-bold text-purple-400 uppercase"
+                v-if="movie.release_date"
+                class="text-[11px] font-semibold text-slate-500 tracking-wider"
               >
-                ID: {{ movie.id }}
+                {{ new Date(movie.release_date).getFullYear() }}
               </span>
               <span
                 class="flex items-center gap-1 text-xs font-bold text-amber-400"
@@ -102,23 +103,22 @@
                   .join(" ")
               }}
             </h2>
-            <p class="text-slate-400 text-xs line-clamp-3 mb-4 leading-relaxed">
+            <p class="text-slate-400 text-xs line-clamp-3 mb-2 leading-relaxed">
               {{ movie.overview || "Sem sinopse disponível." }}
             </p>
+            <div
+              v-if="formatGenres(movie.genres).length > 0"
+              class="text-purple-400/60 text-[11px] font-medium line-clamp-1"
+            >
+              {{ formatGenres(movie.genres).join(', ') }}
+            </div>
           </div>
 
           <!-- Ficha Técnica -->
           <div
             class="px-5 pb-5 pt-3 border-t border-white/5 bg-slate-950/40 text-xs text-slate-400 flex flex-col gap-2"
           >
-            <div class="flex justify-between items-center">
-              <span class="font-semibold text-slate-300">Ano:</span>
-              <span>{{
-                movie.release_date
-                  ? new Date(movie.release_date).getFullYear()
-                  : "N/A"
-              }}</span>
-            </div>
+
             <div class="flex justify-between items-center">
               <span class="font-semibold text-slate-300">Duração:</span>
               <span>{{
@@ -133,23 +133,52 @@
                 movie.budget ? `$${movie.budget.toLocaleString()}` : "N/A"
               }}</span>
             </div>
-            <div class="mt-2 pt-2 border-t border-white/5">
-              <span class="font-semibold text-slate-300 block mb-1"
-                >Gêneros:</span
-              >
-              <div class="flex flex-wrap gap-1">
-                <span
-                  v-for="(genre, idx) in formatGenres(movie.genres)"
-                  :key="idx"
-                  class="px-1.5 py-0.5 bg-white/5 rounded-sm text-[10px] text-slate-300 border border-white/5"
+
+            <!-- Ações -->
+            <div class="mt-3 pt-3 border-t border-white/5 flex justify-end gap-2">
+                <!-- Google Search -->
+                <a
+                  :href="`https://www.google.com/search?q=${encodeURIComponent(
+                    [
+                      movie.original_title,
+                      movie.release_date
+                        ? '(' + new Date(movie.release_date).getFullYear() + ')'
+                        : null,
+                    ]
+                      .filter((v) => !!v)
+                      .join(' ')
+                  )}`"
+                  target="_blank"
+                  title="Pesquisar no Google"
+                  class="btn btn-circle btn-xs bg-white/5 hover:bg-purple-500/20 border-none text-slate-300 hover:text-purple-400 transition-all duration-300"
+                  @click.stop
                 >
-                  {{ genre }}
-                </span>
+                  <Icon name="mdi:google" class="h-3.5 w-3.5" />
+                </a>
+
+                <!-- YouTube Search (Trailer) -->
+                <a
+                  :href="`https://www.youtube.com/results?search_query=${encodeURIComponent(
+                    [
+                      movie.original_title,
+                      movie.release_date
+                        ? '(' + new Date(movie.release_date).getFullYear() + ')'
+                        : null,
+                    ]
+                      .filter((v) => !!v)
+                      .join(' ') + ' trailer'
+                  )}`"
+                  target="_blank"
+                  title="Pesquisar Trailer no YouTube"
+                  class="btn btn-circle btn-xs bg-white/5 hover:bg-red-500/20 border-none text-slate-300 hover:text-red-500 transition-all duration-300"
+                  @click.stop
+                >
+                  <Icon name="mdi:youtube" class="h-3.5 w-3.5" />
+                </a>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
       <!-- Paginação Simples e Elegante -->
       <div
@@ -243,7 +272,9 @@ const mdbMovieSearch = useAxios(
     },
     async run() {
       const resp = await mdbMovieSearch.submit();
-      const query = resp.data.params;
+      const query = Object.fromEntries(
+        Object.entries(resp.data.params).filter((v) => !!v[1]),
+      );
       navigateTo({ query });
     },
   },

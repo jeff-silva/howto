@@ -17,6 +17,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'created_at', type: 'string', format: 'date-time', description: 'Data de criação do registro')
     ]
 )]
+
 class MdbMovieCredit extends Model
 {
     protected $table = 'mdb_movie_credit';

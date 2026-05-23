@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Fluent;
 
 class MdbMovieService extends Service
@@ -13,18 +14,36 @@ class MdbMovieService extends Service
         $supabaseService = app(\App\Services\SupabaseService::class);
         $data = new Fluent($data);
 
-        $embedding = [];
-        $embedding[] = "Title: {$data->original_title} (" . date('Y', strtotime($data->release_date)) . ")";
-        $embedding[] = "Genres: " . collect($data->genres)->pluck('name')->implode(', ');
-        $embedding[] = "Vote Avarage: {$data->vote_average} / 10";
-        $embedding[] = "Popularity: {$data->popularity}";
-        $embedding[] = "Original Language: {$data->original_language}";
-        $embedding[] = "Keywords: " . collect($data->keywords)->pluck('name')->implode(', ');
-        $embedding[] = "Overview: {$data->overview}";
-        // $embedding[] = "Production Countries: " . collect($data->production_countries)->pluck('name')->implode(', ');
-        // $embedding[] = "Spoken Languages: " . collect($data->spoken_languages)->pluck('name')->implode(', ');
-        $data['embedding'] = $supabaseService->embedding(join("\n", $embedding));
-        // dd($data);
+        if ($this->model instanceof Model) {
+            $model = $this->model->firstOrNew(['id' => $data->id], $data->toArray());
+
+            $embedding = [];
+            $embedding[] = "Title: {$data->original_title} (" . date('Y', strtotime($data->release_date)) . ")";
+            $embedding[] = "Genres: " . collect($data->genres)->pluck('name')->implode(', ');
+            $embedding[] = "Vote Avarage: {$data->vote_average} / 10";
+            $embedding[] = "Popularity: {$data->popularity}";
+            $embedding[] = "Original Language: {$data->original_language}";
+            $embedding[] = "Keywords: " . collect($data->keywords)->pluck('name')->implode(', ');
+            $embedding[] = "Overview: {$data->overview}";
+
+            if (!empty($model->credit->cast)) {
+                $embedding[] = '';
+                $embedding[] = 'Cast:';
+                foreach ($model->credit->cast as $item) {
+                    $embedding[] = "- {$item['name']} as {$item['character']}";
+                }
+            }
+
+            if (!empty($model->credit->crew)) {
+                $embedding[] = '';
+                $embedding[] = 'Crew:';
+                foreach ($model->credit->crew as $item) {
+                    $embedding[] = "- {$item['job']}: {$item['name']}";
+                }
+            }
+
+            $data['embedding'] = $supabaseService->embedding(join("\n", $embedding));
+        }
 
         return parent::upsert($data->toArray(), $params);
     }

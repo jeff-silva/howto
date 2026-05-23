@@ -29,7 +29,7 @@ class MdbMovieSearch extends Search
             $search = $supabaseService->embedding($params->search);
             $query->whereRaw('(embedding OPERATOR(extensions.<=>) ?::extensions.vector) < 0.2', [$search]);
             $query->orderByRaw('embedding OPERATOR(extensions.<=>) ?::extensions.vector asc', [$search]);
-            file_put_contents(storage_path('logs/laravel.log'), json_encode($params, JSON_PRETTY_PRINT));
+            // file_put_contents(storage_path('logs/laravel.log'), json_encode($params, JSON_PRETTY_PRINT));
         }
 
         return $query;
