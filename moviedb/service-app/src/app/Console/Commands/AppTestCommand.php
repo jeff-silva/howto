@@ -13,7 +13,7 @@ class AppTestCommand extends Command
     public function handle()
     {
         $supabaseService = app(\App\Services\SupabaseService::class);
-        $resp = $supabaseService->request()->post('/functions/v1/hello');
-        dump($resp->json());
+        $resp = $supabaseService->embedding('Olá mundo');
+        dump($resp);
     }
 }

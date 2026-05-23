@@ -12,11 +12,21 @@ class SupabaseService extends Service
 
     public function request()
     {
-        return Http::baseUrl('http://kong:8000')->withHeaders([
-            'apikey' => env('SERVICE_SUPABASE_SERVICE_ROLE_KEY'),
-            'Authorization' => 'Bearer ' . env('SERVICE_SUPABASE_SERVICE_ROLE_KEY'),
-            'Content-Type' => 'application/json',
-        ]);
+        return Http::baseUrl('http://kong:8000')
+            ->timeout(120)
+            ->withHeaders([
+                'apikey' => env('SERVICE_SUPABASE_SERVICE_ROLE_KEY'),
+                // 'Authorization' => 'Bearer ' . env('SERVICE_SUPABASE_ANON_KEY'),
+                'Authorization' => 'Bearer ' . env('SERVICE_SUPABASE_SERVICE_ROLE_KEY'),
+                'Content-Type' => 'application/json',
+            ]);
+    }
+
+    public function embedding(string $text)
+    {
+        $response = $this->request()->post('/functions/v1/embedding', ['text' => $text]);
+        if ($response->successful()) return $response->json('embedding', null);
+        return null;
     }
 
     public function userUpsert(array $data)
@@ -158,20 +168,5 @@ class SupabaseService extends Service
         }
 
         return $files;
-    }
-
-    public function embedding(string $text)
-    {
-        $response = Http::timeout(120)->withHeaders([
-            'Authorization' => 'Bearer ' . env('SERVICE_SUPABASE_ANON_KEY'),
-        ])->post('http://kong:8000/functions/v1/embeddings', [
-            'text' => $text,
-        ]);
-
-        if ($response->successful()) {
-            return $response->json('embedding', null);
-        }
-
-        return null;
     }
 }
