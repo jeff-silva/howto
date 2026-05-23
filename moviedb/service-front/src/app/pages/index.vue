@@ -28,7 +28,7 @@
           type="text"
           placeholder="Digite sinopse, gênero ou tema"
           class="input input-bordered w-full pl-12 pr-4 py-6 bg-slate-900/40 border-purple-500/20 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 shadow-xl rounded"
-          @input="mdbMovieSearch.submit()"
+          @input="mdbMovieSearch.run()"
         />
       </div>
 
@@ -91,7 +91,16 @@
             <h2
               class="text-lg font-bold text-white mb-2 leading-tight line-clamp-1 group-hover:text-purple-400 transition-colors duration-300"
             >
-              {{ movie.original_title }}
+              {{
+                [
+                  movie.original_title,
+                  movie.release_date
+                    ? "(" + new Date(movie.release_date).getFullYear() + ")"
+                    : null,
+                ]
+                  .filter((v) => !!v)
+                  .join(" ")
+              }}
             </h2>
             <p class="text-slate-400 text-xs line-clamp-3 mb-4 leading-relaxed">
               {{ movie.overview || "Sem sinopse disponível." }}

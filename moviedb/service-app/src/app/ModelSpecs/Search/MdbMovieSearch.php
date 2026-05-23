@@ -2,6 +2,8 @@
 
 namespace App\ModelSpecs\Search;
 
+use Illuminate\Support\Facades\Http;
+
 class MdbMovieSearch extends Search
 {
     public $slug = 'mdb_movie';
@@ -13,7 +15,7 @@ class MdbMovieSearch extends Search
     public function onParams()
     {
         return [
-            'order' => 'id:asc',
+            'order' => 'vote_average:desc',
             'search' => null,
         ];
     }
@@ -23,11 +25,34 @@ class MdbMovieSearch extends Search
         $supabaseService = app(\App\Services\SupabaseService::class);
 
         if ($params->search) {
+            $params->search = $this->translate($params->search);
             $search = $supabaseService->embedding($params->search);
-            $query->whereRaw('(embedding OPERATOR(extensions.<=>) ?::extensions.vector) < 0.3', [$search]);
+            $query->whereRaw('(embedding OPERATOR(extensions.<=>) ?::extensions.vector) < 0.2', [$search]);
             $query->orderByRaw('embedding OPERATOR(extensions.<=>) ?::extensions.vector asc', [$search]);
+            file_put_contents(storage_path('logs/laravel.log'), json_encode($params, JSON_PRETTY_PRINT));
         }
 
         return $query;
+    }
+
+    protected function translate(string $text, $from = 'pt')
+    {
+        try {
+            $req = Http::get('https://translate.googleapis.com/translate_a/single', [
+                'client' => 'gtx',
+                'sl' => $from,
+                'tl' => 'en',
+                'dt' => 't',
+                'q' => $text
+            ]);
+
+            if ($req->successful()) {
+                $data = $req->json();
+                return $data[0][0][0] ?? '';
+            }
+        } catch (\Exception $e) {
+        }
+
+        return '';
     }
 }
