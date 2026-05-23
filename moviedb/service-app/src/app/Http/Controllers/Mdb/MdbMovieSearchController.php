@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Mdb;
 use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
 use App\Http\Controllers\Controller;
+use App\ModelSpecs\Search\MdbMovieSearch;
 
 #[OA\Get(
     path: '/mdb_movie',
@@ -20,6 +21,6 @@ class MdbMovieSearchController extends Controller
 {
     public function __invoke(Request $request)
     {
-        return response()->json(['message' => 'sucesso']);
+        return MdbMovieSearch::paginated($request->query());
     }
 }
