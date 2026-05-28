@@ -73,17 +73,15 @@
         <div
           v-for="movie in mdbMovieSearch.response?.data || []"
           :key="movie.id"
-          class="bg-slate-900 border border-white/5 rounded-sm overflow-hidden hover:border-purple-500/30 hover:-translate-y-0.5 transition-all duration-300 shadow-xl flex flex-col justify-between group"
+          class="relative bg-slate-900 border border-white/5 rounded-md overflow-hidden shadow-lg aspect-[2/3] w-full group"
         >
-          <!-- Capa do Filme -->
-          <div
-            class="relative h-48 w-full bg-slate-950/80 overflow-hidden border-b border-white/5 flex items-center justify-center group/image"
-          >
+          <!-- Capa do Filme (Poster Inteiro Gigante) -->
+          <div class="absolute inset-0 w-full h-full bg-slate-950/80">
             <img
               v-if="movie.image"
               :src="movie.image"
               :alt="movie.original_title"
-              class="w-full h-full object-cover group-hover/image:scale-[1.04] transition-transform duration-500 ease-out"
+              class="w-full h-full object-cover"
             />
             <div
               v-else
@@ -91,120 +89,115 @@
             >
               <Icon name="lucide:image" class="h-8 w-8 text-slate-800" />
               <span
-                class="text-[9px] uppercase font-bold tracking-wider text-slate-600"
+                class="text-[9px] uppercase font-bold tracking-wider text-slate-600 text-center px-2"
                 >Sem Imagem</span
               >
             </div>
-
-            <!-- Badges Flutuantes -->
-            <div
-              class="absolute top-2.5 inset-x-2.5 flex justify-between items-center pointer-events-none"
-            >
-              <!-- Ano -->
-              <span
-                v-if="movie.release_date"
-                class="bg-slate-950/85 backdrop-blur-md text-[10px] font-bold text-slate-300 px-2 py-0.5 rounded-sm border border-white/5 tracking-wider shadow-md"
-              >
-                {{ new Date(movie.release_date).getFullYear() }}
-              </span>
-              <span v-else></span>
-
-              <!-- Média de Votos -->
-              <span
-                class="bg-slate-950/85 backdrop-blur-md text-[10px] font-bold text-amber-400 px-2 py-0.5 rounded-sm border border-white/5 flex items-center gap-1 shadow-md"
-              >
-                ★
-                {{
-                  movie.vote_average
-                    ? parseFloat(movie.vote_average).toFixed(1)
-                    : "N/A"
-                }}
-              </span>
-            </div>
           </div>
 
-          <!-- Informações do Filme -->
-          <div class="p-5 text-left flex-1 flex flex-col justify-between">
-            <div>
-              <nuxt-link :to="`/movie/${movie.id}`" class="group/title block">
+          <!-- Badges Flutuantes (Ano e Votos no Topo do Poster) -->
+          <div
+            class="absolute top-2.5 inset-x-2.5 flex justify-between items-center z-20 pointer-events-none"
+          >
+            <!-- Ano -->
+            <span
+              v-if="movie.release_date"
+              class="bg-slate-950/80 backdrop-blur-md text-[9px] font-bold text-slate-300 px-1.5 py-0.5 rounded-sm border border-white/5 tracking-wider shadow-sm"
+            >
+              {{ new Date(movie.release_date).getFullYear() }}
+            </span>
+            <span v-else></span>
+
+            <!-- Média de Votos -->
+            <span
+              class="bg-slate-950/80 backdrop-blur-md text-[9px] font-bold text-amber-400 px-1.5 py-0.5 rounded-sm border border-white/5 flex items-center gap-0.5 shadow-sm"
+            >
+              ★
+              {{
+                movie.vote_average
+                  ? parseFloat(movie.vote_average).toFixed(1)
+                  : "N/A"
+              }}
+            </span>
+          </div>
+
+          <!-- Informações e Ações por Cima do Poster (Overlay com Transparência) -->
+          <div
+            class="absolute bottom-0 inset-x-0 bg-slate-950/30 group-hover:bg-slate-950/90 backdrop-blur-md border-t border-white/10 p-3 text-left z-10 flex flex-col gap-2 transition-all duration-300"
+          >
+            <!-- Linha 1: Título e Links de Ação Fundidos -->
+            <div class="flex items-center justify-between gap-2.5 min-w-0">
+              <nuxt-link :to="`/movie/${movie.id}`" class="group/title block min-w-0 flex-1">
                 <h2
-                  class="text-base font-bold text-white mb-2 leading-tight line-clamp-1 group-hover/title:text-purple-400 transition-colors duration-300"
+                  class="text-xs font-bold text-white leading-tight truncate group-hover/title:underline"
                   :title="movie.original_title"
                 >
                   {{ movie.original_title }}
                 </h2>
               </nuxt-link>
+
+              <!-- Links Rápidos -->
+              <div class="flex gap-1 flex-shrink-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <!-- Google Search -->
+                <a
+                  :href="`https://www.google.com/search?q=${encodeURIComponent(
+                    [
+                      movie.original_title,
+                      movie.release_date
+                        ? '(' + new Date(movie.release_date).getFullYear() + ')'
+                        : null,
+                    ]
+                      .filter((v) => !!v)
+                      .join(' '),
+                  )}`"
+                  target="_blank"
+                  title="Pesquisar no Google"
+                  class="btn btn-circle btn-xs bg-white/5 hover:bg-purple-500/20 border-none text-slate-300 hover:text-purple-400 transition-all duration-300"
+                  @click.stop
+                >
+                  <Icon name="mdi:google" class="h-3 w-3" />
+                </a>
+
+                <!-- YouTube Search (Trailer) -->
+                <a
+                  :href="`https://www.youtube.com/results?search_query=${encodeURIComponent(
+                    [
+                      movie.original_title,
+                      movie.release_date
+                        ? '(' + new Date(movie.release_date).getFullYear() + ')'
+                        : null,
+                    ]
+                      .filter((v) => !!v)
+                      .join(' ') + ' trailer',
+                  )}`"
+                  target="_blank"
+                  title="Pesquisar Trailer no YouTube"
+                  class="btn btn-circle btn-xs bg-white/5 hover:bg-red-500/20 border-none text-slate-300 hover:text-red-500 transition-all duration-300"
+                  @click.stop
+                >
+                  <Icon name="mdi:youtube" class="h-3 w-3" />
+                </a>
+              </div>
+            </div>
+
+            <!-- Conteúdo Oculto (Expande no Hover) -->
+            <div
+              class="max-h-0 opacity-0 overflow-hidden group-hover:max-h-24 group-hover:opacity-100 transition-all duration-300 ease-out flex flex-col gap-2"
+            >
+              <!-- Linha 2: Sinopse Curta -->
               <p
-                class="text-slate-400 text-xs line-clamp-3 mb-4 leading-relaxed"
+                class="text-slate-300 text-[10px] line-clamp-2 leading-relaxed"
               >
                 {{ movie.overview || "Sem sinopse disponível." }}
               </p>
-            </div>
 
-            <div
-              v-if="formatGenres(movie.genres).length > 0"
-              class="text-purple-400/60 text-[10px] font-semibold tracking-wide uppercase line-clamp-1 border-t border-white/5 pt-3"
-            >
-              {{ formatGenres(movie.genres).join(" • ") }}
-            </div>
-          </div>
-
-          <!-- Ficha Técnica -->
-          <div
-            class="px-5 pb-5 pt-3 border-t border-white/5 bg-slate-950/40 text-xs text-slate-400 flex flex-col gap-2"
-          >
-            <div class="flex justify-between items-center">
-              <span class="font-semibold text-slate-300">Duração:</span>
-              <span>{{
-                movie.runtime
-                  ? `${Math.floor(movie.runtime / 60)}h ${Math.round(movie.runtime % 60)}m`
-                  : "N/A"
-              }}</span>
-            </div>
-
-            <!-- Ações -->
-            <div
-              class="mt-3 pt-3 border-t border-white/5 flex justify-end gap-2"
-            >
-              <!-- Google Search -->
-              <a
-                :href="`https://www.google.com/search?q=${encodeURIComponent(
-                  [
-                    movie.original_title,
-                    movie.release_date
-                      ? '(' + new Date(movie.release_date).getFullYear() + ')'
-                      : null,
-                  ]
-                    .filter((v) => !!v)
-                    .join(' '),
-                )}`"
-                target="_blank"
-                title="Pesquisar no Google"
-                class="btn btn-circle btn-xs bg-white/5 hover:bg-purple-500/20 border-none text-slate-300 hover:text-purple-400 transition-all duration-300"
-                @click.stop
+              <!-- Linha 3: Gêneros -->
+              <div
+                v-if="formatGenres(movie.genres).length > 0"
+                class="text-purple-300/80 text-[8.5px] font-bold tracking-wide uppercase line-clamp-1 border-t border-white/5 pt-1.5"
               >
-                <Icon name="mdi:google" class="h-3.5 w-3.5" />
-              </a>
-
-              <!-- YouTube Search (Trailer) -->
-              <a
-                :href="`https://www.youtube.com/results?search_query=${encodeURIComponent(
-                  [
-                    movie.original_title,
-                    movie.release_date
-                      ? '(' + new Date(movie.release_date).getFullYear() + ')'
-                      : null,
-                  ]
-                    .filter((v) => !!v)
-                    .join(' ') + ' trailer',
-                )}`"
-                target="_blank"
-                title="Pesquisar Trailer no YouTube"
-                class="btn btn-circle btn-xs bg-white/5 hover:bg-red-500/20 border-none text-slate-300 hover:text-red-500 transition-all duration-300"
-                @click.stop
-              >
-                <Icon name="mdi:youtube" class="h-3.5 w-3.5" />
-              </a>
+                {{ formatGenres(movie.genres).join(" • ") }}
+              </div>
             </div>
           </div>
         </div>

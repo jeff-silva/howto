@@ -25,9 +25,8 @@ class MdbMovieSearch extends Search
 
   public function onQuery($query, $params)
   {
-    // $params->search = $this->translate($params->search);
-    // $this->searchPopulate($params);
-
+    $this->searchPopulate($params);
+    $params->search = $this->translate($params->search);
     $supabaseService = app(\App\Services\SupabaseService::class);
 
     if ($params->search) {
@@ -191,7 +190,8 @@ class MdbMovieSearch extends Search
 
     file_put_contents(storage_path('logs/laravel.log'), json_encode([
       'params' => $params,
-      'response' => $resp->json(),
+      'items' => $items,
+      // 'response' => $resp->json(),
     ], JSON_PRETTY_PRINT));
 
     foreach ($items as $item) {

@@ -243,152 +243,158 @@
                 Ficha Técnica
               </h2>
 
-            <div class="space-y-3">
-              <div
-                class="flex justify-between items-center py-1 border-b border-white/5"
-              >
-                <span class="font-semibold text-slate-300"
-                  >Título Original:</span
+              <div class="space-y-3">
+                <div
+                  class="flex justify-between items-center py-1 border-b border-white/5"
                 >
-                <span
-                  class="text-right text-slate-200 truncate max-w-[180px]"
-                  >{{ movie.original_title || "N/A" }}</span
+                  <span class="font-semibold text-slate-300"
+                    >Título Original:</span
+                  >
+                  <span
+                    class="text-right text-slate-200 truncate max-w-[180px]"
+                    >{{ movie.original_title || "N/A" }}</span
+                  >
+                </div>
+                <div
+                  class="flex justify-between items-center py-1 border-b border-white/5"
                 >
-              </div>
-              <div
-                class="flex justify-between items-center py-1 border-b border-white/5"
-              >
-                <span class="font-semibold text-slate-300"
-                  >Idioma Original:</span
+                  <span class="font-semibold text-slate-300"
+                    >Idioma Original:</span
+                  >
+                  <span class="text-slate-200 uppercase">{{
+                    movie.original_language || "N/A"
+                  }}</span>
+                </div>
+                <div
+                  class="flex justify-between items-center py-1 border-b border-white/5"
                 >
-                <span class="text-slate-200 uppercase">{{
-                  movie.original_language || "N/A"
-                }}</span>
-              </div>
-              <div
-                class="flex justify-between items-center py-1 border-b border-white/5"
-              >
-                <span class="font-semibold text-slate-300">Status:</span>
-                <span
-                  class="px-2 py-0.5 bg-green-500/10 border border-green-500/20 text-green-400 text-xs rounded-sm"
+                  <span class="font-semibold text-slate-300">Status:</span>
+                  <span
+                    class="px-2 py-0.5 bg-green-500/10 border border-green-500/20 text-green-400 text-xs rounded-sm"
+                  >
+                    {{ movie.status || "N/A" }}
+                  </span>
+                </div>
+                <div
+                  class="flex justify-between items-center py-1 border-b border-white/5"
                 >
-                  {{ movie.status || "N/A" }}
-                </span>
+                  <span class="font-semibold text-slate-300">Lançamento:</span>
+                  <span class="text-slate-200">
+                    {{
+                      movie.release_date
+                        ? new Date(movie.release_date).toLocaleDateString(
+                            "pt-BR",
+                          )
+                        : "N/A"
+                    }}
+                  </span>
+                </div>
+                <div
+                  class="flex justify-between items-center py-1 border-b border-white/5"
+                >
+                  <span class="font-semibold text-slate-300">Duração:</span>
+                  <span class="text-slate-200">
+                    {{
+                      movie.runtime
+                        ? `${Math.floor(movie.runtime / 60)}h ${Math.round(movie.runtime % 60)}m`
+                        : "N/A"
+                    }}
+                  </span>
+                </div>
+                <div
+                  class="flex justify-between items-center py-1 border-b border-white/5"
+                >
+                  <span class="font-semibold text-slate-300">Orçamento:</span>
+                  <span class="text-slate-200">
+                    {{
+                      movie.budget ? `$${movie.budget.toLocaleString()}` : "N/A"
+                    }}
+                  </span>
+                </div>
+                <div
+                  class="flex justify-between items-center py-1 border-b border-white/5"
+                >
+                  <span class="font-semibold text-slate-300">Receita:</span>
+                  <span class="text-slate-200">
+                    {{
+                      movie.revenue
+                        ? `$${movie.revenue.toLocaleString()}`
+                        : "N/A"
+                    }}
+                  </span>
+                </div>
+                <div class="flex justify-between items-center py-1">
+                  <span class="font-semibold text-slate-300"
+                    >Popularidade:</span
+                  >
+                  <span class="text-slate-200">
+                    {{ movie.popularity ? movie.popularity.toFixed(2) : "N/A" }}
+                  </span>
+                </div>
               </div>
+
+              <!-- Site Oficial -->
               <div
-                class="flex justify-between items-center py-1 border-b border-white/5"
+                v-if="movie.homepage"
+                class="pt-4 border-t border-white/5 text-center"
               >
-                <span class="font-semibold text-slate-300">Lançamento:</span>
-                <span class="text-slate-200">
-                  {{
-                    movie.release_date
-                      ? new Date(movie.release_date).toLocaleDateString("pt-BR")
-                      : "N/A"
-                  }}
-                </span>
-              </div>
-              <div
-                class="flex justify-between items-center py-1 border-b border-white/5"
-              >
-                <span class="font-semibold text-slate-300">Duração:</span>
-                <span class="text-slate-200">
-                  {{
-                    movie.runtime
-                      ? `${Math.floor(movie.runtime / 60)}h ${Math.round(movie.runtime % 60)}m`
-                      : "N/A"
-                  }}
-                </span>
-              </div>
-              <div
-                class="flex justify-between items-center py-1 border-b border-white/5"
-              >
-                <span class="font-semibold text-slate-300">Orçamento:</span>
-                <span class="text-slate-200">
-                  {{
-                    movie.budget ? `$${movie.budget.toLocaleString()}` : "N/A"
-                  }}
-                </span>
-              </div>
-              <div
-                class="flex justify-between items-center py-1 border-b border-white/5"
-              >
-                <span class="font-semibold text-slate-300">Receita:</span>
-                <span class="text-slate-200">
-                  {{
-                    movie.revenue ? `$${movie.revenue.toLocaleString()}` : "N/A"
-                  }}
-                </span>
-              </div>
-              <div class="flex justify-between items-center py-1">
-                <span class="font-semibold text-slate-300">Popularidade:</span>
-                <span class="text-slate-200">
-                  {{ movie.popularity ? movie.popularity.toFixed(2) : "N/A" }}
-                </span>
+                <a
+                  :href="movie.homepage"
+                  target="_blank"
+                  class="block w-full py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-sm transition-all duration-300"
+                >
+                  Visitar Website Oficial
+                </a>
               </div>
             </div>
+          </div>
 
-            <!-- Site Oficial -->
+          <!-- Produtoras e Países -->
+          <div
+            class="px-6 md:p-8 pb-8 pt-4 border-t border-white/5 bg-slate-950/20 text-xs text-slate-400 grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
             <div
-              v-if="movie.homepage"
-              class="pt-4 border-t border-white/5 text-center"
+              v-if="
+                movie.production_companies &&
+                movie.production_companies.length > 0
+              "
             >
-              <a
-                :href="movie.homepage"
-                target="_blank"
-                class="block w-full py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-sm transition-all duration-300"
-              >
-                Visitar Website Oficial
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Produtoras e Países -->
-        <div
-          class="px-6 md:p-8 pb-8 pt-4 border-t border-white/5 bg-slate-950/20 text-xs text-slate-400 grid grid-cols-1 md:grid-cols-2 gap-6"
-        >
-          <div
-            v-if="
-              movie.production_companies &&
-              movie.production_companies.length > 0
-            "
-          >
-            <span
-              class="font-bold text-slate-300 uppercase tracking-wider block mb-2"
-              >Produtoras</span
-            >
-            <div class="flex flex-wrap gap-2">
               <span
-                v-for="company in movie.production_companies"
-                :key="company.id"
-                class="px-2 py-1 bg-white/5 rounded-sm border border-white/5 text-slate-300"
+                class="font-bold text-slate-300 uppercase tracking-wider block mb-2"
+                >Produtoras</span
               >
-                {{ company.name }}
-              </span>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  v-for="company in movie.production_companies"
+                  :key="company.id"
+                  class="px-2 py-1 bg-white/5 rounded-sm border border-white/5 text-slate-300"
+                >
+                  {{ company.name }}
+                </span>
+              </div>
             </div>
-          </div>
 
-          <div
-            v-if="
-              movie.production_countries &&
-              movie.production_countries.length > 0
-            "
-          >
-            <span
-              class="font-bold text-slate-300 uppercase tracking-wider block mb-2"
-              >Países Produtores</span
+            <div
+              v-if="
+                movie.production_countries &&
+                movie.production_countries.length > 0
+              "
             >
-            <div class="flex flex-wrap gap-2">
               <span
-                v-for="(country, idx) in movie.production_countries"
-                :key="idx"
-                class="px-2 py-1 bg-white/5 rounded-sm border border-white/5 text-slate-300"
+                class="font-bold text-slate-300 uppercase tracking-wider block mb-2"
+                >Países Produtores</span
               >
-                {{ country.name }} ({{ country.iso_3166_1 }})
-              </span>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  v-for="(country, idx) in movie.production_countries"
+                  :key="idx"
+                  class="px-2 py-1 bg-white/5 rounded-sm border border-white/5 text-slate-300"
+                >
+                  {{ country.name }} ({{ country.iso_3166_1 }})
+                </span>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
     </div>
