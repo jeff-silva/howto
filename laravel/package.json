@@ -1,8 +1,12 @@
 {
-  "name": "laravel",
+  "name": "moviedb",
   "version": "1.0.0",
-  "license": "MIT",
+  "description": "",
   "scripts": {
-    "dev": "docker compose up -d --build --force-recreate --remove-orphans"
-  }
+    "dev": "sh ./dev.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
 }

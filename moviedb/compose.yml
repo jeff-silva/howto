@@ -1,9 +1,0 @@
-networks:
-  default:
-    name: main_network
-
-include:
-  - ./service-npm/compose.yml
-  - ./service-front/compose.yml
-  - ./service-supabase/src/docker-compose.yml
-  - ./service-app/compose.yml
