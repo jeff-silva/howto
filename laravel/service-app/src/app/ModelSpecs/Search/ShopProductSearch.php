@@ -17,13 +17,41 @@ class ShopProductSearch extends Search
   public function onParams()
   {
     return [
-      'order' => 'id:desc',
       'search' => null,
     ];
   }
 
   public function onQuery($query, $params)
   {
+    $supabaseService = app(\App\Services\SupabaseService::class);
+
+    if ($params->search) {
+      // $query->where(function ($query) use ($params) {
+      //   $words = array_filter(
+      //     preg_split('/[^a-zA-Z0-9]+/', $params->search),
+      //     fn($word) => strlen($word) >= 3,
+      //   );
+
+      //   $isOr = sizeof($words) > 3;
+
+      //   foreach ($words as $word) {
+      //     if ($isOr) {
+      //       $query->orWhere('embedding_text', 'ilike', "%{$word}%");
+      //       continue;
+      //     }
+
+      //     $query->where('embedding_text', 'ilike', "%{$word}%");
+      //   }
+      // });
+
+      if ($search = $supabaseService->embedding($params->search)) {
+        $query->orderByRaw('embedding OPERATOR(extensions.<=>) ?::extensions.vector asc', [$search]);
+        $query->orWhere(function ($query) use ($search, $params) {
+          $query->whereRaw('(embedding OPERATOR(extensions.<=>) ?::extensions.vector) < 0.22', [$search]);
+        });
+      }
+    }
+
     // if ($params->search) {
     //   $query->where(function ($query) use ($params) {
     //     $words = array_filter(

@@ -37,6 +37,8 @@ class ShopProduct extends Model
     'promo_final',
     'image',
     'description',
+    'embedding',
+    'embedding_text',
   ];
 
   protected $casts = [
@@ -44,5 +46,10 @@ class ShopProduct extends Model
     'promo_price' => 'float',
     'promo_start' => 'date',
     'promo_final' => 'date',
+  ];
+
+  protected $hidden = [
+    'embedding',
+    'embedding_text',
   ];
 }
