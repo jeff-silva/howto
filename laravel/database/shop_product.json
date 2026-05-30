@@ -1,0 +1,677 @@
+[
+  {
+    "name": "Smartphone Motorola Moto G84 5G 256GB",
+    "price": 1799.0,
+    "promo_price": 1528.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/motorola,smartphone?lock=0",
+    "description": "O Motorola Moto G84 5G oferece fotos ultra nítidas com câmera de 50 MP e estabilização óptica, tela pOLED premium de 6,5 polegadas e super performance com 256GB de memória interna."
+  },
+  {
+    "name": "Smartphone Samsung Galaxy S24 Ultra 512GB 5G",
+    "price": 7499.0,
+    "promo_price": 6373.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/samsung,phone?lock=1",
+    "description": "Descubra a Inteligência Artificial no seu bolso com o Galaxy S24 Ultra. Tela incrível de 6.8 polegadas, câmera quádrupla de 200MP, S Pen integrada e o processador mais potente da atualidade."
+  },
+  {
+    "name": "Smartphone Apple iPhone 15 Pro Max 256GB",
+    "price": 8899.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/iphone?lock=2",
+    "description": "O primeiro iPhone com design em titânio aeroespacial. Chip A17 Pro inovador, câmera principal de 48 MP com zoom óptico potente e o inovador botão de Ação personalizável."
+  },
+  {
+    "name": "Smartphone Xiaomi Redmi Note 13 Pro 256GB 8GB RAM",
+    "price": 1999.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/xiaomi,phone?lock=3",
+    "description": "Alta performance e bateria de longa duração. O Redmi Note 13 Pro conta com sistema de câmeras de 200MP, tela AMOLED de 120Hz e carregamento turbo ultrarrápido."
+  },
+  {
+    "name": "Carregador Portátil Power Bank Anker 20000mAh",
+    "price": 249.9,
+    "promo_price": 211.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/powerbank?lock=4",
+    "description": "Carregue seus dispositivos em qualquer lugar com segurança máxima. Bateria externa de alta capacidade de 20.000mAh com portas USB-C inteligentes e carregamento rápido."
+  },
+  {
+    "name": "Fone de Ouvido Bluetooth JBL Tune 520BT Preto",
+    "price": 299.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/headphones?lock=5",
+    "description": "O headphone sem fio JBL Tune 520BT oferece o potente som JBL Pure Bass com autonomia de bateria incrível de até 57 horas e carregamento rápido em apenas 2 horas."
+  },
+  {
+    "name": "Película de Vidro 3D e Capinha Anti-impacto Transparente",
+    "price": 49.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/phonecase?lock=6",
+    "description": "Kit de proteção essencial para o seu celular. Acompanha película de vidro temperado 3D de cobertura total e capa de silicone flexível transparente com bordas reforçadas anti-impacto."
+  },
+  {
+    "name": "Smart TV LED 50 polegadas 4K LG UHD ThinQ AI",
+    "price": 2499.0,
+    "promo_price": 2123.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/smarttv,television?lock=7",
+    "description": "Assista aos seus filmes e séries favoritos em resolução 4K real. Recursos inteligentes de IA com LG ThinQ, compatibilidade com Alexa e Google Assistente e cores muito mais vivas."
+  },
+  {
+    "name": "Smart TV LED 32 polegadas HD TCL Android TV",
+    "price": 1199.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/tv,television?lock=8",
+    "description": "Aproveite a melhor experiência em streaming com o sistema Android TV oficial. Acesso direto a Netflix, YouTube e Prime Video com controle por comando de voz integrado."
+  },
+  {
+    "name": "Soundbar JBL Cinema SB190 380W Dolby Atmos",
+    "price": 1699.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/soundbar,speaker?lock=9",
+    "description": "Sinta o som de cinema na sua sala. Soundbar com subwoofer sem fio de 380W de potência, conexão HDMI e tecnologia Dolby Atmos para máxima imersão em filmes e jogos."
+  },
+  {
+    "name": "Caixa de Som Bluetooth JBL Go 3 à Prova D'água",
+    "price": 289.0,
+    "promo_price": 245.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/bluetoothspeaker?lock=10",
+    "description": "A JBL Go 3 apresenta um estilo ousado e o rico som JBL Pro. Design portátil resistente a poeira e água com classificação IP67, perfeito para levar para a praia ou piscina."
+  },
+  {
+    "name": "Projetor Portátil Smart LED Full HD 1080p",
+    "price": 899.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/projector?lock=11",
+    "description": "Crie uma tela de cinema de até 120 polegadas em any parede lisa. Projetor inteligente bivolt com sistema Android integrado, Wi-Fi de banda dupla e foco manual de precisão."
+  },
+  {
+    "name": "Antena Digital Interna para TV HDTV/UHF Aquário",
+    "price": 39.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/tvantenna?lock=12",
+    "description": "Assista aos canais abertos com qualidade digital de alta definição. Antena interna compacta de alto ganho com cabo de 3 metros, fácil de instalar em qualquer televisão."
+  },
+  {
+    "name": "Notebook Lenovo IdeaPad 1i Intel Core i3 8GB 256GB SSD Windows 11",
+    "price": 2399.0,
+    "promo_price": 2038.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/lenovo,laptop?lock=13",
+    "description": "Excelente notebook para estudos e trabalho diário. Equipado com processador Intel Core i3 de 12ª geração, 8GB de RAM, SSD de inicialização rápida e tela antirreflexo de 15.6\"."
+  },
+  {
+    "name": "Notebook ASUS Vivobook AMD Ryzen 5 16GB 512GB SSD Windows 11",
+    "price": 3499.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/asus,laptop?lock=14",
+    "description": "O notebook ideal para produtividade e multitarefas. Possui design moderno e ultrafino com 16GB de RAM, amplo armazenamento em SSD NVMe de 512GB e bateria de carregamento rápido."
+  },
+  {
+    "name": "Console PlayStation 5 Slim 1TB SSD com 2 Jogos Inclusos",
+    "price": 3899.0,
+    "promo_price": 3313.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/playstation5,console?lock=15",
+    "description": "Experimente o carregamento ultrarrápido com o SSD de alta velocidade do novo modelo PS5 Slim. Inclui dois grandes sucessos dos jogos de última geração e controle sem fio DualSense."
+  },
+  {
+    "name": "Controle Sem Fio Xbox Robot White Microsoft",
+    "price": 429.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/xboxcontroller?lock=16",
+    "description": "Experimente o design modernizado do Controle Sem Fio Xbox, com superfícies esculpidas e geometria refinada para maior conforto durante o jogo. Compatível com consoles, PC e celular."
+  },
+  {
+    "name": "Jogo EA Sports FC 24 para PlayStation 5",
+    "price": 199.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/soccergame,football?lock=17",
+    "description": "O jogo de futebol virtual definitivo com o realismo do HyperMotionV, estilos de jogo otimizados pela Opta e a maior base de dados de atletas licenciados no modo Ultimate Team."
+  },
+  {
+    "name": "Mouse Sem Fio Multilaser Sem Fio 1200 DPI Preto USB",
+    "price": 29.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/computermouse?lock=18",
+    "description": "Mouse óptico ergonômico clássico com conexão sem fio confiável via mini receptor USB nano de 2.4GHz. Funciona com apenas uma pilha AA e possui modo de economia de energia automática."
+  },
+  {
+    "name": "Boneca Barbie Color Reveal Mattel 7 Surpresas",
+    "price": 149.9,
+    "promo_price": 126.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/barbiedoll?lock=19",
+    "description": "As bonecas Barbie Color Reveal proporcionam uma experiência cheia de surpresas! O visual da boneca permanece um mistério até ser revelado na água quente. Inclui acessórios de moda surpresa."
+  },
+  {
+    "name": "Jogo de Tabuleiro Banco Imobiliário Estrela Clássico",
+    "price": 129.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/boardgame?lock=20",
+    "description": "Divirta-se em família com o mais famoso jogo de tabuleiro do mundo! Compre propriedades, negocie títulos, invista em casas e hotéis e tente levar seus adversários à falência."
+  },
+  {
+    "name": "Lego Classic Caixa de Pecas Criativas com 484 Pecas",
+    "price": 219.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/legobricks,lego?lock=21",
+    "description": "Estimule a criatividade das crianças com esta incrível caixa de blocos clássicos LEGO. Oferece uma grande variedade de cores de peças, janelas, portas e rodas para montar infinitas criações."
+  },
+  {
+    "name": "Carrinho de Controle Remoto Tornado 360 Graus Recarregavel",
+    "price": 119.9,
+    "promo_price": 101.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/toycar?lock=22",
+    "description": "O carrinho acrobático Tornado executa capotamentos e giros incríveis em 360 graus! Conta com luzes de LED vibrantes para brincar no escuro e acompanha bateria recarregável USB."
+  },
+  {
+    "name": "Pista Hot Wheels City Ataque de Cobra Mattel",
+    "price": 189.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/toytrack?lock=23",
+    "description": "Lute contra a cobra gigante que está atacando a cidade de Hot Wheels! Lance o carrinho na velocidade certa para vencer o monstro e passar pelo portal secreto com segurança."
+  },
+  {
+    "name": "Boneco Luccas Neto com Som 29cm Baby Brink",
+    "price": 159.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/actionfigure?lock=24",
+    "description": "Brinque com o youtuber favorito da garotada! O boneco do Luccas Neto fala 14 de suas frases mais famosas e divertidas ao apertar sua barriguinha. Confeccionado em vinil atóxico macio."
+  },
+  {
+    "name": "Pelucia Disney Mickey Mouse 30cm com Sons Fun Divirta-se",
+    "price": 99.9,
+    "promo_price": 84.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/plushie,mickey?lock=25",
+    "description": "Leve a magia da Disney para a sua casa com o Mickey Mouse de pelúcia fofinho. Ao apertar sua barriguinha, ele emite sons de risada clássica e frases icônicas em português."
+  },
+  {
+    "name": "Quebra-Cabeca 1000 Pecas Cartoes Postais do Brasil Toyster",
+    "price": 59.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/jigsawpuzzle?lock=26",
+    "description": "Divirta-se e relaxe montando um lindo quebra-cabeça com belíssimas paisagens de cartões postais brasileiros. Fabricado em papel cartão rígido de alta durabilidade e encaixe perfeito."
+  },
+  {
+    "name": "Jogo de Lencol Casal 4 Pecas Microfibra 140 Fios Cinza",
+    "price": 79.9,
+    "promo_price": 67.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/bedsheets?lock=27",
+    "description": "Jogo de cama completo em microfibra macia de secagem rápida que não amassa. Inclui lençol de cima, lençol com elástico resistente e duas fronhas macias combinando na cor cinza."
+  },
+  {
+    "name": "Jogo de Toalhas de Banho 5 Pecas 100 por cento Algodao Buddemeyer",
+    "price": 189.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/towels?lock=28",
+    "description": "Toalhas premium fabricadas em algodão 100% de fibra longa de altíssima absorção e toque extremamente macio. O jogo contém 2 toalhas de banho gigante, 2 toalhas de rosto e 1 piso."
+  },
+  {
+    "name": "Cobertor Manta Casal Microfibra Flannel Soft Azul Marinho",
+    "price": 99.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/blanket?lock=29",
+    "description": "Mantenha-se aquecido nas noites mais frias com o aconchegante cobertor de microfibra flannel soft. Oferece toque aveludado e brilho suave, sendo super leve e antialérgico."
+  },
+  {
+    "name": "Travesseiro de Corpo Altamente Macio Percal 180 Fios Altenburg",
+    "price": 89.9,
+    "promo_price": 75.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/bodypillow?lock=30",
+    "description": "O travesseiro de corpo gigante ajuda a manter a postura correta ao dormir de lado, apoiando os joelhos e tornozelos. Revestimento em percal 180 fios respirável de alta durabilidade."
+  },
+  {
+    "name": "Jogo de Mesa Americano Redondo 4 Pecas Impermeavel Copa",
+    "price": 49.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/placemat?lock=31",
+    "description": "Dê um toque de elegância à sua mesa de jantar. Jogo americano redondo com 4 peças laváveis feitas de material impermeável com estampas clássicas de alta qualidade."
+  },
+  {
+    "name": "Protetor de Colchao Impermeavel Casal com Elastico",
+    "price": 69.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/mattresscover?lock=32",
+    "description": "Proteja seu colchão de líquidos, poeira e ácaros com total eficácia. Protetor impermeável com acabamento matelado confortável de toque macio e elásticos reforçados nas laterais."
+  },
+  {
+    "name": "Kit 10 Cuecas Boxer Masculinas de Algodao Lupo",
+    "price": 159.0,
+    "promo_price": 134.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/boxerbriefs?lock=33",
+    "description": "Kit econômico contendo 10 cuecas masculinas modelo boxer em cores sortidas clássicas. Confeccionadas em algodão com elastano de toque macio e cós elástico reforçado super confortável."
+  },
+  {
+    "name": "Kit 3 Camisetas Basicas Masculinas Hering 100 por cento Algodao",
+    "price": 99.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/tshirt?lock=34",
+    "description": "As camisetas básicas Hering são sinônimo de conforto e durabilidade. Confeccionadas em algodão 100% premium com gola careca tradicional, ideais para o guarda-roupa diário."
+  },
+  {
+    "name": "Calca Jeans Masculina Slim com Elastano Basica",
+    "price": 119.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/jeans?lock=35",
+    "description": "Calça jeans masculina com modelagem slim moderna que se ajusta perfeitamente ao corpo. Lavagem escura clássica em tecido com elastano para maior flexibilidade e movimento."
+  },
+  {
+    "name": "Calca Legging Feminina Fitness Suplex Preta Academia",
+    "price": 49.9,
+    "promo_price": 41.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/leggings?lock=36",
+    "description": "Perfeita para caminhadas, academia, crossfit ou uso no dia a dia. Legging preta confeccionada em tecido suplex de alta densidade sem transparência, cintura alta com cós largo modelador."
+  },
+  {
+    "name": "Kit 3 Meias Cano Medio Esportivas Lupo Unissex",
+    "price": 39.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/socks?lock=37",
+    "description": "Kit com 3 pares de meias esportivas macias de algodão atoalhado com punho confortável. Perfeitas para práticas esportivas ou uso casual com tênis sem escorregar."
+  },
+  {
+    "name": "Pijama Feminino de Inverno Soft Fleece Aconchegante",
+    "price": 129.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/pajamas?lock=38",
+    "description": "Durma com máximo conforto nas noites de inverno. Pijama feminino completo em tecido de soft fleece aveludado extremamente macio, quentinho e com estampas delicadas."
+  },
+  {
+    "name": "Chinelo Havaianas Top Unissex Preto Original",
+    "price": 29.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/flipflops?lock=39",
+    "description": "O clássico chinelo de tiras das legítimas Havaianas. Confeccionado em borracha antiderrapante de alta qualidade que não deforma e possui excelente aderência em superfícies molhadas."
+  },
+  {
+    "name": "Caixa de Bombom Especialidades Nestle 251g",
+    "price": 13.99,
+    "promo_price": 11.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/chocolatebox?lock=40",
+    "description": "A tradicional caixa vermelha da Nestlé reúne os maiores sucessos de chocolate em um só lugar. Perfeito para presentear ou saborear com amigos os bombons Prestígio, Alpino, Baton e muito mais."
+  },
+  {
+    "name": "Caixa de Bombom Favoritos Lacta 250g",
+    "price": 13.99,
+    "promo_price": 11.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/chocolates?lock=41",
+    "description": "A caixa Lacta reúne as principais delícias de bombons da marca como Sonho de Valsa, Ouro Branco, Laka, Diamante Negro e Bis. Perfeito para compartilhar alegria com toda a família."
+  },
+  {
+    "name": "Chocolate em Barra Diamante Negro Lacta 90g",
+    "price": 5.99,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/chocolatebar?lock=42",
+    "description": "A barra de chocolate ao leite mais famosa do Brasil. Diamante Negro possui a combinação irresistível e exclusiva do chocolate Lacta com pedacinhos de açúcar crocante que derretem na boca."
+  },
+  {
+    "name": "Pacote de Balas de Goma Fini Dentaduras 500g",
+    "price": 19.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/gummycandy?lock=43",
+    "description": "Embalagem tamanho família de um clássico da Fini! Balas de gelatina em formato de dentaduras deliciosas e divertidas sabor morango e framboesa, perfeitas para festas ou sobremesas rápidas."
+  },
+  {
+    "name": "Salgadinho Doritos Queijo Nacho Elma Chips 140g",
+    "price": 9.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/nachochips,doritos?lock=44",
+    "description": "A tortilha de milho sabor queijo nacho mais crocante e amada do mundo. Perfeito para acompanhar dips caseiros de guacamole ou cheddar em encontros com amigos."
+  },
+  {
+    "name": "Achocolatado em Po Nescau 2.0 Lata 370g Nestle",
+    "price": 8.49,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/chocolatedrink?lock=45",
+    "description": "O achocolatado em pó favorito dos brasileiros. Nescau 2.0 vem enriquecido com o complexo exclusivo Activ-Go com vitaminas e minerais essenciais para dar energia ao seu dia."
+  },
+  {
+    "name": "Biscoito Recheado Passatempo Chocolate Nestle 130g",
+    "price": 2.79,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/cookies,sweet?lock=46",
+    "description": "O delicioso biscoito recheado sabor chocolate com ilustrações divertidas de animais em alto relevo. Fonte de cálcio e zinco, perfeito para o lanche da tarde das crianças."
+  },
+  {
+    "name": "Cafe Soluvel Nescafe Original Vidro 100g",
+    "price": 14.9,
+    "promo_price": 12.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/instantcoffee?lock=47",
+    "description": "Prepare seu café matinal em segundos com o sabor marcante e encorpado de Nescafé Original. Grãos selecionados torrados de forma ideal para garantir frescor e cremosidade imediata."
+  },
+  {
+    "name": "Pack 12 Latas de Refrigerante Coca-Cola Sem Acucar 350ml",
+    "price": 39.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/cocacola?lock=48",
+    "description": "O sabor inconfundível de Coca-Cola em embalagem pack econômica com 12 latas. Versão sem açúcar refrescante, perfeita para ter sempre gelada na geladeira de casa."
+  },
+  {
+    "name": "Cerveja Heineken Premium Lager Pack 6 Garrafas 330ml",
+    "price": 32.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/heineken,beer?lock=49",
+    "description": "A renomada cerveja holandesa Heineken produzida com ingredientes 100% naturais: malte de cevada, água purificada, lúpulo e a exclusiva Levedura A-Yeast. Cerveja pura malte leve e refrescante."
+  },
+  {
+    "name": "Fritadeira Eletrica Sem Oleo Airfryer Mondial Family 4L",
+    "price": 389.0,
+    "promo_price": 330.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/airfryer?lock=50",
+    "description": "Prepare batatas fritas crocantes, pães de queijo, carnes e doces de forma saudável. Tecnologia de circulação de ar quente que dispensa o uso de óleo e cesto antiaderente de 4 litros fácil de limpar."
+  },
+  {
+    "name": "Liquidificador Mondial Turbo Power 500W com Filtro",
+    "price": 129.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/blender?lock=51",
+    "description": "Faça sucos verdes deliciosos, vitaminas e massas de bolo com facilidade. Liquidificador potente com copo de 2.2 litros, 3 velocidades e filtro de bagaços incluso."
+  },
+  {
+    "name": "Micro-ondas Consul 20 Litros Branco Bivolt",
+    "price": 549.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/microwave?lock=52",
+    "description": "Praticidade e economia de espaço no balcão da cozinha. O micro-ondas Consul conta com receitas rápidas pré-programadas, ajuste de potência inteligente e função tira odor."
+  },
+  {
+    "name": "Cafeteira Eletrica Mondial Dolce Arome 30 Xicaras",
+    "price": 149.0,
+    "promo_price": 126.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/coffeemaker?lock=53",
+    "description": "Mantenha o café aquecido por muito mais tempo. Cafeteira elétrica moderna com jarra de vidro resistente de alta capacidade, placa de aquecimento embutida e sistema corta-pingos."
+  },
+  {
+    "name": "Grill e Sanduicheira Mondial Ultra Gourmet Preto",
+    "price": 89.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/sandwichmaker?lock=54",
+    "description": "Prepare sanduíches saborosos, misto-quente e pequenos grelhados rapidamente. Chapas onduladas antiaderentes de aquecimento rápido com luzes piloto indicadoras de funcionamento."
+  },
+  {
+    "name": "Panela de Arroz Eletrica Electrolux 1.2L Easyline",
+    "price": 199.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/ricecooker?lock=55",
+    "description": "Arroz soltinho e fresquinho feito de maneira super rápida. Panela elétrica com desligamento automático inteligente, função de manter aquecido e acessório de cozimento a vapor inclusos."
+  },
+  {
+    "name": "Batedeira Mondial Pratica 400W 3 Velocidades",
+    "price": 99.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/standmixer?lock=56",
+    "description": "Ideal para preparar massas leves, cremes, chantilly e claras em neve de forma rápida. Batedeira compacta de 3 velocidades mais função pulsar com par de batedores de aço resistente."
+  },
+  {
+    "name": "Secador de Cabelo Taiff Easy 1700W Professional",
+    "price": 199.0,
+    "promo_price": 168.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/hairdryer?lock=57",
+    "description": "Seque e modele seus cabelos com qualidade de salão em casa. O secador Taiff Easy de 1700W é extremamente leve e silencioso, possuindo controle de temperatura e velocidade combináveis."
+  },
+  {
+    "name": "Prancha Alisadora de Cabelo Mondial Chrome Pink",
+    "price": 79.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/hairstraightener?lock=58",
+    "description": "Alisamento perfeito com máxima proteção aos fios. Prancha alisadora com chapas revestidas em cerâmica e temperatura constante de até 220 graus, além de cabo giratório funcional de 360 graus."
+  },
+  {
+    "name": "Perfume Masculino Malbec Desodorante Colonia 100ml",
+    "price": 199.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/perfume?lock=59",
+    "description": "O Malbec é um perfume amadeirado aromático marcante, fabricado com álcool vínico macerado em barris de carvalho francês. A fragrância clássica e imponente masculina de maior sucesso."
+  },
+  {
+    "name": "Hidratante Corporal Cerave Locao Hidratante 473ml",
+    "price": 99.9,
+    "promo_price": 84.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/moisturizer?lock=60",
+    "description": "Hidrata profundamente a pele seca enquanto restaura a barreira protetora natural da pele. Contém 3 ceramidas essenciais de alta qualidade e ácido hialurônico de absorção profunda sem perfume."
+  },
+  {
+    "name": "Protetor Solar Nivea Sun Protect e Hidrata FPS 50 200ml",
+    "price": 59.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/sunscreen?lock=61",
+    "description": "Proteção imediata contra raios nocivos UVA e UVB com fórmula super leve e não gordurosa. Previne o envelhecimento precoce da pele e possui excelente resistência à água."
+  },
+  {
+    "name": "Kit Shampoo e Condicionador Elseve LOreal Paris Hidra Hialuronico",
+    "price": 34.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/shampoo?lock=62",
+    "description": "Hidratação intensa e preenchimento imediato da fibra capilar. Enriquecido com Ácido Hialurônico ativo que retém a umidade natural do cabelo para deixá-lo macio e brilhante."
+  },
+  {
+    "name": "Sabonete em Barra Dove Original Leite Hidratante Pack 6 unidades",
+    "price": 18.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/soap?lock=63",
+    "description": "Limpa suavemente sem ressecar a pele. O sabonete em barra Dove Original contém um quarto de creme hidratante nutritivo ativo, deixando a pele incrivelmente macia e radiante."
+  },
+  {
+    "name": "Aparelho de Jantar 18 Pecas Oxford Ceramica",
+    "price": 249.0,
+    "promo_price": 211.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/dinnerware,plates?lock=64",
+    "description": "Deixe sua mesa muito mais elegante para receber convidados. Aparelho de jantar Oxford em cerâmica de alta resistência contendo 6 pratos rasos, 6 pratos fundos e 6 pratos de sobremesa."
+  },
+  {
+    "name": "Conjunto de Panelas 5 Pecas Antiaderente Tramontina Paris",
+    "price": 299.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/cookware,pots?lock=65",
+    "description": "Panelas em alumínio com revestimento interno e externo antiaderente Starflon Max durável da linha Paris Tramontina. O cozimento é rápido e os alimentos não grudam, facilitando a limpeza."
+  },
+  {
+    "name": "Garrafa Termica Invicta 1 Litro Conservacao Quente Frio",
+    "price": 49.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/thermos?lock=66",
+    "description": "Garrafa térmica clássica Invicta com ampola de vidro resistente para manter o café ou chá na temperatura ideal por até 12 horas. Prático bico dosador corta-pingos integrado."
+  },
+  {
+    "name": "Kit 10 Potes de Plastico Sanremo com Tampa Hermetica",
+    "price": 59.9,
+    "promo_price": 50.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/foodcontainer?lock=67",
+    "description": "Kit com 10 potes plásticos livres de BPA e aptos para micro-ondas e lava-louças. Tampas herméticas com travas de borracha coloridas que garantem vedação completa contra ar e vazamentos."
+  },
+  {
+    "name": "MOP Giratorio Limpeza Pratica com Balde Centrifugador",
+    "price": 89.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/cleaningmop?lock=68",
+    "description": "Economize tempo e esforço na limpeza diária do chão de casa. O Mop giratório substitui a vassoura e o rodo com pano de forma prática, com balde escorredor centrífugo em inox."
+  },
+  {
+    "name": "Lixeira Inox com Pedal e Cesto Removivel 5 Litros",
+    "price": 69.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/trashcan?lock=69",
+    "description": "Lixeira compacta em aço inox com acabamento escovado moderno e pedal higiênico antiderrapante. Ideal para banheiros, lavabos ou escritórios, com balde plástico interno removível."
+  },
+  {
+    "name": "Organizador de Gavetas Multiuso de Tecido TNT 3 Pecas",
+    "price": 39.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/drawerorganizer?lock=70",
+    "description": "Organize calcinhas, cuecas, meias e cintos com total facilidade em gavetas e closets. Feito de tecido TNT respirável com divisórias flexíveis costuradas de alta resistência."
+  },
+  {
+    "name": "Caderno Universitario Tilibra 10 Materias Capa Dura",
+    "price": 24.9,
+    "promo_price": 20.97,
+    "promo_start": "2026-05-28",
+    "promo_final": "2026-06-10",
+    "image": "https://loremflickr.com/500/500/notebook?lock=71",
+    "description": "Caderno universitário espiral clássico Tilibra com capa dura estampada moderna. Possui bolsa plástica de recados, cartela de adesivos funcionais e 160 folhas pautadas brancas."
+  },
+  {
+    "name": "Estojo de Canetas Hidrograficas Stabilo Point 88 com 10 Cores",
+    "price": 79.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/pens?lock=72",
+    "description": "As famosas canetas Stabilo de ponta ultrafina de 0.4mm de fibra de alta qualidade. Ideal para desenhos de precisão, caligrafia fina e contornos coloridos em trabalhos de escrita."
+  },
+  {
+    "name": "Caixa de Canetas Esferograficas Bic Cristal Azul com 50 unidades",
+    "price": 45.0,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/ballpointpens?lock=73",
+    "description": "A caneta esferográfica número 1 em vendas no mundo. Caixa contendo 50 canetas Bic Cristal clássicas de tinta azul de alta fluidez, corpo transparente hexagonal e escrita super macia."
+  },
+  {
+    "name": "Resma de Papel Sulfite A4 Chamex 75g com 500 folhas",
+    "price": 29.9,
+    "promo_price": null,
+    "promo_start": null,
+    "promo_final": null,
+    "image": "https://loremflickr.com/500/500/paperstack?lock=74",
+    "description": "Papel sulfite branco de alto desempenho A4 da Chamex, pacote com 500 folhas de 75g/m². Excelente brancura que evita atolamentos e borrões em impressoras a laser ou jato de tinta."
+  }
+]

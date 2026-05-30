@@ -52,8 +52,8 @@ env_create() {
 # Root
 env_create "$ROOT_DIR"
 env_insert "$ROOT_DIR/.env" "SERVICE_APP_ENV" "local"
-env_insert "$ROOT_DIR/.env" "SERVICE_APP_URL" "http://moviedb.localhost"
-env_insert "$ROOT_DIR/.env" "SERVICE_SUPABASE_URL" "http://supabase.moviedb.localhost"
+env_insert "$ROOT_DIR/.env" "SERVICE_APP_URL" "http://laravel.localhost"
+env_insert "$ROOT_DIR/.env" "SERVICE_SUPABASE_URL" "http://supabase.laravel.localhost"
 env_insert "$ROOT_DIR/.env" "SERVICE_SUPABASE_STORAGE_BUCKET" "app"
 
 # Service Front
