@@ -222,7 +222,11 @@
 
               <!-- Top floating tags (Discount Percent or Best Seller status) -->
               <div
-                v-if="product.promo_price"
+                v-if="
+                  product.promotional_price &&
+                  product.price &&
+                  product.price > product.promotional_price
+                "
                 class="absolute top-3 left-3 z-10 pointer-events-none"
               >
                 <span
@@ -230,7 +234,10 @@
                 >
                   <Icon name="lucide:percent" class="h-3 w-3" />
                   {{
-                    getDiscountPercentage(product.price, product.promo_price)
+                    getDiscountPercentage(
+                      product.price,
+                      product.promotional_price,
+                    )
                   }}% OFF
                 </span>
               </div>
@@ -255,7 +262,7 @@
                 <span
                   class="text-[10px] font-black uppercase tracking-widest text-slate-500"
                 >
-                  {{ getProductBrand(product) }}
+                  {{ product.brand || getProductBrand(product) }}
                 </span>
 
                 <!-- Title & Link -->
@@ -265,6 +272,21 @@
                 >
                   {{ product.name }}
                 </h2>
+
+                <!-- Rating -->
+                <div
+                  v-if="product.rating"
+                  class="flex items-center gap-1 mt-0.5"
+                >
+                  <Icon
+                    name="lucide:star"
+                    class="h-3 w-3 text-yellow-500 fill-yellow-500"
+                  />
+                  <span class="text-[10px] text-yellow-500 font-bold">{{
+                    product.rating
+                  }}</span>
+
+                </div>
 
                 <!-- Description -->
                 <p
@@ -279,21 +301,31 @@
                 class="flex flex-col justify-end mt-auto pt-3 border-t border-white/5"
               >
                 <!-- Promo Pricing -->
-                <div v-if="product.promo_price" class="flex flex-col gap-0.5">
+                <div
+                  v-if="
+                    product.promotional_price &&
+                    product.price &&
+                    product.price > product.promotional_price
+                  "
+                  class="flex flex-col gap-0.5"
+                >
                   <span
                     class="text-slate-500 text-[11px] line-through leading-none"
                   >
-                    R$ {{ formatPrice(product.price) }}
+                    US$
+                    {{ formatPrice(product.price) }}
                   </span>
                   <div class="flex items-baseline gap-2">
                     <span
-                      class="text-slate-100 font-black text-2xl tracking-tight leading-none"
+                      class="text-slate-100 font-black text-2xl tracking-tight leading-none flex items-baseline"
                     >
-                      R$
+                      <span class="text-sm mr-1">US$</span>
                       <span class="text-2xl font-black">{{
-                        formatPrice(product.promo_price).split(",")[0]
+                        formatPrice(product.promotional_price).split(",")[0]
                       }}</span
-                      >,{{ formatPrice(product.promo_price).split(",")[1] }}
+                      >,{{
+                        formatPrice(product.promotional_price).split(",")[1] || "00"
+                      }}
                     </span>
                     <span
                       class="text-red-500 text-[11px] font-black uppercase tracking-wider"
@@ -301,7 +333,7 @@
                       {{
                         getDiscountPercentage(
                           product.price,
-                          product.promo_price,
+                          product.promotional_price,
                         )
                       }}% OFF
                     </span>
@@ -311,13 +343,15 @@
                 <!-- Normal Pricing -->
                 <div v-else class="flex flex-col gap-1">
                   <span
-                    class="text-slate-100 font-black text-2xl tracking-tight leading-none"
+                    class="text-slate-100 font-black text-2xl tracking-tight leading-none flex items-baseline"
                   >
-                    R$
+                    <span class="text-sm mr-1">US$</span>
                     <span class="text-2xl font-black">{{
-                      formatPrice(product.price).split(",")[0]
+                      formatPrice(getCurrentPrice(product)).split(",")[0] || "0"
                     }}</span
-                    >,{{ formatPrice(product.price).split(",")[1] }}
+                    >,{{
+                      formatPrice(getCurrentPrice(product)).split(",")[1] || "00"
+                    }}
                   </span>
                 </div>
 
@@ -326,16 +360,11 @@
                   em
                   <span class="font-bold text-rose-400/90"
                     >{{
-                      getInstallmentsCount(
-                        product.promo_price || product.price,
-                      )
-                    }}x R$
+                      getInstallmentsCount(getCurrentPrice(product))
+                    }}x US$
                     {{
                       formatPrice(
-                        (product.promo_price || product.price) /
-                          getInstallmentsCount(
-                            product.promo_price || product.price,
-                          ),
+                        getCurrentPrice(product) / getInstallmentsCount(getCurrentPrice(product))
                       )
                     }}</span
                   >
@@ -416,7 +445,8 @@ const route = useRoute();
 
 // Helpers para simular estrutura rica de dados no estilo Mercado Livre de forma determinística
 const getProductBrand = (product) => {
-  const name = product.name.toLowerCase();
+  if (product.brand) return product.brand;
+  const name = (product.name || "").toLowerCase();
   if (name.includes("motorola")) return "Motorola";
   if (name.includes("samsung")) return "Samsung";
   if (name.includes("apple") || name.includes("iphone")) return "Apple";
@@ -531,11 +561,21 @@ const categories = [
 
 // Helper para formatar moeda brasileira
 const formatPrice = (price) => {
-  if (price === undefined || price === null) return "0,00";
+  if (price === undefined || price === null || isNaN(price)) return "0,00";
   return parseFloat(price).toLocaleString("pt-BR", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+};
+
+const getCurrentPrice = (product) => {
+  if (product.promotional_price && parseFloat(product.promotional_price) > 0) {
+    return parseFloat(product.promotional_price);
+  }
+  if (product.price && parseFloat(product.price) > 0) {
+    return parseFloat(product.price);
+  }
+  return 0;
 };
 
 // Cálculo do percentual de desconto

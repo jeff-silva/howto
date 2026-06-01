@@ -5,6 +5,7 @@ namespace App\ModelSpecs\Search;
 use App\Models\ShopProduct;
 use Illuminate\Support\Str;
 use Illuminate\Support\Fluent;
+use Illuminate\Support\Facades\Http;
 
 class ShopProductSearch extends Search
 {
@@ -25,10 +26,17 @@ class ShopProductSearch extends Search
   {
     $supabaseService = app(\App\Services\SupabaseService::class);
 
-    if ($params->search) {
-      // $query->where(function ($query) use ($params) {
+    if ($search = $params->search) {
+      $search = $this->translate($search);
+      $search = $supabaseService->embedding($search);
+      $query->orderByRaw('embedding OPERATOR(extensions.<=>) ?::extensions.vector asc', [$search]);
+      $query->orWhere(function ($query) use ($search, $params) {
+        $query->whereRaw('(embedding OPERATOR(extensions.<=>) ?::extensions.vector) < 0.22', [$search]);
+      });
+
+      // $query->orWhere(function ($query) use ($params, $search) {
       //   $words = array_filter(
-      //     preg_split('/[^a-zA-Z0-9]+/', $params->search),
+      //     preg_split('/[^a-zA-Z0-9]+/', $search),
       //     fn($word) => strlen($word) >= 3,
       //   );
 
@@ -43,13 +51,6 @@ class ShopProductSearch extends Search
       //     $query->where('embedding_text', 'ilike', "%{$word}%");
       //   }
       // });
-
-      if ($search = $supabaseService->embedding($params->search)) {
-        $query->orderByRaw('embedding OPERATOR(extensions.<=>) ?::extensions.vector asc', [$search]);
-        $query->orWhere(function ($query) use ($search, $params) {
-          $query->whereRaw('(embedding OPERATOR(extensions.<=>) ?::extensions.vector) < 0.22', [$search]);
-        });
-      }
     }
 
     // if ($params->search) {
@@ -69,5 +70,28 @@ class ShopProductSearch extends Search
     // }
 
     return $query;
+  }
+
+  protected function translate(null | string $text, $from = 'pt')
+  {
+    if (!$text) return $text;
+
+    try {
+      $req = Http::get('https://translate.googleapis.com/translate_a/single', [
+        'client' => 'gtx',
+        'sl' => $from,
+        'tl' => 'en',
+        'dt' => 't',
+        'q' => $text
+      ]);
+
+      if ($req->successful()) {
+        $data = $req->json();
+        return $data[0][0][0] ?? '';
+      }
+    } catch (\Exception $e) {
+    }
+
+    return $text;
   }
 }
