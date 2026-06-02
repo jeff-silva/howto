@@ -31,7 +31,7 @@ class ShopProductSearch extends Search
       $search = $supabaseService->embedding($search);
       $query->orderByRaw('embedding OPERATOR(extensions.<=>) ?::extensions.vector asc', [$search]);
       $query->orWhere(function ($query) use ($search, $params) {
-        $query->whereRaw('(embedding OPERATOR(extensions.<=>) ?::extensions.vector) < 0.22', [$search]);
+        $query->whereRaw('(embedding OPERATOR(extensions.<=>) ?::extensions.vector) < 0.2', [$search]);
       });
 
       $query->orWhere(function ($query) use ($params) {
