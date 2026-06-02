@@ -25,32 +25,32 @@ class ShopProductSearch extends Search
   public function onQuery($query, $params)
   {
     $supabaseService = app(\App\Services\SupabaseService::class);
+    $params->search_en = $this->translate($params->search);
 
-    if ($search = $params->search) {
-      $search = $this->translate($search);
+    if ($search = $params->search_en) {
       $search = $supabaseService->embedding($search);
       $query->orderByRaw('embedding OPERATOR(extensions.<=>) ?::extensions.vector asc', [$search]);
       $query->orWhere(function ($query) use ($search, $params) {
         $query->whereRaw('(embedding OPERATOR(extensions.<=>) ?::extensions.vector) < 0.22', [$search]);
       });
 
-      // $query->orWhere(function ($query) use ($params, $search) {
-      //   $words = array_filter(
-      //     preg_split('/[^a-zA-Z0-9]+/', $search),
-      //     fn($word) => strlen($word) >= 3,
-      //   );
+      $query->orWhere(function ($query) use ($params) {
+        $words = array_filter(
+          preg_split('/[^a-zA-Z0-9]+/', $params->search_en),
+          fn($word) => strlen($word) >= 3,
+        );
 
-      //   $isOr = sizeof($words) > 3;
+        $isOr = sizeof($words) > 3;
 
-      //   foreach ($words as $word) {
-      //     if ($isOr) {
-      //       $query->orWhere('embedding_text', 'ilike', "%{$word}%");
-      //       continue;
-      //     }
+        foreach ($words as $word) {
+          if ($isOr) {
+            $query->orWhere('embedding_text', 'ilike', "%{$word}%");
+            continue;
+          }
 
-      //     $query->where('embedding_text', 'ilike', "%{$word}%");
-      //   }
-      // });
+          $query->where('embedding_text', 'ilike', "%{$word}%");
+        }
+      });
     }
 
     // if ($params->search) {
@@ -69,6 +69,7 @@ class ShopProductSearch extends Search
     //   });
     // }
 
+    \LogHelper::put($params);
     return $query;
   }
 

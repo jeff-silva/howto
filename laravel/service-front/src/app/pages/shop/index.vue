@@ -57,7 +57,7 @@
               <input
                 v-model="shopProductSearch.params.search"
                 type="text"
-                placeholder="Busque por produto, marca, categoria ou descrição..."
+                placeholder="Busque por marca, categoria ou descrição..."
                 class="input w-full pl-12 pr-4 py-6 bg-slate-950/80 border border-white/5 text-white placeholder-slate-600 focus:outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all duration-300 shadow-inner rounded-md text-sm"
                 @input="
                   () => {
@@ -92,32 +92,6 @@
               </button>
             </div>
           </div>
-        </div>
-
-        <!-- Quick Tags search bar suggestions -->
-        <div
-          class="mt-5 pt-4 border-t border-white/5 flex flex-wrap gap-2 items-center"
-        >
-          <span
-            class="text-[10px] uppercase font-black tracking-wider text-slate-500 mr-2"
-            >Buscas populares:</span
-          >
-          <button
-            v-for="sug in suggestions"
-            :key="sug"
-            @click="setSearch(sug)"
-            class="px-3 py-1.5 text-xs rounded-lg border border-white/5 bg-slate-950/40 text-slate-400 hover:text-white hover:border-red-500/30 hover:bg-slate-900 transition-all duration-300 cursor-pointer"
-          >
-            {{ sug }}
-          </button>
-          <button
-            v-if="shopProductSearch.params.search || currentCategory"
-            @click="clearFilters()"
-            class="px-3 py-1.5 text-xs rounded-lg border border-red-500/20 bg-red-950/20 text-red-400 hover:text-white hover:bg-red-900/40 transition-all duration-300 flex items-center gap-1 cursor-pointer"
-          >
-            <Icon name="lucide:x" class="h-3.5 w-3.5" />
-            Limpar Filtros
-          </button>
         </div>
       </div>
 
@@ -258,13 +232,6 @@
             <!-- Content details Area -->
             <div class="p-5 flex flex-col flex-1 justify-between gap-4">
               <div class="flex flex-col gap-1.5">
-                <!-- Muted Brand Label above Title -->
-                <span
-                  class="text-[10px] font-black uppercase tracking-widest text-slate-500"
-                >
-                  {{ product.brand || getProductBrand(product) }}
-                </span>
-
                 <!-- Title & Link -->
                 <h2
                   class="text-sm font-extrabold text-white leading-snug line-clamp-2 h-10 group-hover:text-red-400 transition-colors duration-300"
@@ -285,7 +252,6 @@
                   <span class="text-[10px] text-yellow-500 font-bold">{{
                     product.rating
                   }}</span>
-
                 </div>
 
                 <!-- Description -->
@@ -324,7 +290,8 @@
                         formatPrice(product.promotional_price).split(",")[0]
                       }}</span
                       >,{{
-                        formatPrice(product.promotional_price).split(",")[1] || "00"
+                        formatPrice(product.promotional_price).split(",")[1] ||
+                        "00"
                       }}
                     </span>
                     <span
@@ -350,7 +317,8 @@
                       formatPrice(getCurrentPrice(product)).split(",")[0] || "0"
                     }}</span
                     >,{{
-                      formatPrice(getCurrentPrice(product)).split(",")[1] || "00"
+                      formatPrice(getCurrentPrice(product)).split(",")[1] ||
+                      "00"
                     }}
                   </span>
                 </div>
@@ -359,12 +327,11 @@
                 <div class="text-[11px] text-slate-400 mt-1 leading-normal">
                   em
                   <span class="font-bold text-rose-400/90"
-                    >{{
-                      getInstallmentsCount(getCurrentPrice(product))
-                    }}x US$
+                    >{{ getInstallmentsCount(getCurrentPrice(product)) }}x US$
                     {{
                       formatPrice(
-                        getCurrentPrice(product) / getInstallmentsCount(getCurrentPrice(product))
+                        getCurrentPrice(product) /
+                          getInstallmentsCount(getCurrentPrice(product)),
                       )
                     }}</span
                   >
@@ -442,75 +409,6 @@
 
 <script setup>
 const route = useRoute();
-
-// Helpers para simular estrutura rica de dados no estilo Mercado Livre de forma determinística
-const getProductBrand = (product) => {
-  if (product.brand) return product.brand;
-  const name = (product.name || "").toLowerCase();
-  if (name.includes("motorola")) return "Motorola";
-  if (name.includes("samsung")) return "Samsung";
-  if (name.includes("apple") || name.includes("iphone")) return "Apple";
-  if (name.includes("xiaomi")) return "Xiaomi";
-  if (name.includes("anker")) return "Anker";
-  if (name.includes("jbl")) return "JBL";
-  if (name.includes("lg")) return "LG";
-  if (name.includes("tcl")) return "TCL";
-  if (name.includes("lenovo")) return "Lenovo";
-  if (name.includes("asus")) return "ASUS";
-  if (name.includes("sony") || name.includes("playstation")) return "Sony";
-  if (name.includes("microsoft") || name.includes("xbox")) return "Microsoft";
-  if (name.includes("ea sports") || name.includes("electronic arts"))
-    return "EA Sports";
-  if (name.includes("multilaser")) return "Multilaser";
-  if (
-    name.includes("barbie") ||
-    name.includes("hot wheels") ||
-    name.includes("mattel")
-  )
-    return "Mattel";
-  if (name.includes("estrela")) return "Estrela";
-  if (name.includes("lego")) return "LEGO";
-  if (name.includes("luccas neto") || name.includes("baby brink"))
-    return "Baby Brink";
-  if (name.includes("disney") || name.includes("mickey")) return "Disney";
-  if (name.includes("toyster")) return "Toyster";
-  if (name.includes("buddemeyer")) return "Buddemeyer";
-  if (name.includes("altenburg")) return "Altenburg";
-  if (name.includes("lupo")) return "Lupo";
-  if (name.includes("hering")) return "Hering";
-  if (name.includes("havaianas")) return "Havaianas";
-  if (
-    name.includes("nestle") ||
-    name.includes("nescau") ||
-    name.includes("nescafe")
-  )
-    return "Nestlé";
-  if (name.includes("lacta")) return "Lacta";
-  if (name.includes("fini")) return "Fini";
-  if (name.includes("doritos") || name.includes("elma chips"))
-    return "Elma Chips";
-  if (name.includes("coca-cola")) return "Coca-Cola";
-  if (name.includes("heineken")) return "Heineken";
-  if (name.includes("mondial")) return "Mondial";
-  if (name.includes("consul")) return "Consul";
-  if (name.includes("electrolux")) return "Electrolux";
-  if (name.includes("taiff")) return "Taiff";
-  if (name.includes("boticário") || name.includes("malbec"))
-    return "O Boticário";
-  if (name.includes("cerave")) return "CeraVe";
-  if (name.includes("nivea")) return "Nivea";
-  if (name.includes("loreal") || name.includes("elseve")) return "L'Oréal";
-  if (name.includes("dove")) return "Dove";
-  if (name.includes("oxford")) return "Oxford";
-  if (name.includes("tramontina")) return "Tramontina";
-  if (name.includes("invicta")) return "Invicta";
-  if (name.includes("sanremo")) return "Sanremo";
-  if (name.includes("tilibra")) return "Tilibra";
-  if (name.includes("stabilo")) return "Stabilo";
-  if (name.includes("bic")) return "Bic";
-  if (name.includes("chamex")) return "Chamex";
-  return "Importado";
-};
 
 const getInstallmentsCount = (price) => {
   if (price >= 500) return 10;
