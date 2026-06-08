@@ -1,0 +1,11 @@
+name: howto
+
+networks:
+  default:
+    name: main_network
+    external: true
+
+include:
+  - ../../services/redis/compose.yml
+  - ../../services/supabase/compose.yml
+  - ../../services/npm/compose.yml
