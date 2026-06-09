@@ -9,6 +9,7 @@ services:
       - store_volume:/evolution/store
     environment:
       - PORT=8080
+      - SERVER_URL=http://service-evoapi:8080
       - AUTHENTICATION_TYPE=apikey
       - DATABASE_PROVIDER=postgresql
       - DATABASE_CONNECTION_URI=postgresql://postgres:a9a08656521304973f692990fd235bd2@db:5432/postgres?schema=evoapi
