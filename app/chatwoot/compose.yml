@@ -10,3 +10,4 @@ include:
   - ../../services/supabase/compose.yml
   - ../../services/chatwoot/compose.yml
   - ../../services/npm/compose.yml
+  - ../../services/evoapi/compose.yml

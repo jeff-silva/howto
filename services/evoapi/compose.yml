@@ -11,7 +11,7 @@ services:
       - PORT=8080
       - AUTHENTICATION_TYPE=apikey
       - DATABASE_PROVIDER=postgresql
-      - DATABASE_CONNECTION_URI=postgresql://postgres:app@db:5432/postgres?schema=evoapi
+      - DATABASE_CONNECTION_URI=postgresql://postgres:a9a08656521304973f692990fd235bd2@db:5432/postgres?schema=evoapi
       - DATABASE_CONNECTION_CLIENT_NAME=evoapi
       - CACHE_REDIS_ENABLED=true
       - CACHE_REDIS_URI=redis://service-redis:6379
