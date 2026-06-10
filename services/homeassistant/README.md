@@ -1,8 +1,10 @@
 # Home Assistant
 
-Não se esqueça de habilitar a capacidade de ser acessado via proxy reverso editando o arquivo à seguir:
+Não se esqueça de habilitar a capacidade de ser acessado via proxy reverso inserindo os atributos à seguir no arquivo de configuração informado:
 
 ```yaml
+# config/configuration.yaml
+
 http:
   use_x_forwarded_for: true
   trusted_proxies:
