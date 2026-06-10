@@ -3,7 +3,6 @@ name: howto
 networks:
   default:
     name: main_network
-    external: true
 
 include:
   - ../../services/npm/compose.yml

@@ -16,4 +16,5 @@ init_env_files() {
 init_env_files "$CURRENT_DIR"
 init_env_files "$ROOT_DIR/services"
 
+docker compose --profile "*" stop
 docker compose -f "$CURRENT_DIR/compose.yml" up -d --build --force-recreate --remove-orphans
