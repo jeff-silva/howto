@@ -1,0 +1,9 @@
+name: howto
+
+networks:
+  default:
+    name: main_network
+
+include:
+  - ../.services/npm/compose.yml
+  - ../.services/homeassistant/compose.yml
