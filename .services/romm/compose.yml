@@ -1,0 +1,20 @@
+services:
+  romm:
+    image: rommapp/romm:latest
+    restart: unless-stopped
+    env_file: [.env]
+    environment:
+      - ROMM_DB_DRIVER=postgresql
+      - DB_PORT=5432
+      - DB_HOST=db # Nome do serviço do banco do Supabase
+      - DB_NAME=romm_db # Banco de dados padrão do Supabase
+      - DB_USER=postgres # Usuário padrão do Supabase
+      - DB_PASSWD=a9a08656521304973f692990fd235bd2 # Senha extraída do .env
+      - ROMM_AUTH_SECRET_KEY=uma-chave-secreta-bem-longa-e-aleatoria
+    volumes:
+      - ./library:/romm/library # É AQUI QUE VOCÊ VAI COLOCAR AS ROMS!
+      - ./assets:/romm/assets # Aqui ele vai salvar as capas baixadas
+      - ./config:/romm/config # Arquivos de configuração internos
+    expose: [8080]
+    # ports:
+    #   - "8080:8080" # Acesse via http://localhost:8080

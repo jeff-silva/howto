@@ -7,3 +7,5 @@ networks:
 include:
   - ../.services/npm/compose.yml
   - ../.services/homeassistant/compose.yml
+  - ../.services/supabase/compose.yml
+  - ../.services/romm/compose.yml
