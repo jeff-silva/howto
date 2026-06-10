@@ -1,0 +1,18 @@
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data:/data
+    expose: [9000, 9443, 8000]
+    # ports:
+    #   # Expondo as portas caso queira acessar diretamente pelo IP:Porta
+    #   # Porta HTTP: 9000 / Porta HTTPS: 9443
+    #   - "9000:9000"
+    #   - "9443:9443"
+    #   # A porta 8000 é usada para os agentes do Portainer (Edge Agents)
+    #   - "8000:8000"
