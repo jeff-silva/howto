@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Meu Jogo Bevy no Navegador!</title>
+    <style>
+      body {
+        margin: 0;
+        background-color: #1a1a2e;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+        width: 100vw !important;
+        height: 100vh !important;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="module">
+      import init from "./bevy/bevy_app.js";
+      init();
+    </script>
+  </body>
+</html>

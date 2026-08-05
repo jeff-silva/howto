@@ -1,0 +1,13 @@
+# Ignore os arquivos compilados do Rust
+/target
+Cargo.lock
+
+# Ignore as pastas de ambiente e logs do Docker, se houver
+.env
+*.log
+
+# Ignore arquivos temporários de IDE
+.vscode/
+.idea/
+*.swp
+*.swo

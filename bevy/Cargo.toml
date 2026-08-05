@@ -1,0 +1,9 @@
+[package]
+name = "bevy_app"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = "0.14"
+getrandom = { version = "0.3", features = ["wasm_js"] }
+uuid = { version = "1.24", features = ["js"] }
