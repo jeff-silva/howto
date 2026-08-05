@@ -35,6 +35,7 @@ struct PlayerCamera;
 struct PlayerAnimations {
     graph: Handle<AnimationGraph>,
     idle: AnimationNodeIndex,
+    run: AnimationNodeIndex,
 }
 
 fn setup(
@@ -45,14 +46,15 @@ fn setup(
     mut graphs: ResMut<Assets<AnimationGraph>>,
 ) {
     let mut graph = AnimationGraph::new();
-    // Você disse que baixou a olivia.glb COM o idle dentro. 
-    // Vamos carregar a animação direto DELA para ter certeza que os ossos batem perfeitamente!
+    // Carrega Idle do próprio modelo e Run do arquivo especificado
     let idle_idx = graph.add_clip(asset_server.load("models/olivia.glb#Animation0"), 1.0, graph.root);
+    let run_idx = graph.add_clip(asset_server.load("animations/run.glb#Animation0"), 1.0, graph.root);
     let graph_handle = graphs.add(graph);
 
     commands.insert_resource(PlayerAnimations {
         graph: graph_handle,
         idle: idle_idx,
+        run: run_idx,
     });
 
     commands.spawn((
@@ -200,14 +202,20 @@ fn fix_materials(
 }
 
 
-// Troca as animações com base no movimento (Idle vs Walk)
+// Troca as animações com base no movimento (Idle vs Walk/Run)
 fn animate_player(
     animations: Res<PlayerAnimations>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
     mut players: Query<(&mut AnimationPlayer, &mut AnimationTransitions)>,
 ) {
+    let is_moving = keyboard_input.pressed(KeyCode::KeyW)
+        || keyboard_input.pressed(KeyCode::KeyA)
+        || keyboard_input.pressed(KeyCode::KeyS)
+        || keyboard_input.pressed(KeyCode::KeyD);
+
     for (mut player, mut transitions) in &mut players {
-        // Como removemos o walk temporariamente para debugar, vamos apenas manter o idle rodando
-        transitions.play(&mut player, animations.idle, Duration::from_millis(250));
+        let target_anim = if is_moving { animations.run } else { animations.idle };
+        transitions.play(&mut player, target_anim, Duration::from_millis(250));
     }
 }
 
