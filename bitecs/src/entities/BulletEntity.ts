@@ -19,7 +19,7 @@ const bulletMaterial = new THREE.MeshBasicMaterial({
   side: THREE.DoubleSide // Para ser visível de qualquer ângulo após o giro
 });
 
-export function createBulletEntity(world: IWorld, position: THREE.Vector3, quaternion: THREE.Quaternion) {
+export function createBulletEntity(world: IWorld, position: THREE.Vector3, quaternion: THREE.Quaternion, isEnemy: boolean = false) {
   const entity = addEntity(world);
 
   addComponent(world, PositionComponent, entity);
@@ -41,7 +41,19 @@ export function createBulletEntity(world: IWorld, position: THREE.Vector3, quate
   RotationComponent.w[entity] = finalQuat.w;
 
   BulletComponent.distanceTraveled[entity] = 0;
-  BulletComponent.speed[entity] = 8.0; // Bem mais rápido que o avião (que é 0.5)
+  BulletComponent.speed[entity] = 15.0; // Velocidade aumentada para compensar aviões mais rápidos
+  BulletComponent.isEnemy[entity] = isEnemy ? 1 : 0;
+
+  // Cor base
+  if (isEnemy) {
+    ColorComponent.r[entity] = 1.0;
+    ColorComponent.g[entity] = 0.0;
+    ColorComponent.b[entity] = 0.0;
+  } else {
+    ColorComponent.r[entity] = 1.0;
+    ColorComponent.g[entity] = 1.0;
+    ColorComponent.b[entity] = 1.0;
+  }
 
   // Clona o material para que cada tiro possa piscar de forma independente
   const mesh = new THREE.Mesh(bulletGeometry, bulletMaterial.clone());

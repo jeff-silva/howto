@@ -1,5 +1,5 @@
 import { createWorld, pipe } from "bitecs";
-import { initGraphics, renderer, scene, camera } from "./engine/GraphicsEngine";
+import { initGraphics, renderer, scene, camera, enemyCamera } from "./engine/GraphicsEngine";
 import { initPhysics, physicsWorld } from "./engine/PhysicsEngine";
 import { playerControlSystem } from "./systems/PlayerControlSystem";
 import { physicsSystem } from "./systems/PhysicsSystem";
@@ -11,6 +11,7 @@ import { terrainSystem } from "./systems/TerrainSystem";
 import { uiSystem } from "./systems/UiSystem";
 import { cameraSystem } from "./systems/CameraSystem";
 import { renderSystem } from "./systems/RenderSystem";
+import { bonusSystem } from "./systems/BonusSystem";
 import { createF15Entity } from "./entities/F15Entity";
 import { createEnemyEntity } from "./entities/EnemyEntity";
 import { createCloudEntity } from "./entities/CloudEntity";
@@ -38,8 +39,8 @@ async function boot() {
     createCloudEntity(world, startX, startY, startZ);
   }
   
-  // Pipeline: Input/Controls -> AI -> Bullets -> Physics -> Terrain -> Clouds -> Explosions -> Camera -> Render -> UI
-  const pipeline = pipe(playerControlSystem, enemyAiSystem, bulletSystem, physicsSystem, terrainSystem, cloudSystem, explosionSystem, cameraSystem, renderSystem, uiSystem);
+  // Pipeline: Input/Controls -> AI -> Bullets -> Physics -> Terrain -> Clouds -> Explosions -> Bonus -> Camera -> Render -> UI
+  const pipeline = pipe(playerControlSystem, enemyAiSystem, bulletSystem, physicsSystem, terrainSystem, cloudSystem, explosionSystem, bonusSystem, cameraSystem, renderSystem, uiSystem);
 
   let lastTime = performance.now();
   
@@ -51,7 +52,26 @@ async function boot() {
     physicsWorld.step();
     pipeline(world);
     
+    // Full screen Main Camera
+    renderer.setScissorTest(false);
+    renderer.clear();
+    renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.render(scene, camera);
+
+    /* FUTURO BONUS: Picture-In-Picture Enemy Camera
+    const pipW = window.innerWidth * 0.25;
+    const pipH = window.innerHeight * 0.25;
+    const margin = 20;
+    const pipX = window.innerWidth - pipW - margin;
+    const pipY = window.innerHeight - pipH - margin; // Top right in WebGL coordinates
+    
+    renderer.setViewport(pipX, pipY, pipW, pipH);
+    renderer.setScissor(pipX, pipY, pipW, pipH);
+    renderer.setScissorTest(true);
+    renderer.clearDepth(); // clear depth buffer so it renders on top
+    renderer.render(scene, enemyCamera);
+    */
+
     animationId = requestAnimationFrame(animate);
   }
 

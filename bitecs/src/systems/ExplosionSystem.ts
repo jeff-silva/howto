@@ -16,7 +16,7 @@ export const explosionSystem = (world: IWorld) => {
     ExplosionComponent.lifetime[eid] -= 1;
 
     // Apply gravity
-    VelocityComponent.y[eid] -= 0.05; // Puxa pra baixo
+    VelocityComponent.y[eid] += ExplosionComponent.gravity[eid];
 
     // Update position
     PositionComponent.x[eid] += VelocityComponent.x[eid];

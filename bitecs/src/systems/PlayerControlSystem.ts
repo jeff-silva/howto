@@ -5,6 +5,7 @@ import { RotationComponent } from "../components/RotationComponent";
 import { PlayerComponent } from "../components/PlayerComponent";
 import { createBulletEntity } from "../entities/BulletEntity";
 import { getTerrainHeight } from "../entities/ChunkEntity";
+import { createExplosionEntity } from "../entities/ExplosionEntity";
 
 const playerQuery = defineQuery([
   PositionComponent,
@@ -55,31 +56,54 @@ export const playerControlSystem = (world: IWorld) => {
     );
     _euler.setFromQuaternion(_quaternion);
 
-    // Controls
-    const pitchSpeed = 0.02;
-    const rollSpeed = 0.03;
-    const yawSpeed = 0.01;
-    // W/S = Pitch (W = up, S = down)
-    if (keys["KeyW"]) _euler.x += pitchSpeed;
-    if (keys["KeyS"]) _euler.x -= pitchSpeed;
+    // Checa morte
+    const hp = PlayerComponent.hp[eid];
+    let state = PlayerComponent.state[eid];
 
-    // Limita o pitch a 45 graus (PI / 4) para cima e para baixo
-    const MAX_PITCH = Math.PI / 4;
-    _euler.x = Math.max(-MAX_PITCH, Math.min(MAX_PITCH, _euler.x));
-
-    // A/D = Roll & Yaw
-    if (keys["KeyA"]) {
-      _euler.z += rollSpeed;
-      _euler.y += yawSpeed;
-    }
-    if (keys["KeyD"]) {
-      _euler.z -= rollSpeed;
-      _euler.y -= yawSpeed;
+    if (hp <= 0 && state === 0) {
+      PlayerComponent.state[eid] = 1;
+      state = 1;
+      const overlay = document.getElementById("dmg-overlay");
+      if (overlay) {
+        overlay.style.transition = "none";
+        overlay.style.opacity = "0.4"; // Mais transparente
+        overlay.style.backgroundColor = "darkred";
+      }
     }
 
-    // Auto stabilize roll a bit
-    if (!keys["KeyA"] && !keys["KeyD"]) {
-      _euler.z -= _euler.z * 0.05;
+    if (state === 1) {
+      // Estado morto: mergulha
+      _euler.x -= 0.02; // Força pitch para baixo
+      _euler.x = Math.max(-Math.PI / 2, _euler.x); // Trava olhando reto pro chão
+      _euler.z *= 0.95; // Zera o roll
+      _euler.y += 0.01; // Gira sem controle
+    } else {
+      // Controls
+      const pitchSpeed = 0.008;
+      const rollSpeed = 0.025;
+      const yawSpeed = 0.008;
+      // W/S = Pitch (W = up, S = down)
+      if (keys["KeyW"]) _euler.x += pitchSpeed;
+      if (keys["KeyS"]) _euler.x -= pitchSpeed;
+
+      // Limita o pitch a 45 graus (PI / 4) para cima e para baixo
+      const MAX_PITCH = Math.PI / 4;
+      _euler.x = Math.max(-MAX_PITCH, Math.min(MAX_PITCH, _euler.x));
+
+      // A/D = Roll & Yaw
+      if (keys["KeyA"]) {
+        _euler.z += rollSpeed;
+        _euler.y += yawSpeed;
+      }
+      if (keys["KeyD"]) {
+        _euler.z -= rollSpeed;
+        _euler.y -= yawSpeed;
+      }
+
+      // Auto stabilize roll a bit
+      if (!keys["KeyA"] && !keys["KeyD"]) {
+        _euler.z -= _euler.z * 0.05;
+      }
     }
 
     // Apply rotation
@@ -89,8 +113,8 @@ export const playerControlSystem = (world: IWorld) => {
     RotationComponent.z[eid] = _quaternion.z;
     RotationComponent.w[eid] = _quaternion.w;
 
-    // Movement (Constant speed forward)
-    PlayerComponent.speed[eid] = 0.5; // Constant speed
+    // Ticking timers
+    // (turboTimer removido, velocidade é permanente até morrer)
 
     // Forward vector is -Z in local space
     _direction.set(0, 0, -1).applyQuaternion(_quaternion);
@@ -99,26 +123,96 @@ export const playerControlSystem = (world: IWorld) => {
     PositionComponent.y[eid] += _direction.y * PlayerComponent.speed[eid];
     PositionComponent.z[eid] += _direction.z * PlayerComponent.speed[eid];
 
+    // Colisão do player com o chão
+    const terrainY = getTerrainHeight(PositionComponent.x[eid], PositionComponent.z[eid]);
+    if (PositionComponent.y[eid] <= terrainY + 2) {
+      if (state === 1) {
+        // Explode
+        createExplosionEntity(world, PositionComponent.x[eid], terrainY, PositionComponent.z[eid], "FIREBALL");
+        createExplosionEntity(world, PositionComponent.x[eid], terrainY, PositionComponent.z[eid], "SMOKE");
+        createExplosionEntity(world, PositionComponent.x[eid], terrainY, PositionComponent.z[eid], "DIRT");
+
+        // Respawn (volta à vida) no céu
+        PlayerComponent.hp[eid] = 100;
+        PlayerComponent.state[eid] = 0;
+        PlayerComponent.doubleShotTimer[eid] = 0; // Perde o double shot ao morrer
+        PlayerComponent.speed[eid] = 1.5; // Reseta velocidade
+        PositionComponent.y[eid] = terrainY + 50; // Renasce a 50px
+        _euler.x = 0; // Nariz reto
+        _euler.z = 0; // Asas retas
+        
+        // Atualiza a rotação do respawn
+        _quaternion.setFromEuler(_euler);
+        RotationComponent.x[eid] = _quaternion.x;
+        RotationComponent.y[eid] = _quaternion.y;
+        RotationComponent.z[eid] = _quaternion.z;
+        RotationComponent.w[eid] = _quaternion.w;
+
+        const overlay = document.getElementById("dmg-overlay");
+        if (overlay) {
+          overlay.style.transition = "opacity 0.5s";
+          overlay.style.opacity = "0";
+          overlay.style.backgroundColor = "red";
+        }
+      } else {
+        // Morte instantânea se bater vivo no chão!
+        PlayerComponent.hp[eid] = 0;
+        PlayerComponent.state[eid] = 1;
+        
+        // Ativa a tela vermelha da morte
+        const overlay = document.getElementById("dmg-overlay");
+        if (overlay) {
+          overlay.style.transition = "none";
+          overlay.style.opacity = "0.4"; // Mais transparente
+          overlay.style.backgroundColor = "darkred";
+        }
+      }
+    }
+
     // Shooting
-    if (isShooting) {
+    if (isShooting && state === 0) {
       const now = performance.now();
       if (now - lastShotTime > SHOT_COOLDOWN_MS) {
         lastShotTime = now;
-        
+
         _playerPos.set(
           PositionComponent.x[eid],
           PositionComponent.y[eid],
-          PositionComponent.z[eid]
+          PositionComponent.z[eid],
         );
 
         // Deslocamento das asas (ajuste X conforme a largura do avião 3D)
         const wingOffset = 3.5;
-        
-        _leftWing.set(-wingOffset, -0.2, -1).applyQuaternion(_quaternion).add(_playerPos);
-        _rightWing.set(wingOffset, -0.2, -1).applyQuaternion(_quaternion).add(_playerPos);
+
+        _leftWing
+          .set(-wingOffset, -0.2, -1)
+          .applyQuaternion(_quaternion)
+          .add(_playerPos);
+        _rightWing
+          .set(wingOffset, -0.2, -1)
+          .applyQuaternion(_quaternion)
+          .add(_playerPos);
 
         createBulletEntity(world, _leftWing, _quaternion);
         createBulletEntity(world, _rightWing, _quaternion);
+
+        // Tiro Dobrado (Bônus ativo)
+        if (PlayerComponent.doubleShotTimer[eid] > 0) {
+          const _farLeftWing = new THREE.Vector3();
+          const _farRightWing = new THREE.Vector3();
+          
+          _farLeftWing
+            .set(-wingOffset - 2, -0.2, -1)
+            .applyQuaternion(_quaternion)
+            .add(_playerPos);
+          _farRightWing
+            .set(wingOffset + 2, -0.2, -1)
+            .applyQuaternion(_quaternion)
+            .add(_playerPos);
+
+          createBulletEntity(world, _farLeftWing, _quaternion);
+          createBulletEntity(world, _farRightWing, _quaternion);
+        }
       }
     }
   }

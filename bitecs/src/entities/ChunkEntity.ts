@@ -10,12 +10,20 @@ import { createNoise2D } from "simplex-noise";
 export const terrainNoise2D = createNoise2D();
 
 export function getTerrainHeight(vx: number, vz: number): number {
-  let height = 0;
-  const frequency = 0.003;
-  const amplitude = 40;
-  height += terrainNoise2D(vx * frequency, vz * frequency) * amplitude;
-  height +=
-    terrainNoise2D(vx * frequency * 2, vz * frequency * 2) * (amplitude * 0.2);
+  const frequency = 0.003; // Montanhas mais "apertadas" e próximas umas das outras
+  const amplitude = 200; // Colinas médias
+
+  let noise = terrainNoise2D(vx * frequency, vz * frequency); // [-1, 1]
+  
+  // Normaliza pra [0, 1] e eleva a uma potência suave para criar morros
+  let n = (noise + 1) / 2;
+  n = Math.pow(n, 2); // Morros abaulados
+
+  let height = n * amplitude;
+
+  // Ruído secundário para dar textura (rugosidade) ao longo das encostas
+  height += terrainNoise2D(vx * frequency * 4, vz * frequency * 4) * 20;
+  
   return height;
 }
 
@@ -62,23 +70,36 @@ export function createChunkEntity(world: IWorld, gridX: number, gridZ: number) {
   const positionAttribute = geometry.attributes.position;
   const colors = [];
 
-  const colorLow = new THREE.Color(0x2d4c1e); // Verde escuro
-  const colorHigh = new THREE.Color(0x6a8c3a); // Verde claro amarelado
-
   for (let i = 0; i < positionAttribute.count; i++) {
     // Coordenada global para calcular o ruído corretamente sem emendas
     const vx = positionAttribute.getX(i) + posX;
     const vz = positionAttribute.getZ(i) + posZ;
 
     const height = getTerrainHeight(vx, vz);
-    const amplitude = 40; // Mesmo amplitude usada na função
+    const amplitude = 200; // Usado para calcular a cor
 
     positionAttribute.setY(i, height);
 
-    const normalizedHeight = (height + amplitude) / (amplitude * 2);
-    const vertexColor = colorLow
-      .clone()
-      .lerp(colorHigh, Math.max(0, Math.min(1, normalizedHeight)));
+    // Mapeia altura para cores
+    let vertexColor = new THREE.Color();
+    const normalizedHeight = height / amplitude;
+
+    const colorLow = new THREE.Color(0x2d4c1e); // Verde escuro (vales)
+    const colorMid = new THREE.Color(0x5a4d3a); // Marrom rochoso (encostas médias)
+    const colorHigh = new THREE.Color(0xdddddd); // Neve (picos)
+
+    if (normalizedHeight < 0.3) {
+      // De 0 a 0.3 -> Verde a Marrom
+      const t = normalizedHeight / 0.3;
+      vertexColor.copy(colorLow).lerp(colorMid, t);
+    } else if (normalizedHeight < 0.7) {
+      // De 0.3 a 0.7 -> Marrom a Neve
+      const t = (normalizedHeight - 0.3) / 0.4;
+      vertexColor.copy(colorMid).lerp(colorHigh, t);
+    } else {
+      // Acima de 0.7 -> Neve sólida
+      vertexColor.copy(colorHigh);
+    }
 
     colors.push(vertexColor.r, vertexColor.g, vertexColor.b);
   }

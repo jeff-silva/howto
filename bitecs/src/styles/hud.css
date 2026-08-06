@@ -31,6 +31,26 @@
 }
 .hud-value {
   font-size: 32px;
-  font-weight: 700;
+  font-weight: bold;
   text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+/* Barrinhas de Vida dos Inimigos */
+.enemy-hp-container {
+  position: absolute;
+  width: 40px;
+  height: 6px;
+  background-color: #880000;
+  border: 1px solid #000;
+  transform: translate(-50%, -50%); /* Centraliza exato no ponto 2D */
+  pointer-events: none;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.enemy-hp-bar {
+  height: 100%;
+  background-color: #00ff00;
+  width: 100%;
+  transition: width 0.1s linear;
 }

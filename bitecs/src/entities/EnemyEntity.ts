@@ -8,6 +8,8 @@ import { scene, meshMap } from "../engine/GraphicsEngine";
 
 const loader = new GLTFLoader();
 
+let cachedEnemyModel: THREE.Group | null = null;
+
 export function createEnemyEntity(
   world: IWorld,
   x: number,
@@ -31,13 +33,18 @@ export function createEnemyEntity(
   RotationComponent.z[entity] = 0;
   RotationComponent.w[entity] = 1;
 
-  // Aumentamos a velocidade deles (player é 0.5) para eles ultrapassarem bem rápido e não sumirem no horizonte
-  EnemyComponent.speed[entity] = 1.2 + Math.random() * 0.3;
-  EnemyComponent.state[entity] = 0; // Começa tentando ir para a frente do jogador
-  EnemyComponent.targetOffsetX[entity] = Math.random() > 0.5 ? 1 : -1; // Multiplicador de direção (1 = Direita, -1 = Esquerda)
+  // Eles não têm velocidade fixa mais, usam um offset acima da velocidade do player
+  EnemyComponent.speed[entity] = 0; // Calculado no AI System
+  EnemyComponent.speedOffset[entity] = 0.5 + Math.random() * 0.5; // Entre 0.5 e 1.0 mais rápido que o player
+  
+  EnemyComponent.state[entity] = 0;
+  EnemyComponent.targetOffsetX[entity] = Math.random() > 0.5 ? 1 : -1;
+  EnemyComponent.hp[entity] = 100;
+  EnemyComponent.timer[entity] = 0;
+  EnemyComponent.lastShotTime[entity] = 0;
 
-  loader.load("/models/f15.glb", (gltf) => {
-    const mesh = gltf.scene.clone(); // Usa clone pra não interferir no avião do player se cache for usado
+  const initMesh = (model: THREE.Group) => {
+    const mesh = model.clone();
 
     // Rotacionamos 90 graus para que o bico dele aponte para a frente (-Z)
     mesh.rotation.y = Math.PI / 2;
@@ -64,7 +71,16 @@ export function createEnemyEntity(
 
     scene.add(group);
     meshMap.set(entity, group);
-  });
+  };
+
+  if (cachedEnemyModel) {
+    initMesh(cachedEnemyModel);
+  } else {
+    loader.load("/models/f15.glb", (gltf) => {
+      cachedEnemyModel = gltf.scene;
+      initMesh(cachedEnemyModel);
+    });
+  }
 
   return entity;
 }

@@ -4,6 +4,7 @@ import { addEntity, addComponent, IWorld } from "bitecs";
 import { PositionComponent } from "../components/PositionComponent";
 import { RotationComponent } from "../components/RotationComponent";
 import { PlayerComponent } from "../components/PlayerComponent";
+import { getTerrainHeight } from "./ChunkEntity";
 import { scene, meshMap } from "../engine/GraphicsEngine";
 
 const loader = new GLTFLoader();
@@ -15,10 +16,13 @@ export function createF15Entity(world: IWorld) {
   addComponent(world, RotationComponent, entity);
   addComponent(world, PlayerComponent, entity);
 
-  // Initial Position
-  PositionComponent.x[entity] = 0.0;
-  PositionComponent.y[entity] = 5.0;
-  PositionComponent.z[entity] = 0.0;
+  // Initial Position - Garante que nasça 50px acima do terreno
+  const spawnX = 0.0;
+  const spawnZ = 0.0;
+  const initialTerrainY = getTerrainHeight(spawnX, spawnZ);
+  PositionComponent.x[entity] = spawnX;
+  PositionComponent.y[entity] = initialTerrainY + 50.0;
+  PositionComponent.z[entity] = spawnZ;
 
   // Initial Rotation
   RotationComponent.x[entity] = 0;
@@ -26,8 +30,12 @@ export function createF15Entity(world: IWorld) {
   RotationComponent.z[entity] = 0;
   RotationComponent.w[entity] = 1;
 
-  PlayerComponent.speed[entity] = 0;
+  PlayerComponent.speed[entity] = 1.5;
+  PlayerComponent.hp[entity] = 100;
+  PlayerComponent.kills[entity] = 0;
+  PlayerComponent.state[entity] = 0;
 
+  // Add airplane mesh
   loader.load("/models/f15.glb", (gltf) => {
     const mesh = gltf.scene;
 

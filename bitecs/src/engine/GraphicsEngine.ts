@@ -3,6 +3,7 @@ import * as THREE from "three";
 export let renderer: THREE.WebGLRenderer;
 export let scene: THREE.Scene;
 export let camera: THREE.PerspectiveCamera;
+export let enemyCamera: THREE.PerspectiveCamera;
 
 export const meshMap = new Map<
   number,
@@ -15,10 +16,18 @@ export function initGraphics() {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.autoClear = false;
 
     scene = new THREE.Scene();
     // Aumentando a distância de visão (far) para não cortar o terreno abruptamente
     camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      5000,
+    );
+    
+    enemyCamera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
       0.1,
