@@ -1,10 +1,13 @@
 import { createWorld, pipe } from "bitecs";
-import { initGraphics, renderer, scene, camera, controls } from "./engine/GraphicsEngine";
+import { initGraphics, renderer, scene, camera } from "./engine/GraphicsEngine";
 import { initPhysics, physicsWorld } from "./engine/PhysicsEngine";
+import { playerControlSystem } from "./systems/PlayerControlSystem";
 import { physicsSystem } from "./systems/PhysicsSystem";
+import { cameraSystem } from "./systems/CameraSystem";
 import { renderSystem } from "./systems/RenderSystem";
 import { createCubeEntity } from "./entities/CubeEntity";
 import { createGroundEntity } from "./entities/GroundEntity";
+import { createF15Entity } from "./entities/F15Entity";
 
 let animationId: number;
 
@@ -16,15 +19,23 @@ async function boot() {
   
   createGroundEntity(world);
   createCubeEntity(world);
+  createF15Entity(world);
   
-  const pipeline = pipe(physicsSystem, renderSystem);
+  // Pipeline: Input/Controls -> Physics -> Camera -> Render
+  const pipeline = pipe(playerControlSystem, physicsSystem, cameraSystem, renderSystem);
 
+  let lastTime = performance.now();
+  
   function animate() {
-    animationId = requestAnimationFrame(animate);
+    const time = performance.now();
+    const delta = (time - lastTime) / 1000;
+    lastTime = time;
+
     physicsWorld.step();
     pipeline(world);
-    controls.update();
+    
     renderer.render(scene, camera);
+    animationId = requestAnimationFrame(animate);
   }
 
   animate();
