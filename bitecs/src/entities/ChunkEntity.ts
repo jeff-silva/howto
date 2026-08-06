@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { addEntity, addComponent, IWorld } from 'bitecs';
 import { PositionComponent } from '../components/PositionComponent';
+import { RotationComponent } from '../components/RotationComponent';
 import { TerrainChunkComponent } from '../components/TerrainChunkComponent';
 import { scene, meshMap } from '../engine/GraphicsEngine';
 import { createNoise2D } from 'simplex-noise';
@@ -22,6 +23,7 @@ export function createChunkEntity(world: IWorld, gridX: number, gridZ: number) {
   const entity = addEntity(world);
 
   addComponent(world, PositionComponent, entity);
+  addComponent(world, RotationComponent, entity);
   addComponent(world, TerrainChunkComponent, entity);
 
   TerrainChunkComponent.gridX[entity] = gridX;
@@ -33,6 +35,11 @@ export function createChunkEntity(world: IWorld, gridX: number, gridZ: number) {
   PositionComponent.x[entity] = posX;
   PositionComponent.y[entity] = 0;
   PositionComponent.z[entity] = posZ;
+
+  RotationComponent.x[entity] = 0;
+  RotationComponent.y[entity] = 0;
+  RotationComponent.z[entity] = 0;
+  RotationComponent.w[entity] = 1;
 
   const geometry = new THREE.PlaneGeometry(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SEGMENTS, CHUNK_SEGMENTS);
   geometry.rotateX(-Math.PI / 2); // Deita o plano
