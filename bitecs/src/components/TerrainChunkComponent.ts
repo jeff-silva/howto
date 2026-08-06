@@ -1,4 +1,4 @@
-import { defineComponent, Types } from 'bitecs';
+import { defineComponent, Types } from "bitecs";
 
 // Identifica uma entidade como sendo um pedaço do terreno
 export const TerrainChunkComponent = defineComponent({

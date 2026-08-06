@@ -4,7 +4,11 @@ import { PositionComponent } from "../components/PositionComponent";
 import { RotationComponent } from "../components/RotationComponent";
 import { PlayerComponent } from "../components/PlayerComponent";
 
-const playerQuery = defineQuery([PositionComponent, RotationComponent, PlayerComponent]);
+const playerQuery = defineQuery([
+  PositionComponent,
+  RotationComponent,
+  PlayerComponent,
+]);
 
 // Track keys
 const keys: { [key: string]: boolean } = {};
@@ -31,7 +35,7 @@ export const playerControlSystem = (world: IWorld) => {
       RotationComponent.x[eid],
       RotationComponent.y[eid],
       RotationComponent.z[eid],
-      RotationComponent.w[eid]
+      RotationComponent.w[eid],
     );
     _euler.setFromQuaternion(_quaternion);
 
@@ -42,11 +46,11 @@ export const playerControlSystem = (world: IWorld) => {
     // W/S = Pitch (W = up, S = down)
     if (keys["KeyW"]) _euler.x += pitchSpeed;
     if (keys["KeyS"]) _euler.x -= pitchSpeed;
-    
+
     // Limita o pitch a 45 graus (PI / 4) para cima e para baixo
     const MAX_PITCH = Math.PI / 4;
     _euler.x = Math.max(-MAX_PITCH, Math.min(MAX_PITCH, _euler.x));
-    
+
     // A/D = Roll & Yaw
     if (keys["KeyA"]) {
       _euler.z += rollSpeed;
@@ -56,7 +60,7 @@ export const playerControlSystem = (world: IWorld) => {
       _euler.z -= rollSpeed;
       _euler.y -= yawSpeed;
     }
-    
+
     // Auto stabilize roll a bit
     if (!keys["KeyA"] && !keys["KeyD"]) {
       _euler.z -= _euler.z * 0.05;
@@ -71,10 +75,10 @@ export const playerControlSystem = (world: IWorld) => {
 
     // Movement (Constant speed forward)
     PlayerComponent.speed[eid] = 0.5; // Constant speed
-    
+
     // Forward vector is -Z in local space
     _direction.set(0, 0, -1).applyQuaternion(_quaternion);
-    
+
     PositionComponent.x[eid] += _direction.x * PlayerComponent.speed[eid];
     PositionComponent.y[eid] += _direction.y * PlayerComponent.speed[eid];
     PositionComponent.z[eid] += _direction.z * PlayerComponent.speed[eid];

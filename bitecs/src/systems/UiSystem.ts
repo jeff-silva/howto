@@ -9,8 +9,8 @@ let altElement: HTMLElement | null = null;
 let spdElement: HTMLElement | null = null;
 
 function initHud() {
-  const hudDiv = document.createElement('div');
-  hudDiv.id = 'hud';
+  const hudDiv = document.createElement("div");
+  hudDiv.id = "hud";
   hudDiv.innerHTML = `
     <div class="hud-item">
       <span class="hud-label">Altitude</span>
@@ -23,8 +23,8 @@ function initHud() {
   `;
   document.body.appendChild(hudDiv);
 
-  altElement = document.getElementById('alt-val');
-  spdElement = document.getElementById('spd-val');
+  altElement = document.getElementById("alt-val");
+  spdElement = document.getElementById("spd-val");
   initialized = true;
 }
 
@@ -36,12 +36,12 @@ export const uiSystem = (world: IWorld) => {
   const players = playerQuery(world);
   if (players.length > 0) {
     const playerEid = players[0];
-    
+
     // Altura = Posição Y atual do avião
     // Se Y do avião < 0, a altura pode ser negativa dependendo de onde o chão está
     // Mas no jogo o chão (ruído) fica perto de Y=0, então altitude é só Position Y.
     const altitude = PositionComponent.y[playerEid];
-    
+
     // Velocidade = PlayerComponent.speed (unidades por frame).
     // Supondo 60 frames por segundo: unidades/s = speed * 60.
     // 1 unidade = 1 metro. km/h = (m/s) * 3.6

@@ -100,9 +100,11 @@ export const cloudSystem = (world: IWorld) => {
       localSpawnVector.normalize().multiplyScalar(CLOUD_AREA_HALF);
 
       const spawnPos = _playerPos.clone().add(localSpawnVector);
-      
+
       // Fixa a altura da nuvem na faixa desejada
-      spawnPos.y = CLOUD_MIN_HEIGHT + Math.random() * (CLOUD_MAX_HEIGHT - CLOUD_MIN_HEIGHT);
+      spawnPos.y =
+        CLOUD_MIN_HEIGHT +
+        Math.random() * (CLOUD_MAX_HEIGHT - CLOUD_MIN_HEIGHT);
 
       PositionComponent.x[eid] = spawnPos.x;
       PositionComponent.y[eid] = spawnPos.y;

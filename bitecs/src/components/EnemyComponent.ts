@@ -1,5 +1,5 @@
 import { defineComponent, Types } from "bitecs";
 
-export const PlayerComponent = defineComponent({
+export const EnemyComponent = defineComponent({
   speed: Types.f32,
 });

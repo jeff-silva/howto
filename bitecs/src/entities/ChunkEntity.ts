@@ -1,10 +1,10 @@
-import * as THREE from 'three';
-import { addEntity, addComponent, IWorld } from 'bitecs';
-import { PositionComponent } from '../components/PositionComponent';
-import { RotationComponent } from '../components/RotationComponent';
-import { TerrainChunkComponent } from '../components/TerrainChunkComponent';
-import { scene, meshMap } from '../engine/GraphicsEngine';
-import { createNoise2D } from 'simplex-noise';
+import * as THREE from "three";
+import { addEntity, addComponent, IWorld } from "bitecs";
+import { PositionComponent } from "../components/PositionComponent";
+import { RotationComponent } from "../components/RotationComponent";
+import { TerrainChunkComponent } from "../components/TerrainChunkComponent";
+import { scene, meshMap } from "../engine/GraphicsEngine";
+import { createNoise2D } from "simplex-noise";
 
 // Uma única instância de ruído para todo o terreno
 export const terrainNoise2D = createNoise2D();
@@ -14,7 +14,8 @@ export function getTerrainHeight(vx: number, vz: number): number {
   const frequency = 0.003;
   const amplitude = 40;
   height += terrainNoise2D(vx * frequency, vz * frequency) * amplitude;
-  height += terrainNoise2D(vx * frequency * 2, vz * frequency * 2) * (amplitude * 0.2);
+  height +=
+    terrainNoise2D(vx * frequency * 2, vz * frequency * 2) * (amplitude * 0.2);
   return height;
 }
 
@@ -50,12 +51,17 @@ export function createChunkEntity(world: IWorld, gridX: number, gridZ: number) {
   RotationComponent.z[entity] = 0;
   RotationComponent.w[entity] = 1;
 
-  const geometry = new THREE.PlaneGeometry(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SEGMENTS, CHUNK_SEGMENTS);
+  const geometry = new THREE.PlaneGeometry(
+    CHUNK_SIZE,
+    CHUNK_SIZE,
+    CHUNK_SEGMENTS,
+    CHUNK_SEGMENTS,
+  );
   geometry.rotateX(-Math.PI / 2); // Deita o plano
 
   const positionAttribute = geometry.attributes.position;
   const colors = [];
-  
+
   const colorLow = new THREE.Color(0x2d4c1e); // Verde escuro
   const colorHigh = new THREE.Color(0x6a8c3a); // Verde claro amarelado
 
@@ -70,17 +76,19 @@ export function createChunkEntity(world: IWorld, gridX: number, gridZ: number) {
     positionAttribute.setY(i, height);
 
     const normalizedHeight = (height + amplitude) / (amplitude * 2);
-    const vertexColor = colorLow.clone().lerp(colorHigh, Math.max(0, Math.min(1, normalizedHeight)));
-    
+    const vertexColor = colorLow
+      .clone()
+      .lerp(colorHigh, Math.max(0, Math.min(1, normalizedHeight)));
+
     colors.push(vertexColor.r, vertexColor.g, vertexColor.b);
   }
 
-  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+  geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
   geometry.computeVertexNormals();
 
   const mesh = new THREE.Mesh(geometry, terrainMaterial);
   mesh.receiveShadow = true;
-  
+
   scene.add(mesh);
   meshMap.set(entity, mesh);
 

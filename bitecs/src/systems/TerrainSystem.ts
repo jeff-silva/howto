@@ -1,9 +1,9 @@
-import { defineQuery, IWorld, removeEntity } from 'bitecs';
-import { PlayerComponent } from '../components/PlayerComponent';
-import { PositionComponent } from '../components/PositionComponent';
-import { TerrainChunkComponent } from '../components/TerrainChunkComponent';
-import { createChunkEntity, CHUNK_SIZE } from '../entities/ChunkEntity';
-import { meshMap, scene } from '../engine/GraphicsEngine';
+import { defineQuery, IWorld, removeEntity } from "bitecs";
+import { PlayerComponent } from "../components/PlayerComponent";
+import { PositionComponent } from "../components/PositionComponent";
+import { TerrainChunkComponent } from "../components/TerrainChunkComponent";
+import { createChunkEntity, CHUNK_SIZE } from "../entities/ChunkEntity";
+import { meshMap, scene } from "../engine/GraphicsEngine";
 
 const playerQuery = defineQuery([PlayerComponent, PositionComponent]);
 const chunkQuery = defineQuery([TerrainChunkComponent]);
@@ -36,9 +36,9 @@ export const terrainSystem = (world: IWorld) => {
   }
 
   // 1. Cria os chunks que o jogador alcançou mas ainda não existem
-  desiredChunks.forEach(chunkKey => {
+  desiredChunks.forEach((chunkKey) => {
     if (!activeChunks.has(chunkKey)) {
-      const [gridX, gridZ] = chunkKey.split(',').map(Number);
+      const [gridX, gridZ] = chunkKey.split(",").map(Number);
       createChunkEntity(world, gridX, gridZ);
       activeChunks.add(chunkKey);
     }
@@ -55,7 +55,7 @@ export const terrainSystem = (world: IWorld) => {
     if (!desiredChunks.has(chunkKey)) {
       // Remove do rastreador
       activeChunks.delete(chunkKey);
-      
+
       // Limpa os recursos gráficos pesados (geometria) da memória
       const mesh = meshMap.get(eid);
       if (mesh) {
@@ -63,7 +63,7 @@ export const terrainSystem = (world: IWorld) => {
         if ((mesh as any).geometry) (mesh as any).geometry.dispose();
         meshMap.delete(eid);
       }
-      
+
       // Remove a entidade do ECS
       removeEntity(world, eid);
     }
