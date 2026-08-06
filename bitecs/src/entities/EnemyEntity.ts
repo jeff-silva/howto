@@ -31,8 +31,10 @@ export function createEnemyEntity(
   RotationComponent.z[entity] = 0;
   RotationComponent.w[entity] = 1;
 
-  // Speeds can vary slightly, but should be faster than the player (0.5)
-  EnemyComponent.speed[entity] = 0.55 + Math.random() * 0.15;
+  // Aumentamos a velocidade deles (player é 0.5) para eles ultrapassarem bem rápido e não sumirem no horizonte
+  EnemyComponent.speed[entity] = 1.2 + Math.random() * 0.3;
+  EnemyComponent.state[entity] = 0; // Começa tentando ir para a frente do jogador
+  EnemyComponent.targetOffsetX[entity] = Math.random() > 0.5 ? 1 : -1; // Multiplicador de direção (1 = Direita, -1 = Esquerda)
 
   loader.load("/models/f15.glb", (gltf) => {
     const mesh = gltf.scene.clone(); // Usa clone pra não interferir no avião do player se cache for usado

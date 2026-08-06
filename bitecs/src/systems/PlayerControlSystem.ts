@@ -3,6 +3,8 @@ import * as THREE from "three";
 import { PositionComponent } from "../components/PositionComponent";
 import { RotationComponent } from "../components/RotationComponent";
 import { PlayerComponent } from "../components/PlayerComponent";
+import { createBulletEntity } from "../entities/BulletEntity";
+import { getTerrainHeight } from "../entities/ChunkEntity";
 
 const playerQuery = defineQuery([
   PositionComponent,
@@ -10,7 +12,6 @@ const playerQuery = defineQuery([
   PlayerComponent,
 ]);
 
-// Track keys
 const keys: { [key: string]: boolean } = {};
 window.addEventListener("keydown", (e) => {
   keys[e.code] = true;
@@ -19,10 +20,25 @@ window.addEventListener("keyup", (e) => {
   keys[e.code] = false;
 });
 
+export let isShooting = false;
+window.addEventListener("mousedown", (e) => {
+  if (e.button === 0) isShooting = true; // Botão esquerdo
+});
+window.addEventListener("mouseup", (e) => {
+  if (e.button === 0) isShooting = false;
+});
+
 // Helper objects for math
 const _euler = new THREE.Euler(0, 0, 0, "YXZ");
 const _quaternion = new THREE.Quaternion();
 const _direction = new THREE.Vector3();
+const _leftWing = new THREE.Vector3();
+const _rightWing = new THREE.Vector3();
+const _playerPos = new THREE.Vector3();
+
+// Cooldown state
+let lastShotTime = 0;
+const SHOT_COOLDOWN_MS = 150; // Atira rápido (150ms)
 
 export const playerControlSystem = (world: IWorld) => {
   const ents = playerQuery(world);
@@ -82,6 +98,29 @@ export const playerControlSystem = (world: IWorld) => {
     PositionComponent.x[eid] += _direction.x * PlayerComponent.speed[eid];
     PositionComponent.y[eid] += _direction.y * PlayerComponent.speed[eid];
     PositionComponent.z[eid] += _direction.z * PlayerComponent.speed[eid];
+
+    // Shooting
+    if (isShooting) {
+      const now = performance.now();
+      if (now - lastShotTime > SHOT_COOLDOWN_MS) {
+        lastShotTime = now;
+        
+        _playerPos.set(
+          PositionComponent.x[eid],
+          PositionComponent.y[eid],
+          PositionComponent.z[eid]
+        );
+
+        // Deslocamento das asas (ajuste X conforme a largura do avião 3D)
+        const wingOffset = 3.5;
+        
+        _leftWing.set(-wingOffset, -0.2, -1).applyQuaternion(_quaternion).add(_playerPos);
+        _rightWing.set(wingOffset, -0.2, -1).applyQuaternion(_quaternion).add(_playerPos);
+
+        createBulletEntity(world, _leftWing, _quaternion);
+        createBulletEntity(world, _rightWing, _quaternion);
+      }
+    }
   }
   return world;
 };

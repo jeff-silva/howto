@@ -4,6 +4,8 @@ import { initPhysics, physicsWorld } from "./engine/PhysicsEngine";
 import { playerControlSystem } from "./systems/PlayerControlSystem";
 import { physicsSystem } from "./systems/PhysicsSystem";
 import { enemyAiSystem } from "./systems/EnemyAISystem";
+import { bulletSystem } from "./systems/BulletSystem";
+import { explosionSystem } from "./systems/ExplosionSystem";
 import { cloudSystem, CLOUD_INSTANCES, CLOUD_MIN_HEIGHT, CLOUD_MAX_HEIGHT } from "./systems/CloudSystem";
 import { terrainSystem } from "./systems/TerrainSystem";
 import { uiSystem } from "./systems/UiSystem";
@@ -36,8 +38,8 @@ async function boot() {
     createCloudEntity(world, startX, startY, startZ);
   }
   
-  // Pipeline: Input/Controls -> AI -> Physics -> Terrain -> Clouds -> Camera -> Render -> UI
-  const pipeline = pipe(playerControlSystem, enemyAiSystem, physicsSystem, terrainSystem, cloudSystem, cameraSystem, renderSystem, uiSystem);
+  // Pipeline: Input/Controls -> AI -> Bullets -> Physics -> Terrain -> Clouds -> Explosions -> Camera -> Render -> UI
+  const pipeline = pipe(playerControlSystem, enemyAiSystem, bulletSystem, physicsSystem, terrainSystem, cloudSystem, explosionSystem, cameraSystem, renderSystem, uiSystem);
 
   let lastTime = performance.now();
   

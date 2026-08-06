@@ -1,6 +1,7 @@
 import { defineQuery, IWorld } from "bitecs";
 import { PlayerComponent } from "../components/PlayerComponent";
 import { PositionComponent } from "../components/PositionComponent";
+import { getTerrainHeight } from "../entities/ChunkEntity";
 
 const playerQuery = defineQuery([PlayerComponent, PositionComponent]);
 
@@ -37,10 +38,9 @@ export const uiSystem = (world: IWorld) => {
   if (players.length > 0) {
     const playerEid = players[0];
 
-    // Altura = Posição Y atual do avião
-    // Se Y do avião < 0, a altura pode ser negativa dependendo de onde o chão está
-    // Mas no jogo o chão (ruído) fica perto de Y=0, então altitude é só Position Y.
-    const altitude = PositionComponent.y[playerEid];
+    // Altura = Distância verdadeira para o solo diretamente abaixo
+    const terrainY = getTerrainHeight(PositionComponent.x[playerEid], PositionComponent.z[playerEid]);
+    const altitude = PositionComponent.y[playerEid] - terrainY;
 
     // Velocidade = PlayerComponent.speed (unidades por frame).
     // Supondo 60 frames por segundo: unidades/s = speed * 60.
