@@ -39,10 +39,13 @@ export const playerControlSystem = (world: IWorld) => {
     const pitchSpeed = 0.02;
     const rollSpeed = 0.03;
     const yawSpeed = 0.01;
-    
     // W/S = Pitch (W = up, S = down)
     if (keys["KeyW"]) _euler.x += pitchSpeed;
     if (keys["KeyS"]) _euler.x -= pitchSpeed;
+    
+    // Limita o pitch a 45 graus (PI / 4) para cima e para baixo
+    const MAX_PITCH = Math.PI / 4;
+    _euler.x = Math.max(-MAX_PITCH, Math.min(MAX_PITCH, _euler.x));
     
     // A/D = Roll & Yaw
     if (keys["KeyA"]) {

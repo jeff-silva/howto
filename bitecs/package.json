@@ -16,6 +16,7 @@
   "dependencies": {
     "@dimforge/rapier3d-compat": "^0.19.3",
     "bitecs": "^0.3.40",
+    "simplex-noise": "^4.0.3",
     "three": "^0.160.0"
   }
 }
