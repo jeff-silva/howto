@@ -9,6 +9,15 @@ import { createNoise2D } from 'simplex-noise';
 // Uma única instância de ruído para todo o terreno
 export const terrainNoise2D = createNoise2D();
 
+export function getTerrainHeight(vx: number, vz: number): number {
+  let height = 0;
+  const frequency = 0.003;
+  const amplitude = 40;
+  height += terrainNoise2D(vx * frequency, vz * frequency) * amplitude;
+  height += terrainNoise2D(vx * frequency * 2, vz * frequency * 2) * (amplitude * 0.2);
+  return height;
+}
+
 export const CHUNK_SIZE = 500;
 export const CHUNK_SEGMENTS = 40;
 
@@ -55,12 +64,8 @@ export function createChunkEntity(world: IWorld, gridX: number, gridZ: number) {
     const vx = positionAttribute.getX(i) + posX;
     const vz = positionAttribute.getZ(i) + posZ;
 
-    let height = 0;
-    const frequency = 0.003;
-    const amplitude = 40;
-    
-    height += terrainNoise2D(vx * frequency, vz * frequency) * amplitude;
-    height += terrainNoise2D(vx * frequency * 2, vz * frequency * 2) * (amplitude * 0.2);
+    const height = getTerrainHeight(vx, vz);
+    const amplitude = 40; // Mesmo amplitude usada na função
 
     positionAttribute.setY(i, height);
 
@@ -74,6 +79,8 @@ export function createChunkEntity(world: IWorld, gridX: number, gridZ: number) {
   geometry.computeVertexNormals();
 
   const mesh = new THREE.Mesh(geometry, terrainMaterial);
+  mesh.receiveShadow = true;
+  
   scene.add(mesh);
   meshMap.set(entity, mesh);
 

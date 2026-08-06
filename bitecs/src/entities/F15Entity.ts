@@ -35,6 +35,13 @@ export function createF15Entity(world: IWorld) {
     // Rotacionamos 90 graus para que o bico dele aponte para a frente (-Z)
     mesh.rotation.y = Math.PI / 2; 
 
+    // Ativa sombra real no avião
+    mesh.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        child.castShadow = true;
+      }
+    });
+
     // Colocamos dentro de um grupo. O RenderSystem vai rotacionar o grupo,
     // mantendo a nossa correção local do modelo 3D intacta!
     const group = new THREE.Group();

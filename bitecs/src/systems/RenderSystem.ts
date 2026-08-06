@@ -5,7 +5,8 @@ import { RotationComponent } from "../components/RotationComponent";
 import { ScaleComponent } from "../components/ScaleComponent";
 import { ColorComponent } from "../components/ColorComponent";
 import { OpacityComponent } from "../components/OpacityComponent";
-import { meshMap } from "../engine/GraphicsEngine";
+import { meshMap, dirLight } from "../engine/GraphicsEngine";
+import { PlayerComponent } from "../components/PlayerComponent";
 
 const renderQuery = defineQuery([PositionComponent, RotationComponent]);
 
@@ -59,6 +60,22 @@ export const renderSystem = (world: IWorld) => {
            }
         }
       }
+    }
+    
+    // Faz a luz direcional e a câmera de sombra seguirem o jogador
+    if (hasComponent(world, PlayerComponent, eid)) {
+      dirLight.position.set(
+        PositionComponent.x[eid] + 50,
+        PositionComponent.y[eid] + 100,
+        PositionComponent.z[eid] + 50
+      );
+      dirLight.target.position.set(
+        PositionComponent.x[eid],
+        PositionComponent.y[eid],
+        PositionComponent.z[eid]
+      );
+      // Necessário atualizar a matrix do target da luz
+      dirLight.target.updateMatrixWorld();
     }
   }
 

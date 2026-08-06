@@ -25,6 +25,8 @@ export const CLOUD_INSTANCES = 50;
 export const CLOUD_AREA = 500;
 export const CLOUD_FADE_SECONDS = 5;
 export const CLOUD_MAX_OPACITY = 0.8;
+export const CLOUD_MIN_HEIGHT = 150;
+export const CLOUD_MAX_HEIGHT = 200;
 
 const CLOUD_FADE_INCREMENT = CLOUD_MAX_OPACITY / (CLOUD_FADE_SECONDS * 60); // Assumindo 60fps
 const CLOUD_AREA_HALF = CLOUD_AREA / 2;
@@ -98,6 +100,9 @@ export const cloudSystem = (world: IWorld) => {
       localSpawnVector.normalize().multiplyScalar(CLOUD_AREA_HALF);
 
       const spawnPos = _playerPos.clone().add(localSpawnVector);
+      
+      // Fixa a altura da nuvem na faixa desejada
+      spawnPos.y = CLOUD_MIN_HEIGHT + Math.random() * (CLOUD_MAX_HEIGHT - CLOUD_MIN_HEIGHT);
 
       PositionComponent.x[eid] = spawnPos.x;
       PositionComponent.y[eid] = spawnPos.y;
