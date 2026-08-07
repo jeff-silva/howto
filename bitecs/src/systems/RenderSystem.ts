@@ -5,7 +5,7 @@ import { RotationComponent } from "../components/RotationComponent";
 import { ScaleComponent } from "../components/ScaleComponent";
 import { ColorComponent } from "../components/ColorComponent";
 import { OpacityComponent } from "../components/OpacityComponent";
-import { meshMap, dirLight } from "../engine/GraphicsEngine";
+import { meshMap, dirLight, renderer, scene, camera } from "../engine/GraphicsEngine";
 import { PlayerComponent } from "../components/PlayerComponent";
 
 const renderQuery = defineQuery([PositionComponent, RotationComponent]);
@@ -91,6 +91,26 @@ export const renderSystem = (world: IWorld) => {
       dirLight.target.updateMatrixWorld();
     }
   }
+
+  // Desenha a cena inteira usando o motor do Three.js
+  renderer.setScissorTest(false);
+  renderer.clear();
+  renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
+  renderer.render(scene, camera);
+
+  /* FUTURO BONUS: Picture-In-Picture Enemy Camera
+  const pipW = window.innerWidth * 0.25;
+  const pipH = window.innerHeight * 0.25;
+  const margin = 20;
+  const pipX = window.innerWidth - pipW - margin;
+  const pipY = window.innerHeight - pipH - margin; // Top right in WebGL coordinates
+  
+  renderer.setViewport(pipX, pipY, pipW, pipH);
+  renderer.setScissor(pipX, pipY, pipW, pipH);
+  renderer.setScissorTest(true);
+  renderer.clearDepth(); // clear depth buffer so it renders on top
+  renderer.render(scene, enemyCamera);
+  */
 
   return world;
 };

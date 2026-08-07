@@ -5,7 +5,7 @@ import { RotationComponent } from "../components/RotationComponent";
 import { BulletComponent } from "../components/BulletComponent";
 import { ColorComponent } from "../components/ColorComponent";
 import { scene, meshMap } from "../engine/GraphicsEngine";
-import { getTerrainHeight } from "../entities/ChunkEntity";
+import { getTerrainHeight } from "../entities/TerrainEntity";
 import { createExplosionEntity } from "../entities/ExplosionEntity";
 import { EnemyComponent } from "../components/EnemyComponent";
 import { PlayerComponent } from "../components/PlayerComponent";

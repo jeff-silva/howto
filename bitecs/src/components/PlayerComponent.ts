@@ -5,6 +5,6 @@ export const PlayerComponent = defineComponent({
   hp: Types.f32,
   kills: Types.ui32,
   state: Types.ui8,
-  turboTimer: Types.f32,
-  doubleShotTimer: Types.f32,
+  weaponLevel: Types.ui32,
+  distance: Types.f32,
 });

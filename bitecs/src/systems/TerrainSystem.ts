@@ -1,71 +1,77 @@
-import { defineQuery, IWorld, removeEntity } from "bitecs";
+import { defineQuery, IWorld } from "bitecs";
+import * as THREE from "three";
 import { PlayerComponent } from "../components/PlayerComponent";
 import { PositionComponent } from "../components/PositionComponent";
-import { TerrainChunkComponent } from "../components/TerrainChunkComponent";
-import { createChunkEntity, CHUNK_SIZE } from "../entities/ChunkEntity";
-import { meshMap, scene } from "../engine/GraphicsEngine";
+import { TerrainComponent } from "../components/TerrainComponent";
+import { getTerrainHeight, TERRAIN_SEGMENT_SIZE, TERRAIN_MAX_HEIGHT } from "../entities/TerrainEntity";
+import { meshMap } from "../engine/GraphicsEngine";
 
 const playerQuery = defineQuery([PlayerComponent, PositionComponent]);
-const chunkQuery = defineQuery([TerrainChunkComponent]);
-
-// Rastreia os chunks já instanciados pela sua coordenada "x,z"
-const activeChunks = new Set<string>();
+const terrainQuery = defineQuery([TerrainComponent]);
 
 export const terrainSystem = (world: IWorld) => {
   const players = playerQuery(world);
-  if (players.length === 0) return world;
+  const terrains = terrainQuery(world);
+
+  if (players.length === 0 || terrains.length === 0) return world;
 
   const playerEid = players[0];
   const playerX = PositionComponent.x[playerEid];
   const playerZ = PositionComponent.z[playerEid];
 
-  // Calcula em qual célula do grid o jogador está agora
-  const currentGridX = Math.round(playerX / CHUNK_SIZE);
-  const currentGridZ = Math.round(playerZ / CHUNK_SIZE);
+  const terrainEid = terrains[0];
+  
+  // Snap the position to the grid to prevent "swimming" of vertices
+  const snappedX = Math.floor(playerX / TERRAIN_SEGMENT_SIZE) * TERRAIN_SEGMENT_SIZE;
+  const snappedZ = Math.floor(playerZ / TERRAIN_SEGMENT_SIZE) * TERRAIN_SEGMENT_SIZE;
 
-  // Mantemos um grid 3x3 ao redor do jogador (radius = 1)
-  const radius = 1;
-  const desiredChunks = new Set<string>();
+  // Só recalcula se andamos uma distância de pelo menos 1 segmento (snap mudou)
+  if (TerrainComponent.lastSnappedX[terrainEid] !== snappedX || TerrainComponent.lastSnappedZ[terrainEid] !== snappedZ) {
+    TerrainComponent.lastSnappedX[terrainEid] = snappedX;
+    TerrainComponent.lastSnappedZ[terrainEid] = snappedZ;
 
-  for (let x = -radius; x <= radius; x++) {
-    for (let z = -radius; z <= radius; z++) {
-      const gridX = currentGridX + x;
-      const gridZ = currentGridZ + z;
-      desiredChunks.add(`${gridX},${gridZ}`);
-    }
-  }
+    const mesh = meshMap.get(terrainEid) as THREE.Mesh;
+    if (mesh && mesh.geometry) {
+      mesh.position.set(snappedX, 0, snappedZ);
 
-  // 1. Cria os chunks que o jogador alcançou mas ainda não existem
-  desiredChunks.forEach((chunkKey) => {
-    if (!activeChunks.has(chunkKey)) {
-      const [gridX, gridZ] = chunkKey.split(",").map(Number);
-      createChunkEntity(world, gridX, gridZ);
-      activeChunks.add(chunkKey);
-    }
-  });
+      const geometry = mesh.geometry as THREE.PlaneGeometry;
+      const positionAttribute = geometry.attributes.position;
+      const colorAttribute = geometry.attributes.color;
 
-  // 2. Destrói os chunks que ficaram para trás
-  const chunks = chunkQuery(world);
-  for (let i = 0; i < chunks.length; i++) {
-    const eid = chunks[i];
-    const gridX = TerrainChunkComponent.gridX[eid];
-    const gridZ = TerrainChunkComponent.gridZ[eid];
-    const chunkKey = `${gridX},${gridZ}`;
+      for (let i = 0; i < positionAttribute.count; i++) {
+        // Coordenada global real do vértice
+        const vx = positionAttribute.getX(i) + snappedX;
+        const vz = positionAttribute.getZ(i) + snappedZ;
 
-    if (!desiredChunks.has(chunkKey)) {
-      // Remove do rastreador
-      activeChunks.delete(chunkKey);
+        const height = getTerrainHeight(vx, vz);
+        const amplitude = TERRAIN_MAX_HEIGHT; // Usado para calcular a cor
 
-      // Limpa os recursos gráficos pesados (geometria) da memória
-      const mesh = meshMap.get(eid);
-      if (mesh) {
-        scene.remove(mesh);
-        if ((mesh as any).geometry) (mesh as any).geometry.dispose();
-        meshMap.delete(eid);
+        positionAttribute.setY(i, height);
+
+        // Mapeia altura para cores
+        let vertexColor = new THREE.Color();
+        const normalizedHeight = height / amplitude;
+
+        const colorLow = new THREE.Color(0x2d4c1e); // Verde escuro (vales)
+        const colorMid = new THREE.Color(0x5a4d3a); // Marrom rochoso (encostas médias)
+        const colorHigh = new THREE.Color(0xdddddd); // Neve (picos)
+
+        if (normalizedHeight < 0.3) {
+          const t = normalizedHeight / 0.3;
+          vertexColor.copy(colorLow).lerp(colorMid, t);
+        } else if (normalizedHeight < 0.7) {
+          const t = (normalizedHeight - 0.3) / 0.4;
+          vertexColor.copy(colorMid).lerp(colorHigh, t);
+        } else {
+          vertexColor.copy(colorHigh);
+        }
+
+        colorAttribute.setXYZ(i, vertexColor.r, vertexColor.g, vertexColor.b);
       }
 
-      // Remove a entidade do ECS
-      removeEntity(world, eid);
+      geometry.computeVertexNormals();
+      positionAttribute.needsUpdate = true;
+      colorAttribute.needsUpdate = true;
     }
   }
 

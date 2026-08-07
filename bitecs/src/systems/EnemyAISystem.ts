@@ -4,7 +4,7 @@ import { PositionComponent } from "../components/PositionComponent";
 import { RotationComponent } from "../components/RotationComponent";
 import { EnemyComponent } from "../components/EnemyComponent";
 import { PlayerComponent } from "../components/PlayerComponent";
-import { getTerrainHeight } from "../entities/ChunkEntity";
+import { getTerrainHeight } from "../entities/TerrainEntity";
 import { createExplosionEntity } from "../entities/ExplosionEntity";
 import { createEnemyEntity } from "../entities/EnemyEntity";
 import { createBulletEntity } from "../entities/BulletEntity";

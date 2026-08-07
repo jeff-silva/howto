@@ -4,7 +4,7 @@ import { addEntity, addComponent, IWorld } from "bitecs";
 import { PositionComponent } from "../components/PositionComponent";
 import { RotationComponent } from "../components/RotationComponent";
 import { PlayerComponent } from "../components/PlayerComponent";
-import { getTerrainHeight } from "./ChunkEntity";
+import { getTerrainHeight } from "./TerrainEntity";
 import { scene, meshMap } from "../engine/GraphicsEngine";
 
 const loader = new GLTFLoader();
@@ -33,7 +33,9 @@ export function createF15Entity(world: IWorld) {
   PlayerComponent.speed[entity] = 1.5;
   PlayerComponent.hp[entity] = 100;
   PlayerComponent.kills[entity] = 0;
-  PlayerComponent.state[entity] = 0;
+  PlayerComponent.state[entity] = 0; // 0 = Vivo, 1 = Morto
+  PlayerComponent.weaponLevel[entity] = 1;
+  PlayerComponent.distance[entity] = 0;
 
   // Add airplane mesh
   loader.load("/models/f15.glb", (gltf) => {

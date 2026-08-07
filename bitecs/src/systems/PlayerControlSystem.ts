@@ -4,7 +4,7 @@ import { PositionComponent } from "../components/PositionComponent";
 import { RotationComponent } from "../components/RotationComponent";
 import { PlayerComponent } from "../components/PlayerComponent";
 import { createBulletEntity } from "../entities/BulletEntity";
-import { getTerrainHeight } from "../entities/ChunkEntity";
+import { getTerrainHeight } from "../entities/TerrainEntity";
 import { createExplosionEntity } from "../entities/ExplosionEntity";
 
 const playerQuery = defineQuery([
@@ -80,8 +80,10 @@ export const playerControlSystem = (world: IWorld) => {
     } else {
       // Controls
       const pitchSpeed = 0.008;
-      const rollSpeed = 0.025;
       const yawSpeed = 0.008;
+      const MAX_ROLL = Math.PI / 2;
+      let targetRoll = 0;
+
       // W/S = Pitch (W = up, S = down)
       if (keys["KeyW"]) _euler.x += pitchSpeed;
       if (keys["KeyS"]) _euler.x -= pitchSpeed;
@@ -90,20 +92,18 @@ export const playerControlSystem = (world: IWorld) => {
       const MAX_PITCH = Math.PI / 4;
       _euler.x = Math.max(-MAX_PITCH, Math.min(MAX_PITCH, _euler.x));
 
-      // A/D = Roll & Yaw
+      // A/D = Yaw e Target Roll
       if (keys["KeyA"]) {
-        _euler.z += rollSpeed;
+        targetRoll = MAX_ROLL;
         _euler.y += yawSpeed;
       }
       if (keys["KeyD"]) {
-        _euler.z -= rollSpeed;
+        targetRoll = -MAX_ROLL;
         _euler.y -= yawSpeed;
       }
 
-      // Auto stabilize roll a bit
-      if (!keys["KeyA"] && !keys["KeyD"]) {
-        _euler.z -= _euler.z * 0.05;
-      }
+      // Vira o avião para o ângulo alvo (90 graus ou 0) de forma um pouco mais suave
+      _euler.z += (targetRoll - _euler.z) * 0.1;
     }
 
     // Apply rotation
@@ -123,6 +123,9 @@ export const playerControlSystem = (world: IWorld) => {
     PositionComponent.y[eid] += _direction.y * PlayerComponent.speed[eid];
     PositionComponent.z[eid] += _direction.z * PlayerComponent.speed[eid];
 
+    // Odometer
+    PlayerComponent.distance[eid] += PlayerComponent.speed[eid];
+
     // Colisão do player com o chão
     const terrainY = getTerrainHeight(PositionComponent.x[eid], PositionComponent.z[eid]);
     if (PositionComponent.y[eid] <= terrainY + 2) {
@@ -135,8 +138,9 @@ export const playerControlSystem = (world: IWorld) => {
         // Respawn (volta à vida) no céu
         PlayerComponent.hp[eid] = 100;
         PlayerComponent.state[eid] = 0;
-        PlayerComponent.doubleShotTimer[eid] = 0; // Perde o double shot ao morrer
+        PlayerComponent.weaponLevel[eid] = 1; // Perde upgrades de arma ao morrer
         PlayerComponent.speed[eid] = 1.5; // Reseta velocidade
+        PlayerComponent.distance[eid] = 0; // Reseta distância percorrida
         PositionComponent.y[eid] = terrainY + 50; // Renasce a 50px
         _euler.x = 0; // Nariz reto
         _euler.z = 0; // Asas retas
@@ -193,25 +197,37 @@ export const playerControlSystem = (world: IWorld) => {
           .applyQuaternion(_quaternion)
           .add(_playerPos);
 
-        createBulletEntity(world, _leftWing, _quaternion);
-        createBulletEntity(world, _rightWing, _quaternion);
+        // Lógica de Tiro com Multiplicador Infinito (Rajada Caótica)
+        const level = PlayerComponent.weaponLevel[eid];
 
-        // Tiro Dobrado (Bônus ativo)
-        if (PlayerComponent.doubleShotTimer[eid] > 0) {
-          const _farLeftWing = new THREE.Vector3();
-          const _farRightWing = new THREE.Vector3();
-          
-          _farLeftWing
-            .set(-wingOffset - 2, -0.2, -1)
+        for (let j = 0; j < level; j++) {
+          // X aleatório: quanto maior o level, maior a nuvem de tiros horizontal
+          const randX = (Math.random() - 0.5) * (level * 1.5); 
+          // Y aleatório leve
+          const randY = (Math.random() - 0.5) * 1.5; 
+          // Z aleatório forte (Staggering) para quebrar totalmente o formato e parecerem atiradas em tempos diferentes
+          const staggerZ = Math.random() * 40.0; 
+
+          _leftWing
+            .set(-wingOffset + randX, -0.2 + randY, -1 - staggerZ)
             .applyQuaternion(_quaternion)
             .add(_playerPos);
-          _farRightWing
-            .set(wingOffset + 2, -0.2, -1)
+
+          _rightWing
+            .set(wingOffset + randX, -0.2 + randY, -1 - staggerZ)
             .applyQuaternion(_quaternion)
             .add(_playerPos);
 
-          createBulletEntity(world, _farLeftWing, _quaternion);
-          createBulletEntity(world, _farRightWing, _quaternion);
+          // Levíssima variação no ângulo para dar mais caos
+          const randomQuatL = _quaternion.clone().multiply(
+            new THREE.Quaternion().setFromEuler(new THREE.Euler((Math.random()-0.5)*0.02, (Math.random()-0.5)*0.02, 0, 'YXZ'))
+          );
+          const randomQuatR = _quaternion.clone().multiply(
+            new THREE.Quaternion().setFromEuler(new THREE.Euler((Math.random()-0.5)*0.02, (Math.random()-0.5)*0.02, 0, 'YXZ'))
+          );
+
+          createBulletEntity(world, _leftWing, randomQuatL);
+          createBulletEntity(world, _rightWing, randomQuatR);
         }
       }
     }

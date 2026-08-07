@@ -26,7 +26,7 @@ export function initGraphics() {
       0.1,
       5000,
     );
-    
+
     enemyCamera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
@@ -45,7 +45,7 @@ export function initGraphics() {
 
   // Load Skybox
   const textureLoader = new THREE.TextureLoader();
-  textureLoader.load("/hdr/citrus_orchard_road_puresky.webp", (texture) => {
+  textureLoader.load("/hdr/qwantani_moonrise_puresky.webp", (texture) => {
     texture.mapping = THREE.EquirectangularReflectionMapping;
     texture.colorSpace = THREE.SRGBColorSpace;
     scene.background = texture;

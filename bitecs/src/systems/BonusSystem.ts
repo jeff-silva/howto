@@ -3,7 +3,7 @@ import { PositionComponent } from "../components/PositionComponent";
 import { BonusComponent } from "../components/BonusComponent";
 import { PlayerComponent } from "../components/PlayerComponent";
 import { scene, meshMap } from "../engine/GraphicsEngine";
-import { getTerrainHeight } from "../entities/ChunkEntity";
+import { getTerrainHeight } from "../entities/TerrainEntity";
 
 const bonusQuery = defineQuery([PositionComponent, BonusComponent]);
 const playerQuery = defineQuery([PositionComponent, PlayerComponent]);
@@ -61,8 +61,8 @@ export const bonusSystem = (world: IWorld) => {
           // Turbo (Stackável permanentemente até a morte)
           PlayerComponent.speed[playerId] += 0.5;
         } else if (type === 2) {
-          // Tiro Dobrado (Infinito até morrer)
-          PlayerComponent.doubleShotTimer[playerId] = 1; // 1 significa Ativo
+          // Tiro Infinito (Stackável)
+          PlayerComponent.weaponLevel[playerId] += 1;
         }
 
         if (mesh) {

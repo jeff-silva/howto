@@ -53,8 +53,10 @@ export const cameraSystem = (world: IWorld) => {
       .applyQuaternion(_playerQuat)
       .add(_playerPos);
 
-    // Smoothly interpolate camera position
-    camera.position.lerp(_targetCameraPos, 0.1);
+    // Smoothly interpolate camera position (Aumenta o fator de "grude" baseado na velocidade)
+    const speed = PlayerComponent.speed[eid];
+    const lerpFactor = Math.min(1.0, 0.1 * (speed / 1.5));
+    camera.position.lerp(_targetCameraPos, lerpFactor);
 
     // Smoothly look at a point ahead of the player
     _lookTarget.copy(_lookAhead).applyQuaternion(_playerQuat).add(_playerPos);

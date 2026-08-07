@@ -26,6 +26,15 @@ const spriteTiro = new THREE.SpriteMaterial({
   depthTest: false,
 });
 
+// Geometria e material da bolha verde
+const bubbleGeometry = new THREE.SphereGeometry(8, 16, 16);
+const bubbleMaterial = new THREE.MeshBasicMaterial({
+  color: 0x00ff66, // Verde neon
+  transparent: true,
+  opacity: 0.3, // Bolha transparente
+  depthWrite: false, // Ajuda a renderizar sobreposições corretamente
+});
+
 export function createBonusEntity(world: IWorld, x: number, y: number, z: number, type: number) {
   const entity = addEntity(world);
 
@@ -44,11 +53,18 @@ export function createBonusEntity(world: IWorld, x: number, y: number, z: number
   else if (type === 1) mat = spriteTurbo;
   else mat = spriteTiro;
 
+  const group = new THREE.Group();
+
   const sprite = new THREE.Sprite(mat);
   sprite.scale.set(10, 10, 1); // Tamanho grande e visível
 
-  scene.add(sprite);
-  meshMap.set(entity, sprite);
+  const bubble = new THREE.Mesh(bubbleGeometry, bubbleMaterial);
+
+  group.add(sprite);
+  group.add(bubble);
+
+  scene.add(group);
+  meshMap.set(entity, group);
 
   return entity;
 }
