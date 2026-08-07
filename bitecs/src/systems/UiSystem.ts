@@ -5,9 +5,11 @@ import { EnemyComponent } from "../components/EnemyComponent";
 import { PositionComponent } from "../components/PositionComponent";
 import { getTerrainHeight } from "../entities/TerrainEntity";
 import { camera } from "../engine/GraphicsEngine";
+import { TimeComponent } from "../components/TimeComponent";
 
 const playerQuery = defineQuery([PlayerComponent, PositionComponent]);
 const enemyQuery = defineQuery([EnemyComponent, PositionComponent]);
+const timeQuery = defineQuery([TimeComponent]);
 
 const hpBars = new Map<number, HTMLElement>();
 const _vec3 = new THREE.Vector3();
@@ -17,6 +19,7 @@ let initialized = false;
 let altElement: HTMLElement | null = null;
 let spdElement: HTMLElement | null = null;
 let distElement: HTMLElement | null = null;
+let timeElement: HTMLElement | null = null;
 let hpElement: HTMLElement | null = null;
 let killsElement: HTMLElement | null = null;
 let dmgOverlay: HTMLElement | null = null;
@@ -53,31 +56,59 @@ function initHud(world: IWorld) {
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 110px;
+      justify-content: center;
       position: relative;
     }
-    
-    .hud-item:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      right: -15px;
-      top: 15%;
-      height: 70%;
-      width: 1px;
-      background: rgba(51, 255, 51, 0.3);
-    }
 
-    .hud-label {
-      font-size: 13px;
+    .hud-item.hud-primary {
+      min-width: 120px;
+    }
+    .hud-item.hud-primary .hud-value {
+      font-size: 36px;
+      line-height: 1.1;
+      text-shadow: 0 0 10px rgba(51, 255, 51, 0.9);
+    }
+    .hud-item.hud-primary .hud-label {
+      font-size: 14px;
       text-transform: uppercase;
       letter-spacing: 2px;
-      opacity: 0.8;
+      opacity: 0.9;
       margin-bottom: 2px;
     }
 
-    .hud-value {
-      font-size: 32px;
-      line-height: 1.1;
+    .hud-divider {
+      width: 2px;
+      background: rgba(51, 255, 51, 0.4);
+      margin: 0 10px;
+    }
+
+    .hud-secondary-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .hud-item.hud-secondary {
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: flex-end;
+      min-width: 100px;
+      gap: 8px;
+    }
+    .hud-item.hud-secondary .hud-value {
+      font-size: 16px;
+      line-height: 1;
+      opacity: 0.9;
+    }
+    .hud-item.hud-secondary .hud-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.6;
+      margin-bottom: 0;
     }
 
     /* Barrinhas de Vida dos Inimigos */
@@ -105,25 +136,34 @@ function initHud(world: IWorld) {
   const hudDiv = document.createElement("div");
   hudDiv.id = "hud";
   hudDiv.innerHTML = `
-    <div class="hud-item">
-      <span class="hud-label">Altitude</span>
-      <span class="hud-value"><span id="alt-val">0</span>m</span>
-    </div>
-    <div class="hud-item">
-      <span class="hud-label">Kills</span>
-      <span class="hud-value"><span id="kills-val">0</span></span>
-    </div>
-    <div class="hud-item">
-      <span class="hud-label">HP</span>
-      <span class="hud-value"><span id="hp-val">100</span>%</span>
-    </div>
-    <div class="hud-item">
+    <div class="hud-item hud-primary">
       <span class="hud-label">Speed</span>
-      <span class="hud-value"><span id="spd-val">0</span>km/h</span>
+      <span class="hud-value"><span id="spd-val">0</span><span style="font-size:16px;">km/h</span></span>
     </div>
-    <div class="hud-item">
-      <span class="hud-label">Distance</span>
-      <span class="hud-value"><span id="dist-val">0</span>m</span>
+    <div class="hud-item hud-primary">
+      <span class="hud-label">Altitude</span>
+      <span class="hud-value"><span id="alt-val">0</span><span style="font-size:16px;">m</span></span>
+    </div>
+    <div class="hud-item hud-primary">
+      <span class="hud-label">Kills</span>
+      <span class="hud-value" id="kills-val">0</span>
+    </div>
+
+    <div class="hud-divider"></div>
+
+    <div class="hud-secondary-container">
+      <div class="hud-item hud-secondary">
+        <span class="hud-label">HP:</span>
+        <span class="hud-value"><span id="hp-val">100</span>%</span>
+      </div>
+      <div class="hud-item hud-secondary">
+        <span class="hud-label">DIST:</span>
+        <span class="hud-value"><span id="dist-val">0</span>m</span>
+      </div>
+      <div class="hud-item hud-secondary">
+        <span class="hud-label">TIME:</span>
+        <span class="hud-value" id="time-val">00:00</span>
+      </div>
     </div>
   `;
   document.body.appendChild(hudDiv);
@@ -139,6 +179,9 @@ function initHud(world: IWorld) {
       <div style="display: flex; gap: 5px;">
         <button id="btn-spd-sub" style="padding: 5px 10px; cursor: pointer; background: #333; color: white; border: 1px solid #555;">- SPD</button>
         <button id="btn-spd-add" style="padding: 5px 10px; cursor: pointer; background: #333; color: white; border: 1px solid #555;">+ SPD</button>
+      </div>
+      <div style="display: flex; gap: 5px; margin-top: 5px; border-top: 1px solid #444; padding-top: 5px;">
+        <button id="btn-time-add" style="flex: 1; padding: 5px 10px; cursor: pointer; background: #333; color: white; border: 1px solid #555;">+ 1 HORA</button>
       </div>
     </div>
   `;
@@ -160,10 +203,17 @@ function initHud(world: IWorld) {
     const players = playerQuery(world);
     if (players.length > 0) PlayerComponent.speed[players[0]] = Math.max(0.5, PlayerComponent.speed[players[0]] - 0.5);
   });
+  document.getElementById("btn-time-add")?.addEventListener("click", () => {
+    const times = timeQuery(world);
+    if (times.length > 0) {
+      TimeComponent.timeOfDay[times[0]] = (TimeComponent.timeOfDay[times[0]] + 1.0) % 24.0;
+    }
+  });
 
   altElement = document.getElementById("alt-val");
   spdElement = document.getElementById("spd-val");
   distElement = document.getElementById("dist-val");
+  timeElement = document.getElementById("time-val");
   hpElement = document.getElementById("hp-val");
   killsElement = document.getElementById("kills-val");
   
@@ -186,7 +236,17 @@ function initHud(world: IWorld) {
 export const uiSystem = (world: IWorld) => {
   if (!initialized) initHud(world);
 
-  if (!altElement || !spdElement || !distElement || !hpElement || !killsElement) return world;
+  if (!altElement || !spdElement || !distElement || !timeElement || !hpElement || !killsElement) return world;
+
+  const times = timeQuery(world);
+  if (times.length > 0) {
+    const timeOfDay = TimeComponent.timeOfDay[times[0]];
+    const hours = Math.floor(timeOfDay);
+    const minutes = Math.floor((timeOfDay - hours) * 60);
+    const hStr = hours.toString().padStart(2, '0');
+    const mStr = minutes.toString().padStart(2, '0');
+    timeElement.innerText = `${hStr}:${mStr}`;
+  }
 
   const players = playerQuery(world);
   if (players.length > 0) {

@@ -13,6 +13,7 @@ import { uiSystem } from "./systems/UiSystem";
 import { cameraSystem } from "./systems/CameraSystem";
 import { renderSystem } from "./systems/RenderSystem";
 import { bonusSystem } from "./systems/BonusSystem";
+import { environmentSystem } from "./systems/EnvironmentSystem";
 
 let animationId: number;
 
@@ -37,6 +38,7 @@ async function boot() {
     bonusSystem, 
     cameraSystem, 
     renderSystem, 
+    environmentSystem,
     uiSystem
   );
 

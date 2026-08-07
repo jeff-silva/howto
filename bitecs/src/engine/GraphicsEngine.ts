@@ -4,12 +4,15 @@ export let renderer: THREE.WebGLRenderer;
 export let scene: THREE.Scene;
 export let camera: THREE.PerspectiveCamera;
 export let enemyCamera: THREE.PerspectiveCamera;
+export let dirLight: THREE.DirectionalLight;
+export let ambientLight: THREE.AmbientLight;
+export let skyUniforms: any;
+export let skyMesh: THREE.Mesh;
 
 export const meshMap = new Map<
   number,
   THREE.Mesh | THREE.Group | THREE.Object3D
 >();
-export let dirLight: THREE.DirectionalLight;
 
 export function initGraphics() {
   if (!renderer) {
@@ -43,16 +46,71 @@ export function initGraphics() {
     scene.remove(scene.children[0]);
   }
 
-  // Load Skybox
+  // Setup Skybox Uniforms and Shader
+  skyUniforms = {
+    tDay: { value: null },
+    tNight: { value: null },
+    blend: { value: 0.0 },
+  };
+
+  const skyGeo = new THREE.SphereGeometry(4000, 32, 15);
+  const skyMat = new THREE.ShaderMaterial({
+    uniforms: skyUniforms,
+    vertexShader: `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        // Centraliza o céu na câmera (opcional se a câmera não sair de 0,0,0, mas vamos manter na posição fixa)
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform sampler2D tDay;
+      uniform sampler2D tNight;
+      uniform float blend;
+      varying vec2 vUv;
+
+      // Função simples para decodificar sRGB se necessário
+      vec4 sRGBToLinear( in vec4 value ) {
+        return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.a );
+      }
+
+      void main() {
+        vec4 cDay = texture2D(tDay, vUv);
+        vec4 cNight = texture2D(tNight, vUv);
+        
+        // As texturas HDR carregadas geralmente precisam de ajuste.
+        // O Three.js faz isso automaticamente para scene.background, mas no shader customizado
+        // podemos apenas misturá-las diretamente.
+        vec4 color = mix(cDay, cNight, blend);
+        
+        gl_FragColor = color;
+      }
+    `,
+    side: THREE.BackSide,
+    depthWrite: false,
+  });
+
+  skyMesh = new THREE.Mesh(skyGeo, skyMat);
+  scene.add(skyMesh);
+
+  // Load Textures
   const textureLoader = new THREE.TextureLoader();
-  textureLoader.load("/hdr/qwantani_moonrise_puresky.webp", (texture) => {
+  textureLoader.load("/hdr/day.png", (texture) => {
     texture.mapping = THREE.EquirectangularReflectionMapping;
     texture.colorSpace = THREE.SRGBColorSpace;
-    scene.background = texture;
+    skyUniforms.tDay.value = texture;
+    // Set environment map to day by default
     scene.environment = texture;
   });
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+  textureLoader.load("/hdr/night.png", (texture) => {
+    texture.mapping = THREE.EquirectangularReflectionMapping;
+    texture.colorSpace = THREE.SRGBColorSpace;
+    skyUniforms.tNight.value = texture;
+  });
+
+  ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
   scene.add(ambientLight);
 
   dirLight = new THREE.DirectionalLight(0xffffff, 2.0);

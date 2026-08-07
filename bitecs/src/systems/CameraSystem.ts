@@ -4,7 +4,7 @@ import { PositionComponent } from "../components/PositionComponent";
 import { RotationComponent } from "../components/RotationComponent";
 import { PlayerComponent } from "../components/PlayerComponent";
 import { EnemyComponent } from "../components/EnemyComponent";
-import { camera, enemyCamera } from "../engine/GraphicsEngine";
+import { camera, enemyCamera, skyMesh } from "../engine/GraphicsEngine";
 
 const playerQuery = defineQuery([
   PositionComponent,
@@ -97,6 +97,10 @@ export const cameraSystem = (world: IWorld) => {
     const _enemyLookAhead = new THREE.Vector3(0, 0, -10);
     _lookTarget.copy(_enemyLookAhead).applyQuaternion(_enemyQuat).add(_enemyPos);
     enemyCamera.lookAt(_lookTarget);
+  }
+
+  if (skyMesh) {
+    skyMesh.position.copy(camera.position);
   }
 
   return world;
