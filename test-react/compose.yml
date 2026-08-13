@@ -1,0 +1,16 @@
+services:
+  frontend:
+    image: node:22
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      # Algumas configurações recomendadas para garantir que o Hot Reload
+      # (atualização automática) funcione perfeitamente no WSL
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+    # Precisamos ativar o pnpm novamente toda vez que o container sobe
+    command: bash -c "corepack enable pnpm && pnpm dev"

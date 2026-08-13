@@ -1,0 +1,13 @@
+{
+  "name": "test-react",
+  "version": "1.0.0",
+  "description": "Este é um projeto de teste (CRUD completo) criado para praticar e dominar os conceitos fundamentais e intermediários do React. O aplicativo permite cadastrar cursos em andamento, acompanhar o progresso das aulas e fazer anotações em tempo real.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "docker compose up --build --force-recreate --remove-orphans"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
