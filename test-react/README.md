@@ -32,6 +32,15 @@ Este é um projeto de teste (CRUD completo) criado para praticar e dominar os co
 - **Aplicação:** Extrair a lógica do localStorage para um hook `useLocalStorage('cursos', [])` e o cronômetro para um hook `usePomodoro()`.
 - **Conceito praticado:** Reutilização e separação clara entre regra de negócio e componentes visuais.
 
+### 7. Evitando Re-criação de Funções (`useCallback`)
+- **Aplicação:** Memorizar funções (como `deleteCourse` e `toggleCourse`) na memória do componente pai antes de repassá-las como Prop para botões e componentes filhos.
+- **Conceito praticado:** Prevenir re-renderizações em cascata desnecessárias (especialmente útil em união com `React.memo`), entendendo a diferença entre cache de valores (`useMemo`) e cache de funções (`useCallback`).
+
+### 8. Hooks Avançados (Performance e Integração)
+- **`useId`**: Gera IDs universais idênticos no Servidor e no Cliente, perfeitos para vincular `labels` e `inputs` sem causar "Erros de Hidratação".
+- **`useDebugValue`**: Adiciona "etiquetas" aos Custom Hooks que só são visíveis para os programadores na extensão *React DevTools*, facilitando a depuração.
+- **`useSyncExternalStore`**: Permite ao React "escutar" variáveis externas (ex: status da Internet no navegador) e atualizar a tela em perfeita sincronia, sem piscar.
+- **`useActionState`**: O mais novo hook (React 19) que gerencia sozinho o "loading", o "erro" e o envio de formulários assíncronos pesados, dispensando aquele mar de `useStates` manuais.
 ## 🚀 Objetivo
 Garantir o domínio das APIs fundamentais (Hooks) da biblioteca React em uma aplicação com utilidade real para a rotina de estudos.
 
