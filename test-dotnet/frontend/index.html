@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex API</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f4f9; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .section { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        input, button { padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #007bff; color: white; cursor: pointer; border: none; }
+        button:hover { background-color: #0056b3; }
+        pre { background: #eee; padding: 10px; border-radius: 4px; overflow-x: auto; }
+        .favorite-card { border: 1px solid #ddd; padding: 10px; margin-top: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-danger { background-color: #dc3545; }
+        .btn-danger:hover { background-color: #c82333; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Buscador Rápido com Redis ⚡</h1>
+
+    <!-- Busca -->
+    <div class="section">
+        <h2>1. Buscar Produto (DummyJSON + Redis)</h2>
+        <input type="text" id="itemName" placeholder="Ex: laptop, phone">
+        <button onclick="searchItem()">Buscar</button>
+        <div id="searchResult"></div>
+    </div>
+
+    <!-- Gerenciar Favoritos -->
+    <div class="section">
+        <h2>2. Meus Favoritos (Redis CRUD)</h2>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="favName" placeholder="Nome (ex: charizard)">
+            <input type="text" id="favNick" placeholder="Apelido">
+            <input type="text" id="favNote" placeholder="Nota">
+            <button onclick="addFavorite()">Salvar Favorito</button>
+        </div>
+        <div id="favoritesList"></div>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'http://localhost:8080';
+
+    // 1. Buscar Item
+    async function searchItem() {
+        const name = document.getElementById('itemName').value;
+        const resultDiv = document.getElementById('searchResult');
+        resultDiv.innerHTML = 'Carregando...';
+
+        try {
+            const start = performance.now();
+            const response = await fetch(`${API_URL}/product/${name}`);
+            const data = await response.json();
+            const end = performance.now();
+            
+            const timeTaken = Math.round(end - start);
+
+            if (response.ok && data.data.products && data.data.products.length > 0) {
+                const product = data.data.products[0];
+                resultDiv.innerHTML = `
+                    <p><b>Origem:</b> ${data.fromCache ? '⚡ Veio do Redis (Cache)' : '🌐 Veio da API Externa'}</p>
+                    <p><b>Tempo:</b> ${timeTaken} ms</p>
+                    <img src="${product.thumbnail}" alt="${product.title}" style="max-height: 150px;">
+                    <p><b>Nome:</b> ${product.title} | <b>Preço:</b> $${product.price}</p>
+                `;
+            } else {
+                resultDiv.innerHTML = `<p style="color:red">Item não encontrado!</p>`;
+            }
+        } catch (error) {
+            resultDiv.innerHTML = `<p style="color:red">Erro de conexão com a API.</p>`;
+        }
+    }
+
+    // 2. Carregar Favoritos
+    async function loadFavorites() {
+        const listDiv = document.getElementById('favoritesList');
+        try {
+            const response = await fetch(`${API_URL}/favorites`);
+            const favorites = await response.json();
+            
+            if (favorites.length === 0) {
+                listDiv.innerHTML = '<p>Nenhum favorito ainda.</p>';
+                return;
+            }
+
+            listDiv.innerHTML = favorites.map(f => `
+                <div class="favorite-card">
+                    <div>
+                        <b>${f.name}</b> (${f.nickname})<br>
+                        <small>${f.note}</small>
+                    </div>
+                    <button class="btn-danger" onclick="deleteFavorite('${f.name}')">Remover</button>
+                </div>
+            `).join('');
+        } catch (error) {
+            console.error('Erro ao carregar favoritos', error);
+        }
+    }
+
+    // 3. Adicionar Favorito
+    async function addFavorite() {
+        const name = document.getElementById('favName').value;
+        const nickname = document.getElementById('favNick').value;
+        const note = document.getElementById('favNote').value;
+
+        await fetch(`${API_URL}/favorites`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, nickname, note })
+        });
+
+        document.getElementById('favName').value = '';
+        document.getElementById('favNick').value = '';
+        document.getElementById('favNote').value = '';
+        loadFavorites();
+    }
+
+    // 4. Deletar Favorito
+    async function deleteFavorite(name) {
+        await fetch(`${API_URL}/favorites/${name}`, {
+            method: 'DELETE'
+        });
+        loadFavorites();
+    }
+
+    // Iniciar carregando a lista
+    loadFavorites();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  backend:
+    # Para desenvolvimento, usamos a imagem do SDK em vez da imagem final
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    working_dir: /app
+    volumes:
+      # Mapeia a sua pasta local ./backend para dentro do container em /app
+      - ./backend:/app
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_HTTP_PORTS=8080
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Redis=redis:6379
+    depends_on:
+      - redis
+    # O comando "dotnet watch" fica observando as mudanças e reinicia/atualiza sozinho
+    command: dotnet watch run --project backend.csproj
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  frontend:
+    image: nginx:alpine
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend
