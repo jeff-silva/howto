@@ -34,4 +34,12 @@ export const widgets: WidgetDefinition[] = [
     component: dynamic(() => import("./joke")),
     props: {},
   },
+  {
+    id: "ip",
+    icon: "mdi:web",
+    name: "Meu IP",
+    description: "Seu IP público e localização",
+    component: dynamic(() => import("./ip")),
+    props: {},
+  },
 ];
