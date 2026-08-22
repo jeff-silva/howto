@@ -7,8 +7,4 @@ services:
   frontend:
     build: ./frontend
     ports: ["3000:3000"]
-    volumes:
-      - ./frontend/src:/app/src
-      - ./frontend/tailwind.config.js:/app/tailwind.config.js
-      - ./frontend/postcss.config.js:/app/postcss.config.js
-      - ./frontend/next.config.mjs:/app/next.config.mjs
+    volumes: [./frontend/src:/app]
