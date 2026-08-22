@@ -15,6 +15,7 @@ export interface WidgetDefinition {
   description: string;
   component: ComponentType<WidgetBaseProps>;
   props: Record<string, any>;
+  configurable?: boolean;
 }
 
 export const widgets: WidgetDefinition[] = [
@@ -25,6 +26,7 @@ export const widgets: WidgetDefinition[] = [
     description: "Widget de clima",
     component: dynamic(() => import("./weather")),
     props: { lat: -23.5489, lng: -46.6388 },
+    configurable: true,
   },
   {
     id: "joke",
