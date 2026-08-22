@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { WidgetBaseProps } from "./index";
 import { Icon } from "@iconify/react";
+import { useQuery } from "@tanstack/react-query";
 
 interface ZippopotamData {
   "post code": string;
@@ -23,32 +24,21 @@ export default function ZippopotamWidget({
   onRemove,
   ...props
 }: WidgetBaseProps) {
-  const [zip, setZip] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<ZippopotamData | null>(null);
-  const [error, setError] = useState(false);
+  const [zipInput, setZipInput] = useState("");
+  const [searchZip, setSearchZip] = useState("");
 
   const formatZip = (value: string) => {
-    // Formata como 00000-000 (padrão Brasil) para exibição,
-    // mas na api do zippopotam funciona melhor mandar apenas números ou traço
     return value.replace(/\D/g, "").replace(/^(\d{5})(\d{1,3})/, "$1-$2");
   };
 
   const handleZipChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setZip(formatZip(e.target.value));
+    setZipInput(formatZip(e.target.value));
   };
 
-  const fetchData = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const cleanZip = zip.replace(/\D/g, ""); // Apenas números
-    if (cleanZip.length < 8) return;
-
-    setLoading(true);
-    setResult(null);
-    setError(false);
-
-    try {
-      // Usamos country 'br' (Brasil) e enviamos com o traço como o Zippopotam exige para BR
+  const { data: result, isLoading: loading, isError: error } = useQuery({
+    queryKey: ['zippopotam', searchZip],
+    queryFn: async () => {
+      const cleanZip = searchZip.replace(/\D/g, "");
       const formattedForApi = `${cleanZip.slice(0,5)}-${cleanZip.slice(5,8)}`;
       const res = await fetch(`http://api.zippopotam.us/br/${formattedForApi}`);
       
@@ -56,13 +46,19 @@ export default function ZippopotamWidget({
         throw new Error("CEP não encontrado");
       }
       
-      const data: ZippopotamData = await res.json();
-      setResult(data);
-    } catch (err) {
-      console.error("Failed to fetch CEP", err);
-      setError(true);
-    } finally {
-      setLoading(false);
+      const data = await res.json();
+      return data as ZippopotamData;
+    },
+    enabled: !!searchZip && searchZip.replace(/\D/g, "").length >= 8,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleanZip = zipInput.replace(/\D/g, "");
+    if (cleanZip.length >= 8) {
+      setSearchZip(cleanZip);
     }
   };
 
@@ -74,10 +70,10 @@ export default function ZippopotamWidget({
       </div>
 
       <div className="flex-1 flex flex-col justify-center mt-6">
-        <form onSubmit={fetchData} className="flex gap-2 w-full mb-4">
+        <form onSubmit={handleSubmit} className="flex gap-2 w-full mb-4">
           <input
             type="text"
-            value={zip}
+            value={zipInput}
             onChange={handleZipChange}
             placeholder="Ex: 01000-000"
             maxLength={9}
@@ -85,7 +81,7 @@ export default function ZippopotamWidget({
           />
           <button
             type="submit"
-            disabled={loading || zip.replace(/\D/g, "").length < 8}
+            disabled={loading || zipInput.replace(/\D/g, "").length < 8}
             className="bg-indigo-600 hover:bg-indigo-500 disabled:bg-zinc-700 text-white rounded-lg px-3 py-2 transition-colors flex items-center justify-center"
           >
             {loading ? (

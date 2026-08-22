@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { WidgetBaseProps } from "./index";
 import { Icon } from "@iconify/react";
+import { useQuery } from "@tanstack/react-query";
 
 interface IpData {
   ip: string;
@@ -20,14 +20,9 @@ export default function IpWidget({
   onRemove,
   ...props
 }: WidgetBaseProps) {
-  const [ipData, setIpData] = useState<IpData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchIpData = async () => {
-    setLoading(true);
-    setError(null);
-    try {
+  const { data: ipData, isLoading: loading, error, refetch } = useQuery({
+    queryKey: ['ipInfo'],
+    queryFn: async () => {
       const res = await fetch("https://ipapi.co/json/");
       if (!res.ok) {
         throw new Error("Failed to fetch IP data");
@@ -36,18 +31,10 @@ export default function IpWidget({
       if (data.error) {
         throw new Error(data.reason || "Error from API");
       }
-      setIpData(data);
-    } catch (err: any) {
-      console.error("Failed to fetch IP:", err);
-      setError(err.message || "Erro ao carregar dados do IP");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchIpData();
-  }, []);
+      return data as IpData;
+    },
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <div className="relative h-full flex flex-col p-6 bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden min-h-[200px] justify-between">
@@ -58,7 +45,7 @@ export default function IpWidget({
 
       <div className="absolute bottom-3 right-3 flex gap-2">
         <button
-          onClick={fetchIpData}
+          onClick={() => refetch()}
           disabled={loading}
           className="p-2 bg-zinc-800 text-zinc-300 rounded-full hover:bg-zinc-700 hover:text-white transition-all duration-300 shadow-sm disabled:opacity-50"
           title="Atualizar IP"
@@ -71,7 +58,7 @@ export default function IpWidget({
       </div>
 
       <div className="flex-1 flex flex-col justify-center mt-6 mb-4">
-        {loading && !ipData ? (
+        {loading ? (
           <div className="flex items-center justify-center space-x-2 animate-pulse text-zinc-500">
             <Icon icon="mdi:loading" className="animate-spin text-2xl" />
             <span>Verificando...</span>
@@ -79,7 +66,7 @@ export default function IpWidget({
         ) : error ? (
           <div className="flex flex-col items-center justify-center text-red-400 h-full">
             <Icon icon="mdi:alert-circle-outline" className="text-3xl mb-2" />
-            <p className="text-sm text-center">{error}</p>
+            <p className="text-sm text-center">{(error as Error).message || "Erro ao carregar dados do IP"}</p>
           </div>
         ) : ipData ? (
           <div className="flex flex-col items-start gap-4">

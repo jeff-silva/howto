@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { WidgetBaseProps } from "./index";
 import { Icon } from "@iconify/react";
+import { useQuery } from "@tanstack/react-query";
 
 interface JokeData {
   error: boolean;
@@ -18,38 +19,32 @@ export default function JokeWidget({
   onRemove,
   ...props
 }: WidgetBaseProps) {
-  const [joke, setJoke] = useState<JokeData | null>(null);
-  const [loading, setLoading] = useState(false);
   const [showDelivery, setShowDelivery] = useState(false);
 
-  const fetchJoke = async () => {
-    setLoading(true);
-    setShowDelivery(false);
-    try {
-      // Usando categorias seguras para o trabalho (Programming, Misc, Pun)
+  const { data: joke, isLoading: loading, refetch, isError } = useQuery({
+    queryKey: ['joke'],
+    queryFn: async () => {
       const res = await fetch(
         "https://v2.jokeapi.dev/joke/Programming,Miscellaneous,Pun?blacklistFlags=nsfw,religious,political,racist,sexist,explicit",
       );
+      if (!res.ok) throw new Error("Erro ao carregar piada");
       const data = await res.json();
-      setJoke(data);
-    } catch (error) {
-      console.error("Failed to fetch joke:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+      return data as JokeData;
+    },
+    refetchOnWindowFocus: false,
+  });
 
-  useEffect(() => {
-    fetchJoke();
-  }, []);
+  const fetchJoke = () => {
+    setShowDelivery(false);
+    refetch();
+  };
 
   return (
     <div className="relative h-full flex flex-col items-center justify-center p-6 text-center bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden min-h-[200px]">
-      {/* Botão de refresh movido para o canto inferior direito para não conflitar com botões de ação */}
       <div className="absolute bottom-3 right-3 flex gap-2">
         <button
           onClick={fetchJoke}
-          disabled={loading}
+          disabled={loading || isError}
           className="p-2 bg-zinc-800 text-zinc-300 rounded-full hover:bg-zinc-700 hover:text-white transition-all duration-300 shadow-sm disabled:opacity-50"
           title="Nova Piada"
         >
@@ -60,12 +55,12 @@ export default function JokeWidget({
         </button>
       </div>
 
-      {loading && !joke ? (
+      {loading ? (
         <div className="flex items-center justify-center space-x-2 animate-pulse text-zinc-500">
           <Icon icon="mdi:loading" className="animate-spin text-2xl" />
           <span>Carregando...</span>
         </div>
-      ) : joke && !joke.error ? (
+      ) : joke && !joke.error && !isError ? (
         <div className="flex flex-col items-center justify-center gap-4 w-full h-full pb-4">
           <div className="bg-indigo-500/10 p-3 rounded-full mb-2">
             <Icon

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { WidgetBaseProps } from "./index";
 import { Icon } from "@iconify/react";
+import { useQuery } from "@tanstack/react-query";
 
 interface AgifyData {
   age: number | null;
@@ -22,34 +23,37 @@ export default function AgifyWidget({
   onRemove,
   ...props
 }: WidgetBaseProps) {
-  const [name, setName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<{ age: number | null; nationality: string | null } | null>(null);
+  const [inputValue, setInputValue] = useState("");
+  const [searchName, setSearchName] = useState("");
 
-  const fetchData = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim()) return;
-
-    setLoading(true);
-    setResult(null);
-
-    try {
+  const { data: result, isLoading: loading } = useQuery({
+    queryKey: ['agify', searchName],
+    queryFn: async () => {
       const [agifyRes, nationalizeRes] = await Promise.all([
-        fetch(`https://api.agify.io?name=${encodeURIComponent(name.trim())}`),
-        fetch(`https://api.nationalize.io?name=${encodeURIComponent(name.trim())}`),
+        fetch(`https://api.agify.io?name=${encodeURIComponent(searchName)}`),
+        fetch(`https://api.nationalize.io?name=${encodeURIComponent(searchName)}`),
       ]);
+
+      if (!agifyRes.ok || !nationalizeRes.ok) {
+        throw new Error("Erro na API");
+      }
 
       const agifyData: AgifyData = await agifyRes.json();
       const nationalizeData: NationalizeData = await nationalizeRes.json();
 
-      setResult({
+      return {
         age: agifyData.age,
         nationality: nationalizeData.country.length > 0 ? nationalizeData.country[0].country_id : null,
-      });
-    } catch (err) {
-      console.error("Failed to fetch data", err);
-    } finally {
-      setLoading(false);
+      };
+    },
+    enabled: !!searchName,
+    refetchOnWindowFocus: false,
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (inputValue.trim()) {
+      setSearchName(inputValue.trim());
     }
   };
 
@@ -61,17 +65,17 @@ export default function AgifyWidget({
       </div>
 
       <div className="flex-1 flex flex-col justify-center mt-6">
-        <form onSubmit={fetchData} className="flex gap-2 w-full mb-4">
+        <form onSubmit={handleSubmit} className="flex gap-2 w-full mb-4">
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
             placeholder="Digite um nome..."
             className="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-200 outline-none focus:border-indigo-500 transition-colors"
           />
           <button
             type="submit"
-            disabled={loading || !name.trim()}
+            disabled={loading || !inputValue.trim()}
             className="bg-indigo-600 hover:bg-indigo-500 disabled:bg-zinc-700 text-white rounded-lg px-3 py-2 transition-colors flex items-center justify-center"
           >
             {loading ? (
