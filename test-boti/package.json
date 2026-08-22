@@ -1,0 +1,13 @@
+{
+  "name": "test-boti",
+  "version": "1.0.0",
+  "description": "Este diretório contém a estrutura e configuração para uma aplicação fullstack em desenvolvimento.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "docker compose up --build --force-recreate --remove-orphans"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
