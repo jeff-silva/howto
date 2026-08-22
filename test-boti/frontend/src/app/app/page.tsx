@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { widgets, WidgetDefinition } from "../../components/widget";
 import { Icon } from "@iconify/react";
+import { Button } from "@/components/ui/button";
 
 interface ActiveWidget {
   instanceId: string;
@@ -105,14 +106,17 @@ export default function AppPage() {
                   <button
                     key={widget.id}
                     onClick={() => addWidget(widget)}
-                    className="w-full text-left px-3 py-2 rounded-lg hover:bg-zinc-800 flex flex-col transition-colors"
+                    className="w-full text-left px-3 py-2 rounded-lg hover:bg-zinc-800 flex items-center gap-3 transition-colors"
                   >
-                    <span className="text-zinc-200 text-sm font-medium">
-                      {widget.name}
-                    </span>
-                    <span className="text-zinc-500 text-xs">
-                      {widget.description}
-                    </span>
+                    <Icon icon={widget.icon} width="24" height="24" className="text-zinc-400 shrink-0" />
+                    <div className="flex flex-col">
+                      <span className="text-zinc-200 text-sm font-medium">
+                        {widget.name}
+                      </span>
+                      <span className="text-zinc-500 text-xs">
+                        {widget.description}
+                      </span>
+                    </div>
                   </button>
                 ))}
               </div>
