@@ -1,30 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 export default function WeatherWidget() {
-  const [weather, setWeather] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Usando a API gratuita do Open-Meteo (não precisa de chave)
-    // Coordenadas de exemplo (São Paulo)
-    async function fetchWeather() {
-      try {
-        const res = await fetch(
-          'https://api.open-meteo.com/v1/forecast?latitude=-23.5489&longitude=-46.6388&current_weather=true'
-        );
-        const data = await res.json();
-        setWeather(data.current_weather);
-      } catch (error) {
-        console.error("Erro ao buscar clima:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchWeather();
-  }, []);
+  const { data: weather, isLoading: loading, isError } = useQuery({
+    queryKey: ['weather', 'saopaulo'],
+    queryFn: async () => {
+      const res = await fetch(
+        'https://api.open-meteo.com/v1/forecast?latitude=-23.5489&longitude=-46.6388&current_weather=true'
+      );
+      if (!res.ok) throw new Error('Erro na rede');
+      const data = await res.json();
+      return data.current_weather;
+    },
+    // Magia do TanStack: a cada 5 minutos ele atualiza o clima sozinho, sem o usuário recarregar a tela!
+    refetchInterval: 1000 * 60 * 5, 
+  });
 
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 w-full max-w-sm shadow-lg flex flex-col items-center justify-center min-h-[160px] transition-all hover:border-zinc-700">

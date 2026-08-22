@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-zinc-950 text-zinc-50 selection:bg-indigo-500/30">
@@ -19,18 +21,18 @@ export default function Home() {
             </div>
           </div>
           <h1 className="text-5xl font-extrabold tracking-tight sm:text-7xl text-transparent bg-clip-text bg-gradient-to-br from-white via-zinc-200 to-zinc-500 drop-shadow-sm pb-2">
-            Acelere seu fluxo de desenvolvimento
+            Seu Hub Pessoal de Widgets
           </h1>
           <p className="mt-6 text-lg leading-8 text-zinc-400 max-w-xl mx-auto font-light">
-            Bem-vindo ao <strong className="text-zinc-200 font-semibold">Test Boti</strong>. Uma fundação fullstack moderna combinando a performance do FastAPI no backend com a flexibilidade do Next.js.
+            Bem-vindo ao <strong className="text-zinc-200 font-semibold">Test Boti</strong>. Um dashboard modular com utilitários em tempo real, clima, cotações e muito mais.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
-            <a
-              href="#"
+            <Link
+              href="/app"
               className="rounded-md bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400 transition-all hover:scale-105 active:scale-95"
             >
               Começar agora
-            </a>
+            </Link>
             <a href="#" className="text-sm font-semibold leading-6 text-zinc-300 hover:text-white transition-colors group">
               Explorar componentes <span aria-hidden="true" className="inline-block transition-transform group-hover:translate-x-1">→</span>
             </a>
