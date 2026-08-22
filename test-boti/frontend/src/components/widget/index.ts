@@ -42,4 +42,20 @@ export const widgets: WidgetDefinition[] = [
     component: dynamic(() => import("./ip")),
     props: {},
   },
+  {
+    id: "agify",
+    icon: "mdi:face-man-profile",
+    name: "Nome & Idade",
+    description: "Descubra a idade e nacionalidade pelo nome",
+    component: dynamic(() => import("./agify")),
+    props: {},
+  },
+  {
+    id: "zippopotam",
+    icon: "mdi:map-search-outline",
+    name: "Busca CEP",
+    description: "Consulta de CEP usando Zippopotam",
+    component: dynamic(() => import("./zippopotam")),
+    props: {},
+  },
 ];
