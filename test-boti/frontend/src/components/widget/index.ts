@@ -26,4 +26,12 @@ export const widgets: WidgetDefinition[] = [
     component: dynamic(() => import("./weather")),
     props: { lat: -23.5489, lng: -46.6388 },
   },
+  {
+    id: "joke",
+    icon: "mdi:emoticon-happy-outline",
+    name: "Jokes",
+    description: "Piada aleatória",
+    component: dynamic(() => import("./joke")),
+    props: {},
+  },
 ];
