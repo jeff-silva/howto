@@ -2,7 +2,7 @@ import pytest
 from httpx import AsyncClient
 
 @pytest.mark.asyncio
-async def test_create_catalog_success(client: AsyncClient):
+async def test_movie_catalog_create_success(client: AsyncClient):
     payload = {
         "title": "Matrix",
         "category_id": 1,
@@ -21,7 +21,7 @@ async def test_create_catalog_success(client: AsyncClient):
     assert "created_at" in data
 
 @pytest.mark.asyncio
-async def test_list_catalogs_empty(client: AsyncClient):
+async def test_movie_catalog_list_empty(client: AsyncClient):
     # Chama o endpoint GET sem ter inserido nada
     response = await client.get("/movie_catalog/")
     
@@ -31,7 +31,7 @@ async def test_list_catalogs_empty(client: AsyncClient):
     assert len(data) == 0
 
 @pytest.mark.asyncio
-async def test_create_and_list_catalogs(client: AsyncClient):
+async def test_movie_catalog_create_and_list(client: AsyncClient):
     # Insere um filme no catálogo
     await client.post("/movie_catalog/", json={"title": "Inception", "category_id": 2})
     

@@ -2,7 +2,7 @@ import pytest
 from httpx import AsyncClient
 
 @pytest.mark.asyncio
-async def test_create_category_success(client: AsyncClient):
+async def test_movie_category_create_success(client: AsyncClient):
     payload = {
         "name": "Ficção Científica",
         "description": "Filmes que exploram ciência"
@@ -19,7 +19,7 @@ async def test_create_category_success(client: AsyncClient):
     assert "created_at" in data
 
 @pytest.mark.asyncio
-async def test_list_categories_empty(client: AsyncClient):
+async def test_movie_category_list_empty(client: AsyncClient):
     # Chama o endpoint GET sem ter inserido nada
     response = await client.get("/movie_category/")
     
@@ -29,7 +29,7 @@ async def test_list_categories_empty(client: AsyncClient):
     assert len(data) == 0
 
 @pytest.mark.asyncio
-async def test_create_and_list_categories(client: AsyncClient):
+async def test_movie_category_create_and_list(client: AsyncClient):
     # Insere uma categoria
     await client.post("/movie_category/", json={"name": "Ação"})
     
