@@ -2,11 +2,27 @@ services:
   backend:
     build: ./backend
     ports: ["8000:8000"]
-    volumes: [./backend/src:/app/src]
+    volumes: [./backend/project:/app]
+    depends_on: [database]
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@database:5432/test_boti
 
   frontend:
     build: ./frontend
     ports: ["3000:3000"]
-    volumes: 
+    volumes:
       - ./frontend/src:/app
       - /app/node_modules
+
+  database:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test_boti
+    ports: ["5432:5432"]
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+
+volumes:
+  postgres_volume:
