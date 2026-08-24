@@ -41,20 +41,34 @@ class SQLAlchemyMovieCatalogRepository(IMovieCatalogRepository):
             created_at=db_catalog.created_at
         )
 
-    async def list_all(self) -> List[MovieCatalog]:
-        result = await self.session.execute(select(MovieCatalogModel))
-        db_catalogs = result.scalars().all()
+    async def search(self, skip: int = 0, limit: int = 10, search: str | None = None) -> tuple[list[MovieCatalog], int]:
+        from sqlalchemy import func
+        
+        base_query = select(MovieCatalogModel)
+        count_query = select(func.count()).select_from(MovieCatalogModel)
+        
+        if search:
+            condition = MovieCatalogModel.title.ilike(f"%{search}%")
+            base_query = base_query.where(condition)
+            count_query = count_query.where(condition)
+            
+        total_result = await self.session.execute(count_query)
+        total = total_result.scalar_one()
+        
+        query = base_query.offset(skip).limit(limit)
+        result = await self.session.execute(query)
+        models = result.scalars().all()
         
         return [
             MovieCatalog(
-                id=c.id,
-                title=c.title,
-                description=c.description,
-                release_year=c.release_year,
-                category_id=c.category_id,
-                created_at=c.created_at
-            ) for c in db_catalogs
-        ]
+                id=m.id, 
+                title=m.title, 
+                category_id=m.category_id,
+                description=m.description, 
+                release_year=m.release_year,
+                created_at=m.created_at
+            ) for m in models
+        ], total
 
     async def delete(self, catalog_id: int) -> bool:
         db_catalog = await self.session.get(MovieCatalogModel, catalog_id)

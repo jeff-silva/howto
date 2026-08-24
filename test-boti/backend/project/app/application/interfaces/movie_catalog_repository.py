@@ -12,7 +12,7 @@ class IMovieCatalogRepository(ABC):
         pass
 
     @abstractmethod
-    async def list_all(self) -> List[MovieCatalog]:
+    async def search(self, skip: int = 0, limit: int = 10, search: str | None = None) -> tuple[list[MovieCatalog], int]:
         pass
 
     @abstractmethod

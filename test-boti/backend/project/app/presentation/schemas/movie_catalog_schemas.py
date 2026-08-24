@@ -2,13 +2,13 @@ from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import datetime
 
-class MovieCreate(BaseModel):
+class MovieCatalogCreate(BaseModel):
     title: str
     category_id: int
     description: Optional[str] = None
     release_year: Optional[int] = None
 
-class MovieResponse(BaseModel):
+class MovieCatalogResponse(BaseModel):
     id: int
     title: str
     description: Optional[str]

@@ -24,8 +24,12 @@ class MockCategoryRepository(IMovieCategoryRepository):
     async def get_by_id(self, category_id: int) -> MovieCategory | None:
         return self.categories.get(category_id)
 
-    async def list_all(self) -> list[MovieCategory]:
-        return list(self.categories.values())
+    async def search(self, skip: int = 0, limit: int = 10, search: str | None = None) -> tuple[list[MovieCategory], int]:
+        items = list(self.categories.values())
+        if search:
+            items = [i for i in items if search.lower() in i.name.lower()]
+        total = len(items)
+        return items[skip:skip+limit], total
 
     async def delete(self, category_id: int) -> bool:
         if category_id in self.categories:
@@ -57,8 +61,12 @@ class MockCatalogRepository(IMovieCatalogRepository):
     async def get_by_id(self, catalog_id: int) -> MovieCatalog | None:
         return self.catalogs.get(catalog_id)
 
-    async def list_all(self) -> list[MovieCatalog]:
-        return list(self.catalogs.values())
+    async def search(self, skip: int = 0, limit: int = 10, search: str | None = None) -> tuple[list[MovieCatalog], int]:
+        items = list(self.catalogs.values())
+        if search:
+            items = [i for i in items if search.lower() in i.title.lower()]
+        total = len(items)
+        return items[skip:skip+limit], total
 
     async def delete(self, catalog_id: int) -> bool:
         if catalog_id in self.catalogs:

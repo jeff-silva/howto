@@ -1,8 +1,9 @@
 from typing import List, Optional
 from app.domain.entities import MovieCatalog
 from app.application.interfaces.movie_catalog_repository import IMovieCatalogRepository
+from app.presentation.schemas.pagination_schema import PaginatedResponse
 
-class CreateMovieUseCase:
+class MovieCatalogCreateUseCase:
     def __init__(self, repository: IMovieCatalogRepository):
         self.repository = repository
         
@@ -15,14 +16,16 @@ class CreateMovieUseCase:
         )
         return await self.repository.create(movie)
 
-class ListMoviesUseCase:
+class MovieCatalogSearchUseCase:
     def __init__(self, repository: IMovieCatalogRepository):
         self.repository = repository
         
-    async def execute(self) -> List[MovieCatalog]:
-        return await self.repository.list_all()
+    async def execute(self, page: int = 1, per_page: int = 10, search: Optional[str] = None) -> PaginatedResponse[MovieCatalog]:
+        skip = (page - 1) * per_page
+        items, total = await self.repository.search(skip=skip, limit=per_page, search=search)
+        return PaginatedResponse.create(items=items, total=total, page=page, per_page=per_page)
 
-class GetMovieUseCase:
+class MovieCatalogGetUseCase:
     def __init__(self, repository: IMovieCatalogRepository):
         self.repository = repository
         

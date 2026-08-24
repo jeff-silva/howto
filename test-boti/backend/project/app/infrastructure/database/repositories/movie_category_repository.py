@@ -37,18 +37,32 @@ class SQLAlchemyMovieCategoryRepository(IMovieCategoryRepository):
             created_at=db_category.created_at
         )
 
-    async def list_all(self) -> List[MovieCategory]:
-        result = await self.session.execute(select(MovieCategoryModel))
-        db_categories = result.scalars().all()
+    async def search(self, skip: int = 0, limit: int = 10, search: str | None = None) -> tuple[list[MovieCategory], int]:
+        from sqlalchemy import func
+        
+        base_query = select(MovieCategoryModel)
+        count_query = select(func.count()).select_from(MovieCategoryModel)
+        
+        if search:
+            condition = MovieCategoryModel.name.ilike(f"%{search}%")
+            base_query = base_query.where(condition)
+            count_query = count_query.where(condition)
+            
+        total_result = await self.session.execute(count_query)
+        total = total_result.scalar_one()
+        
+        query = base_query.offset(skip).limit(limit)
+        result = await self.session.execute(query)
+        models = result.scalars().all()
         
         return [
             MovieCategory(
-                id=c.id,
-                name=c.name,
-                description=c.description,
-                created_at=c.created_at
-            ) for c in db_categories
-        ]
+                id=m.id, 
+                name=m.name, 
+                description=m.description, 
+                created_at=m.created_at
+            ) for m in models
+        ], total
 
     async def delete(self, category_id: int) -> bool:
         db_category = await self.session.get(MovieCategoryModel, category_id)

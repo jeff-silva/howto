@@ -25,8 +25,10 @@ async def test_movie_category_list_empty(client: AsyncClient):
     
     assert response.status_code == 200
     data = response.json()
-    assert isinstance(data, list)
-    assert len(data) == 0
+    assert "items" in data
+    assert isinstance(data["items"], list)
+    assert len(data["items"]) == 0
+    assert data["total"] == 0
 
 @pytest.mark.asyncio
 async def test_movie_category_create_and_list(client: AsyncClient):
@@ -38,5 +40,6 @@ async def test_movie_category_create_and_list(client: AsyncClient):
     assert response.status_code == 200
     
     data = response.json()
-    assert len(data) == 1
-    assert data[0]["name"] == "Ação"
+    assert data["total"] == 1
+    assert len(data["items"]) == 1
+    assert data["items"][0]["name"] == "Ação"

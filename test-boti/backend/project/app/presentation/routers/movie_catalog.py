@@ -1,16 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
-from typing import List
+from typing import List, Optional
+from app.presentation.schemas.pagination_schema import PaginatedResponse
 
-from app.presentation.schemas.movie_catalog_schemas import MovieCreate, MovieResponse
-from app.presentation.dependencies import get_create_movie_use_case, get_list_movies_use_case
-from app.application.use_cases.movie_catalog_use_cases import CreateMovieUseCase, ListMoviesUseCase
+from app.presentation.schemas.movie_catalog_schemas import MovieCatalogCreate, MovieCatalogResponse
+from app.presentation.dependencies import get_movie_catalog_create_use_case, get_movie_catalog_search_use_case
+from app.application.use_cases.movie_catalog_use_cases import MovieCatalogCreateUseCase, MovieCatalogSearchUseCase
 
 router = APIRouter(prefix="/movie_catalog", tags=["Movie Catalog"])
 
-@router.post("/", response_model=MovieResponse, status_code=201)
+@router.post("/", response_model=MovieCatalogResponse, status_code=201)
 async def create_movie(
-    movie_in: MovieCreate,
-    use_case: CreateMovieUseCase = Depends(get_create_movie_use_case)
+    movie_in: MovieCatalogCreate,
+    use_case: MovieCatalogCreateUseCase = Depends(get_movie_catalog_create_use_case)
 ):
     movie = await use_case.execute(
         title=movie_in.title,
@@ -20,9 +21,12 @@ async def create_movie(
     )
     return movie
 
-@router.get("/", response_model=List[MovieResponse])
+@router.get("/", response_model=PaginatedResponse[MovieCatalogResponse])
 async def list_movies(
-    use_case: ListMoviesUseCase = Depends(get_list_movies_use_case)
+    page: int = 1,
+    per_page: int = 10,
+    search: Optional[str] = None,
+    use_case: MovieCatalogSearchUseCase = Depends(get_movie_catalog_search_use_case)
 ):
-    movies = await use_case.execute()
+    movies = await use_case.execute(page=page, per_page=per_page, search=search)
     return movies

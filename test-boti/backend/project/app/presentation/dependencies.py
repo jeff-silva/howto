@@ -5,8 +5,8 @@ from app.infrastructure.database.session import async_session_maker
 from app.infrastructure.database.repositories.movie_category_repository import SQLAlchemyMovieCategoryRepository
 from app.infrastructure.database.repositories.movie_catalog_repository import SQLAlchemyMovieCatalogRepository
 
-from app.application.use_cases.movie_category_use_cases import CreateCategoryUseCase, ListCategoriesUseCase, GetCategoryUseCase
-from app.application.use_cases.movie_catalog_use_cases import CreateMovieUseCase, ListMoviesUseCase, GetMovieUseCase
+from app.application.use_cases.movie_category_use_cases import MovieCategoryCreateUseCase, MovieCategorySearchUseCase, MovieCategoryGetUseCase
+from app.application.use_cases.movie_catalog_use_cases import MovieCatalogCreateUseCase, MovieCatalogSearchUseCase, MovieCatalogGetUseCase
 from app.application.interfaces.movie_category_repository import IMovieCategoryRepository
 from app.application.interfaces.movie_catalog_repository import IMovieCatalogRepository
 
@@ -22,14 +22,14 @@ def get_catalog_repository(session: AsyncSession = Depends(get_db_session)) -> I
 
 # Dependências para injetar os Casos de Uso diretamente nos endpoints
 
-def get_create_category_use_case(repo: IMovieCategoryRepository = Depends(get_category_repository)) -> CreateCategoryUseCase:
-    return CreateCategoryUseCase(repo)
+def get_movie_category_create_use_case(repo: IMovieCategoryRepository = Depends(get_category_repository)) -> MovieCategoryCreateUseCase:
+    return MovieCategoryCreateUseCase(repo)
 
-def get_list_categories_use_case(repo: IMovieCategoryRepository = Depends(get_category_repository)) -> ListCategoriesUseCase:
-    return ListCategoriesUseCase(repo)
+def get_movie_category_search_use_case(repo: IMovieCategoryRepository = Depends(get_category_repository)) -> MovieCategorySearchUseCase:
+    return MovieCategorySearchUseCase(repo)
 
-def get_create_movie_use_case(repo: IMovieCatalogRepository = Depends(get_catalog_repository)) -> CreateMovieUseCase:
-    return CreateMovieUseCase(repo)
+def get_movie_catalog_create_use_case(repo: IMovieCatalogRepository = Depends(get_catalog_repository)) -> MovieCatalogCreateUseCase:
+    return MovieCatalogCreateUseCase(repo)
 
-def get_list_movies_use_case(repo: IMovieCatalogRepository = Depends(get_catalog_repository)) -> ListMoviesUseCase:
-    return ListMoviesUseCase(repo)
+def get_movie_catalog_search_use_case(repo: IMovieCatalogRepository = Depends(get_catalog_repository)) -> MovieCatalogSearchUseCase:
+    return MovieCatalogSearchUseCase(repo)
