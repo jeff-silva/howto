@@ -69,3 +69,52 @@
 - **Solução:** Padrão **Publish-Subscribe (Pub/Sub)** ou Arquitetura Baseada em Eventos.
 - **Como funciona:** O sistema de Compras não envia uma mensagem direta; ele "publica" um evento (Ex: `PedidoCriado`) em um **Tópico** (usando Kafka, AWS SNS ou RabbitMQ Fanout). 
 - O Estoque e o E-mail são "Inscritos" (Subscribers) desse tópico. Quando o evento acontece, o Tópico clona a mensagem e entrega para todos os interessados simultaneamente!
+
+---
+
+# Resumo: Estrutura de Pastas (Clean Architecture)
+
+Se te perguntarem como o projeto está estruturado, essa é a explicação de cada camada, da mais interna (isolada) para a mais externa:
+
+## 1. `domain/` (O Coração)
+- **O que guarda:** Regras de negócio puras, Entidades (Entities) e Value Objects.
+- **Exemplo:** A classe `MovieCategory` (nome, descrição). 
+- **Regra de Ouro:** Não importa biblioteca externa NENHUMA. Não tem SQLAlchemy, não tem Pydantic, não tem FastAPI. É só a linguagem pura.
+
+## 2. `application/` (O Maestro)
+- **O que guarda:** Casos de Uso (Use Cases) e Interfaces/Contratos.
+- **Exemplo:** `MovieCategoryDeleteUseCase` e `IMovieCategoryRepository`.
+- **Regra de Ouro:** É aqui que a lógica acontece (ex: checar se categoria tem filmes antes de deletar). Ele conhece o `domain`, mas não sabe *como* o banco salva as coisas. Ele apenas dita as regras e exige que a Infraestrutura obedeça as suas Interfaces.
+
+## 3. `infrastructure/` (O Operário)
+- **O que guarda:** A comunicação com o mundo externo (Banco de Dados, APIs Externas, Filas, AWS).
+- **Exemplo:** `SQLAlchemyMovieCategoryRepository`, os `models` do banco, e a configuração do ORM.
+- **Regra de Ouro:** É o código "sujo". Ele pega a interface limpinha que a Camada de Aplicação criou e faz ela funcionar de verdade usando o SQLAlchemy ou o Postgres.
+
+## 4. `presentation/` (O Garçom)
+- **O que guarda:** A porta de entrada do usuário. Controladores, Rotas, Schemas de Request/Response.
+- **Exemplo:** Os arquivos do FastAPI (`routers`), os schemas do Pydantic (para validar o JSON) e as Injeções de Dependência.
+- **Regra de Ouro:** Não tem lógica de negócio aqui! A Rota apenas recebe o JSON, valida, chama o Caso de Uso, pega a resposta e devolve HTTP 200 (ou 400 se der erro).
+
+---
+
+# Árvore de Diretórios do Projeto (Visual)
+
+```text
+app/
+├── application/
+│   ├── interfaces/       -> Contratos abstratos (ex: IMovieCategoryRepository.py)
+│   └── use_cases/        -> Onde a lógica orquestrada vive (ex: movie_category_use_cases.py)
+├── domain/
+│   └── entities/         -> Modelos de domínio puros, sem frameworks (ex: entities.py)
+├── infrastructure/
+│   └── database/
+│       ├── models/       -> Modelos do SQLAlchemy, mapeando as tabelas (ex: movie_catalog.py)
+│       ├── repositories/ -> A implementação real de acesso a dados (ex: movie_catalog_repository.py)
+│       └── session.py    -> Conexão física com o banco de dados
+├── presentation/
+│   ├── routers/          -> Os Endpoints / Controladores do FastAPI (ex: movie_catalog.py)
+│   ├── schemas/          -> Modelos do Pydantic para validar entradas e saídas JSON
+│   └── dependencies.py   -> O arquivo mágico de Injeção de Dependência que amarra tudo
+└── main.py               -> Ponto de inicialização da API
+```
