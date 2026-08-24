@@ -43,3 +43,27 @@ async def test_movie_category_create_and_list(client: AsyncClient):
     assert data["total"] == 1
     assert len(data["items"]) == 1
     assert data["items"][0]["name"] == "Ação"
+
+@pytest.mark.asyncio
+async def test_movie_category_delete_success(client: AsyncClient):
+    # Insere
+    await client.post("/movie_category/", json={"name": "Delete Me"})
+    
+    # Deleta
+    response = await client.delete("/movie_category/1")
+    assert response.status_code == 204
+    
+    # Verifica se sumiu
+    get_response = await client.get("/movie_category/")
+    assert get_response.json()["total"] == 0
+
+@pytest.mark.asyncio
+async def test_movie_category_delete_with_movies_fails(client: AsyncClient):
+    # Insere Categoria e Filme
+    await client.post("/movie_category/", json={"name": "Drama"})
+    await client.post("/movie_catalog/", json={"title": "Joker", "category_id": 1})
+    
+    # Tenta deletar
+    response = await client.delete("/movie_category/1")
+    assert response.status_code == 400
+    assert "Não é possível deletar uma categoria que possui filmes atrelados" in response.json()["detail"]

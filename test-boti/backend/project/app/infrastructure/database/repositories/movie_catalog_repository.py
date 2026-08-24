@@ -72,9 +72,14 @@ class SQLAlchemyMovieCatalogRepository(IMovieCatalogRepository):
 
     async def delete(self, catalog_id: int) -> bool:
         db_catalog = await self.session.get(MovieCatalogModel, catalog_id)
-        if not db_catalog:
-            return False
-        
-        await self.session.delete(db_catalog)
-        await self.session.commit()
-        return True
+        if db_catalog:
+            await self.session.delete(db_catalog)
+            await self.session.commit()
+            return True
+        return False
+
+    async def has_movies_by_category(self, category_id: int) -> bool:
+        from sqlalchemy import select
+        query = select(MovieCatalogModel).where(MovieCatalogModel.category_id == category_id).limit(1)
+        result = await self.session.execute(query)
+        return result.scalar_one_or_none() is not None

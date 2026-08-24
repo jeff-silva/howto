@@ -1,6 +1,7 @@
 from typing import List, Optional
 from app.domain.entities import MovieCategory
 from app.application.interfaces.movie_category_repository import IMovieCategoryRepository
+from app.application.interfaces.movie_catalog_repository import IMovieCatalogRepository
 from app.presentation.schemas.pagination_schema import PaginatedResponse
 
 class MovieCategoryCreateUseCase:
@@ -27,3 +28,14 @@ class MovieCategoryGetUseCase:
         
     async def execute(self, category_id: int) -> Optional[MovieCategory]:
         return await self.repository.get_by_id(category_id)
+
+class MovieCategoryDeleteUseCase:
+    def __init__(self, category_repo: IMovieCategoryRepository, catalog_repo: IMovieCatalogRepository):
+        self.category_repo = category_repo
+        self.catalog_repo = catalog_repo
+
+    async def execute(self, category_id: int) -> bool:
+        has_movies = await self.catalog_repo.has_movies_by_category(category_id)
+        if has_movies:
+            raise ValueError("Não é possível deletar uma categoria que possui filmes atrelados.")
+        return await self.category_repo.delete(category_id)

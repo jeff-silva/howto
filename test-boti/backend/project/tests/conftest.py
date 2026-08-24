@@ -74,6 +74,12 @@ class MockCatalogRepository(IMovieCatalogRepository):
             return True
         return False
 
+    async def has_movies_by_category(self, category_id: int) -> bool:
+        for movie in self.catalogs.values():
+            if movie.category_id == category_id:
+                return True
+        return False
+
 @pytest.fixture
 def mock_catalog_repo():
     return MockCatalogRepository()

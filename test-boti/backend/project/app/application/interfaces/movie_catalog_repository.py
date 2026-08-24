@@ -16,5 +16,9 @@ class IMovieCatalogRepository(ABC):
         pass
 
     @abstractmethod
+    async def has_movies_by_category(self, category_id: int) -> bool:
+        pass
+
+    @abstractmethod
     async def delete(self, catalog_id: int) -> bool:
         pass
