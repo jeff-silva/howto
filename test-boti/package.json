@@ -4,7 +4,7 @@
   "description": "Este diretório contém a estrutura e configuração para uma aplicação fullstack em desenvolvimento.",
   "main": "index.js",
   "scripts": {
-    "dev": "docker compose up --build --force-recreate --remove-orphans"
+    "dev": "docker compose up -d --build --force-recreate --remove-orphans"
   },
   "keywords": [],
   "author": "",
