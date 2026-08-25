@@ -27,47 +27,55 @@
 - **Solução (Relacionamentos 1 para N ou Listas):** Usar **`selectinload`**. Isso faz o ORM trazer os pais numa query, e depois buscar todos os filhos em uma segunda query unificada usando `SELECT ... WHERE parent_id IN (...)`. Otimizado para não estourar a memória.
 
 ## 5. Front-End: Desafios Típicos para Full Stack (React)
+
 - **Gerenciamento de Estado e Ciclo de Vida:** Como você evita re-renderizações desnecessárias? (Uso correto de `useMemo`, `useCallback` e `React.memo`).
 - **Debounce em Buscas:** Nunca disparar a requisição de `search` a cada tecla digitada (keypress). É obrigatório implementar um **Debounce** (ex: esperar 500ms após o usuário parar de digitar para chamar a API).
 - **Acessibilidade (A11y) e Semântica:** E-commerces levam isso a sério. O seu componente precisa ser navegável por teclado (`tabindex`) e ter HTML semântico.
 - **Tratamento de Estado de UI:** A interface deve refletir claramente os 3 estados da chamada de rede: `Loading`, `Error` (com retry), e `Success` (com os dados).
 
 ## 6. Banco de Dados: Modelagem e Performance
+
 - **Problema:** Select muito lento por e-mail numa tabela de 5 milhões de usuários.
-- **Solução:** Criar um **Índice (Index)** na coluna `email`. 
+- **Solução:** Criar um **Índice (Index)** na coluna `email`.
 - **Trade-off (O lado ruim):** Cada índice adicional deixa a escrita (`INSERT`/`UPDATE`) mais lenta e consome mais espaço em disco.
 
 ## 7. Segurança de APIs: Armazenamento de JWT
+
 - **Problema:** Onde salvar o JWT no Frontend?
-- **Solução de Ouro:** Salvar em um **Cookie HttpOnly, Secure e SameSite (Lax/Strict)**. 
+- **Solução de Ouro:** Salvar em um **Cookie HttpOnly, Secure e SameSite (Lax/Strict)**.
 - **Por que não LocalStorage?** Porque o LocalStorage é vulnerável a ataques de **XSS** (Cross-Site Scripting).
 - **Alternativa:** Salvar em memória (variável do JS/React).
 
 ## 8. Front-End / SEO: O problema das SPAs
+
 - **Problema:** Site rápido em React/Vue, mas invisível no Google.
 - **Causa:** SPAs entregam uma `<div>` vazia do servidor, e os robôs do Google (crawlers) têm dificuldade para indexar JS.
 - **Solução:** Utilizar **SSR (Server-Side Rendering)** com ferramentas como Next.js ou Nuxt.js.
 
 ## 9. Boas Práticas HTTP REST
+
 - **Problema:** Atualizar apenas o status de um pedido.
 - **Solução:** Verbo **PATCH**.
 - **Diferença:** O `PATCH` é para atualizações parciais. O `PUT` serve para sobrescrever o recurso inteiro.
 
 ## 10. Front-End: Otimização de Imagens
+
 - **Problema:** Tela cheia de banners pesados demorando 5 segundos para carregar.
 - **Solução 1:** Usar **Lazy Loading** (`loading="lazy"` na tag `<img>`). Isso faz o navegador só baixar as imagens que estão aparecendo na tela, poupando a internet do usuário no carregamento inicial.
 - **Solução 2:** Converter formatos pesados (JPEG/PNG) para **WebP**, que são infinitamente mais leves.
 - **Solução Extra:** Servir as imagens via **CDN** (Content Delivery Network).
 
 ## 11. Testes Automatizados: Mocks vs Stubs
+
 - **Problema:** Qual a diferença teórica entre eles?
-- **Stub:** Fornece respostas "enlatadas" e pré-programadas para que o seu código continue rodando. (Ex: "Sempre que chamar essa função, retorne True"). Ele controla o *estado*.
-- **Mock:** Focado em comportamento. Você usa um mock para verificar *se* uma função foi chamada, *quantas vezes* foi chamada, e *com quais parâmetros* (Ex: verificar se o botão "Salvar" realmente chamou a API externa).
+- **Stub:** Fornece respostas "enlatadas" e pré-programadas para que o seu código continue rodando. (Ex: "Sempre que chamar essa função, retorne True"). Ele controla o _estado_.
+- **Mock:** Focado em comportamento. Você usa um mock para verificar _se_ uma função foi chamada, _quantas vezes_ foi chamada, e _com quais parâmetros_ (Ex: verificar se o botão "Salvar" realmente chamou a API externa).
 
 ## 12. Arquitetura: Comunicação de Microsserviços
+
 - **Problema:** Como avisar 5 sistemas diferentes (Estoque, E-mail, Faturamento) que uma compra foi feita, sem usar uma Fila tradicional (onde a mensagem some após o 1º ler)?
 - **Solução:** Padrão **Publish-Subscribe (Pub/Sub)** ou Arquitetura Baseada em Eventos.
-- **Como funciona:** O sistema de Compras não envia uma mensagem direta; ele "publica" um evento (Ex: `PedidoCriado`) em um **Tópico** (usando Kafka, AWS SNS ou RabbitMQ Fanout). 
+- **Como funciona:** O sistema de Compras não envia uma mensagem direta; ele "publica" um evento (Ex: `PedidoCriado`) em um **Tópico** (usando Kafka, AWS SNS ou RabbitMQ Fanout).
 - O Estoque e o E-mail são "Inscritos" (Subscribers) desse tópico. Quando o evento acontece, o Tópico clona a mensagem e entrega para todos os interessados simultaneamente!
 
 ---
@@ -77,21 +85,25 @@
 Se te perguntarem como o projeto está estruturado, essa é a explicação de cada camada, da mais interna (isolada) para a mais externa:
 
 ## 1. `domain/` (O Coração)
+
 - **O que guarda:** Regras de negócio puras, Entidades (Entities) e Value Objects.
-- **Exemplo:** A classe `MovieCategory` (nome, descrição). 
+- **Exemplo:** A classe `MovieCategory` (nome, descrição).
 - **Regra de Ouro:** Não importa biblioteca externa NENHUMA. Não tem SQLAlchemy, não tem Pydantic, não tem FastAPI. É só a linguagem pura.
 
 ## 2. `application/` (O Maestro)
+
 - **O que guarda:** Casos de Uso (Use Cases) e Interfaces/Contratos.
 - **Exemplo:** `MovieCategoryDeleteUseCase` e `IMovieCategoryRepository`.
-- **Regra de Ouro:** É aqui que a lógica acontece (ex: checar se categoria tem filmes antes de deletar). Ele conhece o `domain`, mas não sabe *como* o banco salva as coisas. Ele apenas dita as regras e exige que a Infraestrutura obedeça as suas Interfaces.
+- **Regra de Ouro:** É aqui que a lógica acontece (ex: checar se categoria tem filmes antes de deletar). Ele conhece o `domain`, mas não sabe _como_ o banco salva as coisas. Ele apenas dita as regras e exige que a Infraestrutura obedeça as suas Interfaces.
 
 ## 3. `infrastructure/` (O Operário)
+
 - **O que guarda:** A comunicação com o mundo externo (Banco de Dados, APIs Externas, Filas, AWS).
 - **Exemplo:** `SQLAlchemyMovieCategoryRepository`, os `models` do banco, e a configuração do ORM.
 - **Regra de Ouro:** É o código "sujo". Ele pega a interface limpinha que a Camada de Aplicação criou e faz ela funcionar de verdade usando o SQLAlchemy ou o Postgres.
 
 ## 4. `presentation/` (O Garçom)
+
 - **O que guarda:** A porta de entrada do usuário. Controladores, Rotas, Schemas de Request/Response.
 - **Exemplo:** Os arquivos do FastAPI (`routers`), os schemas do Pydantic (para validar o JSON) e as Injeções de Dependência.
 - **Regra de Ouro:** Não tem lógica de negócio aqui! A Rota apenas recebe o JSON, valida, chama o Caso de Uso, pega a resposta e devolve HTTP 200 (ou 400 se der erro).
@@ -117,4 +129,217 @@ app/
 │   ├── schemas/          -> Modelos do Pydantic para validar entradas e saídas JSON
 │   └── dependencies.py   -> O arquivo mágico de Injeção de Dependência que amarra tudo
 └── main.py               -> Ponto de inicialização da API
+```
+
+## React Hooks - Resumo Básico
+
+```tsx
+/**
+ * useState
+ * Cria um valor variável com função para alteração posterior.
+ */
+
+const [count, setCount] = useState(0);
+setCount((oldVal) => oldVal + 1);
+setCount(count + 1);
+```
+
+```tsx
+/**
+ * useEffect
+ * Executa com side effect (efeito colateral), ou seja:
+ * sempre que algo mudar, o callback definido aqui é executado.
+ */
+
+// Executa quando count mudar valor
+useEffect(() => console.log(count), [count]);
+
+// Executa no começo (onMounted)
+useEffect(() => console.log(count), []);
+
+// Executa sempre que qualquer coisa mudar
+useEffect(() => console.log(count));
+```
+
+```tsx
+/**
+ * useContext
+ * Reaproveita o valor de um contexto.
+ * Funciona parecido com Pinia.
+ */
+
+// para criar contexto em um arquivo.
+const ThemeContext = createContext("light");
+
+// Para usar em outro arquivo.
+const theme = useContext(ThemeContext);
+console.log(theme); // 'light'
+```
+
+```tsx
+/**
+ * useReducer
+ * Uma alternativa ao useState. Ideal para
+ * lógicas de estado mais complexas,
+ * que envolvem múltiplos subvalores,
+ * ou quando o próximo estado depende
+ * fortemente do estado anterior.
+ */
+
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+  if (action.type === "increment") return { count: state.count + 1 };
+  return state;
+}
+
+const [state, dispatch] = useReducer(reducer, initialState);
+dispatch({ type: "increment" });
+```
+
+```tsx
+/**
+ * useCallback
+ * Retorna uma função de callback memoizada.
+ * Isso evita que a função seja recriada
+ * a cada renderização, útil para otimizar componentes
+ * filhos que dependem dessa função.
+ */
+const memoizedCallback = useCallback(
+  () => {
+    doSomething(a, b);
+  },
+  [a, b], // Só recria a função se 'a' ou 'b' mudarem
+);
+```
+
+```tsx
+/**
+ * useMemo
+ * Diferença do useState:
+ * - useState GUARDA um valor e
+ *   ATUALIZA a tela quando muda.
+ * - useMemo CACHEIA um cálculo
+ *   pesado para não refazer a
+ *   cada renderização à toa.
+ */
+
+const memoizedValue = useMemo(
+  () => computeExpensiveValue(a, b),
+  [a, b], // Só recalcula se 'a' ou 'b' mudarem
+);
+```
+
+```tsx
+/**
+ * useRef
+ * Retorna um objeto mutável com 
+ * uma propriedade .current. Usado 
+ * para acessar elementos do DOM 
+ * diretamente ou armazenar valores 
+ * persistentes sem acionar nova
+ * renderização.
+ */
+const inputEl = useRef(null);
+
+// Focando o input diretamente
+if (inputEl.current) {
+  inputEl.current.focus();
+}
+
+// Em um JSX: <input ref={inputEl} />
+```
+
+```tsx
+/**
+ * useImperativeHandle
+ * Personaliza a instância exposta
+ * a componentes pai ao usar
+ * referências (ref). É utilizado
+ * junto com React.forwardRef.
+ */
+useImperativeHandle(ref, () => ({
+  focus: () => {
+    inputRef.current.focus();
+  },
+}));
+```
+
+```tsx
+/**
+ * useLayoutEffect
+ * Semelhante ao useEffect, mas
+ * dispara de forma síncrona logo
+ * após as mutações no DOM, antes
+ * que o navegador pinte a tela.
+ * Útil para medir o DOM.
+ */
+useLayoutEffect(() => {
+  console.log(boxRef.current.getBoundingClientRect());
+}, []);
+```
+
+```tsx
+/**
+ * useDebugValue
+ * Permite exibir um rótulo (label)
+ * personalizado no React DevTools
+ * para os seus custom hooks
+ * (hooks personalizados).
+ */
+function useFriendStatus(friendID) {
+  const [isOnline, setIsOnline] = useState(null);
+
+  // Exibirá "Online" ou "Offline" no React DevTools
+  useDebugValue(isOnline ? "Online" : "Offline");
+
+  return isOnline;
+}
+```
+
+## Novos Hooks (React 18+)
+
+```tsx
+/**
+ * useId
+ * Gera IDs únicos consistentes
+ * tanto na renderização do 
+ * servidor (SSR) quanto cliente.
+ * Útil para acessibilidade.
+ */
+const id = useId();
+
+// Uso no JSX:
+// <label htmlFor={id}>Nome:</label>
+// <input id={id} type="text" />
+```
+
+```tsx
+/**
+ * useTransition
+ * Permite marcar atualizações
+ * de estado como "não urgentes",
+ * mantendo a interface responsiva
+ * durante renderizações pesadas.
+ */
+const [isPending, startTransition] = useTransition();
+
+// A interface não trava enquanto o state é atualizado
+startTransition(() => {
+  setQuery(input);
+});
+```
+
+```tsx
+/**
+ * useDeferredValue
+ * Obtém versão "adiada" de um 
+ * valor. Útil para atrasar
+ * renderização de partes menos
+ * prioritárias da UI.
+ */
+const deferredQuery = useDeferredValue(query);
+
+// Se 'query' mudar rapidamente (ex: digitando),
+// 'deferredQuery' vai ficar defasado para não travar a tela
 ```
