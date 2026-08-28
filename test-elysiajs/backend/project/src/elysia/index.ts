@@ -1,25 +1,21 @@
 import { Elysia } from "elysia";
 import { openapi } from "@elysia/openapi";
 
-const appUser = new Elysia({ prefix: "/api/v1/app_user" })
-  .post("/", () => ({}), {
-    detail: { tags: ["app_user"] },
-  })
-  .put("/:id", ({ params: { id } }) => ({ id }), {
-    detail: { tags: ["app_user"] },
-  })
-  .get("/", () => [], {
-    detail: { tags: ["app_user"] },
-  })
-  .get("/:id", ({ params: { id } }) => ({ id }), {
-    detail: { tags: ["app_user"] },
-  })
-  .delete("/:id", ({ params: { id } }) => ({ id }), {
-    detail: { tags: ["app_user"] },
-  });
+import { AppError, AppErrorType } from "../shared/errors/AppError";
+import { ErrorTranslator } from "./ErrorTranslator";
+
+import testRoutes from "../modules/test/infrastructure/http/routes";
 
 const app = new Elysia()
   .use(openapi())
+  .onError(({ error, set }) => {
+    if (error instanceof AppError) {
+      set.status = ErrorTranslator.toHttpCode(error);
+      return { error: error.type, message: error.message };
+    }
+    set.status = 500;
+    return { error: "INTERNAL", message: "Erro inesperado no servidor." };
+  })
   .get("/", () => ({ hello: "world" }))
-  .use(appUser)
+  .use(testRoutes)
   .listen(3000);
