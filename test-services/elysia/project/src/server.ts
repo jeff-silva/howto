@@ -5,14 +5,34 @@ import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 import { config } from "./config.ts";
 
-import { connectRabbitMQ, startConsumer, publishEvent } from "./services/rabbitmq.ts";
+import {
+  connectRabbitMQ,
+  startConsumer,
+  publishEvent,
+} from "./services/rabbitmq.ts";
 
 // Conectar ao RabbitMQ assim que o servidor iniciar
 await connectRabbitMQ();
-await startConsumer("elysia_events", (msg) => {
-  console.log("📥 Received Event from RabbitMQ (elysia_events):", msg);
+
+// Escuta pedido criado
+await startConsumer("shop_order.created", async (data) => {
+  const shopOrder: any = JSON.parse(data);
+  console.log("shop_order.created:", shopOrder);
+
+  await publishEvent("payment_request.created", {
+    id: crypto.randomUUID(),
+    user_id: shopOrder.user_id,
+    amount: shopOrder.amount,
+  });
 });
 
+// Escruta requisição de pagamento criada
+await startConsumer("payment_request.created", async (data) => {
+  const paymentRequest: any = JSON.parse(data);
+  console.log("payment_request.created:", paymentRequest);
+});
+
+// Rotas
 export const app = new Elysia()
   .use(swagger())
   .use(bearer())
@@ -20,9 +40,4 @@ export const app = new Elysia()
   .use(jwt({ secret: config.JWT_SECRET }))
   .get("/", () => {
     return { hello: "world" };
-  })
-  .post("/send-event", async ({ body }) => {
-    const payload = body || { message: "Default Event Message" };
-    await publishEvent("elysia_events", payload);
-    return { success: true, message: "Event pushed to RabbitMQ!" };
   });

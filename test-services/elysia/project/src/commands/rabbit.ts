@@ -8,8 +8,14 @@ export default async function handle(args: string[]) {
   await connectRabbitMQ();
 
   const scope: Record<string, any> = {};
-  scope.message = { test: "aaa" };
-  scope.resp = await publishEvent("elysia_events", scope.message);
+  scope.message = {
+    id: crypto.randomUUID(),
+    user_id: crypto.randomUUID(),
+    amount: 100,
+    created_at: new Date(),
+  };
+
+  await publishEvent("shop_order.created", scope.message);
   console.log(scope);
 
   await closeRabbitMQ();
