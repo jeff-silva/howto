@@ -4,3 +4,4 @@ networks:
 
 include:
   - ./elysia/compose.yml
+  - ./rabbitmq/compose.yml

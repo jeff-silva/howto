@@ -1,0 +1,37 @@
+import { join } from "path";
+
+// No Bun/Node, o process.argv sempre vem assim:
+// [0] = executável (bun)
+// [1] = caminho deste arquivo (run)
+// [2] = o nome do comando (ex: "hello")
+// [3 em diante] = argumentos adicionais (ex: "--force", "jeff")
+
+const commandName = process.argv[2];
+const args = process.argv.slice(3);
+
+if (!commandName) {
+  console.error("❌ Ops! Você esqueceu de informar qual comando deseja executar.");
+  console.log("👉 Uso correto: bun ./run <comando> [parametros...]");
+  process.exit(1);
+}
+
+try {
+  // Usamos import.meta.dir para pegar sempre a partir do diretório atual, e jogar para a pasta src/commands
+  const commandModule = await import(join(import.meta.dir, "src", "commands", `${commandName}.ts`));
+  
+  // O padrão do mercado é realmente usar o "export default" como ponto de entrada
+  if (typeof commandModule.default === "function") {
+    // Executamos o comando repassando a array de argumentos para ele lidar como quiser!
+    await commandModule.default(args);
+  } else {
+    console.warn(`⚠️ O comando "${commandName}" existe, mas esqueceu de fazer o "export default async function"`);
+  }
+} catch (error: any) {
+  // Lidamos elegantemente caso o arquivo não exista
+  if (error.code === "ERR_MODULE_NOT_FOUND" || error.message.includes("Cannot find module")) {
+    console.error(`❌ O comando "${commandName}" não foi encontrado em src/commands/`);
+  } else {
+    console.error(`💥 Erro interno ao rodar o comando "${commandName}":`, error);
+  }
+  process.exit(1);
+}
