@@ -5,10 +5,13 @@ import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 import { config } from "./config.ts";
 
-import { connectRabbitMQ, publishEvent } from "./services/rabbitmq.ts";
+import { connectRabbitMQ, startConsumer, publishEvent } from "./services/rabbitmq.ts";
 
 // Conectar ao RabbitMQ assim que o servidor iniciar
-connectRabbitMQ();
+await connectRabbitMQ();
+await startConsumer("elysia_events", (msg) => {
+  console.log("📥 Received Event from RabbitMQ (elysia_events):", msg);
+});
 
 export const app = new Elysia()
   .use(swagger())
@@ -19,7 +22,7 @@ export const app = new Elysia()
     return { hello: "world" };
   })
   .post("/send-event", async ({ body }) => {
-    const message = JSON.stringify(body) || "Default Event Message";
-    await publishEvent(message);
+    const payload = body || { message: "Default Event Message" };
+    await publishEvent("elysia_events", payload);
     return { success: true, message: "Event pushed to RabbitMQ!" };
   });
