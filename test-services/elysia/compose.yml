@@ -1,0 +1,9 @@
+services:
+  elysia-app:
+    build: .
+    ports: ["3000:3000"]
+    volumes:
+      - ./project:/app
+    environment:
+      - NODE_ENV=development
+    command: bun run ${BUN_CMD:-start}
