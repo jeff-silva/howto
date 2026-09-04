@@ -1,7 +1,7 @@
 #!/bin/bash
 # bash -c "$(curl -fsSL https://raw.githubusercontent.com/jeff-silva/snippets/refs/heads/main/rabbitmq/create.sh)"
 
-CURRENT_DIR=$(cd "$(dirname "$0")" && pwd)
+CURRENT_DIR=$(pwd)
 echo "Current folder: $CURRENT_DIR"
 
 VALUE_DEFAULT="rabbitmq"

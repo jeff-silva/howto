@@ -5,3 +5,4 @@ networks:
 include:
   - ./elysia/compose.yml
   - ./rabbitmq/compose.yml
+  - ./n8n/compose.yml
