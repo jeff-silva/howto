@@ -1,5 +1,5 @@
 #!/bin/bash
-# bash -c "$(curl -fsSL https://raw.githubusercontent.com/jeff-silva/howto/refs/heads/main/bin/elysia/create.sh)"
+# bash -c "$(curl -fsSL https://raw.githubusercontent.com/jeff-silva/howto/refs/heads/main/bin/supabase/create.sh)"
 
 CURRENT_DIR=$(pwd)
 echo "Current folder: $CURRENT_DIR"
