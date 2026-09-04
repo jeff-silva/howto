@@ -1,5 +1,5 @@
 services:
-  elysia-app:
+  project:
     build: .
     ports: ["3000:3000"]
     volumes: [./project:/app]

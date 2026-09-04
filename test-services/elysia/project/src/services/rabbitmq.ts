@@ -7,14 +7,19 @@ let channel: any; // Usando any para evitar erros de tipagem com ConfirmChannel
 let connection: any;
 
 export const connectRabbitMQ = async () => {
-  try {
-    connection = await amqp.connect(RABBITMQ_URL);
-    // Usamos ConfirmChannel para termos certeza de que o RabbitMQ recebeu a mensagem!
-    channel = await connection.createConfirmChannel();
-    console.log("🐰 Connected to RabbitMQ!");
-  } catch (error) {
-    console.error("❌ RabbitMQ connection error:", error);
+  for (let i = 0; i < 15; i++) {
+    try {
+      connection = await amqp.connect(RABBITMQ_URL);
+      // Usamos ConfirmChannel para termos certeza de que o RabbitMQ recebeu a mensagem!
+      channel = await connection.createConfirmChannel();
+      console.log("🐰 Connected to RabbitMQ!");
+      return;
+    } catch (error: any) {
+      console.error(`❌ RabbitMQ connection error (retry ${i+1}/15)... waiting 2s`);
+      await new Promise(res => setTimeout(res, 2000));
+    }
   }
+  console.error("❌ Failed to connect to RabbitMQ after 15 retries.");
 };
 
 export const startConsumer = async (queueName: string, onMessage: (msg: string) => void) => {
@@ -54,6 +59,48 @@ export const publishEvent = (queueName: string, message: any): Promise<void> => 
         resolve();
       });
     }).catch(reject);
+  });
+};
+
+export const publishToExchange = (exchangeName: string, routingKey: string, message: any, exchangeType: string = 'topic'): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    if (!channel) {
+      return reject(new Error("RabbitMQ channel not initialized"));
+    }
+    
+    const payload = JSON.stringify(message);
+    
+    channel.assertExchange(exchangeName, exchangeType, { durable: true }).then(() => {
+      // publish aceita callback se for um ConfirmChannel
+      channel.publish(exchangeName, routingKey, Buffer.from(payload), { persistent: true }, (err: any) => {
+        if (err) {
+          return reject(err);
+        }
+        console.log(`📤 Published to Exchange '${exchangeName}' with key '${routingKey}':`, message);
+        resolve();
+      });
+    }).catch(reject);
+  });
+};
+
+export const consumeFromExchange = async (exchangeName: string, routingKey: string, onMessage: (msg: string) => void, exchangeType: string = 'topic', queueName: string = '') => {
+  if (!channel) {
+    throw new Error("RabbitMQ channel not initialized before starting consumer");
+  }
+  
+  await channel.assertExchange(exchangeName, exchangeType, { durable: true });
+  
+  // Se queueName for vazio, o RabbitMQ gera um nome aleatório e a fila será exclusiva (deletada ao desconectar)
+  const q = await channel.assertQueue(queueName, { exclusive: queueName === '' });
+  
+  await channel.bindQueue(q.queue, exchangeName, routingKey);
+  console.log(`🎧 Listening for messages on Exchange '${exchangeName}' (Queue: '${q.queue}', RoutingKey: '${routingKey}')`);
+  
+  channel.consume(q.queue, (msg: any) => {
+    if (msg) {
+      onMessage(msg.content.toString());
+      channel.ack(msg);
+    }
   });
 };
 

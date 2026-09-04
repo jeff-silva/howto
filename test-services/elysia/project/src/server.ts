@@ -9,27 +9,27 @@ import {
   connectRabbitMQ,
   startConsumer,
   publishEvent,
+  consumeFromExchange,
+  publishToExchange,
 } from "./services/rabbitmq.ts";
+import { Logger } from "./services/logger.ts";
 
 // Conectar ao RabbitMQ assim que o servidor iniciar
 await connectRabbitMQ();
 
-// Escuta pedido criado
-await startConsumer("shop_order.created", async (data) => {
-  const shopOrder: any = JSON.parse(data);
-  console.log("shop_order.created:", shopOrder);
-
-  await publishEvent("payment_request.created", {
+await consumeFromExchange("shop_order", "status:created", async (msg) => {
+  const paymentRequest = JSON.parse(msg);
+  await Logger.appendData('consume shop_order status:created', msg);
+  await publishToExchange("payment_request", "status:created", {
     id: crypto.randomUUID(),
-    user_id: shopOrder.user_id,
-    amount: shopOrder.amount,
+    payment_method: 'pix',
+    amount: paymentRequest.amount,
+    user_id: paymentRequest.user_id,
   });
 });
 
-// Escruta requisição de pagamento criada
-await startConsumer("payment_request.created", async (data) => {
-  const paymentRequest: any = JSON.parse(data);
-  console.log("payment_request.created:", paymentRequest);
+await consumeFromExchange("payment_request", "status:created", async (msg) => {
+  await Logger.appendData('consume payment_request status:created', msg);
 });
 
 // Rotas
