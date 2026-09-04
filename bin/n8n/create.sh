@@ -1,5 +1,5 @@
 #!/bin/bash
-# bash -c "$(curl -fsSL https://raw.githubusercontent.com/jeff-silva/snippets/refs/heads/main/n8n/create.sh)"
+# bash -c "$(curl -fsSL https://raw.githubusercontent.com/jeff-silva/howto/refs/heads/main/bin/n8n/create.sh)"
 
 CURRENT_DIR=$(pwd)
 echo "Current folder: $CURRENT_DIR"
@@ -7,7 +7,7 @@ echo "Current folder: $CURRENT_DIR"
 N8N_DIR="n8n"
 
 VALUE_DEFAULT=$N8N_DIR
-echo -e "\nDefine RabbitMQ folder (default: \"$VALUE_DEFAULT\")"
+echo -e "\nDefine folder (default: \"$VALUE_DEFAULT\")"
 echo "Place: $CURRENT_DIR/$VALUE_DEFAULT";
 read -p "New value (empty to keep default): " VALUE
 N8N_DIR=${VALUE:-$VALUE_DEFAULT}
