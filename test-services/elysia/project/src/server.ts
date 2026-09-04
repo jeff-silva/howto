@@ -17,9 +17,11 @@ import { Logger } from "./services/logger.ts";
 // Conectar ao RabbitMQ assim que o servidor iniciar
 await connectRabbitMQ();
 
+// ouvindo pedido criado
 await consumeFromExchange("shop_order", "status:created", async (msg) => {
   const paymentRequest = JSON.parse(msg);
   await Logger.appendData('consume shop_order status:created', msg);
+
   await publishToExchange("payment_request", "status:created", {
     id: crypto.randomUUID(),
     payment_method: 'pix',
@@ -28,8 +30,19 @@ await consumeFromExchange("shop_order", "status:created", async (msg) => {
   });
 });
 
+// ouvindo requisição de pagamento criada
 await consumeFromExchange("payment_request", "status:created", async (msg) => {
   await Logger.appendData('consume payment_request status:created', msg);
+});
+
+// ouvindo evento de erro no pagamento
+await consumeFromExchange("payment_request", "status:error", async (msg) => {
+  await Logger.appendData('consume payment_request status:error', msg);
+});
+
+// ouvindo evento de sucesso no pagamento
+await consumeFromExchange("payment_request", "status:success", async (msg) => {
+  await Logger.appendData('consume payment_request status:success', msg);
 });
 
 // Rotas
