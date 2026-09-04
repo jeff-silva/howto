@@ -83,7 +83,7 @@ export const publishToExchange = (exchangeName: string, routingKey: string, mess
   });
 };
 
-export const consumeFromExchange = async (exchangeName: string, routingKey: string, onMessage: (msg: string) => void, exchangeType: string = 'topic', queueName: string = '') => {
+export const consumeFromExchange = async (exchangeName: string, routingKey: string, onMessage: (msg: string) => void, exchangeType: string = 'topic', queueName: string = 'main') => {
   if (!channel) {
     throw new Error("RabbitMQ channel not initialized before starting consumer");
   }

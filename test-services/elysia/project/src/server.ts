@@ -53,4 +53,8 @@ export const app = new Elysia()
   .use(jwt({ secret: config.JWT_SECRET }))
   .get("/", () => {
     return { hello: "world" };
+  })
+  .post("/webhook", async (ctx) => {
+    await Logger.appendData('response', ctx.body);
+    return { hello: "world" };
   });
