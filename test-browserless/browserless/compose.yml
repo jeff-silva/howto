@@ -6,10 +6,16 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Sao_Paulo
-      - CHROME_CLI=--remote-debugging-port=9222 --remote-debugging-address=0.0.0.0
+      - CHROME_CLI=--remote-debugging-port=9222 --remote-debugging-address=0.0.0.0 --remote-allow-origins=*
     volumes:
       - ./config:/config # Persiste abas, sessões, senhas e histórico
     ports:
       - "3000:3000" # Interface visual no seu navegador
-      - "9222:9222" # Porta para o script Node.js controlar
+      - "9223:9223" # Porta proxy liberada para o Elysia controlar
     shm_size: "2gb"
+
+  browser-proxy:
+    image: alpine/socat
+    container_name: remote_browser_proxy
+    network_mode: "service:browser"
+    command: tcp-listen:9223,fork,reuseaddr tcp:127.0.0.1:9222

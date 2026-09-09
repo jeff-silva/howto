@@ -11,7 +11,7 @@ export const app = new Elysia()
 .use(bearer())
 .use(cors())
 .use(jwt({ secret: config.JWT_SECRET }))
-.use(autoload())
+.use(await autoload())
 .get("/", () => {
   return { hello: 'world' };
 })
