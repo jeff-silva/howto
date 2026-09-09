@@ -1,0 +1,13 @@
+{
+  "name": "test-browserless",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "docker compose stop && docker compose up -d --build --force-recreate --remove-orphans"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

@@ -1,0 +1,18 @@
+# services:
+#   app:
+#     image: node:20-alpine
+#     working_dir: /app
+#     volumes:
+#       - ./app:/app
+#     command: npm start
+#     depends_on:
+#       - browser
+#     restart: unless-stopped
+
+networks:
+  default:
+    name: main_network
+
+include:
+  - ./browserless/compose.yml
+  - ./elysia/compose.yml

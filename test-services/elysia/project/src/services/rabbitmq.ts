@@ -83,15 +83,18 @@ export const publishToExchange = (exchangeName: string, routingKey: string, mess
   });
 };
 
-export const consumeFromExchange = async (exchangeName: string, routingKey: string, onMessage: (msg: string) => void, exchangeType: string = 'topic', queueName: string = 'main') => {
+export const consumeFromExchange = async (exchangeName: string, routingKey: string, onMessage: (msg: string) => void, exchangeType: string = 'topic') => {
   if (!channel) {
     throw new Error("RabbitMQ channel not initialized before starting consumer");
   }
   
   await channel.assertExchange(exchangeName, exchangeType, { durable: true });
   
-  // Se queueName for vazio, o RabbitMQ gera um nome aleatório e a fila será exclusiva (deletada ao desconectar)
-  const q = await channel.assertQueue(queueName, { exclusive: queueName === '' });
+  // Cria um nome único baseado na exchange e routing key
+  const finalQueueName = `${exchangeName}_${routingKey.replace(/:/g, '_')}_queue`;
+  
+  // Garante que a fila existe
+  const q = await channel.assertQueue(finalQueueName, { durable: true });
   
   await channel.bindQueue(q.queue, exchangeName, routingKey);
   console.log(`🎧 Listening for messages on Exchange '${exchangeName}' (Queue: '${q.queue}', RoutingKey: '${routingKey}')`);

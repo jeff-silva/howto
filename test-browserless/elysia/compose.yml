@@ -1,0 +1,7 @@
+services:
+  elysia:
+    build: .
+    ports: ["3001:3000"]
+    volumes: [./project:/app]
+    env_file: [.env]
+    command: sh -c "bun install && bun run ${BUN_CMD:-dev}"
