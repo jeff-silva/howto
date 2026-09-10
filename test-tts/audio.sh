@@ -27,7 +27,7 @@ Quer transformar o seu site em uma máquina de verdade? Envie uma mensagem.
 A Labscrípit pode te ajudar.
 EOF
 
-ARQUIVO_SAIDA="output.mp3"
+ARQUIVO_SAIDA="audio.mp3"
 
 # Define se deseja gerar arquivo de legenda (.json) palavra por palavra (true ou false)
 GERAR_LEGENDA="false"
@@ -83,10 +83,13 @@ docker run --rm \
             cat /tmp/raw_transcript.json
         else
             ARQUIVO_JSON="${ARQUIVO_SAIDA%.*}.json"
-            cat /tmp/raw_transcript.json | jq "[.words[]? | {word: (.word | ltrimstr(\" \") | rtrimstr(\" \")), start: (.start*1000|round)/1000, end: (.end*1000|round)/1000}]" > "/app/$ARQUIVO_JSON"
-            echo "✅ Transcrição salva em $ARQUIVO_JSON"
+            cat /tmp/raw_transcript.json | jq "[.words[]? | {word: (.word | ltrimstr(\" \") | rtrimstr(\" \")), start: (.start*1000|round)/1000, end: (.end*1000|round)/1000}]" > "$ARQUIVO_JSON"
+            echo "window.AUDIO_WORDS = $(cat $ARQUIVO_JSON);" > hyperframes/words.js
+            echo "✅ Transcrição salva em $ARQUIVO_JSON e exportada para hyperframes/words.js"
         fi
     fi
   '
 
 echo "✅ Áudio incrível gerado em segundos! Verifique o arquivo $ARQUIVO_SAIDA"
+
+
