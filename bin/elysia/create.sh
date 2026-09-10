@@ -30,7 +30,7 @@ services:
     ports: ["3000:3000"]
     volumes: [./project:/app]
     env_file: [.env]
-    command: sh -c "bun install && bun run \${BUN_CMD:-start}"
+    command: sh -c "bun install && bun run \${BUN_CMD:-dev}"
 EOF
 
 # Dockerfile

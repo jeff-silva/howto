@@ -37,7 +37,6 @@ FILENAME="$CURRENT_DIR/$APP_DIR/compose.yml"
 networks:
   default:
     name: main_network
-    external: true
 
 include:
   - ./subfolder/compose.yml
