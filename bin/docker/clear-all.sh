@@ -1,4 +1,5 @@
 #!/bin/bash
+# bash -c "$(curl -fsSL https://raw.githubusercontent.com/jeff-silva/howto/refs/heads/main/bin/docker/clear-all.sh)"
 
 # ATENÇÃO: ESTE SCRIPT VAI DESTRUIR TUDO DO DOCKER!
 # Todos os containers, imagens, volumes e redes serão apagados.
