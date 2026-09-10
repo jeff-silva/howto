@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Labscript Promo</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --cream: #f4efeb;
+        --red: #b82823;
+        --dark: #222222;
+      }
+      body {
+        margin: 0;
+        background: var(--cream);
+        color: var(--dark);
+        font-family: 'Inter', sans-serif;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      h1, h2, .bubble-font {
+        font-family: 'Mochiy Pop One', sans-serif;
+        margin: 0;
+        line-height: 1.1;
+      }
+      
+      /* Asterisk decoration */
+      .asterisk {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M45,0 h10 v40 h40 v10 h-40 v40 h-10 v-40 h-40 v-10 h40 z" fill="%23b82823" transform="rotate(45 50 50)"/><path d="M45,0 h10 v40 h40 v10 h-40 v40 h-10 v-40 h-40 v-10 h40 z" fill="%23b82823"/></svg>') center/contain no-repeat;
+      }
+      .asterisk.cream {
+        background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M45,0 h10 v40 h40 v10 h-40 v40 h-10 v-40 h-40 v-10 h40 z" fill="%23f4efeb" transform="rotate(45 50 50)"/><path d="M45,0 h10 v40 h40 v10 h-40 v40 h-10 v-40 h-40 v-10 h40 z" fill="%23f4efeb"/></svg>') center/contain no-repeat;
+      }
+
+      /* Section 1 */
+      #scene1 {
+        background: var(--cream);
+        color: var(--red);
+        justify-content: center;
+        align-items: center;
+        padding: 80px;
+      }
+      #scene1 h1 {
+        font-size: 160px;
+        text-align: center;
+        letter-spacing: -2px;
+        z-index: 2;
+      }
+      #scene1 .desc {
+        font-size: 40px;
+        text-align: center;
+        margin-top: 60px;
+        color: var(--red);
+        max-width: 800px;
+        font-weight: 600;
+        z-index: 2;
+      }
+      
+      /* Section 2 */
+      #scene2 {
+        background: var(--red);
+        color: var(--cream);
+        justify-content: center;
+        padding: 100px;
+      }
+      #scene2 h2 {
+        font-size: 140px;
+        z-index: 2;
+      }
+      #scene2 .body-text {
+        font-size: 36px;
+        margin-top: 60px;
+        line-height: 1.5;
+        max-width: 750px;
+        font-weight: 400;
+        z-index: 2;
+      }
+      .giant-number {
+        position: absolute;
+        font-size: 600px;
+        font-family: 'Mochiy Pop One', sans-serif;
+        color: rgba(244, 239, 235, 0.15); /* Transparent cream */
+        right: -50px;
+        bottom: 100px;
+        line-height: 0.8;
+        z-index: 1;
+      }
+      #scene1 .giant-number, #scene3 .giant-number {
+        color: rgba(184, 40, 35, 0.1); /* Transparent red */
+        left: -50px;
+        top: 200px;
+      }
+
+      /* Section 3 */
+      #scene3 {
+        background: var(--cream);
+        color: var(--red);
+        justify-content: center;
+        padding: 100px;
+      }
+      #scene3 h2 {
+        font-size: 130px;
+        z-index: 2;
+      }
+      #scene3 .list {
+        font-size: 45px;
+        margin-top: 50px;
+        line-height: 1.6;
+        font-weight: 600;
+        z-index: 2;
+        color: var(--dark);
+      }
+      #scene3 .highlight {
+        color: var(--red);
+        font-family: 'Mochiy Pop One', sans-serif;
+        font-size: 60px;
+        margin-top: 40px;
+      }
+
+      /* Section 4 */
+      #scene4 {
+        background: var(--red);
+        color: var(--cream);
+        justify-content: center;
+        align-items: center;
+        padding: 100px;
+        text-align: center;
+      }
+      #scene4 h2 {
+        font-size: 150px;
+      }
+      #scene4 p {
+        font-size: 50px;
+        font-weight: 600;
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-width="1080"
+      data-height="1920"
+      data-duration="73.5"
+    >
+      <audio id="vo" src="./input/voiceover.mp3" data-start="0"></audio>
+
+      <!-- SCENE 1: 0 to 19.5s -->
+      <section id="scene1" class="clip" data-start="0" data-duration="19.5">
+        <div class="giant-number">01</div>
+        <div class="asterisk" style="top: 200px; right: 150px;"></div>
+        <div class="asterisk" style="bottom: 300px; left: 150px; transform: scale(0.7);"></div>
+        
+        <h1 id="s1-title">O SITE<br>DA SUA<br>EMPRESA</h1>
+        <div id="s1-desc" class="desc">não deve ser só um cartão de visitas bonitinho. Ele deve trabalhar por você.</div>
+      </section>
+
+      <!-- SCENE 2: 19.5 to 39.5s -->
+      <section id="scene2" class="clip" data-start="19.5" data-duration="20">
+        <div class="giant-number">02</div>
+        <div class="asterisk cream" style="top: 150px; right: 100px;"></div>
+        <div class="asterisk cream" style="bottom: 250px; left: 150px;"></div>
+
+        <h2 id="s2-title">Faça mais<br>com a<br>sua página</h2>
+        <div id="s2-desc" class="body-text">A Labscript constrói soluções sob medida que resolvem problemas reais. Emissão de segunda via ou pagamentos pela web? A Labscript faz. Receber, organizar e filtrar currículos? A Labscript faz.</div>
+      </section>
+
+      <!-- SCENE 3: 39.5 to 58s -->
+      <section id="scene3" class="clip" data-start="39.5" data-duration="18.5">
+        <div class="giant-number" style="top: -50px; left: auto; right: -50px;">03</div>
+        <div class="asterisk" style="top: 350px; left: 100px;"></div>
+        <div class="asterisk" style="bottom: 150px; right: 150px;"></div>
+
+        <h2 id="s3-title">Automação<br>Real</h2>
+        <div id="s3-list" class="list">
+          <div class="item">Inserir no funil de vendas?</div>
+          <div class="item">Enviar links de download?</div>
+          <div class="item">Gerar arquivos PDF?</div>
+          <div class="item">Receber pedidos?</div>
+          <div class="item">Abrir chamado?</div>
+          <div class="highlight" id="s3-highlight">A Labscript faz.</div>
+        </div>
+      </section>
+
+      <!-- SCENE 4: 58 to 73.5s -->
+      <section id="scene4" class="clip" data-start="58" data-duration="15.5">
+        <div class="giant-number" style="left: 50%; transform: translateX(-50%); bottom: 50px; color: rgba(244, 239, 235, 0.08);">04</div>
+        <div class="asterisk cream" style="top: 200px; left: 200px;"></div>
+        <div class="asterisk cream" style="top: 250px; right: 200px; transform: scale(1.5);"></div>
+
+        <h2 id="s4-title">Máquina<br>de<br>Verdade</h2>
+        <p id="s4-desc">Pare de ter prejuízo.<br>Mande um direct.</p>
+        <p id="s4-cta" class="bubble-font" style="color: var(--dark); font-size: 65px; background: var(--cream); padding: 30px 60px; border-radius: 100px; display: inline-block; margin-top: 80px;">A Labscript ajuda.</p>
+      </section>
+
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // Scene 1 animations
+      tl.from("#s1-title", { y: 100, opacity: 0, duration: 1, ease: "power3.out" }, 0.5);
+      tl.from("#s1-desc", { y: 50, opacity: 0, duration: 1, ease: "power3.out" }, 1.5);
+      tl.from("#scene1 .asterisk", { scale: 0, rotation: -90, opacity: 0, duration: 1, stagger: 0.2, ease: "back.out(1.5)" }, 0.8);
+      tl.from("#scene1 .giant-number", { x: -100, opacity: 0, duration: 1.5, ease: "power2.out" }, 0);
+
+      // Scene 2 animations
+      tl.from("#s2-title", { x: -100, opacity: 0, duration: 1, ease: "power3.out" }, 20);
+      tl.from("#s2-desc", { opacity: 0, duration: 1, ease: "power2.out" }, 21);
+      tl.from("#scene2 .asterisk", { scale: 0, rotation: 90, opacity: 0, duration: 1, stagger: 0.2, ease: "back.out(1.5)" }, 20.5);
+      tl.from("#scene2 .giant-number", { x: 100, opacity: 0, duration: 1.5, ease: "power2.out" }, 19.5);
+
+      // Scene 3 animations
+      tl.from("#s3-title", { y: -100, opacity: 0, duration: 1, ease: "power3.out" }, 40);
+      tl.from("#scene3 .item", { x: -50, opacity: 0, duration: 0.6, stagger: 0.4, ease: "power2.out" }, 41);
+      tl.from("#s3-highlight", { scale: 0.8, opacity: 0, duration: 0.8, ease: "back.out(2)" }, 56);
+      tl.from("#scene3 .asterisk", { scale: 0, rotation: -180, opacity: 0, duration: 1, stagger: 0.2, ease: "back.out(1.5)" }, 40.5);
+
+      // Scene 4 animations
+      tl.from("#s4-title", { scale: 0.8, opacity: 0, duration: 1, ease: "back.out(1.2)" }, 58.5);
+      tl.from("#s4-desc", { y: 50, opacity: 0, duration: 1, ease: "power2.out" }, 60);
+      tl.from("#s4-cta", { y: 50, scale: 0.5, opacity: 0, duration: 1, ease: "back.out(1.5)" }, 70);
+      tl.from("#scene4 .asterisk", { scale: 0, rotation: 180, opacity: 0, duration: 1, stagger: 0.2, ease: "back.out(1.5)" }, 59);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,782 @@
+[
+  {
+    "word": "O",
+    "start": 0.02,
+    "end": 0.28
+  },
+  {
+    "word": "site",
+    "start": 0.28,
+    "end": 0.66
+  },
+  {
+    "word": "da",
+    "start": 0.66,
+    "end": 0.86
+  },
+  {
+    "word": "sua",
+    "start": 0.86,
+    "end": 1
+  },
+  {
+    "word": "empresa",
+    "start": 1,
+    "end": 1.4
+  },
+  {
+    "word": "não",
+    "start": 1.4,
+    "end": 1.62
+  },
+  {
+    "word": "deve",
+    "start": 1.62,
+    "end": 1.84
+  },
+  {
+    "word": "ser",
+    "start": 1.84,
+    "end": 2.02
+  },
+  {
+    "word": "só",
+    "start": 2.02,
+    "end": 2.22
+  },
+  {
+    "word": "um",
+    "start": 2.22,
+    "end": 2.34
+  },
+  {
+    "word": "cartão",
+    "start": 2.34,
+    "end": 2.72
+  },
+  {
+    "word": "de",
+    "start": 2.72,
+    "end": 2.86
+  },
+  {
+    "word": "visitas",
+    "start": 2.86,
+    "end": 3.36
+  },
+  {
+    "word": "bonitinho.",
+    "start": 3.36,
+    "end": 4.42
+  },
+  {
+    "word": "Ele",
+    "start": 4.88,
+    "end": 5.02
+  },
+  {
+    "word": "deve",
+    "start": 5.02,
+    "end": 5.24
+  },
+  {
+    "word": "trabalhar",
+    "start": 5.24,
+    "end": 5.64
+  },
+  {
+    "word": "por",
+    "start": 5.64,
+    "end": 5.94
+  },
+  {
+    "word": "você.",
+    "start": 5.94,
+    "end": 6.32
+  },
+  {
+    "word": "Muitas",
+    "start": 7.32,
+    "end": 7.64
+  },
+  {
+    "word": "empresas",
+    "start": 7.64,
+    "end": 8.18
+  },
+  {
+    "word": "gastam",
+    "start": 8.18,
+    "end": 8.62
+  },
+  {
+    "word": "uma",
+    "start": 8.62,
+    "end": 8.8
+  },
+  {
+    "word": "fortuna",
+    "start": 8.8,
+    "end": 9.3
+  },
+  {
+    "word": "para",
+    "start": 9.3,
+    "end": 9.52
+  },
+  {
+    "word": "colocar",
+    "start": 9.52,
+    "end": 9.9
+  },
+  {
+    "word": "um",
+    "start": 9.9,
+    "end": 10.06
+  },
+  {
+    "word": "site",
+    "start": 10.06,
+    "end": 10.38
+  },
+  {
+    "word": "no",
+    "start": 10.38,
+    "end": 10.6
+  },
+  {
+    "word": "ar",
+    "start": 10.6,
+    "end": 10.74
+  },
+  {
+    "word": "e",
+    "start": 10.74,
+    "end": 10.82
+  },
+  {
+    "word": "depois",
+    "start": 10.82,
+    "end": 11.12
+  },
+  {
+    "word": "deixam",
+    "start": 11.12,
+    "end": 11.52
+  },
+  {
+    "word": "ele",
+    "start": 11.52,
+    "end": 11.76
+  },
+  {
+    "word": "lá,",
+    "start": 11.76,
+    "end": 12.28
+  },
+  {
+    "word": "parado.",
+    "start": 12.28,
+    "end": 12.72
+  },
+  {
+    "word": "Um",
+    "start": 13.64,
+    "end": 13.8
+  },
+  {
+    "word": "site",
+    "start": 13.8,
+    "end": 14.18
+  },
+  {
+    "word": "que",
+    "start": 14.18,
+    "end": 14.34
+  },
+  {
+    "word": "só",
+    "start": 14.34,
+    "end": 14.52
+  },
+  {
+    "word": "tem",
+    "start": 14.52,
+    "end": 14.7
+  },
+  {
+    "word": "o",
+    "start": 14.7,
+    "end": 14.82
+  },
+  {
+    "word": "seu",
+    "start": 14.82,
+    "end": 14.96
+  },
+  {
+    "word": "endereço",
+    "start": 14.96,
+    "end": 15.36
+  },
+  {
+    "word": "e",
+    "start": 15.36,
+    "end": 15.5
+  },
+  {
+    "word": "o",
+    "start": 15.5,
+    "end": 15.58
+  },
+  {
+    "word": "botão",
+    "start": 15.58,
+    "end": 15.86
+  },
+  {
+    "word": "do",
+    "start": 15.86,
+    "end": 16.02
+  },
+  {
+    "word": "WhatsApp",
+    "start": 16.02,
+    "end": 16.38
+  },
+  {
+    "word": "não",
+    "start": 16.38,
+    "end": 16.8
+  },
+  {
+    "word": "é",
+    "start": 16.8,
+    "end": 16.96
+  },
+  {
+    "word": "uma",
+    "start": 16.96,
+    "end": 17.1
+  },
+  {
+    "word": "ferramenta,",
+    "start": 17.1,
+    "end": 18.1
+  },
+  {
+    "word": "é",
+    "start": 18.1,
+    "end": 18.18
+  },
+  {
+    "word": "só",
+    "start": 18.18,
+    "end": 18.4
+  },
+  {
+    "word": "um",
+    "start": 18.4,
+    "end": 18.54
+  },
+  {
+    "word": "panfleto",
+    "start": 18.54,
+    "end": 19.06
+  },
+  {
+    "word": "digital.",
+    "start": 19.06,
+    "end": 19.48
+  },
+  {
+    "word": "Faça",
+    "start": 20.66,
+    "end": 20.96
+  },
+  {
+    "word": "mais",
+    "start": 20.96,
+    "end": 21.3
+  },
+  {
+    "word": "com",
+    "start": 21.3,
+    "end": 21.46
+  },
+  {
+    "word": "a",
+    "start": 21.46,
+    "end": 21.66
+  },
+  {
+    "word": "sua",
+    "start": 21.66,
+    "end": 21.88
+  },
+  {
+    "word": "página.",
+    "start": 21.88,
+    "end": 22.82
+  },
+  {
+    "word": "A",
+    "start": 23.36,
+    "end": 23.54
+  },
+  {
+    "word": "Labscript",
+    "start": 23.54,
+    "end": 24.04
+  },
+  {
+    "word": "constrói",
+    "start": 24.04,
+    "end": 24.62
+  },
+  {
+    "word": "soluções",
+    "start": 24.62,
+    "end": 25.2
+  },
+  {
+    "word": "sob",
+    "start": 25.2,
+    "end": 25.42
+  },
+  {
+    "word": "medida",
+    "start": 25.42,
+    "end": 25.76
+  },
+  {
+    "word": "que",
+    "start": 25.76,
+    "end": 25.98
+  },
+  {
+    "word": "resolvem",
+    "start": 25.98,
+    "end": 26.52
+  },
+  {
+    "word": "problemas",
+    "start": 26.52,
+    "end": 27
+  },
+  {
+    "word": "reais.",
+    "start": 27,
+    "end": 27.34
+  },
+  {
+    "word": "Emissão",
+    "start": 28.52,
+    "end": 28.98
+  },
+  {
+    "word": "de",
+    "start": 28.98,
+    "end": 29.14
+  },
+  {
+    "word": "segunda",
+    "start": 29.14,
+    "end": 29.48
+  },
+  {
+    "word": "via",
+    "start": 29.48,
+    "end": 29.82
+  },
+  {
+    "word": "ou",
+    "start": 29.82,
+    "end": 30
+  },
+  {
+    "word": "pagamentos",
+    "start": 30,
+    "end": 30.62
+  },
+  {
+    "word": "pela",
+    "start": 30.62,
+    "end": 30.9
+  },
+  {
+    "word": "web",
+    "start": 30.9,
+    "end": 31.26
+  },
+  {
+    "word": "A",
+    "start": 32.2,
+    "end": 32.38
+  },
+  {
+    "word": "Lapscript",
+    "start": 32.38,
+    "end": 32.9
+  },
+  {
+    "word": "faz",
+    "start": 32.9,
+    "end": 33.36
+  },
+  {
+    "word": "Receber,",
+    "start": 34.46,
+    "end": 35.3
+  },
+  {
+    "word": "organizar",
+    "start": 35.3,
+    "end": 35.86
+  },
+  {
+    "word": "e",
+    "start": 35.86,
+    "end": 36.02
+  },
+  {
+    "word": "filtrar",
+    "start": 36.02,
+    "end": 36.34
+  },
+  {
+    "word": "currículos",
+    "start": 36.34,
+    "end": 36.88
+  },
+  {
+    "word": "A",
+    "start": 37.9,
+    "end": 38.1
+  },
+  {
+    "word": "Lapscript",
+    "start": 38.1,
+    "end": 38.58
+  },
+  {
+    "word": "faz",
+    "start": 38.58,
+    "end": 39.14
+  },
+  {
+    "word": "Inserir",
+    "start": 40.22,
+    "end": 40.68
+  },
+  {
+    "word": "o",
+    "start": 40.68,
+    "end": 40.8
+  },
+  {
+    "word": "cliente",
+    "start": 40.8,
+    "end": 41.22
+  },
+  {
+    "word": "no",
+    "start": 41.22,
+    "end": 41.36
+  },
+  {
+    "word": "funil",
+    "start": 41.36,
+    "end": 41.62
+  },
+  {
+    "word": "de",
+    "start": 41.62,
+    "end": 41.8
+  },
+  {
+    "word": "vendas",
+    "start": 41.8,
+    "end": 42.26
+  },
+  {
+    "word": "Enviar",
+    "start": 43.2,
+    "end": 43.68
+  },
+  {
+    "word": "links",
+    "start": 43.68,
+    "end": 44.02
+  },
+  {
+    "word": "de",
+    "start": 44.02,
+    "end": 44.18
+  },
+  {
+    "word": "download",
+    "start": 44.18,
+    "end": 44.48
+  },
+  {
+    "word": "por",
+    "start": 44.48,
+    "end": 44.76
+  },
+  {
+    "word": "e-mail",
+    "start": 44.76,
+    "end": 45.12
+  },
+  {
+    "word": "Gerar",
+    "start": 46,
+    "end": 46.42
+  },
+  {
+    "word": "arquivos",
+    "start": 46.42,
+    "end": 46.86
+  },
+  {
+    "word": "PDF",
+    "start": 46.86,
+    "end": 47.18
+  },
+  {
+    "word": "Receber",
+    "start": 48.5,
+    "end": 49
+  },
+  {
+    "word": "arquivos",
+    "start": 49,
+    "end": 49.6
+  },
+  {
+    "word": "Receber",
+    "start": 50.52,
+    "end": 51.08
+  },
+  {
+    "word": "pedidos",
+    "start": 51.08,
+    "end": 51.64
+  },
+  {
+    "word": "Enviar",
+    "start": 52.62,
+    "end": 53.16
+  },
+  {
+    "word": "e-mails",
+    "start": 53.16,
+    "end": 53.52
+  },
+  {
+    "word": "Abrir",
+    "start": 54.58,
+    "end": 54.94
+  },
+  {
+    "word": "chamado",
+    "start": 54.94,
+    "end": 55.36
+  },
+  {
+    "word": "A",
+    "start": 56.34,
+    "end": 56.52
+  },
+  {
+    "word": "Lapscript",
+    "start": 56.52,
+    "end": 56.92
+  },
+  {
+    "word": "faz.",
+    "start": 56.92,
+    "end": 58.02
+  },
+  {
+    "word": "Se",
+    "start": 58.62,
+    "end": 58.74
+  },
+  {
+    "word": "o",
+    "start": 58.74,
+    "end": 58.86
+  },
+  {
+    "word": "seu",
+    "start": 58.86,
+    "end": 58.98
+  },
+  {
+    "word": "site",
+    "start": 58.98,
+    "end": 59.34
+  },
+  {
+    "word": "não",
+    "start": 59.34,
+    "end": 59.56
+  },
+  {
+    "word": "está",
+    "start": 59.56,
+    "end": 59.78
+  },
+  {
+    "word": "automatizando",
+    "start": 59.78,
+    "end": 60.42
+  },
+  {
+    "word": "o",
+    "start": 60.42,
+    "end": 60.54
+  },
+  {
+    "word": "seu",
+    "start": 60.54,
+    "end": 60.64
+  },
+  {
+    "word": "trabalho",
+    "start": 60.64,
+    "end": 61.06
+  },
+  {
+    "word": "e",
+    "start": 61.06,
+    "end": 61.28
+  },
+  {
+    "word": "captando",
+    "start": 61.28,
+    "end": 61.72
+  },
+  {
+    "word": "clientes,",
+    "start": 61.72,
+    "end": 62.58
+  },
+  {
+    "word": "ele",
+    "start": 62.58,
+    "end": 62.68
+  },
+  {
+    "word": "está",
+    "start": 62.68,
+    "end": 62.88
+  },
+  {
+    "word": "te",
+    "start": 62.88,
+    "end": 63.04
+  },
+  {
+    "word": "dando",
+    "start": 63.04,
+    "end": 63.28
+  },
+  {
+    "word": "prejuízo.",
+    "start": 63.28,
+    "end": 63.9
+  },
+  {
+    "word": "Quer",
+    "start": 64.88,
+    "end": 64.98
+  },
+  {
+    "word": "transformar",
+    "start": 64.98,
+    "end": 65.66
+  },
+  {
+    "word": "o",
+    "start": 65.66,
+    "end": 65.76
+  },
+  {
+    "word": "seu",
+    "start": 65.76,
+    "end": 65.92
+  },
+  {
+    "word": "site",
+    "start": 65.92,
+    "end": 66.26
+  },
+  {
+    "word": "em",
+    "start": 66.26,
+    "end": 66.44
+  },
+  {
+    "word": "uma",
+    "start": 66.44,
+    "end": 66.6
+  },
+  {
+    "word": "máquina",
+    "start": 66.6,
+    "end": 66.98
+  },
+  {
+    "word": "de",
+    "start": 66.98,
+    "end": 67.18
+  },
+  {
+    "word": "verdade?",
+    "start": 67.18,
+    "end": 67.48
+  },
+  {
+    "word": "Mande",
+    "start": 68.72,
+    "end": 69
+  },
+  {
+    "word": "um",
+    "start": 69,
+    "end": 69.18
+  },
+  {
+    "word": "direct.",
+    "start": 69.18,
+    "end": 70.06
+  },
+  {
+    "word": "A",
+    "start": 70.64,
+    "end": 70.8
+  },
+  {
+    "word": "Lapscript",
+    "start": 70.8,
+    "end": 71.28
+  },
+  {
+    "word": "pode",
+    "start": 71.28,
+    "end": 71.8
+  },
+  {
+    "word": "te",
+    "start": 71.8,
+    "end": 71.94
+  },
+  {
+    "word": "ajudar.",
+    "start": 71.94,
+    "end": 72.8
+  }
+]
