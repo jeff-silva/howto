@@ -16,4 +16,24 @@ services:
     volumes:
       - ./:/app
       - ./.cache:/root/.cache
-    command: sh -c "mkdir -p output && hyperframes render input/ -o output/video.mp4"
+    command: sh -c "mkdir -p public && hyperframes render public/ -o public/video.mp4"
+
+  preview:
+    build:
+      context: .
+    working_dir: /app
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    ports:
+      - "3002:3000"
+    volumes:
+      - ./public:/app
+    command: >
+      sh -c "
+      echo '#!/bin/sh' > /usr/local/bin/chromium-wrapper &&
+      echo '/usr/bin/chromium --no-sandbox \"\$$@\"' >> /usr/local/bin/chromium-wrapper &&
+      chmod +x /usr/local/bin/chromium-wrapper &&
+      export PUPPETEER_EXECUTABLE_PATH=/usr/local/bin/chromium-wrapper &&
+      node -e \"const net=require('net'); net.createServer(c=>{const p=net.connect(3002,'127.0.0.1'); c.pipe(p).pipe(c); c.on('error',()=>{}); p.on('error',()=>{});}).listen(3000,'0.0.0.0');\" &
+      hyperframes preview . --no-open --port=3002 --foreground"

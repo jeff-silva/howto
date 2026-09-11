@@ -1,12 +1,12 @@
 #!/bin/sh
 
 # Configurações (podem ser substituídas por variáveis de ambiente via .env)
-ARQUIVO_SAIDA=${ARQUIVO_SAIDA:-"output/audio.mp3"}
+ARQUIVO_SAIDA=${ARQUIVO_SAIDA:-"public/audio.mp3"}
 GERAR_LEGENDA=${GERAR_LEGENDA:-"false"}
 VOZ=${VOZ:-"pt-BR-ThalitaMultilingualNeural"}
-TEXTO_ARQUIVO="input/audio.txt"
+TEXTO_ARQUIVO="public/audio.txt"
 
-mkdir -p output
+mkdir -p public
 
 echo "⚡ Instalando edge-tts no contêiner..."
 pip install -q edge-tts
@@ -44,8 +44,8 @@ if [ -n "$GROQ_API_KEY" ] && [ "$GERAR_LEGENDA" = "true" ]; then
     else
         ARQUIVO_JSON="${ARQUIVO_SAIDA%.*}.json"
         cat /tmp/raw_transcript.json | jq "[.words[]? | {word: (.word | ltrimstr(\" \") | rtrimstr(\" \")), start: (.start*1000|round)/1000, end: (.end*1000|round)/1000}]" > "$ARQUIVO_JSON"
-        echo "window.AUDIO_WORDS = $(cat $ARQUIVO_JSON);" > input/audio.js
-        echo "✅ Transcrição salva em $ARQUIVO_JSON e exportada para input/audio.js"
+        echo "window.AUDIO_WORDS = $(cat $ARQUIVO_JSON);" > public/audio.js
+        echo "✅ Transcrição salva em $ARQUIVO_JSON e exportada para public/audio.js"
     fi
 fi
 

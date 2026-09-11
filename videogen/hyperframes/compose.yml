@@ -1,0 +1,14 @@
+services:
+  cli:
+    build: .
+    volumes:
+      - ./:/workspace
+      - ./.cache:/root/.cache
+    ports: ["3000:3000"]
+    command: sleep infinity
+
+  proxy:
+    image: alpine/socat
+    network_mode: "service:cli"
+    depends_on: [cli]
+    command: tcp-listen:3000,fork,reuseaddr tcp-connect:127.0.0.1:3002
