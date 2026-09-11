@@ -1,52 +1,514 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=1920, height=1080">
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080, height=1920">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            indigo: '#181423',
+            darkindigo: '#0B0813',
+            neonpurple: '#8C3FFF',
+            slate: '#cbd5e1',
+          },
+          fontFamily: {
+            sans: ['"Share Tech"', 'sans-serif']
+          }
+        }
       }
-      html,
-      body {
-        margin: 0;
-        width: 1920px;
-        height: 1080px;
-        overflow: hidden;
-        background: #000;
-      }
-      body {
-        font-family: "Inter", sans-serif;
-      }
-      code,
-      pre,
-      .monospace {
-        font-family: "JetBrains Mono", monospace;
-      }
-    </style>
-  </head>
-  <body>
-    <div data-hf-id="hf-199x" id="root" data-composition-id="main" data-start="0" data-duration="10" data-width="1920" data-height="1080">
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech&display=swap" rel="stylesheet">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; font-family: 'Share Tech', sans-serif; }
+    .clip { position: absolute; top: 0; left: 0; width: 1080px; height: 1920px; overflow: hidden; }
+    
+    .grid-bg {
+      position: absolute; width: 200%; height: 200%;
+      bottom: -50%; left: -50%;
+      background-image: 
+        linear-gradient(rgba(140, 63, 255, 0.3) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(140, 63, 255, 0.3) 2px, transparent 2px);
+      background-size: 100px 100px;
+      transform: perspective(1000px) rotateX(60deg);
+      z-index: 0;
+    }
+    
+    .text-outline {
+      -webkit-text-stroke: 2px #fff;
+      color: transparent;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+  <div data-hf-id="hf-gw9g" id="root" data-composition-id="main" data-start="0" data-duration="55.70" data-width="1080" data-height="1920" class="bg-darkindigo">
+    
+    <!-- Audios -->
+    <audio data-hf-id="hf-17pa" id="voice" src="audio.mp3" data-start="0" data-duration="55.70"></audio>
+    <audio data-hf-id="hf-tkpf" id="bgm" src="bgm.mp3" loop data-start="0" data-duration="55.70"></audio>
+    
+    <!-- Cena 1 -->
+    <div data-hf-id="hf-bkgo" id="scene1" class="clip bg-white flex items-center justify-center" data-start="0" data-duration="6.24" data-track-index="1">
+      <div data-hf-id="hf-zmhk" id="card" class="w-[600px] h-[350px] bg-gray-200 border-4 border-gray-300 rounded-lg shadow-xl flex items-center justify-center absolute">
+        <span data-hf-id="hf-xj7i" class="text-4xl text-gray-500">Cartão de Visitas</span>
+      </div>
+      <div data-hf-id="hf-435u" id="card-shadow" class="w-[500px] h-[50px] bg-black/20 blur-xl absolute bottom-[400px] rounded-[100%] scale-0"></div>
       
+      <div data-hf-id="hf-gsqb" id="scene1-flash" class="absolute inset-0 bg-neonpurple opacity-0 z-10"></div>
       
-
-      <!--
-        Add your clips here. Example:
-        <div id="title" class="clip" data-start="0" data-duration="5" data-track-index="1"
-             style="font-size: 64px; color: #fff; padding: 40px">
-          Hello World
-        </div>
-      -->
+      <div data-hf-id="hf-yrf5" id="scene1-end" class="absolute inset-0 bg-indigo hidden z-20 flex-col items-center justify-center">
+        <div data-hf-id="hf-q4u8" class="grid-bg"></div>
+        <h1 data-hf-id="hf-pimb" id="scene1-text" class="text-9xl text-white font-bold text-center leading-none z-10 scale-150 opacity-0">TRABALHAR<br data-hf-id="hf-x5px">POR VOCÊ</h1>
+      </div>
     </div>
 
-    <script>
-      window.__timelines = window.__timelines || {};
-      const tl = gsap.timeline({ paused: true });
-      // Example: tl.from("#title", { opacity: 0, y: -50, duration: 1 }, 0);
-      window.__timelines["main"] = tl;
-    </script>
-  </body>
+    <!-- Cena 2 -->
+    <div data-hf-id="hf-d863" id="scene2" class="clip bg-indigo flex items-center justify-center" data-start="6.32" data-duration="5.78" data-track-index="1">
+      <div data-hf-id="hf-wbnc" class="grid-bg"></div>
+      <div data-hf-id="hf-asu5" id="safe" class="w-[400px] h-[400px] bg-slate-800 border-8 border-slate-600 rounded-3xl absolute bottom-[200px] z-10 flex items-center justify-center perspective-[1000px]">
+        <div data-hf-id="hf-0ht4" class="w-[300px] h-[300px] bg-slate-900 border-4 border-black rounded-full flex items-center justify-center absolute"></div>
+        <div data-hf-id="hf-g0x8" id="safe-door" class="w-full h-full bg-slate-700 border-8 border-slate-500 rounded-3xl origin-left rotate-y-[-110deg] absolute"></div>
+      </div>
+      
+      <div data-hf-id="hf-ck9t" id="money-container" class="absolute w-full h-full pointer-events-none z-0"></div>
+      
+      <div data-hf-id="hf-cusc" id="lock" class="absolute z-20 opacity-0 scale-150">
+        <iconify-icon data-hf-id="hf-neir" icon="lucide:lock" width="400" height="400" class="text-neonpurple drop-shadow-2xl"></iconify-icon>
+      </div>
+    </div>
+
+    <!-- Cena 3 -->
+    <div data-hf-id="hf-1f6b" id="scene3" class="clip bg-indigo flex items-center justify-center" data-start="12.10" data-duration="6.08" data-track-index="1">
+      <div data-hf-id="hf-ivux" id="phone" class="w-[500px] h-[1000px] border-[16px] border-white rounded-[60px] bg-gray-100 absolute flex flex-col items-center p-8 gap-6 z-10 relative overflow-hidden">
+        <div data-hf-id="hf-khau" class="w-full h-32 bg-gray-300 rounded-2xl"></div>
+        <div data-hf-id="hf-x7du" class="w-full h-12 bg-gray-300 rounded-xl mt-4"></div>
+        <div data-hf-id="hf-l3za" class="w-full h-12 bg-gray-300 rounded-xl"></div>
+        <div data-hf-id="hf-g399" class="w-full h-64 bg-gray-300 rounded-2xl mt-4"></div>
+        
+        <div data-hf-id="hf-j25z" id="whatsapp" class="absolute bottom-8 right-8 scale-0">
+          <iconify-icon data-hf-id="hf-lkvy" icon="logos:whatsapp-icon" width="100" height="100"></iconify-icon>
+        </div>
+      </div>
+      
+      <div data-hf-id="hf-n58q" id="cross" class="absolute z-20 opacity-0 scale-50">
+        <iconify-icon data-hf-id="hf-m81s" icon="lucide:x" width="600" height="600" class="text-red-500"></iconify-icon>
+      </div>
+      
+      <h1 data-hf-id="hf-60jv" id="scene3-text" class="text-8xl text-white font-bold absolute top-32 z-30 opacity-0 bg-red-600 px-8 py-4 uppercase">PANFLETO DIGITAL</h1>
+    </div>
+
+    <!-- Cena 4 -->
+    <div data-hf-id="hf-4scq" id="scene4" class="clip bg-neonpurple flex items-center justify-center overflow-hidden" data-start="18.28" data-duration="8.00" data-track-index="1">
+      <img data-hf-id="hf-fjlr" id="logo1" src="labscript.dev.png" class="w-[800px] z-10 scale-0 opacity-0 absolute">
+      <div data-hf-id="hf-38xy" id="reactions-container" class="absolute inset-0 pointer-events-none z-20"></div>
+    </div>
+
+    <!-- Cena 5 -->
+    <div data-hf-id="hf-pyca" id="scene5" class="clip bg-indigo flex items-center justify-center" data-start="26.34" data-duration="4.42" data-track-index="1">
+      <div data-hf-id="hf-v4q9" class="grid-bg"></div>
+      <div data-hf-id="hf-jtcu" id="boleto" class="absolute w-[600px] h-[300px] bg-white rounded-xl shadow-2xl p-8 flex flex-col gap-4 transform rotate-[-10deg] x-[-200px] y-[100px] opacity-0">
+         <div data-hf-id="hf-8hr0" class="w-full h-12 bg-black"></div>
+         <div data-hf-id="hf-fdfm" class="w-1/2 h-8 bg-gray-300"></div>
+         <div data-hf-id="hf-a8fb" class="w-full h-8 bg-gray-300"></div>
+      </div>
+      <div data-hf-id="hf-mod5" id="creditcard" class="absolute w-[500px] h-[300px] bg-neonpurple rounded-2xl shadow-2xl p-8 flex flex-col justify-end transform rotate-[15deg] x-[200px] y-[-100px] opacity-0">
+         <div data-hf-id="hf-i907" class="w-full h-12 bg-white/30 rounded-lg"></div>
+      </div>
+      
+      <div data-hf-id="hf-puoa" id="scene5-end" class="absolute inset-0 bg-black hidden z-30 flex items-center justify-center">
+        <h1 data-hf-id="hf-p8fq" id="scene5-text" class="text-9xl text-white font-bold opacity-0 scale-150">A LAB FAZ</h1>
+      </div>
+    </div>
+
+    <!-- Cena 6 -->
+    <div data-hf-id="hf-8hdm" id="scene6" class="clip bg-indigo flex items-center justify-center overflow-hidden" data-start="30.86" data-duration="4.04" data-track-index="1">
+      <div data-hf-id="hf-vj1a" class="grid-bg"></div>
+      <div data-hf-id="hf-c5xt" id="cart" class="absolute z-10 opacity-0">
+        <iconify-icon data-hf-id="hf-bhqv" icon="lucide:shopping-cart" width="300" height="300" class="text-white"></iconify-icon>
+      </div>
+      <div data-hf-id="hf-rz4r" id="folder" class="absolute z-10 opacity-0">
+        <iconify-icon data-hf-id="hf-7uv9" icon="lucide:folder" width="300" height="300" class="text-neonpurple"></iconify-icon>
+      </div>
+      
+      <h1 data-hf-id="hf-1rz0" id="scene6-text" class="text-9xl text-white font-bold z-30 opacity-0 scale-50">A LAB FAZ</h1>
+      <h1 data-hf-id="hf-21cc" id="scene6-glitch1" class="text-9xl text-neonpurple font-bold z-20 absolute opacity-0">A LAB FAZ</h1>
+      <h1 data-hf-id="hf-n58e" id="scene6-glitch2" class="text-9xl text-white font-bold z-20 absolute opacity-0 translate-x-[10px] translate-y-[-10px]">A LAB FAZ</h1>
+    </div>
+
+    <!-- Cena 7 -->
+    <div data-hf-id="hf-89x0" id="scene7" class="clip bg-indigo flex flex-col items-center justify-center" data-start="35.46" data-duration="4.38" data-track-index="1">
+      <div data-hf-id="hf-uc47" class="grid-bg"></div>
+      <div data-hf-id="hf-gkzm" id="email-mockup" class="w-[800px] h-[600px] bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden z-10 scale-0 opacity-0">
+        <div data-hf-id="hf-vonq" class="w-full h-20 bg-gray-200 border-b-4 border-gray-300 flex items-center px-8">
+          <div data-hf-id="hf-f8dg" class="w-1/2 h-8 bg-gray-400 rounded-md"></div>
+        </div>
+        <div data-hf-id="hf-leo0" class="p-8 flex flex-col gap-6 flex-1">
+          <div data-hf-id="hf-vlcp" class="w-3/4 h-8 bg-gray-300 rounded-md"></div>
+          <div data-hf-id="hf-hid2" class="w-full h-8 bg-gray-300 rounded-md"></div>
+          <div data-hf-id="hf-uwup" class="w-5/6 h-8 bg-gray-300 rounded-md"></div>
+        </div>
+        <div data-hf-id="hf-vkw4" class="p-8 flex justify-center border-t-4 border-gray-100">
+          <div data-hf-id="hf-8au1" id="download-btn" class="px-12 py-6 bg-neonpurple rounded-full text-white text-3xl font-bold uppercase shadow-lg">Download PDF</div>
+        </div>
+      </div>
+      
+      <h1 data-hf-id="hf-e8ye" id="scene7-text" class="text-[200px] leading-none text-white font-bold absolute z-30 opacity-0 scale-[3]">A LAB<br data-hf-id="hf-rsrt">FAZ.</h1>
+    </div>
+
+    <!-- Cena 8 -->
+    <div data-hf-id="hf-bu7h" id="scene8" class="clip bg-neonpurple flex flex-col items-center justify-center overflow-hidden" data-start="40.44" data-duration="5.32" data-track-index="1">
+      <!-- Popups de prejuizo -->
+      <div data-hf-id="hf-sg7p" id="pop-1" class="absolute z-40 bg-red-600 text-white text-5xl font-bold px-6 py-2 rounded-xl shadow-2xl opacity-0" style="top:35%; left:20%">-42%</div>
+      <div data-hf-id="hf-lcpo" id="pop-2" class="absolute z-40 bg-red-600 text-white text-6xl font-bold px-8 py-3 rounded-xl shadow-2xl opacity-0" style="top:55%; left:45%">-65%</div>
+      <div data-hf-id="hf-1vy8" id="pop-3" class="absolute z-40 bg-red-600 text-white text-8xl font-bold px-10 py-4 rounded-xl shadow-2xl opacity-0" style="top:75%; left:75%">-89%</div>
+      
+      <div data-hf-id="hf-uviq" id="chart-container" class="w-[900px] h-[700px] z-10 absolute flex items-center justify-center opacity-0 scale-50 overflow-hidden">
+        <div data-hf-id="hf-2c4w" id="apex-chart" class="w-full h-[600px] relative z-0"></div>
+        <div data-hf-id="hf-soe5" id="chart-cover" class="absolute right-0 top-0 w-full h-[600px] bg-neonpurple z-10 origin-right"></div>
+      </div>
+      <div data-hf-id="hf-7po7" id="sad-reactions" class="absolute inset-0 z-20 pointer-events-none"></div>
+      <h1 data-hf-id="hf-5zax" id="scene8-text" class="text-[180px] text-white font-bold absolute z-30 opacity-0 scale-[2]">PREJUÍZO</h1>
+    </div>
+
+    <!-- Cena 9 -->
+    <div data-hf-id="hf-bmz9" id="scene9" class="clip bg-indigo flex flex-col items-center justify-center overflow-hidden" data-start="46.18" data-duration="9.52" data-track-index="1">
+      <div data-hf-id="hf-uqf8" class="grid-bg"></div>
+      <div data-hf-id="hf-vxht" id="orbs" class="absolute inset-0 z-0 opacity-50">
+        <div data-hf-id="hf-fyz5" class="absolute w-[600px] h-[600px] bg-neonpurple rounded-full blur-[150px] top-[10%] left-[10%]"></div>
+        <div data-hf-id="hf-xleo" class="absolute w-[800px] h-[800px] bg-purple-700 rounded-full blur-[200px] bottom-[10%] right-[10%]"></div>
+      </div>
+      
+      <img data-hf-id="hf-zc7m" id="logo9" src="labscript.dev.png" class="w-[600px] z-10 mb-32 opacity-0 -translate-y-[100px]" data-duplicate="true">
+      
+      <div data-hf-id="hf-k5a4" id="cta-btn" class="px-16 py-8 bg-neonpurple rounded-full text-white text-6xl font-bold uppercase shadow-[0_0_50px_rgba(140,63,255,0.8)] z-10 opacity-0 scale-50">
+        ENVIE UM DIRECT
+      </div>
+      
+      <div data-hf-id="hf-uxek" id="fade-black" class="absolute inset-0 bg-black opacity-0 z-30 pointer-events-none"></div>
+    </div>
+  </div>
+
+  <script>
+    
+    // Seeded Random
+    let m_w = 123456789;
+    let m_z = 987654321;
+    let mask = 0xffffffff;
+    function random() {
+      m_z = (36969 * (m_z & 65535) + (m_z >> 16)) & mask;
+      m_w = (18000 * (m_w & 65535) + (m_w >> 16)) & mask;
+      let result = ((m_z << 16) + m_w) & mask;
+      result /= 4294967296;
+      return result + 0.5;
+    }
+
+    // Initialize ApexCharts
+    const apexOptions = {
+      series: [{
+        name: 'Receita',
+        data: [100, 90, 80, 50, 20, 5]
+      }],
+      chart: {
+        type: 'area',
+        height: '100%',
+        width: '100%',
+        animations: { enabled: false }, // Disable animation so GSAP can scrub properly
+        toolbar: { show: false },
+        background: 'transparent'
+      },
+      colors: ['#000000'],
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: 0.6,
+          opacityTo: 0.0,
+          stops: [0, 90, 100]
+        }
+      },
+      dataLabels: { enabled: false },
+      stroke: {
+        curve: 'smooth',
+        width: 10,
+        colors: ['#000000']
+      },
+      xaxis: {
+        categories: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+        labels: { style: { colors: '#ffffff', fontSize: '28px', fontFamily: 'Share Tech' } },
+        axisBorder: { show: false },
+        axisTicks: { show: false }
+      },
+      yaxis: {
+        labels: { style: { colors: '#ffffff', fontSize: '28px', fontFamily: 'Share Tech' } }
+      },
+      grid: {
+        borderColor: 'rgba(255,255,255,0.3)',
+        strokeDashArray: 6,
+      },
+      theme: { mode: 'dark' }
+    };
+    const apexChart = new ApexCharts(document.querySelector("#apex-chart"), apexOptions);
+    apexChart.render();
+
+    // Populate money for scene 2
+    const moneyContainer = document.getElementById('money-container');
+    for(let i=0; i<30; i++) {
+      const money = document.createElement('div');
+      money.className = 'absolute bottom-[300px] left-1/2 -translate-x-1/2 opacity-0 money-item';
+      money.innerHTML = '<div class="relative"><iconify-icon icon="twemoji:money-with-wings" width="120" height="120"></iconify-icon><iconify-icon icon="twemoji:fire" width="80" height="80" class="absolute bottom-0 right-0"></iconify-icon></div>';
+      moneyContainer.appendChild(money);
+    }
+
+    // Populate reactions for scene 4
+    const reactions = ['twemoji:red-heart', 'twemoji:thumbs-up', 'twemoji:grinning-face-with-big-eyes', 'twemoji:fire', 'twemoji:rocket'];
+    const rxContainer = document.getElementById('reactions-container');
+    for(let i=0; i<40; i++) {
+      const rx = document.createElement('div');
+      rx.className = 'absolute bottom-[-100px] opacity-0 rx-item';
+      rx.style.left = random() * 800 + 140 + 'px';
+      rx.innerHTML = `<iconify-icon icon="${reactions[i%reactions.length]}" width="80" height="80"></iconify-icon>`;
+      rxContainer.appendChild(rx);
+    }
+    
+    // Populate sad reactions for scene 8
+    const sadReactions = ['twemoji:frowning-face', 'twemoji:crying-face', 'twemoji:loudly-crying-face', 'twemoji:broken-heart'];
+    const sadContainer = document.getElementById('sad-reactions');
+    for(let i=0; i<30; i++) {
+      const sx = document.createElement('div');
+      sx.className = 'absolute top-[-100px] opacity-0 sx-item';
+      sx.style.left = random() * 800 + 140 + 'px';
+      sx.innerHTML = `<iconify-icon icon="${sadReactions[i%sadReactions.length]}" width="120" height="120"></iconify-icon>`;
+      sadContainer.appendChild(sx);
+    }
+
+    // GSAP Setup
+    window.__timelines = window.__timelines || {};
+    const tl = gsap.timeline({ paused: true });
+    window.__timelines["main"] = tl;
+
+    // BGM Audio handling in GSAP
+    let bgmObj = { vol: 0.15 };
+    const bgmEl = document.getElementById('bgm');
+    const voiceEl = document.getElementById('voice');
+    
+    // Helper to sync audio in Studio/preview
+    // Using timeline to trigger audio logic if allowed by browser
+    tl.to(bgmObj, {
+      vol: 0,
+      duration: 3,
+      onUpdate: () => { if(bgmEl) bgmEl.volume = bgmObj.vol; }
+    }, 52.7);
+
+    // ==========================================
+    // CENA 1: 0.00s a 6.24s
+    // ==========================================
+    tl.fromTo("#card", 
+      { y: -1000, rotationZ: -45, rotationY: -180 }, 
+      { y: 0, rotationZ: 0, rotationY: 0, duration: 1.5, ease: "bounce.out" }, 
+    0);
+    tl.to("#card-shadow", { scale: 1, duration: 1.5, ease: "bounce.out" }, 0);
+    
+    // Flash e mudança aos 4.0s
+    tl.to("#scene1-flash", { opacity: 1, duration: 0.1 }, 4.0);
+    tl.set("#scene1-end", { display: "flex" }, 4.05);
+    tl.fromTo("#scene1-text", 
+      { scale: 3, opacity: 0 }, 
+      { scale: 1, opacity: 1, duration: 0.3, ease: "power4.out" }, 
+    4.1);
+    
+    // Camera shake Cena 1
+    tl.to("#scene1", {
+      x: () => random() * 40 - 20,
+      y: () => random() * 40 - 20,
+      duration: 0.1,
+      repeat: 5,
+      yoyo: true,
+      ease: "none"
+    }, 4.1);
+    tl.set("#scene1", { x: 0, y: 0 }, 4.7);
+
+    // ==========================================
+    // CENA 2: 6.32s a 12.10s
+    // ==========================================
+    // Camera shake leve contínuo
+    tl.to("#scene2", {
+      x: () => random() * 10 - 5,
+      y: () => random() * 10 - 5,
+      duration: 0.1,
+      repeat: 40,
+      yoyo: true,
+      ease: "none"
+    }, 6.32);
+    
+    // Explosão de dinheiro
+    const moneys = document.querySelectorAll('.money-item');
+    moneys.forEach((m, i) => {
+      tl.to(m, {
+        opacity: 1,
+        duration: 0.1
+      }, 6.5 + i * 0.1);
+      tl.to(m, {
+        x: (random() - 0.5) * 800,
+        y: -random() * 1200 - 200,
+        rotationZ: random() * 360,
+        duration: 2 + random(),
+        ease: "power2.out"
+      }, 6.5 + i * 0.1);
+    });
+
+    // 10.6s: Lá, parado.
+    tl.set(moneys, { clearProps: "animation" }, 10.6); // Parada abrupta (GSAP might need a pause, but setting a tween overriding is better)
+    tl.to(moneys, { y: "+=0", duration: 1.5, ease: "none" }, 10.6); // Stop movement roughly
+    
+    tl.fromTo("#lock", 
+      { scale: 3, opacity: 0 }, 
+      { scale: 1, opacity: 1, duration: 0.3, ease: "bounce.out" }, 
+    10.6);
+
+    // ==========================================
+    // CENA 3: 12.10s a 18.18s
+    // ==========================================
+    tl.fromTo("#phone", { y: 2000 }, { y: 0, duration: 1, ease: "power3.out" }, 12.10);
+    tl.to("#whatsapp", { scale: 1, duration: 0.5, ease: "back.out(1.7)" }, 13.5);
+    
+    // Cruz vermelha batendo e texto
+    tl.fromTo("#cross", { scale: 3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "power4.inOut" }, 15.5);
+    tl.to("#phone", { rotation: -5, x: -20, duration: 0.1, yoyo: true, repeat: 3 }, 15.5);
+    
+    tl.fromTo("#scene3-text", { y: -200, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "bounce.out" }, 16.0);
+
+    // ==========================================
+    // CENA 4: 18.28s a 26.28s
+    // ==========================================
+    // Zoom dentro da tela do celular (a cor muda por baixo na timeline)
+    tl.fromTo("#logo1", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: "back.out(1.5)" }, 18.5);
+    
+    // Reactions subindo
+    const rxs = document.querySelectorAll('.rx-item');
+    rxs.forEach((rx, i) => {
+      let st = 19.5 + random() * 5;
+      tl.to(rx, { opacity: 1, duration: 0.2 }, st);
+      tl.to(rx, { 
+        y: -2200, 
+        x: "+=" + (random() * 200 - 100),
+        rotation: random() * 90 - 45,
+        duration: 3 + random() * 2, 
+        ease: "power1.inOut" 
+      }, st);
+      tl.to(rx, { opacity: 0, duration: 0.5 }, st + 2);
+    });
+
+    // ==========================================
+    // CENA 5: 26.34s a 30.76s
+    // ==========================================
+    tl.fromTo("#boleto", { x: -800, opacity: 0, rotation: -45 }, { x: -200, opacity: 1, rotation: -10, duration: 1, ease: "power3.out" }, 26.5);
+    tl.fromTo("#creditcard", { x: 800, opacity: 0, rotation: 45 }, { x: 200, opacity: 1, rotation: 15, duration: 1, ease: "power3.out" }, 27.0);
+    
+    tl.to(["#boleto", "#creditcard"], { y: "-=50", duration: 2, yoyo: true, repeat: 1, ease: "sine.inOut" }, 27.5);
+    
+    // 29.6s A LAB FAZ
+    tl.set("#scene5-end", { display: "flex" }, 29.6);
+    tl.fromTo("#scene5-text", { scale: 5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.2, ease: "power4.in" }, 29.6);
+    tl.to("#scene5", {
+      x: () => random() * 60 - 30,
+      y: () => random() * 60 - 30,
+      duration: 0.1,
+      repeat: 6,
+      yoyo: true,
+      ease: "none"
+    }, 29.8);
+    tl.set("#scene5", { x: 0, y: 0 }, 30.5);
+
+    // ==========================================
+    // CENA 6: 30.86s a 34.90s
+    // ==========================================
+    tl.fromTo("#cart", { x: -1000, y: -500, opacity: 1 }, { x: 1000, y: 500, duration: 2, ease: "none" }, 31.0);
+    tl.fromTo("#folder", { x: 1000, y: -300, opacity: 1 }, { x: -1000, y: 300, duration: 2, ease: "none" }, 31.5);
+    
+    tl.fromTo("#cart", { x: -1000, y: 300, opacity: 1 }, { x: 1000, y: -200, duration: 2, ease: "none", immediateRender: false }, 33.0);
+    tl.fromTo("#folder", { x: 1000, y: 500, opacity: 1 }, { x: -1000, y: -400, duration: 2, ease: "none", immediateRender: false }, 33.5);
+    
+    // 34.2s A LAB FAZ com glitch
+    tl.set(["#scene6-text", "#scene6-glitch1", "#scene6-glitch2"], { opacity: 1, scale: 1 }, 34.2);
+    tl.to("#scene6-glitch1", { x: 15, y: -10, duration: 0.05, repeat: 10, yoyo: true }, 34.2);
+    tl.to("#scene6-glitch2", { x: -15, y: 15, duration: 0.05, repeat: 10, yoyo: true }, 34.2);
+
+    // ==========================================
+    // CENA 7: 35.46s a 39.84s
+    // ==========================================
+    tl.fromTo("#email-mockup", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.5)" }, 35.5);
+    
+    // Simular clique 37.5s
+    tl.to("#download-btn", { scale: 0.9, backgroundColor: "#6b21a8", duration: 0.1, yoyo: true, repeat: 1 }, 37.5);
+    
+    // 39.0s A LAB FAZ
+    tl.fromTo("#scene7-text", { scale: 5, opacity: 0 }, { scale: 1.2, opacity: 1, duration: 0.2, ease: "power4.in" }, 39.0);
+    tl.to("#scene7", {
+      x: () => random() * 50 - 25,
+      y: () => random() * 50 - 25,
+      duration: 0.1,
+      repeat: 5,
+      yoyo: true,
+      ease: "none"
+    }, 39.2);
+    tl.set("#scene7", { x: 0, y: 0 }, 39.7);
+
+    // ==========================================
+    // CENA 8: 40.44s a 45.76s
+    // ==========================================
+    tl.fromTo("#chart-container", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: "power3.out" }, 40.5);
+    
+    // Atualizar gráfico para simular queda
+    tl.fromTo("#chart-cover", 
+      { width: "100%" }, 
+      { width: "0%", duration: 3, ease: "none" }, 
+    41.5);
+
+    // Animar popups de porcentagem com a queda
+    tl.to("#pop-1", { opacity: 1, y: -50, duration: 0.5, ease: "back.out" }, 42.0);
+    tl.to("#pop-2", { opacity: 1, y: -50, duration: 0.5, ease: "back.out" }, 42.5);
+    tl.to("#pop-3", { opacity: 1, y: -50, scale: 1.2, duration: 0.5, ease: "back.out" }, 43.5);
+    
+    // Queda das reactions
+    const sxs = document.querySelectorAll('.sx-item');
+    sxs.forEach((sx, i) => {
+      let st = 41.5 + random() * 3;
+      tl.to(sx, { opacity: 1, duration: 0.1 }, st);
+      tl.to(sx, { 
+        y: 2200, 
+        x: "+=" + (random() * 200 - 100),
+        rotation: random() * 180 - 90,
+        duration: 2 + random() * 1.5, 
+        ease: "power2.in" 
+      }, st);
+    });
+    
+    tl.fromTo("#scene8-text", { scale: 4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "bounce.out" }, 44.5);
+
+    // ==========================================
+    // CENA 9: 46.18s a 55.70s
+    // ==========================================
+    tl.to("#logo9", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, 46.5);
+    
+    tl.fromTo("#cta-btn", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "elastic.out(1, 0.5)" }, 47.5);
+    tl.to("#cta-btn", { scale: 1.05, duration: 0.8, repeat: 100, yoyo: true, ease: "sine.inOut" }, 48.3);
+    
+    // Orbs flutuando
+    tl.to("#orbs div:nth-child(1)", { x: 100, y: 50, duration: 4, repeat: 100, yoyo: true, ease: "sine.inOut" }, 46.18);
+    tl.to("#orbs div:nth-child(2)", { x: -100, y: -50, duration: 5, repeat: 100, yoyo: true, ease: "sine.inOut" }, 46.18);
+    
+    // Fade to black últimos 2 seg
+    tl.to("#fade-black", { opacity: 1, duration: 2 }, 53.7);
+
+  </script>
+</body>
 </html>
