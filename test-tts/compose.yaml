@@ -1,0 +1,19 @@
+services:
+  audio:
+    image: python:3.11-alpine
+    working_dir: /app
+    volumes:
+      - ./:/app
+    env_file:
+      - .env
+    command: sh /app/audio.sh
+
+  video:
+    build:
+      context: .
+      network: host
+    network_mode: host
+    volumes:
+      - ./:/app
+      - ./.cache:/root/.cache
+    command: sh -c "mkdir -p output && hyperframes render input/ -o output/video.mp4"

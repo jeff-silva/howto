@@ -1,3 +1,4 @@
-tts_models
-piper_models
-piper_tts
+.cache
+.env
+input
+output

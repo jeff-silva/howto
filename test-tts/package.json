@@ -1,0 +1,14 @@
+{
+  "name": "test-tts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "audio": "docker compose run --rm audio",
+    "video": "docker compose run --rm video"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
