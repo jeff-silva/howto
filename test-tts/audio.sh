@@ -44,8 +44,8 @@ if [ -n "$GROQ_API_KEY" ] && [ "$GERAR_LEGENDA" = "true" ]; then
     else
         ARQUIVO_JSON="${ARQUIVO_SAIDA%.*}.json"
         cat /tmp/raw_transcript.json | jq "[.words[]? | {word: (.word | ltrimstr(\" \") | rtrimstr(\" \")), start: (.start*1000|round)/1000, end: (.end*1000|round)/1000}]" > "$ARQUIVO_JSON"
-        echo "window.AUDIO_WORDS = $(cat $ARQUIVO_JSON);" > input/words.js
-        echo "✅ Transcrição salva em $ARQUIVO_JSON e exportada para input/words.js"
+        echo "window.AUDIO_WORDS = $(cat $ARQUIVO_JSON);" > input/audio.js
+        echo "✅ Transcrição salva em $ARQUIVO_JSON e exportada para input/audio.js"
     fi
 fi
 
