@@ -1,0 +1,6 @@
+networks:
+  default:
+    name: main_network
+
+include:
+  - ./novu/compose.yml

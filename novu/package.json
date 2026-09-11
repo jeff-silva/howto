@@ -1,0 +1,13 @@
+{
+  "name": "novu",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "docker compose stop && docker compose up -d --build --force-recreate --remove-orphans",
+    "start": "docker compose stop && docker compose up -d --build --force-recreate --remove-orphans"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
