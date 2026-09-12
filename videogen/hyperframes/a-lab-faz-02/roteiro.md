@@ -10,10 +10,10 @@ Dashboards visuais com gráficos que ajudam a entender seu negócio? A Lab faz.
 Substituir planilhas por plataformas seguras e com backup? A Lab faz.
 Controle de estoque, vendas e financeiro integrados?
 Regras de negócio exclusivas para sua operação?
-Autenticação de clientes e funcionários?
-Cruzamento de dados em tempo real?
-Auditoria automatizada?
+Login de clientes e funcionários?
 
 A Lab faz.
 
-Se a sua empresa precisa se adaptar ao sistema, e não o sistema à sua empresa, você precisa mudar. Quer um software que resolva o seu problema de verdade? Vamos conversar. A Labscript pode te ajudar.
+Se a sua empresa precisa se adaptar ao sistema, e não o sistema à sua empresa, você precisa mudar.
+Quer um software que resolva o seu problema de verdade? Vamos conversar.
+A Labscript pode te ajudar.

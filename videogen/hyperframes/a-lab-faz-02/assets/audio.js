@@ -1,0 +1,742 @@
+window.AUDIO_WORDS = [
+  {
+    "word": "A",
+    "start": 0,
+    "end": 0.16
+  },
+  {
+    "word": "gestão",
+    "start": 0.16,
+    "end": 0.52
+  },
+  {
+    "word": "da",
+    "start": 0.52,
+    "end": 0.66
+  },
+  {
+    "word": "sua",
+    "start": 0.66,
+    "end": 0.76
+  },
+  {
+    "word": "empresa",
+    "start": 0.76,
+    "end": 1.14
+  },
+  {
+    "word": "não",
+    "start": 1.14,
+    "end": 1.36
+  },
+  {
+    "word": "deve",
+    "start": 1.36,
+    "end": 1.6
+  },
+  {
+    "word": "depender",
+    "start": 1.6,
+    "end": 1.94
+  },
+  {
+    "word": "de",
+    "start": 1.94,
+    "end": 2.14
+  },
+  {
+    "word": "planilhas.",
+    "start": 2.14,
+    "end": 3.02
+  },
+  {
+    "word": "Cada",
+    "start": 3.08,
+    "end": 3.22
+  },
+  {
+    "word": "setor",
+    "start": 3.22,
+    "end": 3.6
+  },
+  {
+    "word": "cria",
+    "start": 3.6,
+    "end": 3.86
+  },
+  {
+    "word": "seu",
+    "start": 3.86,
+    "end": 4.06
+  },
+  {
+    "word": "próprio",
+    "start": 4.06,
+    "end": 4.38
+  },
+  {
+    "word": "arquivo",
+    "start": 4.38,
+    "end": 4.88
+  },
+  {
+    "word": "e",
+    "start": 4.88,
+    "end": 5.04
+  },
+  {
+    "word": "alguém",
+    "start": 5.04,
+    "end": 5.32
+  },
+  {
+    "word": "precisa",
+    "start": 5.32,
+    "end": 5.76
+  },
+  {
+    "word": "ficar",
+    "start": 5.76,
+    "end": 6.04
+  },
+  {
+    "word": "passando",
+    "start": 6.04,
+    "end": 6.44
+  },
+  {
+    "word": "dados",
+    "start": 6.44,
+    "end": 6.8
+  },
+  {
+    "word": "de",
+    "start": 6.8,
+    "end": 6.96
+  },
+  {
+    "word": "um",
+    "start": 6.96,
+    "end": 7.02
+  },
+  {
+    "word": "lugar",
+    "start": 7.02,
+    "end": 7.24
+  },
+  {
+    "word": "para",
+    "start": 7.24,
+    "end": 7.46
+  },
+  {
+    "word": "o",
+    "start": 7.46,
+    "end": 7.58
+  },
+  {
+    "word": "outro",
+    "start": 7.58,
+    "end": 7.9
+  },
+  {
+    "word": "na",
+    "start": 7.42,
+    "end": 8.08
+  },
+  {
+    "word": "tentativa",
+    "start": 8.08,
+    "end": 8.62
+  },
+  {
+    "word": "de",
+    "start": 8.62,
+    "end": 8.76
+  },
+  {
+    "word": "manter",
+    "start": 8.76,
+    "end": 9.04
+  },
+  {
+    "word": "tudo",
+    "start": 9.04,
+    "end": 9.38
+  },
+  {
+    "word": "atualizado,",
+    "start": 9.38,
+    "end": 10.22
+  },
+  {
+    "word": "entrando",
+    "start": 10.22,
+    "end": 10.56
+  },
+  {
+    "word": "num",
+    "start": 10.56,
+    "end": 10.72
+  },
+  {
+    "word": "ciclo",
+    "start": 10.72,
+    "end": 11.12
+  },
+  {
+    "word": "infinito",
+    "start": 11.12,
+    "end": 11.76
+  },
+  {
+    "word": "de",
+    "start": 11.76,
+    "end": 11.92
+  },
+  {
+    "word": "copia-cola",
+    "start": 11.92,
+    "end": 12.7
+  },
+  {
+    "word": "que",
+    "start": 12.24,
+    "end": 12.96
+  },
+  {
+    "word": "não",
+    "start": 12.96,
+    "end": 13.16
+  },
+  {
+    "word": "deixa",
+    "start": 13.16,
+    "end": 13.48
+  },
+  {
+    "word": "o",
+    "start": 13.48,
+    "end": 13.54
+  },
+  {
+    "word": "trabalho",
+    "start": 13.54,
+    "end": 13.88
+  },
+  {
+    "word": "progredir.",
+    "start": 13.88,
+    "end": 14.74
+  },
+  {
+    "word": "As",
+    "start": 14.86,
+    "end": 15
+  },
+  {
+    "word": "planilhas",
+    "start": 15,
+    "end": 15.54
+  },
+  {
+    "word": "travam",
+    "start": 15.54,
+    "end": 15.96
+  },
+  {
+    "word": "quando",
+    "start": 15.96,
+    "end": 16.2
+  },
+  {
+    "word": "ficam",
+    "start": 16.2,
+    "end": 16.5
+  },
+  {
+    "word": "com",
+    "start": 16.5,
+    "end": 16.76
+  },
+  {
+    "word": "dados",
+    "start": 16.76,
+    "end": 16.98
+  },
+  {
+    "word": "demais,",
+    "start": 16.98,
+    "end": 17.72
+  },
+  {
+    "word": "se",
+    "start": 17.72,
+    "end": 17.82
+  },
+  {
+    "word": "corrompem,",
+    "start": 17.82,
+    "end": 18.66
+  },
+  {
+    "word": "quebram",
+    "start": 18.66,
+    "end": 19.06
+  },
+  {
+    "word": "e",
+    "start": 18.6,
+    "end": 19.26
+  },
+  {
+    "word": "você",
+    "start": 19.26,
+    "end": 19.5
+  },
+  {
+    "word": "acaba",
+    "start": 19.5,
+    "end": 19.76
+  },
+  {
+    "word": "perdendo",
+    "start": 19.76,
+    "end": 20.18
+  },
+  {
+    "word": "informações",
+    "start": 20.18,
+    "end": 20.7
+  },
+  {
+    "word": "importantes.",
+    "start": 20.7,
+    "end": 22.04
+  },
+  {
+    "word": "A",
+    "start": 22.1,
+    "end": 22.3
+  },
+  {
+    "word": "LabScript",
+    "start": 22.3,
+    "end": 22.88
+  },
+  {
+    "word": "desenvolve",
+    "start": 22.88,
+    "end": 23.66
+  },
+  {
+    "word": "painéis",
+    "start": 23.66,
+    "end": 24.14
+  },
+  {
+    "word": "sob",
+    "start": 24.14,
+    "end": 24.36
+  },
+  {
+    "word": "medida",
+    "start": 24.36,
+    "end": 24.78
+  },
+  {
+    "word": "para",
+    "start": 24.78,
+    "end": 25.04
+  },
+  {
+    "word": "sua",
+    "start": 25.04,
+    "end": 25.24
+  },
+  {
+    "word": "realidade.",
+    "start": 25.24,
+    "end": 25.7
+  },
+  {
+    "word": "Substituir",
+    "start": 26.62,
+    "end": 27.08
+  },
+  {
+    "word": "planilhas",
+    "start": 27.08,
+    "end": 27.64
+  },
+  {
+    "word": "por",
+    "start": 27.64,
+    "end": 27.84
+  },
+  {
+    "word": "plataformas",
+    "start": 27.84,
+    "end": 28.48
+  },
+  {
+    "word": "seguras",
+    "start": 28.48,
+    "end": 29
+  },
+  {
+    "word": "e",
+    "start": 29,
+    "end": 29.2
+  },
+  {
+    "word": "com",
+    "start": 29.2,
+    "end": 29.32
+  },
+  {
+    "word": "backup",
+    "start": 29.32,
+    "end": 29.62
+  },
+  {
+    "word": "A",
+    "start": 30.34,
+    "end": 30.38
+  },
+  {
+    "word": "LAB",
+    "start": 30.38,
+    "end": 30.72
+  },
+  {
+    "word": "faz.",
+    "start": 30.72,
+    "end": 31.06
+  },
+  {
+    "word": "Painéis",
+    "start": 31.62,
+    "end": 32
+  },
+  {
+    "word": "com",
+    "start": 32,
+    "end": 32.2
+  },
+  {
+    "word": "gráficos",
+    "start": 32.2,
+    "end": 32.76
+  },
+  {
+    "word": "que",
+    "start": 32.76,
+    "end": 32.92
+  },
+  {
+    "word": "ajudam",
+    "start": 32.92,
+    "end": 33.34
+  },
+  {
+    "word": "a",
+    "start": 33.34,
+    "end": 33.48
+  },
+  {
+    "word": "entender",
+    "start": 33.48,
+    "end": 33.8
+  },
+  {
+    "word": "melhor",
+    "start": 33.8,
+    "end": 34.22
+  },
+  {
+    "word": "seu",
+    "start": 34.22,
+    "end": 34.46
+  },
+  {
+    "word": "negócio?",
+    "start": 34.46,
+    "end": 35.06
+  },
+  {
+    "word": "A",
+    "start": 35.36,
+    "end": 35.52
+  },
+  {
+    "word": "LAB",
+    "start": 35.52,
+    "end": 35.78
+  },
+  {
+    "word": "faz.",
+    "start": 35.78,
+    "end": 36.2
+  },
+  {
+    "word": "Login",
+    "start": 36.78,
+    "end": 37
+  },
+  {
+    "word": "de",
+    "start": 37,
+    "end": 37.18
+  },
+  {
+    "word": "clientes",
+    "start": 37.18,
+    "end": 37.72
+  },
+  {
+    "word": "e",
+    "start": 37.72,
+    "end": 37.84
+  },
+  {
+    "word": "funcionários?",
+    "start": 37.84,
+    "end": 38.5
+  },
+  {
+    "word": "A",
+    "start": 39,
+    "end": 39.2
+  },
+  {
+    "word": "LAB",
+    "start": 39.2,
+    "end": 39.46
+  },
+  {
+    "word": "faz.",
+    "start": 39.46,
+    "end": 40.36
+  },
+  {
+    "word": "Se",
+    "start": 40.34,
+    "end": 40.44
+  },
+  {
+    "word": "a",
+    "start": 40.44,
+    "end": 40.56
+  },
+  {
+    "word": "sua",
+    "start": 40.56,
+    "end": 40.66
+  },
+  {
+    "word": "empresa",
+    "start": 40.66,
+    "end": 41.1
+  },
+  {
+    "word": "precisa",
+    "start": 41.1,
+    "end": 41.52
+  },
+  {
+    "word": "se",
+    "start": 41.52,
+    "end": 41.66
+  },
+  {
+    "word": "adaptar",
+    "start": 41.66,
+    "end": 42.26
+  },
+  {
+    "word": "ao",
+    "start": 42.26,
+    "end": 42.38
+  },
+  {
+    "word": "sistema",
+    "start": 42.38,
+    "end": 42.9
+  },
+  {
+    "word": "e",
+    "start": 42.9,
+    "end": 43.24
+  },
+  {
+    "word": "não",
+    "start": 43.24,
+    "end": 43.46
+  },
+  {
+    "word": "o",
+    "start": 43.46,
+    "end": 43.54
+  },
+  {
+    "word": "sistema",
+    "start": 43.54,
+    "end": 43.94
+  },
+  {
+    "word": "sua",
+    "start": 43.94,
+    "end": 44.12
+  },
+  {
+    "word": "empresa,",
+    "start": 44.12,
+    "end": 44.88
+  },
+  {
+    "word": "você",
+    "start": 44.88,
+    "end": 44.98
+  },
+  {
+    "word": "precisa",
+    "start": 44.98,
+    "end": 45.44
+  },
+  {
+    "word": "mudar.",
+    "start": 45.44,
+    "end": 46.24
+  },
+  {
+    "word": "Quer",
+    "start": 46.2,
+    "end": 46.28
+  },
+  {
+    "word": "um",
+    "start": 46.28,
+    "end": 46.46
+  },
+  {
+    "word": "software",
+    "start": 46.46,
+    "end": 47
+  },
+  {
+    "word": "que",
+    "start": 47,
+    "end": 47.24
+  },
+  {
+    "word": "resolva",
+    "start": 47.24,
+    "end": 47.7
+  },
+  {
+    "word": "o",
+    "start": 47.7,
+    "end": 47.8
+  },
+  {
+    "word": "seu",
+    "start": 47.8,
+    "end": 47.9
+  },
+  {
+    "word": "problema",
+    "start": 47.9,
+    "end": 48.32
+  },
+  {
+    "word": "de",
+    "start": 48.32,
+    "end": 48.48
+  },
+  {
+    "word": "verdade?",
+    "start": 48.48,
+    "end": 49.42
+  },
+  {
+    "word": "Fale",
+    "start": 49.52,
+    "end": 49.72
+  },
+  {
+    "word": "conosco.",
+    "start": 49.72,
+    "end": 50.34
+  },
+  {
+    "word": "A",
+    "start": 50.76,
+    "end": 50.9
+  },
+  {
+    "word": "LabScript",
+    "start": 50.9,
+    "end": 51.36
+  },
+  {
+    "word": "tem",
+    "start": 51.36,
+    "end": 51.76
+  },
+  {
+    "word": "soluções",
+    "start": 51.76,
+    "end": 52.3
+  },
+  {
+    "word": "que",
+    "start": 52.3,
+    "end": 52.46
+  },
+  {
+    "word": "acompanham",
+    "start": 52.46,
+    "end": 52.96
+  },
+  {
+    "word": "o",
+    "start": 52.96,
+    "end": 53.08
+  },
+  {
+    "word": "tamanho",
+    "start": 53.08,
+    "end": 53.56
+  },
+  {
+    "word": "e",
+    "start": 53.56,
+    "end": 53.84
+  },
+  {
+    "word": "o",
+    "start": 53.84,
+    "end": 53.9
+  },
+  {
+    "word": "momento",
+    "start": 53.9,
+    "end": 54.28
+  },
+  {
+    "word": "da",
+    "start": 54.28,
+    "end": 54.44
+  },
+  {
+    "word": "sua",
+    "start": 54.44,
+    "end": 54.56
+  },
+  {
+    "word": "empresa.",
+    "start": 54.56,
+    "end": 55.46
+  }
+];
