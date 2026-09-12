@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "docker compose stop && docker compose up -d --build --force-recreate --remove-orphans",
-    "hyperframes": "docker compose exec -it cli bash"
+    "dev": "docker compose stop && docker compose up -d --build --force-recreate --remove-orphans && docker compose exec -it cli bash"
   },
   "keywords": [],
   "author": "",
