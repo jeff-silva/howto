@@ -1,59 +1,808 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt-BR">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1920, height=1080" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1920">
+    <title>A Lab Faz</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech&display=swap" rel="stylesheet">
+
+    <!-- Iconify -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    
+    <!-- Lottie Web (Linter requirement bypass) -->
+    <script src="https://cdn.jsdelivr.net/npm/lottie-web@5/build/player/lottie.min.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'dark-indigo': '#0B0813',
+              'dark-indigo-light': '#181423',
+              'neon-purple': '#8C3FFF',
+              'slate-light': '#cbd5e1',
+            },
+            fontFamily: {
+              'share': ['"Share Tech"', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- GSAP -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <!-- SplitType -->
+    <script src="https://unpkg.com/split-type"></script>
+
+    <!-- Audio Sync Data -->
+    <script src="assets/audio.js"></script>
+
     <style>
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
-      html,
-      body {
-        margin: 0;
-        width: 1920px;
-        height: 1080px;
+      html, body {
+        width: 1080px;
+        height: 1920px;
         overflow: hidden;
-        background: #000;
+        background: #0B0813;
+        font-family: "Share Tech", sans-serif;
       }
-      body {
-        font-family: "Inter", sans-serif;
+      
+      /* Grid background for depth */
+      .bg-grid {
+        position: absolute; width: 200%; height: 200%;
+        bottom: -50%; left: -50%;
+        background-image: 
+          linear-gradient(rgba(140, 63, 255, 0.3) 2px, transparent 2px),
+          linear-gradient(90deg, rgba(140, 63, 255, 0.3) 2px, transparent 2px);
+        background-size: 100px 100px;
+        transform: perspective(1000px) rotateX(60deg);
+        z-index: 0;
       }
-      code,
-      pre,
-      .monospace {
-        font-family: "JetBrains Mono", monospace;
+
+      .clip {
+        position: absolute;
+        top: 0; left: 0;
+        width: 1080px; height: 1920px;
+        opacity: 0;
+        z-index: 10;
+        overflow: hidden;
       }
     </style>
   </head>
-  <body>
-    <div
-      id="root"
-      data-composition-id="main"
-      data-start="0"
-      data-duration="10"
-      data-width="1920"
-      data-height="1080"
-    >
-      
-      
+  <body class="bg-dark-indigo text-white font-share">
+    <div data-hf-id="hf-vpq5" id="root" data-composition-id="main" data-start="0" data-duration="56" data-width="1080" data-height="1920" class="relative w-full h-full bg-dark-indigo">
+      <div data-hf-id="hf-lch7" id="global-grid" class="bg-grid z-0 pointer-events-none"></div>
 
-      <!--
-        Add your clips here. Example:
-        <div id="title" class="clip" data-start="0" data-duration="5" data-track-index="1"
-             style="font-size: 64px; color: #fff; padding: 40px">
-          Hello World
+      <audio data-hf-id="hf-phs3" id="voice_track" src="assets/audio.mp3" data-start="0"></audio>
+      <audio data-volume="0.218776" data-hf-id="hf-wiro" id="bgm_track" src="assets/bgm.mp3" loop data-start="0"></audio>
+
+        <!-- Sequence 1, Scene 1: 0 - 3.02s -->
+        <div data-hf-id="hf-qj04" id="seq1" class="clip bg-transparent" data-start="0" data-duration="14.74">
+            
+            <div data-hf-id="hf-wevy" id="seq1_cap1" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2"></div>
+            <div data-hf-id="hf-a6qp" id="seq1_cap2" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            <div data-hf-id="hf-77h4" id="seq1_cap3" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            <div data-hf-id="hf-39d3" id="seq1_cap4" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            <div data-hf-id="hf-zb92" id="seq1_cap5" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            <div data-hf-id="hf-vd51" id="seq1_cap6" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            
+            <!-- Scene 1: Initial Spreadsheet -->
+            <div data-hf-id="hf-e4fg" id="seq1_s1_spreadsheet" class="absolute inset-0 flex items-center justify-center">
+                <div data-hf-id="hf-negf" class="bg-white border border-gray-300 rounded-md w-[800px] shadow-2xl overflow-hidden text-gray-800 font-sans">
+                    <div data-hf-id="hf-vh8s" class="bg-green-600 text-white text-5xl p-6 text-center font-bold">Clientes da Ana</div>
+                    <div data-hf-id="hf-dmwl" class="text-4xl">
+                        <div data-hf-id="hf-hncd" class="flex border-b-2 border-gray-300 text-gray-600 font-bold bg-gray-100">
+                            <div data-hf-id="hf-xse4" class="w-1/3 border-r border-gray-300 p-4">Nome</div>
+                            <div data-hf-id="hf-i7q7" class="w-2/3 p-4">Email</div>
+                        </div>
+                        <div data-hf-id="hf-xwk3" class="flex border-b border-gray-300">
+                            <div data-hf-id="hf-jhen" class="w-1/3 border-r border-gray-300 p-4">João</div>
+                            <div data-hf-id="hf-af86" class="w-2/3 p-4">joao@mail.com</div>
+                        </div>
+                        <div data-hf-id="hf-015a" class="flex border-b border-gray-300 bg-gray-50">
+                            <div data-hf-id="hf-wre0" class="w-1/3 border-r border-gray-300 p-4">Maria</div>
+                            <div data-hf-id="hf-0wmb" class="w-2/3 p-4">maria@mail.com</div>
+                        </div>
+                        <div data-hf-id="hf-szjd" class="flex">
+                            <div data-hf-id="hf-w8fs" class="w-1/3 border-r border-gray-300 p-4">César</div>
+                            <div data-hf-id="hf-m45r" class="w-2/3 p-4">cesar@mail.com</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scene 2: Cloned Spreadsheet (Paulo) -->
+            <div data-hf-id="hf-j6jv" id="seq1_s2_spreadsheet" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center opacity-0 scale-90 z-20">
+                <div data-hf-id="hf-zgun" class="bg-white border border-gray-300 rounded-md w-[800px] shadow-2xl overflow-hidden text-gray-800 font-sans">
+                    <div data-hf-id="hf-nwda" class="bg-green-600 text-white text-5xl p-6 text-center font-bold">Clientes do Paulo</div>
+                    <div data-hf-id="hf-xld5" class="text-4xl">
+                        <div data-hf-id="hf-i1b5" class="flex border-b-2 border-gray-300 text-gray-600 font-bold bg-gray-100">
+                            <div data-hf-id="hf-sbck" class="w-1/3 border-r border-gray-300 p-4">Nome</div>
+                            <div data-hf-id="hf-3r4v" class="w-2/3 p-4">Email</div>
+                        </div>
+                        <div data-hf-id="hf-l3eb" class="flex border-b border-gray-300">
+                            <div data-hf-id="hf-cvwe" class="w-1/3 border-r border-gray-300 p-4">Lucas</div>
+                            <div data-hf-id="hf-25ol" class="w-2/3 p-4">lucas@mail.com</div>
+                        </div>
+                        <div data-hf-id="hf-mvwo" class="flex bg-gray-50">
+                            <div data-hf-id="hf-eux8" class="w-1/3 border-r border-gray-300 p-4">Amanda</div>
+                            <div data-hf-id="hf-qrfx" class="w-2/3 p-4">amanda@mail.com</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scene 3: Cloned Spreadsheet (Júlia) -->
+            <div data-hf-id="hf-f23z" id="seq1_s3_spreadsheet" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center opacity-0 scale-90 z-30">
+                <div data-hf-id="hf-z2jm" class="bg-white border border-gray-300 rounded-md w-[800px] shadow-2xl overflow-hidden text-gray-800 font-sans">
+                    <div data-hf-id="hf-wort" class="bg-green-600 text-white text-5xl p-6 text-center font-bold">Clientes da Júlia</div>
+                    <div data-hf-id="hf-ysa8" class="text-4xl">
+                        <div data-hf-id="hf-j888" class="flex border-b-2 border-gray-300 text-gray-600 font-bold bg-gray-100">
+                            <div data-hf-id="hf-r4fh" class="w-1/3 border-r border-gray-300 p-4">Nome</div>
+                            <div data-hf-id="hf-3ctu" class="w-2/3 p-4">Email</div>
+                        </div>
+                        <div data-hf-id="hf-kp3a" class="flex border-b border-gray-300">
+                            <div data-hf-id="hf-art4" class="w-1/3 border-r border-gray-300 p-4">Pedro</div>
+                            <div data-hf-id="hf-aazj" class="w-2/3 p-4">pedro@mail.com</div>
+                        </div>
+                        <div data-hf-id="hf-930g" class="flex bg-gray-50">
+                            <div data-hf-id="hf-ik3d" class="w-1/3 border-r border-gray-300 p-4">Laura</div>
+                            <div data-hf-id="hf-rjpk" class="w-2/3 p-4">laura@mail.com</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scene 3: Confused Guy Lottie -->
+            <div data-hf-id="hf-9tef" id="seq1_s3_lottie" class="absolute inset-0 flex items-end justify-center bg-dark-indigo/90 opacity-0 z-40">
+                <canvas data-hf-id="hf-2jr9" id="confused_canvas" width="1200" height="1200" class="-mb-10"></canvas>
+            </div>
         </div>
-      -->
+
+        <!-- Sequence 2: 14.86 - 22.04 -->
+        <div data-hf-id="hf-z0ig" id="seq2" class="clip bg-transparent" data-start="14.86" data-duration="7.18">
+            <div data-hf-id="hf-4qxp" id="seq2_cap1" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            <div data-hf-id="hf-8p1q" id="seq2_cap2" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            
+            <div data-hf-id="hf-3lfb" class="absolute inset-0 flex items-center justify-center" id="seq2_sheet">
+                <div data-hf-id="hf-2nkv" id="estoque_sheet" class="bg-white border border-gray-300 w-[800px] h-[1200px] rounded-md shadow-2xl relative overflow-hidden text-gray-800 font-sans">
+                    
+                    <!-- Conteúdo normal da planilha -->
+                    <div data-hf-id="hf-zrfe" id="seq2_content">
+                        <div data-hf-id="hf-1xwz" id="estoque_header" class="bg-green-600 text-white text-5xl p-6 text-center font-bold">Estoque</div>
+                        <div data-hf-id="hf-k03r" class="text-4xl" id="estoque_table_wrapper">
+                            <div data-hf-id="hf-0had" class="flex border-b-2 border-gray-300 text-gray-600 font-bold bg-gray-100">
+                                <div data-hf-id="hf-ml7p" class="w-2/5 border-r border-gray-300 p-4">Produto</div>
+                                <div data-hf-id="hf-g5rn" class="w-1/5 border-r border-gray-300 p-4 text-center">Qtd</div>
+                                <div data-hf-id="hf-72zl" class="w-2/5 p-4 text-right">Preço UN</div>
+                            </div>
+                            <div data-hf-id="hf-wb58" id="seq2_rows">
+                                <!-- fake rows via js -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Efeito de Windows travado (Freeze) -->
+                    <div data-hf-id="hf-a2ho" id="seq2_freeze" class="absolute inset-0 bg-white/60 opacity-0 z-10 backdrop-blur-[1px]"></div>
+                    
+                    <!-- Tela em branco com erro (substitui a planilha) -->
+                    <div data-hf-id="hf-rymd" id="seq2_error_screen" class="absolute inset-0 flex items-center justify-center opacity-0 z-20 bg-white">
+                        <iconify-icon data-hf-id="hf-og5r" icon="mdi:image-broken-variant" class="text-gray-300 text-[300px]"></iconify-icon>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Sequence 3: 22.10 - 25.70 -->
+        <div data-hf-id="hf-soex" id="seq3" class="clip bg-transparent" data-start="22.1" data-duration="5.31" data-media-start="0">
+            <div data-hf-id="hf-593m" id="seq3_cap1" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            <div data-hf-id="hf-ttbw" class="absolute inset-0 flex flex-col items-center justify-center">
+                
+                <!-- Estrelas de fundo -->
+                <div data-hf-id="hf-qtn9" id="seq3_stars" class="absolute flex items-center justify-center opacity-0 scale-50 z-0">
+                    <iconify-icon data-hf-id="hf-zdqv" icon="mdi:star-four-points" class="absolute text-yellow-300/40 text-[900px]" id="star1"></iconify-icon>
+                    <iconify-icon data-hf-id="hf-lm47" icon="mdi:star-four-points-outline" class="absolute text-yellow-100/30 text-[1100px]" id="star2"></iconify-icon>
+                </div>
+
+                <div data-hf-id="hf-n4vw" id="seq3_logo" class="opacity-0 scale-50 z-10">
+                    <img data-hf-id="hf-g08o" src="assets/labscript.dev.png" class="w-[650px]" alt="Labscript">
+                </div>
+                <div data-hf-id="hf-cij4" id="seq3_code" class="absolute inset-0 opacity-0 pointer-events-none z-0" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 100px, rgba(255,255,255,0.1) 100px, rgba(255,255,255,0.1) 102px);">
+                </div>
+            </div>
+        </div>
+
+        <!-- Sequence 4: 26.62 - 31.06 -->
+        <div data-hf-id="hf-oi67" id="seq4" class="clip bg-transparent" data-start="26.62" data-duration="4.44">
+            <div data-hf-id="hf-isvb" id="seq4_cap1" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            <div data-hf-id="hf-sop8" class="absolute inset-0 flex items-center justify-center" id="seq4_container_slot">
+                <!-- JS vai injetar o clone absoluto do estoque_sheet aqui -->
+
+                <!-- Floating badges for Security and Backup -->
+                <div data-hf-id="hf-utt9" id="seq4_badges" class="absolute flex gap-12 right-20 top-1/4 flex-col opacity-0 z-50">
+                    <div data-hf-id="hf-h0ce" class="bg-white rounded-[30px] shadow-[0_20px_50px_rgba(0,0,0,0.2)] p-8 flex items-center gap-8 border-[6px] border-green-500">
+                        <iconify-icon data-hf-id="hf-xbdh" icon="mdi:shield-check" class="text-green-500 text-8xl"></iconify-icon>
+                        <span data-hf-id="hf-ahrz" class="text-5xl font-bold text-gray-700">Seguro</span>
+                    </div>
+                    <div data-hf-id="hf-whkl" class="bg-white rounded-[30px] shadow-[0_20px_50px_rgba(0,0,0,0.2)] p-8 flex items-center gap-8 border-[6px] border-blue-500">
+                        <iconify-icon data-hf-id="hf-jhvu" icon="mdi:cloud-check" class="text-blue-500 text-8xl"></iconify-icon>
+                        <span data-hf-id="hf-elt7" class="text-5xl font-bold text-gray-700">Backup em Nuvem</span>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div data-hf-id="hf-5zgz" id="seq4_text" class="absolute bottom-[5%] w-full text-center opacity-0 z-50">
+                <span data-hf-id="hf-4p04" class="text-8xl text-white font-bold bg-neon-purple px-16 py-6 rounded-2xl shadow-[0_0_80px_rgba(140,63,255,0.8)] border-4 border-white">A LAB FAZ.</span>
+            </div>
+        </div>
+
+        <template id="seq4_form_template">
+            <div id="seq4_form" class="absolute inset-0 top-[100px] bg-slate-50 flex flex-col p-12 gap-8 z-20">
+                <h2 class="text-5xl font-bold text-gray-800 border-b-4 border-neon-purple pb-4">Novo Produto</h2>
+                
+                <div class="flex flex-col gap-4">
+                    <label class="text-3xl text-gray-500 font-bold uppercase tracking-wider">Nome do Produto</label>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 text-4xl text-gray-800 flex items-center gap-4">
+                        <iconify-icon icon="mdi:box-outline" class="text-gray-400"></iconify-icon>
+                        Cadeira Office Premium
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <label class="text-3xl text-gray-500 font-bold uppercase tracking-wider">Preço Unitário</label>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 text-4xl text-gray-800 flex items-center gap-4">
+                        <iconify-icon icon="mdi:cash" class="text-green-500"></iconify-icon>
+                        R$ 450,00
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <label class="text-3xl text-gray-500 font-bold uppercase tracking-wider">Descrição</label>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 text-4xl text-gray-800 h-48 flex items-start gap-4">
+                        <iconify-icon icon="mdi:text-box-outline" class="text-gray-400 mt-2"></iconify-icon>
+                        <span class="leading-relaxed">Cadeira ergonômica preta com apoio de braços ajustável.</span>
+                    </div>
+                </div>
+
+                <div class="mt-auto pb-8">
+                    <div class="bg-neon-purple text-white text-4xl font-bold text-center py-8 rounded-full shadow-[0_10px_30px_rgba(140,63,255,0.4)] flex items-center justify-center gap-4">
+                        <iconify-icon icon="mdi:content-save"></iconify-icon> Salvar Alterações
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Sequence 5: 31.62 - 36.20 -->
+        <div data-hf-id="hf-46gb" id="seq5" class="clip bg-transparent" data-start="31.62" data-duration="4.58">
+            <div data-hf-id="hf-2el8" id="seq5_cap1" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            <div data-hf-id="hf-0dyn" class="absolute inset-0 flex flex-col items-center justify-center" id="seq5_dash">
+                <div data-hf-id="hf-u9nu" id="seq5_dash_mockup" class="w-[850px] h-[1350px] bg-slate-50 rounded-[50px] shadow-[0_0_80px_rgba(0,0,0,0.4)] flex flex-col overflow-hidden border-[16px] border-gray-900 font-sans">
+                    
+                    <!-- Topbar (Mobile) -->
+                    <div data-hf-id="hf-2cn0" class="h-28 bg-slate-900 border-b border-gray-200 flex items-center justify-between px-10 shadow-md">
+                        <div data-hf-id="hf-16fw" class="flex items-center gap-6">
+                            <iconify-icon data-hf-id="hf-fak0" icon="mdi:menu" class="text-6xl text-white"></iconify-icon>
+                            <div data-hf-id="hf-m040" class="text-4xl font-bold text-neon-purple">Lab Admin</div>
+                        </div>
+                        <div data-hf-id="hf-ltlf" class="flex gap-8 text-gray-300 text-6xl">
+                            <iconify-icon data-hf-id="hf-n65h" icon="mdi:bell-outline"></iconify-icon>
+                            <iconify-icon data-hf-id="hf-n9kl" icon="mdi:account-circle"></iconify-icon>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Content (Mobile Layout) -->
+                    <div data-hf-id="hf-888v" class="flex-1 flex flex-col bg-slate-100 p-10 gap-10">
+                        <div data-hf-id="hf-qnkt" class="text-5xl font-bold text-gray-800">Visão Geral</div>
+
+                        <!-- Metric Cards (Stacked for Mobile) -->
+                        <div data-hf-id="hf-z1sw" class="flex flex-col gap-8">
+                            <div data-hf-id="hf-vz1o" class="bg-white p-10 rounded-3xl shadow-sm border border-gray-200">
+                                <div data-hf-id="hf-cjv0" class="text-gray-500 font-bold mb-4 text-4xl">Faturamento Mensal</div>
+                                <div data-hf-id="hf-lo9m" class="text-7xl font-black text-gray-800" id="dash_metric1">R$ 0</div>
+                                <div data-hf-id="hf-750k" class="text-green-500 font-bold flex items-center gap-2 mt-6 text-3xl"><iconify-icon data-hf-id="hf-14qo" icon="mdi:arrow-up-bold"></iconify-icon> 24.5% de alta</div>
+                            </div>
+                            
+                            <div data-hf-id="hf-d17i" class="flex gap-8">
+                                <div data-hf-id="hf-ixmm" class="flex-1 bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
+                                    <div data-hf-id="hf-gcrg" class="text-gray-500 font-bold mb-4 text-3xl leading-tight">Novos<br data-hf-id="hf-x5px">Clientes</div>
+                                    <div data-hf-id="hf-czqc" class="text-6xl font-black text-gray-800" id="dash_metric2">0</div>
+                                    <div data-hf-id="hf-gisq" class="text-green-500 font-bold flex items-center gap-1 mt-4 text-3xl"><iconify-icon data-hf-id="hf-i1x4" icon="mdi:arrow-up-bold"></iconify-icon> 12.8%</div>
+                                </div>
+                                <div data-hf-id="hf-gale" class="flex-1 bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
+                                    <div data-hf-id="hf-3x9b" class="text-gray-500 font-bold mb-4 text-3xl leading-tight">Taxa de<br data-hf-id="hf-rsrt">Conversão</div>
+                                    <div data-hf-id="hf-3ike" class="text-6xl font-black text-gray-800" id="dash_metric3">0%</div>
+                                    <div data-hf-id="hf-bm5t" class="text-green-500 font-bold flex items-center gap-1 mt-4 text-3xl"><iconify-icon data-hf-id="hf-gv01" icon="mdi:arrow-up-bold"></iconify-icon> 4.2%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Big Chart Area -->
+                        <div data-hf-id="hf-7n61" class="flex-1 bg-white rounded-3xl shadow-sm border border-gray-200 p-8 flex flex-col mt-4">
+                            <div data-hf-id="hf-iv7x" class="text-gray-500 font-bold mb-8 text-4xl">Crescimento (Q3)</div>
+                            <!-- Bar Chart Simulator -->
+                            <div data-hf-id="hf-6bqz" class="flex-1 flex items-end justify-between gap-6 border-b-4 border-l-4 border-gray-200 pb-2 pl-6 pt-10 relative">
+                                <!-- Bars -->
+                                <div data-hf-id="hf-frbv" class="w-full bg-blue-500/80 rounded-t-xl dash-bar origin-bottom h-0" data-h="40%"></div>
+                                <div data-hf-id="hf-ubrx" class="w-full bg-blue-500/80 rounded-t-xl dash-bar origin-bottom h-0" data-h="55%"></div>
+                                <div data-hf-id="hf-4jvs" class="w-full bg-blue-500/80 rounded-t-xl dash-bar origin-bottom h-0" data-h="45%"></div>
+                                <div data-hf-id="hf-z4u0" class="w-full bg-blue-500/80 rounded-t-xl dash-bar origin-bottom h-0" data-h="70%"></div>
+                                <div data-hf-id="hf-0fd2" class="w-full bg-blue-500/80 rounded-t-xl dash-bar origin-bottom h-0" data-h="65%"></div>
+                                <div data-hf-id="hf-ptho" class="w-full bg-blue-500/80 rounded-t-xl dash-bar origin-bottom h-0" data-h="85%"></div>
+                                <div data-hf-id="hf-875b" class="w-full bg-neon-purple rounded-t-xl dash-bar origin-bottom h-0 shadow-[0_0_15px_rgba(140,63,255,0.6)]" data-h="100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div data-hf-id="hf-g511" id="seq5_text" class="absolute inset-0 flex items-center justify-center opacity-0 scale-150 pointer-events-none">
+                <span data-hf-id="hf-kpme" class="text-[120px] text-white font-bold bg-dark-indigo/90 px-16 py-8 border-[10px] border-neon-purple rounded-3xl -rotate-6">A LAB FAZ.</span>
+            </div>
+        </div>
+
+        <!-- Sequence 6: 36.78 - 40.36 -->
+        <div data-hf-id="hf-hmff" id="seq6" class="clip bg-transparent" data-start="36.78" data-duration="3.58">
+            <div data-hf-id="hf-zur5" id="seq6_cap1" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            <div data-hf-id="hf-ud08" class="absolute inset-0 flex items-center justify-center">
+                
+                <div data-hf-id="hf-9c7h" id="seq6_mobile_login" class="w-[850px] h-[1350px] bg-slate-50 rounded-[50px] shadow-[0_0_80px_rgba(0,0,0,0.4)] flex flex-col overflow-hidden border-[16px] border-gray-900 font-sans p-16 relative">
+                    
+                    <!-- App Logo / Header -->
+                    <div data-hf-id="hf-g0um" class="flex flex-col items-center mt-8 mb-16">
+                        <div data-hf-id="hf-edy0" class="w-48 h-48 bg-neon-purple rounded-[50px] flex items-center justify-center shadow-[0_20px_40px_rgba(140,63,255,0.4)] mb-10">
+                            <iconify-icon data-hf-id="hf-ogfq" icon="mdi:fingerprint" class="text-white text-[120px]"></iconify-icon>
+                        </div>
+                        <h1 data-hf-id="hf-56ge" class="text-6xl font-black text-gray-800">Bem-vindo(a)</h1>
+                        <p data-hf-id="hf-zc0m" class="text-4xl text-gray-500 mt-6 text-center leading-relaxed">Acesse sua conta corporativa<br data-hf-id="hf-szow">para continuar</p>
+                    </div>
+
+                    <!-- Toggle Role (Client / Employee) -->
+                    <div data-hf-id="hf-sink" class="bg-gray-200 rounded-full p-3 flex relative mb-16 shadow-inner" id="login_toggle_container">
+                        <div data-hf-id="hf-cxfa" class="absolute bg-white rounded-full shadow-md w-[48%] h-[85%] top-1/2 -translate-y-1/2 left-[1%]" id="login_toggle_active"></div>
+                        <div data-hf-id="hf-w4u2" class="flex-1 text-4xl font-bold text-neon-purple py-6 text-center z-10 relative cursor-default" id="login_toggle_client">Cliente</div>
+                        <div data-hf-id="hf-85ay" class="flex-1 text-4xl font-bold text-gray-500 py-6 text-center z-10 relative cursor-default" id="login_toggle_func">Funcionário</div>
+                    </div>
+
+                    <!-- Form Fields -->
+                    <div data-hf-id="hf-96zn" class="flex flex-col gap-8 mb-16">
+                        <div data-hf-id="hf-ppmm" class="bg-white rounded-3xl p-8 border-2 border-gray-200 flex items-center gap-6 shadow-sm">
+                            <iconify-icon data-hf-id="hf-669t" icon="mdi:email-outline" class="text-gray-400 text-6xl"></iconify-icon>
+                            <span data-hf-id="hf-pyc1" class="text-4xl text-gray-400">seu@email.com</span>
+                        </div>
+                        <div data-hf-id="hf-mnky" class="bg-white rounded-3xl p-8 border-2 border-gray-200 flex items-center gap-6 shadow-sm">
+                            <iconify-icon data-hf-id="hf-nqbk" icon="mdi:lock-outline" class="text-gray-400 text-6xl"></iconify-icon>
+                            <span data-hf-id="hf-mf9q" class="text-4xl text-gray-400 tracking-[10px]">••••••••</span>
+                            <iconify-icon data-hf-id="hf-7qz9" icon="mdi:eye-outline" class="text-gray-400 text-6xl ml-auto"></iconify-icon>
+                        </div>
+                    </div>
+
+                    <!-- Login Button -->
+                    <div data-hf-id="hf-od6d" id="btn_login_container" class="bg-neon-purple text-white text-5xl font-bold text-center py-16 rounded-[35px] shadow-[0_20px_50px_rgba(140,63,255,0.4)] mb-16 relative overflow-hidden flex items-center justify-center">
+                        <span data-hf-id="hf-bejm" class="relative z-10" id="btn_login_text">Acessar Conta</span>
+                        <div data-hf-id="hf-ju8v" class="absolute inset-0 bg-green-500 translate-x-[-100%]" id="btn_login_success"></div>
+                        <div data-hf-id="hf-vkkb" class="absolute inset-0 flex items-center justify-center opacity-0 text-white z-20 text-5xl gap-4 font-black" id="btn_login_success_text">
+                            <iconify-icon data-hf-id="hf-25o1" icon="mdi:check-circle" class="text-6xl"></iconify-icon> ACESSO LIBERADO
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <div data-hf-id="hf-qq7w" id="seq6_text" class="absolute bottom-[10%] w-full text-center opacity-0">
+                <span data-hf-id="hf-k34h" class="inline-block text-[100px] text-white font-bold bg-dark-indigo/95 px-16 py-6 border-[8px] border-neon-purple rounded-3xl -rotate-3 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">A LAB FAZ.</span>
+            </div>
+        </div>
+
+        <!-- Sequence 7: 40.34 - 46.24 -->
+        <div data-hf-id="hf-ihcp" id="seq7" class="clip bg-transparent" data-start="40.34" data-duration="5.9">
+            <div data-hf-id="hf-qb46" id="seq7_cap1" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            <div data-hf-id="hf-md05" id="seq7_cap2" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            <div data-hf-id="hf-d8iz" class="absolute inset-0 flex flex-col items-center justify-center gap-24">
+                <div data-hf-id="hf-652e" id="seq7_title" class="text-[120px] font-bold text-white opacity-0 tracking-widest">
+                    ADAPTAÇÃO
+                </div>
+                <div data-hf-id="hf-bneb" class="relative w-[400px] h-[400px]">
+                    <div data-hf-id="hf-eq8z" id="seq7_hole" class="absolute inset-0 rounded-full border-[20px] border-neon-purple flex items-center justify-center">
+                    </div>
+                    <div data-hf-id="hf-wcpu" id="seq7_square" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-slate-light rounded-2xl flex items-center justify-center">
+                        <iconify-icon data-hf-id="hf-x8dk" icon="lucide:settings" class="text-8xl text-dark-indigo animate-spin" style="animation-duration: 3s;"></iconify-icon>
+                    </div>
+                </div>
+                <div data-hf-id="hf-jczl" id="seq7_phrase" class="text-6xl text-neon-purple font-bold text-center w-[800px] opacity-0">
+                    O SISTEMA DEVE SE MOLDAR À SUA EMPRESA.
+                </div>
+            </div>
+        </div>
+
+        <!-- Sequence 8: 46.20 - 56.00 -->
+        <div data-hf-id="hf-xwga" id="seq8" class="clip bg-transparent" data-start="46.20" data-duration="9.80">
+            <div data-hf-id="hf-g7ej" id="seq8_cap1" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            <div data-hf-id="hf-5bww" id="seq8_cap2" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+            <div data-hf-id="hf-u32y" id="seq8_emojis" class="absolute inset-0 pointer-events-none z-20 overflow-hidden"></div>
+            <div data-hf-id="hf-8x1n" class="absolute inset-0 flex flex-col items-center justify-center gap-24">
+                <img data-hf-id="hf-8elu" src="assets/labscript.dev.png" class="w-[750px] opacity-0" id="seq8_logo" alt="Labscript">
+                <div data-hf-id="hf-8odg" id="seq8_btn" class="bg-neon-purple text-white text-7xl font-bold px-20 py-12 rounded-[50px] shadow-2xl relative overflow-hidden flex items-center justify-center">
+                    <span data-hf-id="hf-2gs9" class="relative z-10">FALE CONOSCO</span>
+                    <div data-hf-id="hf-jup4" class="absolute inset-0 bg-white/20 w-0 z-0" id="seq8_btn_shine"></div>
+                </div>
+            </div>
+        </div>
+
+        <div data-hf-id="hf-u5eg" id="fade_to_black" class="absolute inset-0 bg-black opacity-0 z-50 pointer-events-none"></div>
     </div>
 
-    <script>
-      window.__timelines = window.__timelines || {};
-      const tl = gsap.timeline({ paused: true });
-      // Example: tl.from("#title", { opacity: 0, y: -50, duration: 1 }, 0);
-      window.__timelines["main"] = tl;
+    <!-- Scripts for animations -->
+    <script type="module">
+        import { DotLottie } from "https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm";
+
+        function applyScrambleText(tl, selector, startTime) {
+            const split = new SplitType(selector, { types: 'words, chars' });
+            const chars = split.chars;
+            if (!chars) return;
+            
+            const charSet = "@#$%&01X?";
+            const baseDuration = 0.4;
+            const stagger = 0.05;
+            
+            const element = document.querySelector(selector);
+            if (element && element.parentElement) {
+                tl.set(element.parentElement, { opacity: 1, scale: 1, y: 0 }, startTime);
+            }
+            tl.set(selector, { opacity: 1, scale: 1 }, startTime);
+            
+            tl.fromTo(chars, 
+                { opacity: 0, scale: 3, z: 200, rotationX: 90 },
+                { opacity: 1, scale: 1, z: 0, rotationX: 0, stagger: stagger, duration: baseDuration, ease: "power4.out" },
+                startTime
+            );
+
+            chars.forEach((char, i) => {
+                const originalText = char.innerText;
+                if (!originalText.trim()) return;
+
+                const dummy = { p: 0 };
+                tl.to(dummy, {
+                    p: 100,
+                    duration: baseDuration,
+                    onUpdate: function() {
+                        if (this.progress() < 0.8) {
+                            char.innerText = charSet[Math.floor(Math.random() * charSet.length)];
+                        } else {
+                            char.innerText = originalText;
+                        }
+                    },
+                    onComplete: function() {
+                        char.innerText = originalText;
+                    }
+                }, startTime + (i * stagger));
+            });
+        }
+
+        function createFloatingEmojis(tl, containerSelector, startTime, duration) {
+            const container = document.querySelector(containerSelector);
+            if (!container) return;
+            const emojis = ['👍', '❤️', '🔥', '🚀', '👏', '💯', '🤩', '🎯'];
+            const numEmojis = 30;
+            
+            for (let i = 0; i < numEmojis; i++) {
+                const el = document.createElement("div");
+                el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                el.className = "absolute text-[80px] opacity-0";
+                container.appendChild(el);
+                
+                const delay = Math.random() * duration; // Spread over the full duration
+                const startX = 100 + Math.random() * 880;
+                const endX = startX + (Math.random() * 400 - 200);
+                
+                const animDuration = 4 + Math.random() * 3; // Lento: entre 4s e 7s de duração de subida
+
+                tl.fromTo(el, 
+                    { x: startX, y: 1920, opacity: 0, scale: 0.5 + Math.random() },
+                    { x: endX, y: -200, opacity: 1, scale: 1 + Math.random(), duration: animDuration, ease: "power1.out" },
+                    startTime + delay
+                );
+                tl.to(el, { opacity: 0, duration: 0.8 }, startTime + delay + (animDuration * 0.8));
+            }
+        }
+
+        // Preload lottie
+        const lottie = new DotLottie({
+            autoplay: false,
+            loop: true,
+            mode: "bounce",
+            canvas: document.getElementById("confused_canvas"),
+            src: "https://lottie.host/aebe6397-1c6f-45d8-b772-933e92561326/MllZGbSQwp.json", 
+        });
+
+        // Inject fake grid for Seq2
+        const grid = document.getElementById("seq2_rows");
+        const fakeProducts = ["Cadeira Office", "Mesa Gamer", "Monitor 27\"", "Teclado Mec.", "Mouse Sem Fio", "Headset", "Webcam 1080p", "Hub USB", "Cabo HDMI", "SSD 1TB", "Memória 16GB", "Fonte 600W"];
+        for (let i = 0; i < 20; i++) {
+            const row = document.createElement("div");
+            row.className = "flex border-b border-gray-300" + (i % 2 !== 0 ? " bg-gray-50" : "");
+            
+            const col1 = document.createElement("div");
+            col1.className = "w-2/5 border-r border-gray-300 p-4";
+            col1.innerText = fakeProducts[Math.floor(Math.random() * fakeProducts.length)];
+            
+            const col2 = document.createElement("div");
+            col2.className = "w-1/5 border-r border-gray-300 p-4 text-center";
+            col2.innerText = Math.floor(Math.random() * 200) + 1;
+            
+            const col3 = document.createElement("div");
+            col3.className = "w-2/5 p-4 text-right";
+            col3.innerText = "R$ " + (Math.random() * 500 + 50).toFixed(2).replace('.', ',');
+            
+            row.appendChild(col1);
+            row.appendChild(col2);
+            row.appendChild(col3);
+            grid.appendChild(row);
+        }
+
+        // Clone the entire wrapper from Seq 2 into Seq 4
+        const clone = document.getElementById("estoque_sheet").cloneNode(true);
+        clone.id = "seq4_app_container";
+        
+        // Remove Seq2 specific glitch overlays from clone
+        const freezeEl = clone.querySelector("#seq2_freeze");
+        if (freezeEl) freezeEl.remove();
+        const errorScreen = clone.querySelector("#seq2_error_screen");
+        if (errorScreen) errorScreen.remove();
+
+        // Rename inner elements for GSAP animation targetting
+        clone.querySelector("#estoque_header").id = "seq4_header";
+        clone.querySelector("#estoque_table_wrapper").id = "seq4_spreadsheet";
+
+        // Append the mobile app form from the template
+        const formTemplate = document.getElementById("seq4_form_template").content.cloneNode(true);
+        clone.appendChild(formTemplate);
+
+        // Inject clone into Seq 4
+        document.getElementById("seq4_container_slot").appendChild(clone);
+
+        window.__timelines = window.__timelines || {};
+        const mainTl = gsap.timeline({ paused: true });
+        
+        // Animar grid background infinitamente
+        mainTl.to(".bg-grid", { backgroundPosition: "100px 100px", duration: 2, repeat: 100, ease: "none" }, 0);
+
+        // Seq 1 (0 to 14.74)
+        mainTl.set("#seq1", { opacity: 1 }, 0);
+        
+        // Seq 1, Scene 1
+        mainTl.from("#seq1_s1_spreadsheet", { opacity: 0, y: 100, duration: 1, ease: "power3.out" }, 0);
+        
+        // Seq 1, Scene 2 (3.02s)
+        mainTl.to("#seq1_s1_spreadsheet", { y: -250, duration: 0.5, ease: "power2.inOut" }, 3.02);
+        mainTl.fromTo("#seq1_s2_spreadsheet", { scale: 0.5, y: 0 }, { opacity: 1, scale: 1, y: 250, duration: 0.5, ease: "back.out(1.7)" }, 3.02);
+
+        // Seq 1, Scene 2.5 (7.90s)
+        mainTl.to("#seq1_s1_spreadsheet", { y: -500, duration: 0.5, ease: "power2.inOut" }, 7.90);
+        mainTl.to("#seq1_s2_spreadsheet", { y: 0, duration: 0.5, ease: "power2.inOut" }, 7.90);
+        mainTl.fromTo("#seq1_s3_spreadsheet", { scale: 0.5, y: 0 }, { opacity: 1, scale: 1, y: 500, duration: 0.5, ease: "back.out(1.7)" }, 7.90);
+        
+        // Seq 1, Scene 3 (10.22s)
+        mainTl.add(() => { lottie.play(); }, 10.22);
+        mainTl.to("#seq1_s3_lottie", { opacity: 1, duration: 0.5 }, 10.22);
+        mainTl.fromTo("#confused_canvas", { y: 300, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "back.out(1.5)" }, 10.22);
+        mainTl.add(() => { lottie.pause(); }, 14.74);
+        
+        mainTl.set("#seq1", { opacity: 0 }, 14.74);
+
+
+        // Seq 2 (14.86 - 22.04)
+        mainTl.set("#seq2", { opacity: 1 }, 14.86);
+        mainTl.from("#seq2_sheet", { scale: 0, duration: 1, ease: "bounce.out" }, 14.86);
+        // "Windows não está respondendo" - freeze esbranquiçado aos 16.5s
+        mainTl.to("#seq2_freeze", { opacity: 1, duration: 0.1 }, 16.5);
+        // Tudo some e vira um espaço em branco com ícone de imagem quebrada aos 18s
+        mainTl.to("#seq2_error_screen", { opacity: 1, duration: 0.1 }, 18.0);
+        mainTl.set("#seq2", { opacity: 0 }, 22.04);
+
+
+        // Seq 3 (22.10 - 25.70)
+        mainTl.set("#seq3", { opacity: 1 }, 22.10);
+        
+        mainTl.to("#seq3_stars", { opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, 22.10);
+        mainTl.to("#star1", { rotation: 90, duration: 6, ease: "none" }, 22.10);
+        mainTl.to("#star2", { rotation: -120, duration: 6, ease: "none" }, 22.10);
+
+        mainTl.to("#seq3_logo", { opacity: 1, scale: 1, duration: 1, ease: "elastic.out(1, 0.5)" }, 22.10);
+        mainTl.to("#seq3_code", { opacity: 1, duration: 2 }, 22.10);
+        mainTl.set("#seq3", { opacity: 0 }, 25.70);
+
+
+        // Seq 4 (26.62 - 31.06)
+        mainTl.set("#seq4", { opacity: 1 }, 26.62);
+        
+        // A planilha idêntica à Seq 2 entra em cena
+        mainTl.from("#seq4_app_container", { y: 1500, duration: 0.8, ease: "power3.out" }, 26.62);
+        
+        // Transformação mágica: O container da planilha ganha borda de celular
+        mainTl.to("#seq4_app_container", { borderRadius: "40px", borderWidth: "12px", borderColor: "#111827", duration: 0.6 }, 27.8);
+        
+        // Título muda para roxo e padding de app
+        mainTl.to("#seq4_header", { backgroundColor: "#8b5cf6", paddingTop: "48px", duration: 0.5 }, 27.8);
+        mainTl.to("#seq4_header", { innerHTML: "Produto", duration: 0.1 }, 27.8);
+        
+        // Conteúdo da planilha desliza fora, formulário desliza dentro
+        mainTl.to("#seq4_spreadsheet", { x: -800, opacity: 0, duration: 0.7, ease: "back.in(1.2)" }, 27.8);
+        mainTl.fromTo("#seq4_form", { x: 800, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, ease: "back.out(1.2)" }, 28.0);
+
+        // Badges pulam na tela
+        mainTl.to("#seq4_badges", { opacity: 1, duration: 0.1 }, 28.5);
+        mainTl.from("#seq4_badges > div", { x: 500, rotation: 25, opacity: 0, stagger: 0.2, duration: 0.8, ease: "back.out(1.7)" }, 28.5);
+
+        // Texto A LAB FAZ bate no final com Scramble
+        applyScrambleText(mainTl, "#seq4_text span", 29.5);
+        
+        // Saída orgânica (app escorrega para a esquerda e badges seguem atrás)
+        mainTl.to("#seq4_app_container", { x: -1500, duration: 0.6, ease: "power2.in" }, 30.3);
+        mainTl.to("#seq4_badges > div", { x: -1500, stagger: 0.1, duration: 0.6, ease: "power2.in" }, 30.4);
+        mainTl.to("#seq4_text", { opacity: 0, scale: 0.8, duration: 0.4 }, 30.5);
+
+        mainTl.set("#seq4", { opacity: 0 }, 31.06);
+
+
+        // Seq 5 (31.62 - 36.20)
+        mainTl.set("#seq5", { opacity: 1 }, 31.62);
+        
+        // Entra deslizando pela direita para continuar o carrossel orgânico
+        mainTl.from("#seq5_dash", { x: 1500, opacity: 0, duration: 1, ease: "power3.out" }, 31.62);
+        
+        mainTl.to({val:0}, {
+            val: 125430, duration: 2, ease: "power2.out",
+            onUpdate: function() { 
+                document.getElementById("dash_metric1").innerText = "R$ " + Math.round(this.targets()[0].val).toLocaleString('pt-BR'); 
+            }
+        }, 32.2);
+
+        mainTl.to({val:0}, {
+            val: 842, duration: 2, ease: "power2.out",
+            onUpdate: function() { 
+                document.getElementById("dash_metric2").innerText = Math.round(this.targets()[0].val); 
+            }
+        }, 32.3);
+
+        mainTl.to({val:0}, {
+            val: 68.5, duration: 2, ease: "power2.out",
+            onUpdate: function() { 
+                document.getElementById("dash_metric3").innerText = this.targets()[0].val.toFixed(1) + "%"; 
+            }
+        }, 32.4);
+
+        document.querySelectorAll(".dash-bar").forEach((bar, i) => {
+            mainTl.to(bar, { height: bar.getAttribute('data-h'), duration: 0.8, ease: "power4.out" }, 32.5 + (i*0.1));
+        });
+
+        // O selo aparece aos 34.5s com Scramble
+        applyScrambleText(mainTl, "#seq5_text span", 34.5);
+        
+        // Saída deslizando pela esquerda aos 35.6s para continuar o movimento
+        mainTl.to("#seq5_dash", { x: -1500, duration: 0.6, ease: "power2.in" }, 35.6);
+        mainTl.to("#seq5_text", { opacity: 0, scale: 0.8, duration: 0.4 }, 35.7);
+
+        mainTl.set("#seq5", { opacity: 0 }, 36.20);
+
+
+        // Seq 6 (36.78 - 40.36)
+        mainTl.set("#seq6", { opacity: 1 }, 36.78);
+        
+        // Entra deslizando pela direita
+        mainTl.from("#seq6_mobile_login", { x: 1500, opacity: 0, duration: 1, ease: "power3.out" }, 36.78);
+        
+        // Toggle animado aos 37.5s (Cliente -> Funcionário)
+        mainTl.to("#login_toggle_active", { x: "105%", duration: 0.4, ease: "power2.inOut" }, 37.5);
+        mainTl.to("#login_toggle_client", { color: "#6b7280", duration: 0.2 }, 37.6);
+        mainTl.to("#login_toggle_func", { color: "#8b5cf6", duration: 0.2 }, 37.7);
+        
+        // Sucesso de login animado aos 38.3s
+        mainTl.to("#btn_login_success", { x: 0, duration: 0.5, ease: "power3.out" }, 38.2);
+        mainTl.to("#btn_login_text", { opacity: 0, duration: 0.2 }, 38.3);
+        mainTl.to("#btn_login_success_text", { opacity: 1, duration: 0.2 }, 38.4);
+
+        // Selo "A LAB FAZ" bate com Scramble
+        applyScrambleText(mainTl, "#seq6_text span", 38.7);
+        
+        // Saída deslizando para a esquerda (continuando carrossel)
+        mainTl.to("#seq6_mobile_login", { x: -1500, duration: 0.5, ease: "power2.in" }, 39.7);
+        mainTl.to("#seq6_text", { opacity: 0, scale: 0.8, duration: 0.3 }, 39.8);
+        
+        mainTl.set("#seq6", { opacity: 0 }, 40.36);
+
+
+        // Seq 7 (40.34 - 46.24)
+        mainTl.set("#seq7", { opacity: 1 }, 40.34);
+        mainTl.to("#seq7_title", { opacity: 1, duration: 1, ease: "power2.out" }, 40.34);
+        mainTl.from("#seq7_hole", { scale: 0, opacity: 0, duration: 1, ease: "back.out(1.5)" }, 40.5);
+        mainTl.from("#seq7_square", { x: -800, rotation: 180, opacity: 0, duration: 1.5, ease: "power3.inOut" }, 41.5);
+        
+        mainTl.to("#seq7_square", { borderRadius: "50%", duration: 1, ease: "power2.inOut" }, 43.5);
+        
+        mainTl.to("#seq7_phrase", { opacity: 1, y: -50, duration: 1, ease: "power2.out" }, 44.5);
+        mainTl.set("#seq7", { opacity: 0 }, 46.24);
+
+
+        // Seq 8 (46.20 - 52.00) Fim do vídeo
+        mainTl.set("#seq8", { opacity: 1 }, 46.20);
+        mainTl.fromTo("#seq8_logo", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: "elastic.out(1, 0.5)" }, 46.2);
+        mainTl.from("#seq8_btn", { scale: 0, duration: 1, ease: "elastic.out(1, 0.5)" }, 46.5);
+        
+        // Efeito Instagram Live Emojis até o final do vídeo (56s)
+        createFloatingEmojis(mainTl, "#seq8_emojis", 47.0, 9.0);
+        mainTl.to("#seq8_btn", { scale: 1.1, yoyo: true, repeat: 10, duration: 1, ease: "sine.inOut" }, 47.5);
+        mainTl.to("#seq8_btn_shine", { width: "100%", duration: 1, ease: "power2.inOut", repeat: 5, repeatDelay: 1 }, 47.5);
+        
+        // Finalizar vídeo desvanecendo para preto
+        mainTl.to("#fade_to_black", { opacity: 1, duration: 1.5 }, 54.5);
+
+        const bgm = document.getElementById("bgm_track");
+        mainTl.to(bgm, { volume: 0, duration: 3, ease: "linear" }, 53.0);
+
+        // ==========================================
+        // Legendas Dinâmicas (Karaoke) da Cena 1
+        // ==========================================
+        if (typeof AUDIO_WORDS !== 'undefined') {
+            const chunks = [
+                { id: "seq1_cap1", start: 0, end: 10, fadeOutAt: 3.0 },
+                { id: "seq1_cap2", start: 10, end: 16, fadeOutAt: 5.0 },
+                { id: "seq1_cap3", start: 16, end: 28, fadeOutAt: 7.4 },
+                { id: "seq1_cap4", start: 28, end: 34, fadeOutAt: 10.2 },
+                { id: "seq1_cap5", start: 34, end: 40, fadeOutAt: 12.2 },
+                { id: "seq1_cap6", start: 40, end: 46, fadeOutAt: 14.8 },
+                { id: "seq2_cap1", start: 46, end: 54, fadeOutAt: 17.72 },
+                { id: "seq2_cap2", start: 54, end: 63, fadeOutAt: 22.1 },
+                { id: "seq3_cap1", start: 63, end: 72, fadeOutAt: 26.62 },
+                { id: "seq4_cap1", start: 72, end: 80, fadeOutAt: 30.34 },
+                { id: "seq5_cap1", start: 83, end: 93, fadeOutAt: 35.36 },
+                { id: "seq6_cap1", start: 96, end: 101, fadeOutAt: 39.0 },
+                { id: "seq7_cap1", start: 104, end: 113, fadeOutAt: 42.9 },
+                { id: "seq7_cap2", start: 113, end: 122, fadeOutAt: 46.2 },
+                { id: "seq8_cap1", start: 122, end: 132, fadeOutAt: 49.52 },
+                { id: "seq8_cap2", start: 134, end: 148, fadeOutAt: 55.46 }
+            ];
+
+            chunks.forEach((chunk, chunkIdx) => {
+                const container = document.getElementById(chunk.id);
+                if (!container) return;
+                
+                const words = AUDIO_WORDS.slice(chunk.start, chunk.end);
+                
+                // Exibe o container um pouco antes da primeira palavra (exceto o primeiro, que já começa visível)
+                if (chunkIdx > 0 && words.length > 0) {
+                    mainTl.set(container, { opacity: 1 }, words[0].start - 0.1);
+                }
+
+                words.forEach((w, i) => {
+                    const span = document.createElement("span");
+                    span.innerHTML = w.word + "&nbsp;";
+                    span.id = `cap${chunkIdx}-w-${i}`;
+                    span.className = "inline-block origin-bottom"; // Ajuda no scale do GSAP
+                    container.appendChild(span);
+                    
+                    // Acende a palavra (karaoke) exatamente em w.start
+                    mainTl.to(span, { color: "#ffffff", scale: 1.15, textShadow: "0px 0px 10px rgba(255,255,255,0.5)", duration: 0.1 }, w.start);
+                });
+                
+                // Apaga a legenda no tempo calculado com corte seco (sem fade)
+                mainTl.set(container, { opacity: 0 }, chunk.fadeOutAt);
+            });
+        }
+
+        window.__timelines["main"] = mainTl;
     </script>
   </body>
 </html>
