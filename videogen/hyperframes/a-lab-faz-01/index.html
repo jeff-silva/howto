@@ -21,7 +21,10 @@
       }
     }
   </script>
+  <script src="audio.js"></script>
+  <script src="bgm-beats.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/split-type"></script>
   <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
   
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech&display=swap" rel="stylesheet">
@@ -50,45 +53,59 @@
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 <body>
-  <div data-hf-id="hf-gw9g" id="root" data-composition-id="main" data-start="0" data-duration="55.70" data-width="1080" data-height="1920" class="bg-darkindigo">
+  <div data-hf-id="hf-gw9g" id="root" data-composition-id="main" data-start="0" data-duration="58.70" data-width="1080" data-height="1920" class="bg-indigo">
+    <div data-hf-id="hf-feal" id="global-grid" class="grid-bg z-0 pointer-events-none"></div>
+
     
     <!-- Audios -->
     <audio data-hf-id="hf-17pa" id="voice" src="audio.mp3" data-start="0" data-duration="55.70"></audio>
-    <audio data-hf-id="hf-tkpf" id="bgm" src="bgm.mp3" loop data-start="0" data-duration="55.70"></audio>
+    <audio data-volume="0.165959" data-hf-id="hf-tkpf" id="bgm" src="bgm.mp3" loop data-start="0" data-duration="58.70"></audio>
     
     <!-- Cena 1 -->
     <div data-hf-id="hf-bkgo" id="scene1" class="clip bg-white flex items-center justify-center" data-start="0" data-duration="6.24" data-track-index="1">
-      <div data-hf-id="hf-zmhk" id="card" class="w-[600px] h-[350px] bg-gray-200 border-4 border-gray-300 rounded-lg shadow-xl flex items-center justify-center absolute">
-        <span data-hf-id="hf-xj7i" class="text-4xl text-gray-500">Cartão de Visitas</span>
+      <h2 data-hf-id="hf-fcu9" id="scene1-top-text" class="absolute top-[15%] text-[80px] text-gray-800 font-bold text-center uppercase leading-tight w-[950px] opacity-0 z-10">O site da sua empresa não deve ser só um</h2>
+      
+      <div data-hf-id="hf-zmhk" id="card" class="w-[700px] h-[450px] bg-white rounded-xl shadow-[0_30px_60px_rgba(0,0,0,0.3)] flex flex-col items-center justify-center absolute z-10 border border-gray-200 p-8 overflow-hidden">
+        <!-- Detalhe superior -->
+        <div data-hf-id="hf-jx5n" class="absolute top-0 left-0 w-full h-6 bg-neonpurple"></div>
+        <!-- Detalhe circular no fundo -->
+        <div data-hf-id="hf-80ua" class="absolute bottom-[-100px] right-[-100px] w-[300px] h-[300px] bg-indigo/5 rounded-full"></div>
+        
+        <div data-hf-id="hf-4dfq" class="flex flex-col items-center gap-6 z-10">
+           <div data-hf-id="hf-8uu8" class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
+             <iconify-icon data-hf-id="hf-kavu" icon="lucide:user" width="50" height="50" class="text-gray-400"></iconify-icon>
+           </div>
+           <span data-hf-id="hf-n2sq" class="text-[55px] text-gray-800 uppercase font-bold tracking-widest text-center mt-2 leading-tight">CARTÃO DE VISITAS<br data-hf-id="hf-q7jp"><span data-hf-id="hf-eccb" id="card-bonitinho" class="text-[80px] text-neonpurple font-bold opacity-0 inline-block mt-4 uppercase">BONITINHO</span></span>
+        </div>
       </div>
-      <div data-hf-id="hf-435u" id="card-shadow" class="w-[500px] h-[50px] bg-black/20 blur-xl absolute bottom-[400px] rounded-[100%] scale-0"></div>
+      <div data-hf-id="hf-435u" id="card-shadow" class="w-[600px] h-[50px] bg-black/20 blur-xl absolute top-[68%] rounded-[100%] scale-0 z-0"></div>
       
-      <div data-hf-id="hf-gsqb" id="scene1-flash" class="absolute inset-0 bg-neonpurple opacity-0 z-10"></div>
+      <div data-hf-id="hf-gsqb" id="scene1-flash" class="absolute inset-0 bg-white opacity-0 z-10"></div>
       
-      <div data-hf-id="hf-yrf5" id="scene1-end" class="absolute inset-0 bg-indigo hidden z-20 flex-col items-center justify-center">
-        <div data-hf-id="hf-q4u8" class="grid-bg"></div>
-        <h1 data-hf-id="hf-pimb" id="scene1-text" class="text-9xl text-white font-bold text-center leading-none z-10 scale-150 opacity-0">TRABALHAR<br data-hf-id="hf-x5px">POR VOCÊ</h1>
+      <div data-hf-id="hf-yrf5" id="scene1-end" class="absolute inset-0 bg-darkindigo hidden z-20 flex-col items-center justify-center overflow-hidden">
+        <!-- Glowing Orb Background -->
+        <div data-hf-id="hf-nktp" class="absolute w-[900px] h-[900px] bg-neonpurple rounded-full blur-[200px] opacity-60"></div>
+        <!-- Huge typography with gradient -->
+        <h1 data-hf-id="hf-pimb" id="scene1-text" class="text-[160px] text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 font-bold text-center leading-[0.9] z-10 scale-150 opacity-0 drop-shadow-2xl">TRABALHAR<br data-hf-id="hf-x5px">POR VOCÊ</h1>
       </div>
     </div>
 
     <!-- Cena 2 -->
-    <div data-hf-id="hf-d863" id="scene2" class="clip bg-indigo flex items-center justify-center" data-start="6.32" data-duration="5.78" data-track-index="1">
-      <div data-hf-id="hf-wbnc" class="grid-bg"></div>
-      <div data-hf-id="hf-asu5" id="safe" class="w-[400px] h-[400px] bg-slate-800 border-8 border-slate-600 rounded-3xl absolute bottom-[200px] z-10 flex items-center justify-center perspective-[1000px]">
-        <div data-hf-id="hf-0ht4" class="w-[300px] h-[300px] bg-slate-900 border-4 border-black rounded-full flex items-center justify-center absolute"></div>
-        <div data-hf-id="hf-g0x8" id="safe-door" class="w-full h-full bg-slate-700 border-8 border-slate-500 rounded-3xl origin-left rotate-y-[-110deg] absolute"></div>
-      </div>
+    <div data-hf-id="hf-d863" id="scene2" class="clip bg-transparent flex flex-col items-center justify-center" data-start="6.32" data-duration="5.78" data-track-index="1">
+      
+      <!-- Container de Legendas -->
+      <div data-hf-id="hf-hjq6" id="scene2-captions" class="absolute top-[10%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-4 z-30 text-[55px] font-bold uppercase text-gray-700 leading-tight"></div>
       
       <div data-hf-id="hf-ck9t" id="money-container" class="absolute w-full h-full pointer-events-none z-0"></div>
-      
-      <div data-hf-id="hf-cusc" id="lock" class="absolute z-20 opacity-0 scale-150">
-        <iconify-icon data-hf-id="hf-neir" icon="lucide:lock" width="400" height="400" class="text-neonpurple drop-shadow-2xl"></iconify-icon>
-      </div>
     </div>
 
     <!-- Cena 3 -->
-    <div data-hf-id="hf-1f6b" id="scene3" class="clip bg-indigo flex items-center justify-center" data-start="12.10" data-duration="6.08" data-track-index="1">
-      <div data-hf-id="hf-ivux" id="phone" class="w-[500px] h-[1000px] border-[16px] border-white rounded-[60px] bg-gray-100 absolute flex flex-col items-center p-8 gap-6 z-10 relative overflow-hidden">
+    <div data-hf-id="hf-1f6b" id="scene3" class="clip bg-transparent flex flex-col items-center justify-center" data-start="12.10" data-duration="6.08" data-track-index="1">
+      
+      <!-- Container de Legendas -->
+      <div data-hf-id="hf-mn6k" id="scene3-captions" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-30 text-[50px] font-bold uppercase text-gray-700 leading-tight"></div>
+
+      <div data-hf-id="hf-ivux" id="phone" class="w-[500px] h-[1000px] border-[16px] border-white rounded-[60px] bg-gray-100 absolute flex flex-col items-center p-8 gap-6 z-10 relative overflow-hidden translate-y-[150px]">
         <div data-hf-id="hf-khau" class="w-full h-32 bg-gray-300 rounded-2xl"></div>
         <div data-hf-id="hf-x7du" class="w-full h-12 bg-gray-300 rounded-xl mt-4"></div>
         <div data-hf-id="hf-l3za" class="w-full h-12 bg-gray-300 rounded-xl"></div>
@@ -99,29 +116,94 @@
         </div>
       </div>
       
-      <div data-hf-id="hf-n58q" id="cross" class="absolute z-20 opacity-0 scale-50">
+      <div data-hf-id="hf-n58q" id="cross" class="absolute z-20 opacity-0 scale-50 translate-y-[150px]">
         <iconify-icon data-hf-id="hf-m81s" icon="lucide:x" width="600" height="600" class="text-red-500"></iconify-icon>
       </div>
       
-      <h1 data-hf-id="hf-60jv" id="scene3-text" class="text-8xl text-white font-bold absolute top-32 z-30 opacity-0 bg-red-600 px-8 py-4 uppercase">PANFLETO DIGITAL</h1>
+      <h1 data-hf-id="hf-60jv" id="scene3-text" class="text-[100px] text-white font-bold absolute top-[40%] z-30 opacity-0 bg-red-600 px-8 py-4 uppercase">PANFLETO DIGITAL</h1>
     </div>
 
     <!-- Cena 4 -->
-    <div data-hf-id="hf-4scq" id="scene4" class="clip bg-neonpurple flex items-center justify-center overflow-hidden" data-start="18.28" data-duration="8.00" data-track-index="1">
+    <div data-hf-id="hf-4scq" id="scene4" class="clip bg-darkindigo flex flex-col items-center justify-center overflow-hidden" data-start="18.28" data-duration="8.00" data-track-index="1">
+      
+      <!-- Container de Legendas -->
+      <div data-hf-id="hf-2an7" id="scene4-captions" class="absolute top-[10%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-30 text-[60px] font-bold uppercase text-gray-700 leading-tight"></div>
+      
       <img data-hf-id="hf-fjlr" id="logo1" src="labscript.dev.png" class="w-[800px] z-10 scale-0 opacity-0 absolute">
       <div data-hf-id="hf-38xy" id="reactions-container" class="absolute inset-0 pointer-events-none z-20"></div>
     </div>
 
     <!-- Cena 5 -->
-    <div data-hf-id="hf-pyca" id="scene5" class="clip bg-indigo flex items-center justify-center" data-start="26.34" data-duration="4.42" data-track-index="1">
-      <div data-hf-id="hf-v4q9" class="grid-bg"></div>
-      <div data-hf-id="hf-jtcu" id="boleto" class="absolute w-[600px] h-[300px] bg-white rounded-xl shadow-2xl p-8 flex flex-col gap-4 transform rotate-[-10deg] x-[-200px] y-[100px] opacity-0">
-         <div data-hf-id="hf-8hr0" class="w-full h-12 bg-black"></div>
-         <div data-hf-id="hf-fdfm" class="w-1/2 h-8 bg-gray-300"></div>
-         <div data-hf-id="hf-a8fb" class="w-full h-8 bg-gray-300"></div>
+    <div data-hf-id="hf-pyca" id="scene5" class="clip bg-transparent flex flex-col items-center justify-center" data-start="26.34" data-duration="4.42" data-track-index="1">
+      
+      <!-- Container de Legendas -->
+      <div data-hf-id="hf-x8ib" id="scene5-captions" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-30 text-[55px] font-bold uppercase text-gray-700 leading-tight"></div>
+
+      <div data-hf-id="hf-jtcu" id="boleto" class="absolute w-[500px] h-[700px] bg-white rounded-3xl shadow-2xl p-10 flex flex-col gap-6 opacity-0 z-10 border border-gray-100 mt-[150px]">
+         <!-- Header / Fatura -->
+         <div data-hf-id="hf-3t4n" class="flex justify-between items-center border-b-4 border-gray-100 pb-6">
+            <div data-hf-id="hf-yc5f" class="flex flex-col gap-3">
+              <div data-hf-id="hf-j1sj" class="w-40 h-8 bg-gray-300 rounded-md"></div>
+              <div data-hf-id="hf-z7i0" class="w-24 h-6 bg-gray-200 rounded-md"></div>
+            </div>
+            <div data-hf-id="hf-icam" class="w-20 h-20 bg-neonpurple/20 rounded-full flex items-center justify-center">
+              <iconify-icon data-hf-id="hf-21il" icon="lucide:receipt" width="40" height="40" class="text-neonpurple"></iconify-icon>
+            </div>
+         </div>
+         <!-- Lista de itens -->
+         <div data-hf-id="hf-yu27" class="flex flex-col gap-5 mt-4">
+            <div data-hf-id="hf-f4y8" class="flex justify-between items-center">
+               <div data-hf-id="hf-2ezj" class="w-3/5 h-6 bg-gray-200 rounded-md"></div>
+               <div data-hf-id="hf-w73q" class="w-16 h-6 bg-gray-300 rounded-md"></div>
+            </div>
+            <div data-hf-id="hf-onmw" class="flex justify-between items-center">
+               <div data-hf-id="hf-989o" class="w-1/2 h-6 bg-gray-200 rounded-md"></div>
+               <div data-hf-id="hf-o95m" class="w-16 h-6 bg-gray-300 rounded-md"></div>
+            </div>
+            <div data-hf-id="hf-ngpt" class="flex justify-between items-center">
+               <div data-hf-id="hf-nfi6" class="w-2/3 h-6 bg-gray-200 rounded-md"></div>
+               <div data-hf-id="hf-ongn" class="w-16 h-6 bg-gray-300 rounded-md"></div>
+            </div>
+         </div>
+         <!-- Total -->
+         <div data-hf-id="hf-w285" class="flex justify-between items-center border-t-4 border-gray-100 pt-6 mt-4">
+            <div data-hf-id="hf-ykyo" class="w-24 h-8 bg-gray-400 rounded-md"></div>
+            <div data-hf-id="hf-t5lv" class="w-32 h-10 bg-green-500 rounded-md"></div>
+         </div>
+         <!-- Botoes -->
+         <div data-hf-id="hf-cp93" class="flex gap-4 mt-auto">
+            <div data-hf-id="hf-kaca" class="flex-1 bg-gray-100 rounded-xl h-16 flex items-center justify-center gap-2">
+               <iconify-icon data-hf-id="hf-5vio" icon="ic:baseline-pix" width="30" height="30" class="text-teal-500"></iconify-icon>
+               <div data-hf-id="hf-ay3m" class="w-12 h-4 bg-gray-300 rounded"></div>
+            </div>
+            <div data-hf-id="hf-521h" class="flex-1 bg-neonpurple rounded-xl h-16 flex items-center justify-center gap-2">
+               <iconify-icon data-hf-id="hf-wqx2" icon="lucide:credit-card" width="30" height="30" class="text-white"></iconify-icon>
+               <div data-hf-id="hf-zqly" class="w-12 h-4 bg-white/50 rounded"></div>
+            </div>
+         </div>
       </div>
-      <div data-hf-id="hf-mod5" id="creditcard" class="absolute w-[500px] h-[300px] bg-neonpurple rounded-2xl shadow-2xl p-8 flex flex-col justify-end transform rotate-[15deg] x-[200px] y-[-100px] opacity-0">
-         <div data-hf-id="hf-i907" class="w-full h-12 bg-white/30 rounded-lg"></div>
+      
+      <div data-hf-id="hf-mod5" id="creditcard" class="absolute w-[550px] h-[340px] bg-gradient-to-br from-gray-800 to-black rounded-3xl shadow-2xl p-10 flex flex-col justify-between opacity-0 z-20 border border-white/20 overflow-hidden mt-[150px]">
+         <div data-hf-id="hf-fr18" class="absolute top-0 right-0 w-[400px] h-[400px] bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 z-0"></div>
+         <div data-hf-id="hf-xyhb" class="flex justify-between items-start z-10">
+            <div data-hf-id="hf-2rdq" class="w-16 h-12 bg-yellow-400/80 rounded-md shadow-sm border border-yellow-300/50"></div>
+            <iconify-icon data-hf-id="hf-ft1b" icon="lucide:nfc" width="40" height="40" class="text-white/70"></iconify-icon>
+         </div>
+         <div data-hf-id="hf-a8rq" class="flex flex-col gap-6 z-10 mt-8">
+            <div data-hf-id="hf-cd14" class="flex gap-6">
+               <div data-hf-id="hf-6y92" class="w-20 h-6 bg-white/60 rounded"></div>
+               <div data-hf-id="hf-irmy" class="w-20 h-6 bg-white/60 rounded"></div>
+               <div data-hf-id="hf-j5xz" class="w-20 h-6 bg-white/60 rounded"></div>
+               <div data-hf-id="hf-fte0" class="w-20 h-6 bg-white/80 rounded"></div>
+            </div>
+            <div data-hf-id="hf-ynru" class="flex justify-between items-end">
+               <div data-hf-id="hf-xes2" class="flex flex-col gap-2">
+                  <div data-hf-id="hf-6jh2" class="w-12 h-3 bg-white/40 rounded"></div>
+                  <div data-hf-id="hf-7wv7" class="w-48 h-6 bg-white/70 rounded"></div>
+               </div>
+               <div data-hf-id="hf-br64" class="w-16 h-6 bg-white/50 rounded"></div>
+            </div>
+         </div>
       </div>
       
       <div data-hf-id="hf-puoa" id="scene5-end" class="absolute inset-0 bg-black hidden z-30 flex items-center justify-center">
@@ -130,58 +212,111 @@
     </div>
 
     <!-- Cena 6 -->
-    <div data-hf-id="hf-8hdm" id="scene6" class="clip bg-indigo flex items-center justify-center overflow-hidden" data-start="30.86" data-duration="4.04" data-track-index="1">
-      <div data-hf-id="hf-vj1a" class="grid-bg"></div>
-      <div data-hf-id="hf-c5xt" id="cart" class="absolute z-10 opacity-0">
-        <iconify-icon data-hf-id="hf-bhqv" icon="lucide:shopping-cart" width="300" height="300" class="text-white"></iconify-icon>
-      </div>
-      <div data-hf-id="hf-rz4r" id="folder" class="absolute z-10 opacity-0">
-        <iconify-icon data-hf-id="hf-7uv9" icon="lucide:folder" width="300" height="300" class="text-neonpurple"></iconify-icon>
+    <div data-hf-id="hf-8hdm" id="scene6" class="clip bg-transparent flex flex-col items-center justify-center overflow-hidden gap-12 pt-[150px]" data-start="30.86" data-duration="5.04" data-track-index="1">
+      
+      <!-- Container de Legendas -->
+      <div data-hf-id="hf-opto" id="scene6-captions" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-30 text-[55px] font-bold uppercase text-gray-500 leading-tight"></div>
+
+      <!-- Notification 1 -->
+      <div data-hf-id="hf-s4qm" id="notif1" class="w-[800px] bg-white/10 backdrop-blur-xl border-2 border-white/20 rounded-[40px] p-8 flex items-center gap-8 shadow-2xl opacity-0 transform -translate-x-20 z-10">
+         <div data-hf-id="hf-waef" class="w-24 h-24 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shrink-0 shadow-lg">
+            <iconify-icon data-hf-id="hf-y4wn" icon="lucide:shopping-bag" width="50" height="50" class="text-white"></iconify-icon>
+         </div>
+         <div data-hf-id="hf-z4rn" class="flex flex-col">
+            <span data-hf-id="hf-7new" class="text-gray-300 text-3xl font-bold uppercase tracking-widest mb-1">Novo Pedido</span>
+            <span data-hf-id="hf-go6y" class="text-white text-5xl font-medium">Luiz fez um novo pedido</span>
+         </div>
       </div>
       
-      <h1 data-hf-id="hf-1rz0" id="scene6-text" class="text-9xl text-white font-bold z-30 opacity-0 scale-50">A LAB FAZ</h1>
-      <h1 data-hf-id="hf-21cc" id="scene6-glitch1" class="text-9xl text-neonpurple font-bold z-20 absolute opacity-0">A LAB FAZ</h1>
-      <h1 data-hf-id="hf-n58e" id="scene6-glitch2" class="text-9xl text-white font-bold z-20 absolute opacity-0 translate-x-[10px] translate-y-[-10px]">A LAB FAZ</h1>
+      <!-- Notification 2 -->
+      <div data-hf-id="hf-jt92" id="notif2" class="w-[800px] bg-white/10 backdrop-blur-xl border-2 border-white/20 rounded-[40px] p-8 flex items-center gap-8 shadow-2xl opacity-0 transform translate-x-20 z-10">
+         <div data-hf-id="hf-4yfz" class="w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shrink-0 shadow-lg">
+            <iconify-icon data-hf-id="hf-4yr6" icon="lucide:file-text" width="50" height="50" class="text-white"></iconify-icon>
+         </div>
+         <div data-hf-id="hf-fq3n" class="flex flex-col">
+            <span data-hf-id="hf-94wb" class="text-gray-300 text-3xl font-bold uppercase tracking-widest mb-1">Arquivo Recebido</span>
+            <span data-hf-id="hf-oj0s" class="text-white text-5xl font-medium">Carla enviou um arquivo</span>
+         </div>
+      </div>
+      
+      <h1 data-hf-id="hf-1rz0" id="scene6-text" class="text-[200px] leading-none text-white text-center font-bold z-30 absolute opacity-0 scale-50">A LAB<br data-hf-id="hf-szow">FAZ</h1>
+      <h1 data-hf-id="hf-21cc" id="scene6-glitch1" class="text-[200px] leading-none text-neonpurple text-center font-bold z-20 absolute opacity-0">A LAB<br data-hf-id="hf-sldv">FAZ</h1>
+      <h1 data-hf-id="hf-n58e" id="scene6-glitch2" class="text-[200px] leading-none text-white text-center font-bold z-20 absolute opacity-0 translate-x-[10px] translate-y-[-10px]">A LAB<br data-hf-id="hf-qluq">FAZ</h1>
     </div>
 
     <!-- Cena 7 -->
-    <div data-hf-id="hf-89x0" id="scene7" class="clip bg-indigo flex flex-col items-center justify-center" data-start="35.46" data-duration="4.38" data-track-index="1">
-      <div data-hf-id="hf-uc47" class="grid-bg"></div>
-      <div data-hf-id="hf-gkzm" id="email-mockup" class="w-[800px] h-[600px] bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden z-10 scale-0 opacity-0">
-        <div data-hf-id="hf-vonq" class="w-full h-20 bg-gray-200 border-b-4 border-gray-300 flex items-center px-8">
-          <div data-hf-id="hf-f8dg" class="w-1/2 h-8 bg-gray-400 rounded-md"></div>
+    <div data-hf-id="hf-89x0" id="scene7" class="clip bg-transparent flex flex-col items-center justify-center pt-[250px]" data-start="35.46" data-duration="5.38" data-track-index="1">
+      
+      <!-- Container de Legendas -->
+      <div data-hf-id="hf-sut3" id="scene7-captions" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-30 text-[55px] font-bold uppercase text-gray-500 leading-tight"></div>
+
+      <div data-hf-id="hf-gkzm" id="email-mockup" class="w-[950px] h-[1300px] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden z-10 scale-0 opacity-0">
+        
+        <!-- Header (Remetente e Assunto) -->
+        <div data-hf-id="hf-vonq" class="w-full bg-gray-100 border-b-4 border-gray-200 flex flex-col px-10 py-8 gap-6">
+          <div data-hf-id="hf-16fw" class="flex items-center gap-6">
+             <div data-hf-id="hf-e1n0" class="w-20 h-20 bg-gray-400 rounded-full"></div>
+             <div data-hf-id="hf-1cw3" class="flex flex-col gap-3">
+               <div data-hf-id="hf-i1qz" class="w-[300px] h-8 bg-gray-400 rounded-md"></div>
+               <div data-hf-id="hf-g4ep" class="w-[200px] h-6 bg-gray-300 rounded-md"></div>
+             </div>
+          </div>
+          <div data-hf-id="hf-e867" class="w-3/4 h-12 bg-gray-400 rounded-md mt-4"></div>
         </div>
-        <div data-hf-id="hf-leo0" class="p-8 flex flex-col gap-6 flex-1">
-          <div data-hf-id="hf-vlcp" class="w-3/4 h-8 bg-gray-300 rounded-md"></div>
-          <div data-hf-id="hf-hid2" class="w-full h-8 bg-gray-300 rounded-md"></div>
-          <div data-hf-id="hf-uwup" class="w-5/6 h-8 bg-gray-300 rounded-md"></div>
+        
+        <!-- Corpo do Email -->
+        <div data-hf-id="hf-leo0" class="p-12 flex flex-col gap-10 flex-1">
+          <div data-hf-id="hf-v0eq" class="w-1/2 h-10 bg-gray-300 rounded-md"></div>
+          
+          <div data-hf-id="hf-oq8d" class="flex flex-col gap-5 mt-6">
+            <div data-hf-id="hf-gtrh" class="w-full h-8 bg-gray-200 rounded-md"></div>
+            <div data-hf-id="hf-plr5" class="w-full h-8 bg-gray-200 rounded-md"></div>
+            <div data-hf-id="hf-6ey2" class="w-5/6 h-8 bg-gray-200 rounded-md"></div>
+            <div data-hf-id="hf-qso8" class="w-full h-8 bg-gray-200 rounded-md"></div>
+            <div data-hf-id="hf-vu3g" class="w-4/5 h-8 bg-gray-200 rounded-md"></div>
+          </div>
+          
+          <div data-hf-id="hf-4q2p" class="flex flex-col gap-5 mt-6">
+            <div data-hf-id="hf-qed7" class="w-full h-8 bg-gray-200 rounded-md"></div>
+            <div data-hf-id="hf-8rf6" class="w-3/4 h-8 bg-gray-200 rounded-md"></div>
+          </div>
         </div>
-        <div data-hf-id="hf-vkw4" class="p-8 flex justify-center border-t-4 border-gray-100">
-          <div data-hf-id="hf-8au1" id="download-btn" class="px-12 py-6 bg-neonpurple rounded-full text-white text-3xl font-bold uppercase shadow-lg">Download PDF</div>
+        
+        <!-- Anexo e Botão -->
+        <div data-hf-id="hf-vkw4" class="p-12 flex flex-col items-center border-t-4 border-gray-100 bg-gray-50">
+          <div data-hf-id="hf-42v6" class="w-full h-40 border-8 border-dashed border-gray-300 rounded-2xl mb-10 flex items-center justify-center bg-white">
+             <div data-hf-id="hf-rb4z" class="w-1/3 h-10 bg-gray-300 rounded-md"></div>
+          </div>
+          <div data-hf-id="hf-8au1" id="download-btn" class="px-16 py-8 bg-neonpurple rounded-full text-white text-5xl font-bold uppercase shadow-xl w-full text-center">Download PDF</div>
         </div>
       </div>
       
-      <h1 data-hf-id="hf-e8ye" id="scene7-text" class="text-[200px] leading-none text-white font-bold absolute z-30 opacity-0 scale-[3]">A LAB<br data-hf-id="hf-rsrt">FAZ.</h1>
+      <h1 data-hf-id="hf-e8ye" id="scene7-text" class="text-[200px] leading-none text-purple-600 text-center font-bold absolute z-30 opacity-0 scale-[3]">A LAB<br data-hf-id="hf-rsrt">FAZ</h1>
     </div>
 
     <!-- Cena 8 -->
-    <div data-hf-id="hf-bu7h" id="scene8" class="clip bg-neonpurple flex flex-col items-center justify-center overflow-hidden" data-start="40.44" data-duration="5.32" data-track-index="1">
+    <div data-hf-id="hf-bu7h" id="scene8" class="clip bg-transparent flex flex-col items-center justify-center overflow-hidden" data-start="40.44" data-duration="5.32" data-track-index="1">
+      
+      <!-- Container de Legendas (z-60 para ficar sobre os emojis) -->
+      <div data-hf-id="hf-5ccr" id="scene8-captions" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-[60] text-[55px] font-bold uppercase text-gray-500 leading-tight"></div>
+
       <!-- Popups de prejuizo -->
       <div data-hf-id="hf-sg7p" id="pop-1" class="absolute z-40 bg-red-600 text-white text-5xl font-bold px-6 py-2 rounded-xl shadow-2xl opacity-0" style="top:35%; left:20%">-42%</div>
       <div data-hf-id="hf-lcpo" id="pop-2" class="absolute z-40 bg-red-600 text-white text-6xl font-bold px-8 py-3 rounded-xl shadow-2xl opacity-0" style="top:55%; left:45%">-65%</div>
       <div data-hf-id="hf-1vy8" id="pop-3" class="absolute z-40 bg-red-600 text-white text-8xl font-bold px-10 py-4 rounded-xl shadow-2xl opacity-0" style="top:75%; left:75%">-89%</div>
       
-      <div data-hf-id="hf-uviq" id="chart-container" class="w-[900px] h-[700px] z-10 absolute flex items-center justify-center opacity-0 scale-50 overflow-hidden">
+      <div data-hf-id="hf-uviq" id="chart-container" class="w-[900px] h-[700px] z-10 absolute flex items-center justify-center opacity-0 scale-50 overflow-hidden mt-[150px]">
         <div data-hf-id="hf-2c4w" id="apex-chart" class="w-full h-[600px] relative z-0"></div>
-        <div data-hf-id="hf-soe5" id="chart-cover" class="absolute right-0 top-0 w-full h-[600px] bg-neonpurple z-10 origin-right"></div>
       </div>
-      <div data-hf-id="hf-7po7" id="sad-reactions" class="absolute inset-0 z-20 pointer-events-none"></div>
       <h1 data-hf-id="hf-5zax" id="scene8-text" class="text-[180px] text-white font-bold absolute z-30 opacity-0 scale-[2]">PREJUÍZO</h1>
     </div>
 
     <!-- Cena 9 -->
-    <div data-hf-id="hf-bmz9" id="scene9" class="clip bg-indigo flex flex-col items-center justify-center overflow-hidden" data-start="46.18" data-duration="9.52" data-track-index="1">
-      <div data-hf-id="hf-uqf8" class="grid-bg"></div>
+    <div data-hf-id="hf-bmz9" id="scene9" class="clip bg-transparent flex flex-col items-center justify-center overflow-hidden pt-[150px]" data-start="46.18" data-duration="12.52" data-track-index="1">
+      
+      <!-- Container de Legendas -->
+      <div data-hf-id="hf-8hcx" id="scene9-captions" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-30 text-[55px] font-bold uppercase text-gray-500 leading-tight"></div>
+
       <div data-hf-id="hf-vxht" id="orbs" class="absolute inset-0 z-0 opacity-50">
         <div data-hf-id="hf-fyz5" class="absolute w-[600px] h-[600px] bg-neonpurple rounded-full blur-[150px] top-[10%] left-[10%]"></div>
         <div data-hf-id="hf-xleo" class="absolute w-[800px] h-[800px] bg-purple-700 rounded-full blur-[200px] bottom-[10%] right-[10%]"></div>
@@ -189,16 +324,58 @@
       
       <img data-hf-id="hf-zc7m" id="logo9" src="labscript.dev.png" class="w-[600px] z-10 mb-32 opacity-0 -translate-y-[100px]" data-duplicate="true">
       
-      <div data-hf-id="hf-k5a4" id="cta-btn" class="px-16 py-8 bg-neonpurple rounded-full text-white text-6xl font-bold uppercase shadow-[0_0_50px_rgba(140,63,255,0.8)] z-10 opacity-0 scale-50">
+      <div data-hf-id="hf-k5a4" id="cta-btn" class="px-16 py-8 bg-neonpurple rounded-full text-white text-6xl font-bold uppercase shadow-xl z-10 opacity-0 scale-50">
         ENVIE UM DIRECT
       </div>
       
       <div data-hf-id="hf-uxek" id="fade-black" class="absolute inset-0 bg-black opacity-0 z-30 pointer-events-none"></div>
     </div>
+
+    <!-- Container global de animações em queda livre -->
+    <div data-hf-id="hf-1z3i" id="sad-reactions" class="absolute inset-0 z-20 pointer-events-none overflow-hidden"></div>
   </div>
 
   <script>
     
+    function applyScrambleText(tl, selector, startTime) {
+      const split = new SplitType(selector, { types: 'words, chars' });
+      const chars = split.chars;
+      if (!chars) return;
+      
+      const charSet = "@#$%&01X?";
+      const baseDuration = 0.4;
+      const stagger = 0.05;
+      
+      tl.set(selector, { opacity: 1, scale: 1 }, startTime);
+      
+      tl.fromTo(chars, 
+        { opacity: 0, scale: 3, z: 200, rotationX: 90 },
+        { opacity: 1, scale: 1, z: 0, rotationX: 0, stagger: stagger, duration: baseDuration, ease: "power4.out" },
+        startTime
+      );
+
+      chars.forEach((char, i) => {
+        const originalText = char.innerText;
+        if (!originalText.trim()) return;
+
+        const dummy = { p: 0 };
+        tl.to(dummy, {
+          p: 100,
+          duration: baseDuration,
+          onUpdate: function() {
+            if (this.progress() < 0.8) {
+              char.innerText = charSet[Math.floor(Math.random() * charSet.length)];
+            } else {
+              char.innerText = originalText;
+            }
+          },
+          onComplete: function() {
+            char.innerText = originalText;
+          }
+        }, startTime + (i * stagger));
+      });
+    }
+
     // Seeded Random
     let m_w = 123456789;
     let m_z = 987654321;
@@ -261,11 +438,28 @@
 
     // Populate money for scene 2
     const moneyContainer = document.getElementById('money-container');
-    for(let i=0; i<30; i++) {
+    
+    // Pilha de dinheiro no centro
+    for(let i=0; i<60; i++) {
       const money = document.createElement('div');
-      money.className = 'absolute bottom-[300px] left-1/2 -translate-x-1/2 opacity-0 money-item';
-      money.innerHTML = '<div class="relative"><iconify-icon icon="twemoji:money-with-wings" width="120" height="120"></iconify-icon><iconify-icon icon="twemoji:fire" width="80" height="80" class="absolute bottom-0 right-0"></iconify-icon></div>';
+      money.className = 'absolute top-[60%] left-1/2 opacity-0 money-item';
+      let ox = (random() - 0.5) * 400 - 100;
+      let oy = (random() - 0.5) * 150 - i * 5;
+      let rot = (random() - 0.5) * 60;
+      money.style.transform = `translate(${ox}px, ${oy}px) rotate(${rot}deg) scale(1.5)`;
+      money.innerHTML = `<iconify-icon icon="twemoji:dollar-banknote" width="200" height="200"></iconify-icon>`;
       moneyContainer.appendChild(money);
+    }
+    
+    // Partículas de fogo soltas nascendo da pilha
+    for(let i=0; i<30; i++) {
+      const fire = document.createElement('div');
+      fire.className = 'absolute top-[60%] left-1/2 opacity-0 fire-anim';
+      let ox = (random() - 0.5) * 400 - 80;
+      let oy = (random() - 0.5) * 200 - 50;
+      fire.style.transform = `translate(${ox}px, ${oy}px)`;
+      fire.innerHTML = `<iconify-icon icon="twemoji:fire" width="150" height="150"></iconify-icon>`;
+      moneyContainer.appendChild(fire);
     }
 
     // Populate reactions for scene 4
@@ -295,10 +489,14 @@
     const tl = gsap.timeline({ paused: true });
     window.__timelines["main"] = tl;
 
+    // Animar grid background
+    tl.to(".grid-bg", { backgroundPosition: "100px 100px", duration: 2, repeat: 100, ease: "none" }, 0);
+
     // BGM Audio handling in GSAP
-    let bgmObj = { vol: 0.15 };
+    let bgmObj = { vol: 0.004 };
     const bgmEl = document.getElementById('bgm');
     const voiceEl = document.getElementById('voice');
+    if(bgmEl) bgmEl.volume = bgmObj.vol;
     
     // Helper to sync audio in Studio/preview
     // Using timeline to trigger audio logic if allowed by browser
@@ -316,6 +514,10 @@
       { y: 0, rotationZ: 0, rotationY: 0, duration: 1.5, ease: "bounce.out" }, 
     0);
     tl.to("#card-shadow", { scale: 1, duration: 1.5, ease: "bounce.out" }, 0);
+    
+    // Animação das legendas e detalhe do cartão
+    tl.fromTo("#scene1-top-text", { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 0.5);
+    tl.fromTo("#card-bonitinho", { y: 30, opacity: 0, scale: 0.5 }, { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" }, 2.5);
     
     // Flash e mudança aos 4.0s
     tl.to("#scene1-flash", { opacity: 1, duration: 0.1 }, 4.0);
@@ -349,30 +551,24 @@
       ease: "none"
     }, 6.32);
     
-    // Explosão de dinheiro
+    // Pilha de dinheiro queimando
     const moneys = document.querySelectorAll('.money-item');
     moneys.forEach((m, i) => {
-      tl.to(m, {
-        opacity: 1,
-        duration: 0.1
-      }, 6.5 + i * 0.1);
-      tl.to(m, {
-        x: (random() - 0.5) * 800,
-        y: -random() * 1200 - 200,
-        rotationZ: random() * 360,
-        duration: 2 + random(),
-        ease: "power2.out"
-      }, 6.5 + i * 0.1);
+      tl.fromTo(m, { opacity: 0, y: "+=50" }, { opacity: 1, y: "-=50", duration: 0.2, ease: "back.out" }, 6.4 + i * 0.05);
     });
-
-    // 10.6s: Lá, parado.
-    tl.set(moneys, { clearProps: "animation" }, 10.6); // Parada abrupta (GSAP might need a pause, but setting a tween overriding is better)
-    tl.to(moneys, { y: "+=0", duration: 1.5, ease: "none" }, 10.6); // Stop movement roughly
     
-    tl.fromTo("#lock", 
-      { scale: 3, opacity: 0 }, 
-      { scale: 1, opacity: 1, duration: 0.3, ease: "bounce.out" }, 
-    10.6);
+    // Animar o fogo (burning effect): chamas começam grandes/visiveis e sobem sumindo
+    const fires = document.querySelectorAll('.fire-anim');
+    fires.forEach((f, i) => {
+      let st = 6.4 + (i * 0.08) % 2; // staggered start
+      tl.fromTo(f, 
+        { opacity: 1, scale: 1.5, y: "+=0" }, 
+        { opacity: 0, scale: 0.3, y: "-=400", duration: 1.5, repeat: 3, ease: "power1.in", immediateRender: false }, 
+        st
+      );
+    });
+    
+
 
     // ==========================================
     // CENA 3: 12.10s a 18.18s
@@ -417,7 +613,7 @@
     
     // 29.6s A LAB FAZ
     tl.set("#scene5-end", { display: "flex" }, 29.6);
-    tl.fromTo("#scene5-text", { scale: 5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.2, ease: "power4.in" }, 29.6);
+    applyScrambleText(tl, "#scene5-text", 29.6);
     tl.to("#scene5", {
       x: () => random() * 60 - 30,
       y: () => random() * 60 - 30,
@@ -431,16 +627,14 @@
     // ==========================================
     // CENA 6: 30.86s a 34.90s
     // ==========================================
-    tl.fromTo("#cart", { x: -1000, y: -500, opacity: 1 }, { x: 1000, y: 500, duration: 2, ease: "none" }, 31.0);
-    tl.fromTo("#folder", { x: 1000, y: -300, opacity: 1 }, { x: -1000, y: 300, duration: 2, ease: "none" }, 31.5);
+    tl.fromTo("#notif1", { opacity: 0, x: -300 }, { opacity: 1, x: 0, duration: 0.8, ease: "back.out(1.2)" }, 31.0);
+    tl.fromTo("#notif2", { opacity: 0, x: 300 }, { opacity: 1, x: 0, duration: 0.8, ease: "back.out(1.2)" }, 31.5);
+    tl.to(["#notif1", "#notif2"], { y: -30, duration: 2, yoyo: true, repeat: 1, ease: "sine.inOut" }, 32.0);
     
-    tl.fromTo("#cart", { x: -1000, y: 300, opacity: 1 }, { x: 1000, y: -200, duration: 2, ease: "none", immediateRender: false }, 33.0);
-    tl.fromTo("#folder", { x: 1000, y: 500, opacity: 1 }, { x: -1000, y: -400, duration: 2, ease: "none", immediateRender: false }, 33.5);
-    
-    // 34.2s A LAB FAZ com glitch
-    tl.set(["#scene6-text", "#scene6-glitch1", "#scene6-glitch2"], { opacity: 1, scale: 1 }, 34.2);
-    tl.to("#scene6-glitch1", { x: 15, y: -10, duration: 0.05, repeat: 10, yoyo: true }, 34.2);
-    tl.to("#scene6-glitch2", { x: -15, y: 15, duration: 0.05, repeat: 10, yoyo: true }, 34.2);
+    // 34.2s A LAB FAZ Scramble
+    applyScrambleText(tl, "#scene6-text", 34.2);
+    // Suavizar saída da cena estendida para não cortar bruto
+    tl.to("#scene6", { opacity: 0, duration: 0.5 }, 35.4);
 
     // ==========================================
     // CENA 7: 35.46s a 39.84s
@@ -451,7 +645,7 @@
     tl.to("#download-btn", { scale: 0.9, backgroundColor: "#6b21a8", duration: 0.1, yoyo: true, repeat: 1 }, 37.5);
     
     // 39.0s A LAB FAZ
-    tl.fromTo("#scene7-text", { scale: 5, opacity: 0 }, { scale: 1.2, opacity: 1, duration: 0.2, ease: "power4.in" }, 39.0);
+    applyScrambleText(tl, "#scene7-text", 39.0);
     tl.to("#scene7", {
       x: () => random() * 50 - 25,
       y: () => random() * 50 - 25,
@@ -461,16 +655,17 @@
       ease: "none"
     }, 39.2);
     tl.set("#scene7", { x: 0, y: 0 }, 39.7);
+    tl.to("#scene7", { opacity: 0, duration: 0.5 }, 40.3);
 
     // ==========================================
     // CENA 8: 40.44s a 45.76s
     // ==========================================
     tl.fromTo("#chart-container", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: "power3.out" }, 40.5);
     
-    // Atualizar gráfico para simular queda
-    tl.fromTo("#chart-cover", 
-      { width: "100%" }, 
-      { width: "0%", duration: 3, ease: "none" }, 
+    // Atualizar gráfico para simular queda usando mask (clip-path)
+    tl.fromTo("#apex-chart", 
+      { clipPath: "inset(0 100% 0 0)" }, 
+      { clipPath: "inset(0 0% 0 0)", duration: 3, ease: "none" }, 
     41.5);
 
     // Animar popups de porcentagem com a queda
@@ -495,9 +690,14 @@
     tl.fromTo("#scene8-text", { scale: 4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "bounce.out" }, 44.5);
 
     // ==========================================
+    // ==========================================
     // CENA 9: 46.18s a 55.70s
     // ==========================================
-    tl.to("#logo9", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, 46.5);
+    // Logo aparece menor e vai crescendo lentamente ao longo da cena (ideia de crescimento contínuo)
+    tl.fromTo("#logo9", 
+      { y: 50, opacity: 0, scale: 0.8 }, 
+      { y: 0, opacity: 1, scale: 1.15, duration: 9, ease: "power1.out" }, 
+    46.5);
     
     tl.fromTo("#cta-btn", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "elastic.out(1, 0.5)" }, 47.5);
     tl.to("#cta-btn", { scale: 1.05, duration: 0.8, repeat: 100, yoyo: true, ease: "sine.inOut" }, 48.3);
@@ -506,8 +706,275 @@
     tl.to("#orbs div:nth-child(1)", { x: 100, y: 50, duration: 4, repeat: 100, yoyo: true, ease: "sine.inOut" }, 46.18);
     tl.to("#orbs div:nth-child(2)", { x: -100, y: -50, duration: 5, repeat: 100, yoyo: true, ease: "sine.inOut" }, 46.18);
     
-    // Fade to black últimos 2 seg
-    tl.to("#fade-black", { opacity: 1, duration: 2 }, 53.7);
+    // Fade to black and music fade out nos últimos 3 seg (55.7 a 58.7)
+    tl.to("#fade-black", { opacity: 1, duration: 3 }, 55.7);
+    tl.to("#bgm", { volume: 0, duration: 3 }, 55.7);
+
+    // ==========================================
+    // Legendas Dinâmicas (Karaoke) da Cena 2
+    // ==========================================
+    if (typeof AUDIO_WORDS !== 'undefined') {
+      const capContainer2 = document.getElementById("scene2-captions");
+      // "Muitas empresas gastam uma fortuna para colocar um site no ar e depois deixam ele lá, parado." (indices 19 a 35)
+      const wordsCena2 = AUDIO_WORDS.slice(19, 36);
+      wordsCena2.forEach((w, i) => {
+        const span = document.createElement("span");
+        span.innerHTML = w.word + "&nbsp;";
+        span.id = `cap2-w-${i}`;
+        span.className = "inline-block origin-bottom"; // Ajuda no scale do GSAP
+        capContainer2.appendChild(span);
+        
+        // Acende a palavra (karaoke) exatamente em w.start
+        tl.to(span, { color: "#ffffff", scale: 1.15, textShadow: "0px 0px 10px rgba(255,255,255,0.5)", duration: 0.1 }, w.start);
+      });
+    }
+
+    // ==========================================
+    // Legendas Dinâmicas (Karaoke) da Cena 3
+    // ==========================================
+    if (typeof AUDIO_WORDS !== 'undefined') {
+      const capContainer3 = document.getElementById("scene3-captions");
+      // Omitindo "panfleto digital. Faça", paramos no índice 56 ("um")
+      const wordsCena3 = AUDIO_WORDS.slice(36, 56);
+      wordsCena3.forEach((w, i) => {
+        const span = document.createElement("span");
+        span.innerHTML = w.word + "&nbsp;";
+        span.id = `cap3-w-${i}`;
+        span.className = "inline-block origin-bottom"; // Ajuda no scale do GSAP
+        capContainer3.appendChild(span);
+        
+        // Acende a palavra (karaoke) exatamente em w.start
+        tl.to(span, { color: "#ffffff", scale: 1.15, textShadow: "0px 0px 10px rgba(255,255,255,0.5)", duration: 0.1 }, w.start);
+      });
+    }
+
+    // ==========================================
+    // Legendas Dinâmicas (Karaoke) da Cena 4 (Sequência Completa)
+    // ==========================================
+    if (typeof AUDIO_WORDS !== 'undefined') {
+      const capContainer4 = document.getElementById("scene4-captions");
+      
+      const sequences = [
+        { id: "seq1", startIdx: 58, endIdx: 64 }, // "Faça mais com a sua página."
+        { id: "seq2", startIdx: 64, endIdx: 70 }, // "A LabScript constrói soluções sob medida"
+        { id: "seq3", startIdx: 70, endIdx: 74 }, // "que resolvem problemas reais"
+        { id: "seq4", startIdx: 74, endIdx: 79 }  // "rodando direto do seu site."
+      ];
+
+      sequences.forEach((seq, sIdx) => {
+        // Criar um sub-container absoluto para cada frase
+        const phraseContainer = document.createElement("div");
+        phraseContainer.className = "absolute top-0 w-full flex flex-wrap justify-center gap-x-5 gap-y-3 opacity-0";
+        capContainer4.appendChild(phraseContainer);
+
+        const words = AUDIO_WORDS.slice(seq.startIdx, seq.endIdx);
+        
+        // Calcular o tempo em que a frase inteira aparece e desaparece
+        const phraseStart = words[0].start;
+        // A frase some pouco antes da próxima começar, ou 0.5s depois se for a última
+        const phraseEnd = (sIdx < sequences.length - 1) 
+          ? AUDIO_WORDS[sequences[sIdx + 1].startIdx].start - 0.1 
+          : words[words.length - 1].end + 0.5;
+
+        // Fade in do container inteiro (as palavras aparecem em cinza)
+        tl.to(phraseContainer, { opacity: 1, duration: 0.1 }, phraseStart - 0.1);
+
+        words.forEach((w) => {
+          const span = document.createElement("span");
+          span.innerHTML = w.word + "&nbsp;";
+          span.className = "inline-block origin-bottom"; 
+          phraseContainer.appendChild(span);
+          
+          // Destaque karaoke
+          tl.to(span, { color: "#ffffff", scale: 1.15, textShadow: "0px 0px 10px rgba(255,255,255,0.5)", duration: 0.1 }, w.start);
+        });
+
+        // Fade out do container inteiro para a próxima frase assumir
+        tl.to(phraseContainer, { opacity: 0, duration: 0.1 }, phraseEnd);
+      });
+    }
+
+    // ==========================================
+    // Legendas Dinâmicas (Karaoke) da Cena 5
+    // ==========================================
+    if (typeof AUDIO_WORDS !== 'undefined') {
+      const capContainer5 = document.getElementById("scene5-captions");
+      
+      const sequences5 = [
+        { id: "seq5_1", startIdx: 79, endIdx: 87 } // "Emissão de segunda via ou pagamentos pela web."
+      ];
+
+      sequences5.forEach((seq, sIdx) => {
+        const phraseContainer = document.createElement("div");
+        phraseContainer.className = "absolute top-0 w-full flex flex-wrap justify-center gap-x-5 gap-y-3 opacity-0";
+        capContainer5.appendChild(phraseContainer);
+
+        const words = AUDIO_WORDS.slice(seq.startIdx, seq.endIdx);
+        const phraseStart = words[0].start;
+        const phraseEnd = (sIdx < sequences5.length - 1) 
+          ? AUDIO_WORDS[sequences5[sIdx + 1].startIdx].start - 0.1 
+          : words[words.length - 1].end + 0.5;
+
+        tl.to(phraseContainer, { opacity: 1, duration: 0.1 }, phraseStart - 0.1);
+
+        words.forEach((w) => {
+          const span = document.createElement("span");
+          span.innerHTML = w.word + "&nbsp;";
+          span.className = "inline-block origin-bottom"; 
+          phraseContainer.appendChild(span);
+          
+          tl.to(span, { color: "#ffffff", scale: 1.15, textShadow: "0px 0px 10px rgba(255,255,255,0.5)", duration: 0.1 }, w.start);
+        });
+
+        tl.to(phraseContainer, { opacity: 0, duration: 0.1 }, phraseEnd);
+      });
+    }
+
+    // ==========================================
+    // Legendas Dinâmicas (Karaoke) da Cena 6
+    // ==========================================
+    if (typeof AUDIO_WORDS !== 'undefined') {
+      const capContainer6 = document.getElementById("scene6-captions");
+      
+      const sequences6 = [
+        { id: "seq6_1", startIdx: 90, endIdx: 98 } // "Receber pedidos de compra ou envio de arquivos."
+      ];
+
+      sequences6.forEach((seq, sIdx) => {
+        const phraseContainer = document.createElement("div");
+        phraseContainer.className = "absolute top-0 w-full flex flex-wrap justify-center gap-x-5 gap-y-3 opacity-0";
+        capContainer6.appendChild(phraseContainer);
+
+        const words = AUDIO_WORDS.slice(seq.startIdx, seq.endIdx);
+        const phraseStart = words[0].start;
+        const phraseEnd = (sIdx < sequences6.length - 1) 
+          ? AUDIO_WORDS[sequences6[sIdx + 1].startIdx].start - 0.1 
+          : words[words.length - 1].end + 0.5;
+
+        tl.to(phraseContainer, { opacity: 1, duration: 0.1 }, phraseStart - 0.1);
+
+        words.forEach((w) => {
+          const span = document.createElement("span");
+          span.innerHTML = w.word + "&nbsp;";
+          span.className = "inline-block origin-bottom"; 
+          phraseContainer.appendChild(span);
+          
+          tl.to(span, { color: "#ffffff", scale: 1.15, textShadow: "0px 0px 10px rgba(255,255,255,0.5)", duration: 0.1 }, w.start);
+        });
+
+        tl.to(phraseContainer, { opacity: 0, duration: 0.1 }, phraseEnd);
+      });
+    }
+
+    // ==========================================
+    // Legendas Dinâmicas (Karaoke) da Cena 7
+    // ==========================================
+    if (typeof AUDIO_WORDS !== 'undefined') {
+      const capContainer7 = document.getElementById("scene7-captions");
+      
+      const sequences7 = [
+        { id: "seq7_1", startIdx: 101, endIdx: 110 } // "Enviar links de download por e-mail ou gerar PDF."
+      ];
+
+      sequences7.forEach((seq, sIdx) => {
+        const phraseContainer = document.createElement("div");
+        phraseContainer.className = "absolute top-0 w-full flex flex-wrap justify-center gap-x-5 gap-y-3 opacity-0";
+        capContainer7.appendChild(phraseContainer);
+
+        const words = AUDIO_WORDS.slice(seq.startIdx, seq.endIdx);
+        const phraseStart = words[0].start;
+        const phraseEnd = (sIdx < sequences7.length - 1) 
+          ? AUDIO_WORDS[sequences7[sIdx + 1].startIdx].start - 0.1 
+          : words[words.length - 1].end + 0.5;
+
+        tl.to(phraseContainer, { opacity: 1, duration: 0.1 }, phraseStart - 0.1);
+
+        words.forEach((w) => {
+          const span = document.createElement("span");
+          span.innerHTML = w.word + "&nbsp;";
+          span.className = "inline-block origin-bottom"; 
+          phraseContainer.appendChild(span);
+          
+          tl.to(span, { color: "#ffffff", scale: 1.15, textShadow: "0px 0px 10px rgba(255,255,255,0.5)", duration: 0.1 }, w.start);
+        });
+
+        tl.to(phraseContainer, { opacity: 0, duration: 0.1 }, phraseEnd);
+      });
+    }
+
+    // ==========================================
+    // Legendas Dinâmicas (Karaoke) da Cena 8
+    // ==========================================
+    if (typeof AUDIO_WORDS !== 'undefined') {
+      const capContainer8 = document.getElementById("scene8-captions");
+      
+      const sequences8 = [
+        { id: "seq8_1", startIdx: 113, endIdx: 132 } // "Se o seu site não está automatizando a sua vida e a do seu cliente, ele está te dando"
+      ];
+
+      sequences8.forEach((seq, sIdx) => {
+        const phraseContainer = document.createElement("div");
+        phraseContainer.className = "absolute top-0 w-full flex flex-wrap justify-center gap-x-5 gap-y-3 opacity-0";
+        capContainer8.appendChild(phraseContainer);
+
+        const words = AUDIO_WORDS.slice(seq.startIdx, seq.endIdx);
+        const phraseStart = words[0].start;
+        const phraseEnd = (sIdx < sequences8.length - 1) 
+          ? AUDIO_WORDS[sequences8[sIdx + 1].startIdx].start - 0.1 
+          : words[words.length - 1].end + 0.5;
+
+        tl.to(phraseContainer, { opacity: 1, duration: 0.1 }, phraseStart - 0.1);
+
+        words.forEach((w) => {
+          const span = document.createElement("span");
+          span.innerHTML = w.word + "&nbsp;";
+          span.className = "inline-block origin-bottom"; 
+          phraseContainer.appendChild(span);
+          
+          tl.to(span, { color: "#ffffff", scale: 1.15, textShadow: "0px 0px 10px rgba(255,255,255,0.5)", duration: 0.1 }, w.start);
+        });
+
+        tl.to(phraseContainer, { opacity: 0, duration: 0.1 }, phraseEnd);
+      });
+    }
+
+    // ==========================================
+    // Legendas Dinâmicas (Karaoke) da Cena 9
+    // ==========================================
+    if (typeof AUDIO_WORDS !== 'undefined') {
+      const capContainer9 = document.getElementById("scene9-captions");
+      
+      const sequences9 = [
+        { id: "seq9_1", startIdx: 133, endIdx: 143 }, // "Quer transformar o seu site em uma máquina de verdade?"
+        { id: "seq9_2", startIdx: 146, endIdx: 152 }, // "A LabScript tem soluções que acompanham"
+        { id: "seq9_3", startIdx: 152, endIdx: 160 }  // "o tamanho e o momento da sua empresa."
+      ];
+
+      sequences9.forEach((seq, sIdx) => {
+        const phraseContainer = document.createElement("div");
+        phraseContainer.className = "absolute top-0 w-full flex flex-wrap justify-center gap-x-5 gap-y-3 opacity-0";
+        capContainer9.appendChild(phraseContainer);
+
+        const words = AUDIO_WORDS.slice(seq.startIdx, seq.endIdx);
+        const phraseStart = words[0].start;
+        const phraseEnd = (sIdx < sequences9.length - 1) 
+          ? AUDIO_WORDS[sequences9[sIdx + 1].startIdx].start - 0.1 
+          : words[words.length - 1].end + 0.5;
+
+        tl.to(phraseContainer, { opacity: 1, duration: 0.1 }, phraseStart - 0.1);
+
+        words.forEach((w) => {
+          const span = document.createElement("span");
+          span.innerHTML = w.word + "&nbsp;";
+          span.className = "inline-block origin-bottom"; 
+          phraseContainer.appendChild(span);
+          
+          tl.to(span, { color: "#ffffff", scale: 1.15, textShadow: "0px 0px 10px rgba(255,255,255,0.5)", duration: 0.1 }, w.start);
+        });
+
+        tl.to(phraseContainer, { opacity: 0, duration: 0.1 }, phraseEnd);
+      });
+    }
 
   </script>
 </body>
