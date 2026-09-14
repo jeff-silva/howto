@@ -1,59 +1,389 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt-BR">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1920, height=1080" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1920">
+    <title>A Lab Faz</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech&display=swap" rel="stylesheet">
+
+    <!-- Iconify -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'dark-indigo': '#0B0813',
+              'neon-purple': '#8C3FFF',
+            },
+            fontFamily: {
+              'share': ['"Share Tech"', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- GSAP -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <!-- SplitType -->
+    <script src="https://unpkg.com/split-type"></script>
+
+    <!-- Audio Sync Data -->
+    <script src="assets/audio.js"></script>
+
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0B0813; font-family: "Share Tech", sans-serif; }
+      
+      .bg-grid {
+        position: absolute; width: 200%; height: 200%; bottom: -50%; left: -50%;
+        background-image: linear-gradient(rgba(140, 63, 255, 0.3) 2px, transparent 2px), linear-gradient(90deg, rgba(140, 63, 255, 0.3) 2px, transparent 2px);
+        background-size: 100px 100px; transform: perspective(1000px) rotateX(60deg); z-index: 0;
       }
-      html,
-      body {
-        margin: 0;
-        width: 1920px;
-        height: 1080px;
-        overflow: hidden;
-        background: #000;
-      }
-      body {
-        font-family: "Inter", sans-serif;
-      }
-      code,
-      pre,
-      .monospace {
-        font-family: "JetBrains Mono", monospace;
-      }
+      .clip { position: absolute; top: 0; left: 0; width: 1080px; height: 1920px; opacity: 0; z-index: 10; overflow: hidden; }
+      .stamp-alabfaz { text-transform: uppercase; border: 8px solid #8C3FFF; border-radius: 20px; padding: 20px 40px; background: rgba(11,8,19,0.95); font-weight: bold; color: white; box-shadow: 0 0 50px rgba(140,63,255,0.8); display: inline-block; }
     </style>
   </head>
-  <body>
-    <div
-      id="root"
-      data-composition-id="main"
-      data-start="0"
-      data-duration="10"
-      data-width="1920"
-      data-height="1080"
-    >
-      
-      
+  <body class="bg-dark-indigo text-white font-share">
+    <div data-hf-id="hf-t9q5" id="root" data-composition-id="main" data-start="0" data-duration="60" data-width="1080" data-height="1920" class="relative w-full h-full bg-dark-indigo">
+      <div data-hf-id="hf-lch7" id="global-grid" class="bg-grid z-0 pointer-events-none"></div>
 
-      <!--
-        Add your clips here. Example:
-        <div id="title" class="clip" data-start="0" data-duration="5" data-track-index="1"
-             style="font-size: 64px; color: #fff; padding: 40px">
-          Hello World
+      <audio data-hf-id="hf-fxf1" id="voice_track" src="assets/audio.mp3" data-start="0"></audio>
+      <audio data-hf-id="hf-yo5u" data-volume="0.2" id="bgm_track" src="assets/bgm.mp3" loop data-start="0"></audio>
+
+      <!-- SEQUENCIA 1 -->
+      <div data-hf-id="hf-sm8w" id="seq1" class="clip bg-transparent" data-start="0" data-duration="9.72">
+        <div data-hf-id="hf-5sug" id="seq1_cap1" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+        <div data-hf-id="hf-goc3" id="seq1_cap2" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+        
+        <div data-hf-id="hf-8u8g" id="seq1_mic" class="absolute inset-0 flex items-center justify-center opacity-0 scale-50">
+            <div data-hf-id="hf-2a6c" class="relative w-[500px] h-[500px] flex items-center justify-center">
+                <iconify-icon data-hf-id="hf-f26d" icon="lucide:mic" class="text-[350px] text-neon-purple drop-shadow-[0_0_40px_rgba(140,63,255,0.8)]"></iconify-icon>
+                <iconify-icon data-hf-id="hf-sb06" id="seq1_note1" icon="lucide:music" class="absolute top-[10%] right-[10%] text-[80px] text-white opacity-0"></iconify-icon>
+                <iconify-icon data-hf-id="hf-mp51" id="seq1_note2" icon="lucide:music" class="absolute bottom-[20%] left-[10%] text-[60px] text-white opacity-0"></iconify-icon>
+            </div>
         </div>
-      -->
+
+        <div data-hf-id="hf-z6u8" id="seq1_globe" class="absolute inset-0 flex items-center justify-center opacity-0 translate-y-32">
+            <iconify-icon data-hf-id="hf-j7r3" icon="lucide:globe-2" class="text-[500px] text-neon-purple drop-shadow-[0_0_80px_rgba(140,63,255,0.8)]"></iconify-icon>
+            <div data-hf-id="hf-ubdt" id="seq1_waves" class="absolute inset-0 flex items-center justify-center pointer-events-none"></div>
+        </div>
+      </div>
+
+      <!-- SEQUENCIA 2 -->
+      <div data-hf-id="hf-ycm3" id="seq2" class="clip bg-transparent" data-start="9.72" data-duration="9.38">
+        <div data-hf-id="hf-4qxp" id="seq2_cap1" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+        <div data-hf-id="hf-8p1q" id="seq2_cap2" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+
+        <div data-hf-id="hf-q85c" id="seq2_store" class="absolute inset-0 flex items-center justify-center opacity-0 scale-0">
+            <div data-hf-id="hf-x18u" class="bg-white border-4 border-neon-purple rounded-[40px] p-16 shadow-[0_0_80px_rgba(140,63,255,0.6)] flex flex-col items-center">
+                <iconify-icon data-hf-id="hf-qr8b" icon="lucide:store" class="text-[250px] text-dark-indigo"></iconify-icon>
+                <div data-hf-id="hf-lss9" class="mt-8 text-5xl text-dark-indigo font-bold">MÚSICA AMBIENTE</div>
+            </div>
+        </div>
+
+        <div data-hf-id="hf-mgkc" id="seq2_network" class="absolute inset-0 flex items-center justify-center opacity-0 translate-x-[800px]">
+            <iconify-icon data-hf-id="hf-apq2" icon="lucide:users" class="text-[400px] text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] z-10"></iconify-icon>
+            <iconify-icon data-hf-id="hf-v2cb" icon="lucide:share-2" class="absolute text-[600px] text-neon-purple opacity-40 z-0 spin-slow"></iconify-icon>
+        </div>
+      </div>
+
+      <!-- SEQUENCIA 3 -->
+      <div data-hf-id="hf-bwks" id="seq3" class="clip bg-transparent" data-start="19.1" data-duration="13.3">
+        <div data-hf-id="hf-593m" id="seq3_cap1" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+        <div data-hf-id="hf-1azl" id="seq3_cap2" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+
+        <div data-hf-id="hf-fvow" id="seq3_servers" class="absolute inset-0 flex flex-col items-center justify-center gap-8 opacity-0">
+            <div data-hf-id="hf-riur" class="srv bg-dark-indigo border border-neon-purple w-[700px] h-[150px] rounded-2xl flex items-center px-10 shadow-[0_0_30px_rgba(140,63,255,0.4)]">
+                <iconify-icon data-hf-id="hf-2m66" icon="lucide:server" class="text-6xl text-neon-purple"></iconify-icon>
+                <div data-hf-id="hf-6n19" class="ml-10 h-4 bg-gray-800 rounded-full flex-1 overflow-hidden">
+                    <div data-hf-id="hf-f6em" class="h-full bg-neon-purple w-2/3 glow-bar"></div>
+                </div>
+            </div>
+            <div data-hf-id="hf-w13n" class="srv bg-dark-indigo border border-neon-purple w-[700px] h-[150px] rounded-2xl flex items-center px-10 shadow-[0_0_30px_rgba(140,63,255,0.4)]">
+                <iconify-icon data-hf-id="hf-wl2a" icon="lucide:server" class="text-6xl text-neon-purple"></iconify-icon>
+                <div data-hf-id="hf-07ch" class="ml-10 h-4 bg-gray-800 rounded-full flex-1 overflow-hidden">
+                    <div data-hf-id="hf-enst" class="h-full bg-neon-purple w-full glow-bar"></div>
+                </div>
+            </div>
+            <div data-hf-id="hf-rkti" class="srv bg-dark-indigo border border-neon-purple w-[700px] h-[150px] rounded-2xl flex items-center px-10 shadow-[0_0_30px_rgba(140,63,255,0.4)]">
+                <iconify-icon data-hf-id="hf-wzdb" icon="lucide:server" class="text-6xl text-neon-purple"></iconify-icon>
+                <div data-hf-id="hf-1e9k" class="ml-10 h-4 bg-gray-800 rounded-full flex-1 overflow-hidden">
+                    <div data-hf-id="hf-esfk" class="h-full bg-neon-purple w-1/2 glow-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <div data-hf-id="hf-4mpg" id="seq3_mixer" class="absolute inset-0 flex flex-col items-center justify-center opacity-0 translate-y-[300px]">
+            <iconify-icon data-hf-id="hf-jusq" icon="lucide:sliders-horizontal" class="text-[300px] text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.8)]"></iconify-icon>
+            <div data-hf-id="hf-qbiq" class="mt-16 text-6xl text-green-400 font-bold flex items-center gap-4">
+                <iconify-icon data-hf-id="hf-wbqt" icon="lucide:badge-check"></iconify-icon> SEM CUSTOS ADICIONAIS
+            </div>
+        </div>
+      </div>
+
+      <!-- SEQUENCIA 4 -->
+      <div data-hf-id="hf-k187" id="seq4" class="clip bg-transparent" data-start="32.4" data-duration="14.8">
+        <div data-hf-id="hf-isvb" id="seq4_cap1" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+        <div data-hf-id="hf-a4zg" id="seq4_cap2" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+        <div data-hf-id="hf-awn9" id="seq4_cap3" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+
+        <div data-hf-id="hf-8bo4" id="seq4_c1" class="absolute inset-0 flex flex-col items-center justify-center opacity-0 scale-50">
+            <iconify-icon data-hf-id="hf-oa0w" id="clock_icon" icon="lucide:clock" class="text-[350px] text-neon-purple drop-shadow-[0_0_60px_rgba(140,63,255,0.8)]"></iconify-icon>
+        </div>
+        <div data-hf-id="hf-j75r" id="seq4_c2" class="absolute inset-0 flex flex-col items-center justify-center opacity-0 scale-50">
+            <iconify-icon data-hf-id="hf-nbop" icon="lucide:handshake" class="text-[350px] text-neon-purple drop-shadow-[0_0_60px_rgba(140,63,255,0.8)]"></iconify-icon>
+        </div>
+        <div data-hf-id="hf-f91q" id="seq4_c3" class="absolute inset-0 flex flex-col items-center justify-center opacity-0 scale-50">
+            <iconify-icon data-hf-id="hf-b9i3" icon="lucide:gauge" class="text-[350px] text-neon-purple drop-shadow-[0_0_60px_rgba(140,63,255,0.8)]"></iconify-icon>
+        </div>
+
+        <div data-hf-id="hf-u8ct" id="seq4_stamp" class="absolute bottom-[10%] w-full flex justify-center opacity-0 text-center">
+            <span data-hf-id="hf-cw13" class="text-[100px] stamp-alabfaz -rotate-3" id="stamp_text">A LAB FAZ.</span>
+        </div>
+      </div>
+
+      <!-- SEQUENCIA 5 -->
+      <div data-hf-id="hf-aksy" id="seq5" class="clip bg-transparent" data-start="47.2" data-duration="6.7">
+        <div data-hf-id="hf-2el8" id="seq5_cap1" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+        <div data-hf-id="hf-10i2" id="seq5_bg" class="absolute inset-0 bg-neon-purple opacity-0"></div>
+        <div data-hf-id="hf-0w8k" class="absolute inset-0 flex flex-col items-center justify-center gap-16">
+            <iconify-icon data-hf-id="hf-5b0k" id="seq5_plane" icon="lucide:send" class="text-[300px] text-white drop-shadow-2xl opacity-0 translate-y-[300px]"></iconify-icon>
+            <div data-hf-id="hf-9953" id="seq5_cta" class="text-8xl font-black text-white text-center opacity-0 scale-0">ENVIE UM<br data-hf-id="hf-x5px">DIRECT</div>
+        </div>
+      </div>
+
+      <!-- SEQUENCIA 6 -->
+      <div data-hf-id="hf-vfcf" id="seq6" class="clip bg-transparent" data-start="53.9" data-duration="6.1">
+        <div data-hf-id="hf-zur5" id="seq6_cap1" class="absolute top-[8%] w-[900px] flex flex-wrap justify-center gap-x-5 gap-y-3 z-50 text-[55px] font-bold uppercase text-gray-400 leading-tight left-1/2 -translate-x-1/2 opacity-0"></div>
+        
+        <div data-hf-id="hf-06zo" id="seq6_emojis" class="absolute inset-0 pointer-events-none z-20 overflow-hidden"></div>
+        
+        <div data-hf-id="hf-yx58" class="absolute inset-0 flex flex-col items-center justify-center gap-16">
+            <img data-hf-id="hf-gs8z" id="seq6_logo" src="assets/labscript.dev.png" class="w-[700px] opacity-0 scale-50" alt="Labscript">
+            <div data-hf-id="hf-c83l" id="seq6_tag" class="text-4xl text-gray-400 font-bold text-center w-[800px] opacity-0 -translate-y-10">Soluções que acompanham o tamanho e o momento da sua empresa.</div>
+        </div>
+      </div>
+
+      <div data-hf-id="hf-u5eg" id="fade_to_black" class="absolute inset-0 bg-black opacity-0 z-50 pointer-events-none"></div>
     </div>
 
-    <script>
-      window.__timelines = window.__timelines || {};
-      const tl = gsap.timeline({ paused: true });
-      // Example: tl.from("#title", { opacity: 0, y: -50, duration: 1 }, 0);
-      window.__timelines["main"] = tl;
+    <script type="module">
+        function applyScrambleText(tl, selector, startTime) {
+            const split = new SplitType(selector, { types: 'words, chars' });
+            const chars = split.chars;
+            if (!chars) return;
+            const charSet = "@#$%&01X?";
+            
+            const element = document.querySelector(selector);
+            if (element && element.parentElement) {
+                tl.set(element.parentElement, { opacity: 1, scale: 1, y: 0 }, startTime);
+            }
+            tl.set(selector, { opacity: 1, scale: 1 }, startTime);
+
+            tl.fromTo(chars, 
+                { opacity: 0, scale: 3, z: 200, rotationX: 90 }, 
+                { opacity: 1, scale: 1, z: 0, rotationX: 0, stagger: 0.05, duration: 0.4, ease: "power4.out" }, 
+                startTime
+            );
+
+            chars.forEach((char, i) => {
+                const originalText = char.innerText;
+                if (!originalText.trim()) return;
+                const dummy = { p: 0 };
+                tl.to(dummy, {
+                    p: 100, duration: 0.4,
+                    onUpdate: function() {
+                        if (this.progress() < 0.8) {
+                            char.innerText = charSet[Math.floor(Math.random() * charSet.length)];
+                        } else {
+                            char.innerText = originalText;
+                        }
+                    },
+                    onComplete: function() { char.innerText = originalText; }
+                }, startTime + (i * 0.05));
+            });
+        }
+
+        function createFloatingEmojis(tl, containerSelector, startTime, duration) {
+            const container = document.querySelector(containerSelector);
+            if (!container) return;
+            const emojis = [
+                'noto:thumbs-up', 'noto:red-heart', 'noto:fire', 'noto:rocket', 
+                'noto:clapping-hands', 'noto:hundred-points', 'noto:star-struck', 'noto:direct-hit'
+            ];
+            const numEmojis = 30;
+            for (let i = 0; i < numEmojis; i++) {
+                const el = document.createElement("div");
+                el.className = "absolute text-[80px] opacity-0 flex items-center justify-center";
+                const icon = emojis[Math.floor(Math.random() * emojis.length)];
+                el.innerHTML = `<iconify-icon icon="${icon}"></iconify-icon>`;
+                container.appendChild(el);
+                
+                const delay = Math.random() * duration; 
+                const startX = 100 + Math.random() * 880;
+                const endX = startX + (Math.random() * 400 - 200);
+                const animDuration = 4 + Math.random() * 3; 
+                tl.fromTo(el, 
+                    { x: startX, y: 1920, opacity: 0, scale: 0.5 + Math.random() },
+                    { x: endX, y: -200, opacity: 1, scale: 1 + Math.random(), duration: animDuration, ease: "power1.out" },
+                    startTime + delay
+                );
+                tl.to(el, { opacity: 0, duration: 0.8 }, startTime + delay + (animDuration * 0.8));
+            }
+        }
+
+        window.__timelines = window.__timelines || {};
+        const mainTl = gsap.timeline({ paused: true });
+        
+        // Grid Animation
+        mainTl.to(".bg-grid", { backgroundPosition: "100px 100px", duration: 2, repeat: 100, ease: "none" }, 0);
+
+        // Seq 1 (0 to 9.72)
+        mainTl.set("#seq1", { opacity: 1 }, 0);
+        mainTl.fromTo("#seq1_mic", { scale: 0.5, opacity: 0, y: 200 }, { scale: 1, opacity: 1, y: 0, duration: 1, ease: "back.out(1.5)" }, 0);
+        mainTl.to("#seq1_note1", { y: -50, opacity: 1, duration: 0.5, ease: "power2.out" }, 1.5);
+        mainTl.to("#seq1_note2", { y: -50, opacity: 1, duration: 0.5, ease: "power2.out" }, 2.0);
+        
+        mainTl.to("#seq1_mic", { x: -1500, duration: 0.8, ease: "power2.in" }, 3.5); // organic exit
+        mainTl.fromTo("#seq1_globe", { x: 1500, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 4.0); // organic entry
+        
+        const waveContainer = document.getElementById("seq1_waves");
+        for(let i=0; i<3; i++) {
+            const circle = document.createElement("div");
+            circle.className = "absolute border-[8px] border-neon-purple rounded-full";
+            waveContainer.appendChild(circle);
+            mainTl.fromTo(circle, { width: 0, height: 0, opacity: 1 }, { width: 800, height: 800, opacity: 0, duration: 2, ease: "power2.out" }, 4.5 + i*0.5);
+        }
+        mainTl.to("#seq1_globe", { x: -1500, duration: 0.8, ease: "power2.in" }, 9.0);
+        mainTl.set("#seq1", { opacity: 0 }, 9.72);
+
+        // Seq 2 (9.72 to 19.1)
+        mainTl.set("#seq2", { opacity: 1 }, 9.72);
+        mainTl.fromTo("#seq2_store", { scale: 0.5, y: 500, opacity: 0 }, { scale: 1, y: 0, opacity: 1, duration: 1, ease: "back.out(1.5)" }, 9.72);
+        mainTl.to("#seq2_store", { x: -1500, duration: 0.8, ease: "power2.in" }, 14.5);
+        
+        mainTl.fromTo("#seq2_network", { x: 1500, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, 15.0);
+        mainTl.to(".spin-slow", { rotation: 360, duration: 5, ease: "none", repeat: 2 }, 15.0);
+        mainTl.to("#seq2_network", { scale: 0, opacity: 0, duration: 0.6, ease: "back.in(1.2)" }, 18.5);
+        mainTl.set("#seq2", { opacity: 0 }, 19.1);
+
+        // Seq 3 (19.1 to 32.4)
+        mainTl.set("#seq3", { opacity: 1 }, 19.1);
+        mainTl.to("#seq3_servers", { opacity: 1, duration: 0.2 }, 19.1);
+        mainTl.from(".srv", { x: 1500, opacity: 0, stagger: 0.3, duration: 1, ease: "back.out(1.2)" }, 19.1);
+        mainTl.to(".glow-bar", { x: "100%", duration: 1.5, repeat: 10, ease: "none" }, 19.1);
+
+        mainTl.to("#seq3_servers", { x: -1500, duration: 0.8, ease: "power2.in" }, 25.5);
+        mainTl.fromTo("#seq3_mixer", { y: 800, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "back.out(1.5)" }, 26.0);
+        mainTl.to("#seq3_mixer", { scale: 0.5, opacity: 0, duration: 0.6, ease: "power2.in" }, 31.8);
+        mainTl.set("#seq3", { opacity: 0 }, 32.4);
+
+        // Seq 4 (32.4 to 47.2)
+        mainTl.set("#seq4", { opacity: 1 }, 32.4);
+        
+        // Cena 1
+        mainTl.fromTo("#seq4_c1", { scale: 0.5, opacity: 0, y: 500 }, { scale: 1, opacity: 1, y: 0, duration: 0.8, ease: "back.out(1.5)" }, 32.4);
+        mainTl.to("#clock_icon", { rotation: 360, duration: 5, ease: "none" }, 32.4);
+        applyScrambleText(mainTl, "#stamp_text", 37.0);
+        mainTl.to("#seq4_c1", { x: -1500, duration: 0.6, ease: "power2.in" }, 37.5);
+
+        // Cena 2
+        mainTl.fromTo("#seq4_c2", { x: 1500, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 37.9);
+        applyScrambleText(mainTl, "#stamp_text", 41.0);
+        mainTl.to("#seq4_c2", { x: -1500, duration: 0.6, ease: "power2.in" }, 41.6);
+
+        // Cena 3
+        mainTl.fromTo("#seq4_c3", { x: 1500, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 42.0);
+        applyScrambleText(mainTl, "#stamp_text", 45.6);
+        
+        mainTl.to("#seq4_c3", { y: -1500, duration: 0.6, ease: "power2.in" }, 46.5);
+        mainTl.to("#seq4_stamp", { opacity: 0, duration: 0.4 }, 46.5);
+        mainTl.set("#seq4", { opacity: 0 }, 47.2);
+
+        // Seq 5 (47.2 to 53.9)
+        mainTl.set("#seq5", { opacity: 1 }, 47.2);
+        mainTl.to("#seq5_bg", { opacity: 1, duration: 0.5 }, 47.2);
+        mainTl.fromTo("#seq5_plane", { x: -1500, y: 800, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 1, ease: "power3.out" }, 47.5);
+        mainTl.to("#seq5_plane", { x: 50, y: -50, duration: 0.5, yoyo: true, repeat: 10 }, 48.5);
+        mainTl.to("#seq5_cta", { scale: 1, opacity: 1, duration: 1, ease: "elastic.out(1,0.5)" }, 48.0);
+        
+        mainTl.to("#seq5_plane", { x: 1500, y: -800, duration: 0.8, ease: "power2.in" }, 53.0);
+        mainTl.to("#seq5_cta", { scale: 0, duration: 0.5, ease: "back.in(1.5)" }, 53.2);
+        mainTl.set("#seq5", { opacity: 0 }, 53.9);
+
+        // Seq 6 (53.9 to 60)
+        mainTl.set("#seq6", { opacity: 1 }, 53.9);
+        mainTl.fromTo("#seq6_logo", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.5, ease: "elastic.out(1,0.5)" }, 53.9);
+        mainTl.fromTo("#seq6_tag", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power2.out" }, 55.0);
+        
+        createFloatingEmojis(mainTl, "#seq6_emojis", 54.0, 5.0);
+        
+        mainTl.to("#fade_to_black", { opacity: 1, duration: 1.0 }, 59.0);
+
+        // ==========================================
+        // Legendas Dinâmicas (Karaoke)
+        // ==========================================
+        if (typeof AUDIO_WORDS !== 'undefined') {
+            const chunks = [
+                { id: "seq1_cap1", start: 0, end: 10, fadeOutAt: 3.5 },
+                { id: "seq1_cap2", start: 10, end: 29, fadeOutAt: 9.7 },
+                { id: "seq2_cap1", start: 29, end: 43, fadeOutAt: 15.5 },
+                { id: "seq2_cap2", start: 43, end: 54, fadeOutAt: 19.1 },
+                { id: "seq3_cap1", start: 54, end: 68, fadeOutAt: 26.0 },
+                { id: "seq3_cap2", start: 68, end: 77, fadeOutAt: 32.4 },
+                { id: "seq4_cap1", start: 77, end: 88, fadeOutAt: 37.6 },
+                { id: "seq4_cap2", start: 88, end: 95, fadeOutAt: 41.7 },
+                { id: "seq4_cap3", start: 95, end: 102, fadeOutAt: 47.0 },
+                { id: "seq5_cap1", start: 102, end: 116, fadeOutAt: 53.5 },
+                { id: "seq6_cap1", start: 116, end: 127, fadeOutAt: 59.0 }
+            ];
+
+            chunks.forEach((chunk) => {
+                const container = document.getElementById(chunk.id);
+                if (!container) return;
+                
+                const words = AUDIO_WORDS.slice(Math.min(chunk.start, AUDIO_WORDS.length-1), Math.min(chunk.end, AUDIO_WORDS.length));
+                if (words.length === 0) return;
+
+                const firstWordStart = words[0].start;
+                // Entry transition for captions
+                mainTl.fromTo(container, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, firstWordStart);
+
+                words.forEach((w) => {
+                    const span = document.createElement("span");
+                    span.innerText = w.word;
+                    span.style.opacity = "0.3";
+                    container.appendChild(span);
+                    
+                    mainTl.to(span, {
+                        color: "#fff",
+                        textShadow: "0 0 20px rgba(255,255,255,0.8)",
+                        opacity: 1,
+                        scale: 1.1,
+                        duration: 0.1
+                    }, w.start);
+                    
+                    mainTl.to(span, {
+                        scale: 1.0,
+                        duration: 0.2
+                    }, w.start + 0.1);
+                });
+                
+                // Exit transition for captions
+                mainTl.to(container, { y: -20, opacity: 0, duration: 0.4, ease: "power2.in" }, chunk.fadeOutAt);
+            });
+        }
+
+        window.__timelines["main"] = mainTl;
     </script>
   </body>
 </html>

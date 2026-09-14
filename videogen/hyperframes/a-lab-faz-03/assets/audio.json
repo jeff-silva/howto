@@ -1,0 +1,782 @@
+[
+  {
+    "word": "Ter",
+    "start": 0,
+    "end": 0.2
+  },
+  {
+    "word": "a",
+    "start": 0.2,
+    "end": 0.36
+  },
+  {
+    "word": "sua",
+    "start": 0.36,
+    "end": 0.5
+  },
+  {
+    "word": "própria",
+    "start": 0.5,
+    "end": 0.94
+  },
+  {
+    "word": "rádio",
+    "start": 0.94,
+    "end": 1.24
+  },
+  {
+    "word": "online",
+    "start": 1.24,
+    "end": 1.56
+  },
+  {
+    "word": "não",
+    "start": 1.56,
+    "end": 1.98
+  },
+  {
+    "word": "precisa",
+    "start": 1.98,
+    "end": 2.48
+  },
+  {
+    "word": "ser",
+    "start": 2.48,
+    "end": 2.72
+  },
+  {
+    "word": "complicado.",
+    "start": 2.72,
+    "end": 3.78
+  },
+  {
+    "word": "Você",
+    "start": 3.8,
+    "end": 3.94
+  },
+  {
+    "word": "só",
+    "start": 3.94,
+    "end": 4.2
+  },
+  {
+    "word": "precisa",
+    "start": 4.2,
+    "end": 4.78
+  },
+  {
+    "word": "da",
+    "start": 4.78,
+    "end": 4.92
+  },
+  {
+    "word": "tecnologia",
+    "start": 4.92,
+    "end": 5.48
+  },
+  {
+    "word": "certa",
+    "start": 5.48,
+    "end": 6.02
+  },
+  {
+    "word": "para",
+    "start": 6.02,
+    "end": 6.24
+  },
+  {
+    "word": "levar",
+    "start": 6.24,
+    "end": 6.5
+  },
+  {
+    "word": "a",
+    "start": 6.5,
+    "end": 6.66
+  },
+  {
+    "word": "sua",
+    "start": 6.66,
+    "end": 6.76
+  },
+  {
+    "word": "voz",
+    "start": 6.76,
+    "end": 6.98
+  },
+  {
+    "word": "mais",
+    "start": 6.98,
+    "end": 7.32
+  },
+  {
+    "word": "longe",
+    "start": 7.32,
+    "end": 7.72
+  },
+  {
+    "word": "e",
+    "start": 7.72,
+    "end": 7.98
+  },
+  {
+    "word": "dar",
+    "start": 7.98,
+    "end": 8.18
+  },
+  {
+    "word": "vida",
+    "start": 8.18,
+    "end": 8.54
+  },
+  {
+    "word": "ao",
+    "start": 8.54,
+    "end": 8.64
+  },
+  {
+    "word": "seu",
+    "start": 8.64,
+    "end": 8.76
+  },
+  {
+    "word": "projeto.",
+    "start": 8.76,
+    "end": 9.72
+  },
+  {
+    "word": "Pode",
+    "start": 9.72,
+    "end": 9.82
+  },
+  {
+    "word": "ser",
+    "start": 9.82,
+    "end": 9.98
+  },
+  {
+    "word": "uma",
+    "start": 9.98,
+    "end": 10.14
+  },
+  {
+    "word": "rádio",
+    "start": 10.14,
+    "end": 10.46
+  },
+  {
+    "word": "exclusiva",
+    "start": 10.46,
+    "end": 11.14
+  },
+  {
+    "word": "para",
+    "start": 11.14,
+    "end": 11.36
+  },
+  {
+    "word": "seu",
+    "start": 11.36,
+    "end": 11.52
+  },
+  {
+    "word": "estabelecimento,",
+    "start": 11.52,
+    "end": 12.66
+  },
+  {
+    "word": "tocando",
+    "start": 12.66,
+    "end": 12.92
+  },
+  {
+    "word": "música",
+    "start": 12.92,
+    "end": 13.4
+  },
+  {
+    "word": "ambiente",
+    "start": 13.4,
+    "end": 13.8
+  },
+  {
+    "word": "e",
+    "start": 13.8,
+    "end": 14.3
+  },
+  {
+    "word": "anunciando",
+    "start": 14.3,
+    "end": 14.78
+  },
+  {
+    "word": "promoções,",
+    "start": 14.78,
+    "end": 15.78
+  },
+  {
+    "word": "ou",
+    "start": 15.72,
+    "end": 15.84
+  },
+  {
+    "word": "uma",
+    "start": 15.84,
+    "end": 16.02
+  },
+  {
+    "word": "rádio",
+    "start": 16.02,
+    "end": 16.38
+  },
+  {
+    "word": "comunitária",
+    "start": 16.38,
+    "end": 16.94
+  },
+  {
+    "word": "forte",
+    "start": 16.94,
+    "end": 17.42
+  },
+  {
+    "word": "para",
+    "start": 17.42,
+    "end": 17.62
+  },
+  {
+    "word": "conectar",
+    "start": 17.62,
+    "end": 18.08
+  },
+  {
+    "word": "a",
+    "start": 18.08,
+    "end": 18.16
+  },
+  {
+    "word": "sua",
+    "start": 18.16,
+    "end": 18.24
+  },
+  {
+    "word": "região.",
+    "start": 18.24,
+    "end": 19.08
+  },
+  {
+    "word": "A",
+    "start": 19.1,
+    "end": 19.26
+  },
+  {
+    "word": "LabScript",
+    "start": 19.26,
+    "end": 19.8
+  },
+  {
+    "word": "monta",
+    "start": 19.8,
+    "end": 20.28
+  },
+  {
+    "word": "a",
+    "start": 20.28,
+    "end": 20.44
+  },
+  {
+    "word": "infraestrutura",
+    "start": 20.44,
+    "end": 21.08
+  },
+  {
+    "word": "completa",
+    "start": 21.08,
+    "end": 21.5
+  },
+  {
+    "word": "para",
+    "start": 21.5,
+    "end": 21.82
+  },
+  {
+    "word": "você",
+    "start": 21.82,
+    "end": 22.02
+  },
+  {
+    "word": "transmitir",
+    "start": 22.02,
+    "end": 22.68
+  },
+  {
+    "word": "ou",
+    "start": 22.2,
+    "end": 22.84
+  },
+  {
+    "word": "montar",
+    "start": 22.84,
+    "end": 23.26
+  },
+  {
+    "word": "seu",
+    "start": 23.26,
+    "end": 23.4
+  },
+  {
+    "word": "sistema",
+    "start": 23.4,
+    "end": 23.8
+  },
+  {
+    "word": "de",
+    "start": 23.8,
+    "end": 23.98
+  },
+  {
+    "word": "rádios",
+    "start": 23.98,
+    "end": 24.3
+  },
+  {
+    "word": "online",
+    "start": 24.3,
+    "end": 24.74
+  },
+  {
+    "word": "com",
+    "start": 24.74,
+    "end": 24.96
+  },
+  {
+    "word": "qualidade",
+    "start": 24.96,
+    "end": 25.32
+  },
+  {
+    "word": "e",
+    "start": 25.32,
+    "end": 25.76
+  },
+  {
+    "word": "liberdade,",
+    "start": 25.76,
+    "end": 26.72
+  },
+  {
+    "word": "com",
+    "start": 26.36,
+    "end": 26.66
+  },
+  {
+    "word": "as",
+    "start": 26.66,
+    "end": 26.8
+  },
+  {
+    "word": "ferramentas",
+    "start": 26.8,
+    "end": 27.32
+  },
+  {
+    "word": "mais",
+    "start": 27.32,
+    "end": 27.7
+  },
+  {
+    "word": "utilizadas",
+    "start": 27.7,
+    "end": 28.32
+  },
+  {
+    "word": "pelos",
+    "start": 28.32,
+    "end": 28.56
+  },
+  {
+    "word": "profissionais",
+    "start": 28.56,
+    "end": 29.2
+  },
+  {
+    "word": "de",
+    "start": 29.2,
+    "end": 29.4
+  },
+  {
+    "word": "streaming",
+    "start": 29.4,
+    "end": 29.8
+  },
+  {
+    "word": "do",
+    "start": 29.8,
+    "end": 29.96
+  },
+  {
+    "word": "país,",
+    "start": 29.96,
+    "end": 30.74
+  },
+  {
+    "word": "sem",
+    "start": 30.74,
+    "end": 30.86
+  },
+  {
+    "word": "custos",
+    "start": 30.86,
+    "end": 31.32
+  },
+  {
+    "word": "adicionais",
+    "start": 31.32,
+    "end": 31.86
+  },
+  {
+    "word": "por",
+    "start": 31.86,
+    "end": 32.04
+  },
+  {
+    "word": "canal.",
+    "start": 32.04,
+    "end": 32.4
+  },
+  {
+    "word": "Estruturar",
+    "start": 32.98,
+    "end": 33.42
+  },
+  {
+    "word": "a",
+    "start": 33.42,
+    "end": 33.6
+  },
+  {
+    "word": "base",
+    "start": 33.6,
+    "end": 33.9
+  },
+  {
+    "word": "para",
+    "start": 33.9,
+    "end": 34.1
+  },
+  {
+    "word": "sua",
+    "start": 34.1,
+    "end": 34.3
+  },
+  {
+    "word": "rádio",
+    "start": 34.3,
+    "end": 34.72
+  },
+  {
+    "word": "transmitir",
+    "start": 34.72,
+    "end": 35.42
+  },
+  {
+    "word": "24",
+    "start": 35.42,
+    "end": 35.9
+  },
+  {
+    "word": "horas",
+    "start": 35.9,
+    "end": 36.26
+  },
+  {
+    "word": "por",
+    "start": 36.26,
+    "end": 36.44
+  },
+  {
+    "word": "dia?",
+    "start": 36.44,
+    "end": 37.16
+  },
+  {
+    "word": "A",
+    "start": 37.32,
+    "end": 37.44
+  },
+  {
+    "word": "LAB",
+    "start": 37.44,
+    "end": 37.66
+  },
+  {
+    "word": "faz.",
+    "start": 37.66,
+    "end": 37.92
+  },
+  {
+    "word": "Ter",
+    "start": 38.54,
+    "end": 38.66
+  },
+  {
+    "word": "liberdade",
+    "start": 38.66,
+    "end": 39.38
+  },
+  {
+    "word": "para",
+    "start": 39.38,
+    "end": 39.6
+  },
+  {
+    "word": "revender",
+    "start": 39.6,
+    "end": 40.02
+  },
+  {
+    "word": "seu",
+    "start": 40.02,
+    "end": 40.24
+  },
+  {
+    "word": "espaço?",
+    "start": 40.24,
+    "end": 41.08
+  },
+  {
+    "word": "A",
+    "start": 41.18,
+    "end": 41.36
+  },
+  {
+    "word": "LAB",
+    "start": 41.36,
+    "end": 41.64
+  },
+  {
+    "word": "faz.",
+    "start": 41.64,
+    "end": 42.04
+  },
+  {
+    "word": "Painel",
+    "start": 42.54,
+    "end": 42.9
+  },
+  {
+    "word": "de",
+    "start": 42.9,
+    "end": 43.06
+  },
+  {
+    "word": "controle",
+    "start": 43.06,
+    "end": 43.5
+  },
+  {
+    "word": "profissional",
+    "start": 43.5,
+    "end": 44.06
+  },
+  {
+    "word": "de",
+    "start": 44.06,
+    "end": 44.36
+  },
+  {
+    "word": "alta",
+    "start": 44.36,
+    "end": 44.7
+  },
+  {
+    "word": "performance?",
+    "start": 44.7,
+    "end": 45.8
+  },
+  {
+    "word": "A",
+    "start": 45.6,
+    "end": 46.04
+  },
+  {
+    "word": "LAB",
+    "start": 46.04,
+    "end": 46.3
+  },
+  {
+    "word": "faz.",
+    "start": 46.3,
+    "end": 47.2
+  },
+  {
+    "word": "Se",
+    "start": 47.22,
+    "end": 47.28
+  },
+  {
+    "word": "você",
+    "start": 47.28,
+    "end": 47.48
+  },
+  {
+    "word": "tem",
+    "start": 47.48,
+    "end": 47.64
+  },
+  {
+    "word": "um",
+    "start": 47.64,
+    "end": 47.74
+  },
+  {
+    "word": "projeto",
+    "start": 47.74,
+    "end": 48.1
+  },
+  {
+    "word": "de",
+    "start": 48.1,
+    "end": 48.26
+  },
+  {
+    "word": "rádio",
+    "start": 48.26,
+    "end": 48.56
+  },
+  {
+    "word": "online",
+    "start": 48.56,
+    "end": 48.84
+  },
+  {
+    "word": "ou",
+    "start": 48.84,
+    "end": 49.18
+  },
+  {
+    "word": "comunicação",
+    "start": 49.18,
+    "end": 49.74
+  },
+  {
+    "word": "corporativa",
+    "start": 49.74,
+    "end": 50.58
+  },
+  {
+    "word": "e",
+    "start": 50.1,
+    "end": 50.86
+  },
+  {
+    "word": "quer",
+    "start": 50.86,
+    "end": 51
+  },
+  {
+    "word": "começar",
+    "start": 51,
+    "end": 51.4
+  },
+  {
+    "word": "do",
+    "start": 51.4,
+    "end": 51.56
+  },
+  {
+    "word": "jeito",
+    "start": 51.56,
+    "end": 51.8
+  },
+  {
+    "word": "certo,",
+    "start": 51.8,
+    "end": 52.66
+  },
+  {
+    "word": "envie",
+    "start": 52.66,
+    "end": 52.86
+  },
+  {
+    "word": "um",
+    "start": 52.86,
+    "end": 53
+  },
+  {
+    "word": "direct.",
+    "start": 53,
+    "end": 53.88
+  },
+  {
+    "word": "A",
+    "start": 53.92,
+    "end": 54.08
+  },
+  {
+    "word": "LabScript",
+    "start": 54.08,
+    "end": 54.44
+  },
+  {
+    "word": "tem",
+    "start": 54.44,
+    "end": 54.9
+  },
+  {
+    "word": "soluções",
+    "start": 54.9,
+    "end": 55.4
+  },
+  {
+    "word": "que",
+    "start": 55.4,
+    "end": 55.58
+  },
+  {
+    "word": "acompanham",
+    "start": 55.58,
+    "end": 56.06
+  },
+  {
+    "word": "o",
+    "start": 56.06,
+    "end": 56.18
+  },
+  {
+    "word": "tamanho",
+    "start": 56.18,
+    "end": 56.64
+  },
+  {
+    "word": "e",
+    "start": 56.64,
+    "end": 56.9
+  },
+  {
+    "word": "o",
+    "start": 56.9,
+    "end": 56.98
+  },
+  {
+    "word": "momento",
+    "start": 56.98,
+    "end": 57.4
+  },
+  {
+    "word": "da",
+    "start": 57.4,
+    "end": 57.58
+  },
+  {
+    "word": "sua",
+    "start": 57.58,
+    "end": 57.7
+  },
+  {
+    "word": "empresa.",
+    "start": 57.7,
+    "end": 58.6
+  }
+]
