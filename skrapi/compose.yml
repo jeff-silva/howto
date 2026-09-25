@@ -3,5 +3,6 @@ networks:
     name: main_network
 
 include:
+  - ./chromium/compose.yml
   - ./elysia/compose.yml
   - ./searxng/compose.yml
