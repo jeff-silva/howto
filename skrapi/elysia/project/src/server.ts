@@ -14,6 +14,22 @@ export const app = new Elysia()
   .use(swagger())
   .use(oauth2({}))
   .use(bearer())
+  .onBeforeHandle(({ bearer, set }) => {
+    const requiredToken = process.env.API_TOKEN
+
+    // Se o dono da API não configurou um token no .env, as rotas ficam 100% abertas!
+    if (!requiredToken)
+      return
+
+    // Se o token foi configurado, exigimos que o usuário mande no Header: "Authorization: Bearer <token>"
+    if (bearer !== requiredToken) {
+      set.status = 401
+      return {
+        success: false,
+        message: "Acesso Negado: Token da API ausente ou inválido.",
+      }
+    }
+  })
   .use(cors())
   .use(html())
   .use(jwt({ secret: config.JWT_SECRET }))
