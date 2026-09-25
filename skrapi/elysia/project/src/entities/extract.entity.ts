@@ -6,4 +6,5 @@ export interface ExtractedData {
   contentText: string
   contentMarkdown: string
   metaTags: Record<string, string>
+  links: { url: string; title: string }[]
 }

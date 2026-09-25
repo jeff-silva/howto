@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+  echo "Uso: ./run <nome>"
+  echo "Exemplo: ./run rent"
+  exit 1
+fi
+
+SCRIPT_NAME="$1"
+BASE_PATH="cmd/$SCRIPT_NAME"
+TARGET_FILE=""
+
+# 1. Procura diretamente por nome.js
+if [ -f "$BASE_PATH.js" ]; then
+  TARGET_FILE="$SCRIPT_NAME.js"
+# 2. Se não achar, procura dentro da pasta por nome/index.js
+elif [ -f "$BASE_PATH/index.js" ]; then
+  TARGET_FILE="$SCRIPT_NAME/index.js"
+else
+  echo "Erro: Não encontrei '$BASE_PATH.js' e nem '$BASE_PATH/index.js'."
+  exit 1
+fi
+
+# Executa o docker apontando para o arquivo correto que encontramos
+docker run -it --rm \
+  --network host \
+  --env-file .env \
+  -v "$PWD/cmd":/app \
+  -w /app \
+  node:alpine \
+  node "$TARGET_FILE" "${@:2}"

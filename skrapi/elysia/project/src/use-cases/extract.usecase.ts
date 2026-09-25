@@ -15,7 +15,7 @@ export async function executeExtractUseCase(url: string): Promise<ExtractedData>
     try {
       page = await browser.newPage()
       await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-      await page.goto(url, { waitUntil: "networkidle2", timeout: 30000 })
+      await page.goto(url, { waitUntil: "networkidle2", timeout: 10000 })
 
       const metaData = await page.evaluate(() => {
         const title = document.title
@@ -29,10 +29,19 @@ export async function executeExtractUseCase(url: string): Promise<ExtractedData>
           }
         })
 
+        const links: { url: string; title: string }[] = []
+        document.querySelectorAll("a").forEach((a) => {
+          const href = a.href
+          const text = a.innerText?.trim()
+          if (href && text && !href.startsWith("javascript:")) {
+            links.push({ url: href, title: text })
+          }
+        })
+
         const description = metaTags.description || metaTags["og:description"] || ""
         const html = document.documentElement.outerHTML
 
-        return { title, description, metaTags, html }
+        return { title, description, metaTags, html, links }
       })
 
       const dom = new JSDOM(metaData.html, { url })
@@ -65,6 +74,7 @@ export async function executeExtractUseCase(url: string): Promise<ExtractedData>
         contentText: contentText?.trim() || "",
         contentMarkdown,
         metaTags: metaData.metaTags,
+        links: metaData.links,
       }
     }
     finally {
