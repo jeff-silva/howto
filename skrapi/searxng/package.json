@@ -1,0 +1,13 @@
+{
+  "name": "searxng",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "docker compose stop && docker compose up -d --build --force-recreate --remove-orphans",
+    "stop": "docker compose stop"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

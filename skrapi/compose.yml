@@ -1,0 +1,7 @@
+networks:
+  default:
+    name: main_network
+
+include:
+  - ./elysia/compose.yml
+  - ./searxng/compose.yml
