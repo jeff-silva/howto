@@ -5,7 +5,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Sao_Paulo
-      - CHROME_CLI=--remote-debugging-port=9223
+      - CHROME_CLI=--remote-debugging-port=9223 --remote-allow-origins=*
     volumes:
       - ./config:/config
     ports:
