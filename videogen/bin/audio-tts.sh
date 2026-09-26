@@ -50,14 +50,35 @@ if [ ! -s "$TEXTO_ARQUIVO" ]; then
     exit 1
 fi
 
-VOZ=${VOZ:-"pt-BR-ThalitaMultilingualNeural"}
+VOZ=${VOZ:-"pt-BR-FranciscaNeural"}
+# VOZ=${VOZ:-"pt-BR-AntonioNeural"}
+# VOZ=${VOZ:-"pt-BR-ThalitaMultilingualNeural"}
 
 echo "-------------------------------------"
-echo "⚡ Gerando áudio com a voz neural: $VOZ (via Docker)..."
-docker run --rm -v "$(pwd):/app" -w /app python:3.10-alpine sh -c "
-  pip install -q edge-tts &&
-  edge-tts --voice \"$VOZ\" --rate=\"+0%\" --file \"$TEXTO_ARQUIVO\" --write-media \"$ARQUIVO_SAIDA\"
-"
+echo "⚡ Gerando áudio com a voz neural: $VOZ..."
+# Constrói a imagem Docker localmente se ela ainda não existir
+if ! docker image inspect edge-tts-local >/dev/null 2>&1; then
+    echo "⚙️  Construindo imagem Docker com edge-tts (isso só ocorre na primeira vez e pode demorar alguns minutos)..."
+    docker build -t edge-tts-local - >/dev/null <<EOF
+FROM python:3.10-alpine
+RUN pip install --no-cache-dir edge-tts
+EOF
+fi
+
+# Roda o edge-tts em background e mostra um "spinner" de carregamento
+docker run --rm -v "$(pwd):/app" -w /app edge-tts-local edge-tts \
+  --voice "$VOZ" --rate="+0%" --file "$TEXTO_ARQUIVO" --write-media "$ARQUIVO_SAIDA" &
+PID=$!
+
+spin='-\|/'
+i=0
+while kill -0 $PID 2>/dev/null; do
+  i=$(( (i+1) %4 ))
+  echo -en "\r⏳ Gerando áudio... ${spin:$i:1}"
+  sleep 0.1
+done
+echo -e "\r⏳ Gerando áudio... Concluído!     "
+
 echo "✅ Áudio salvo em $ARQUIVO_SAIDA"
 
 echo "-------------------------------------"
@@ -66,7 +87,7 @@ if [ "$GERAR_LEGENDA" -eq 1 ]; then
         echo "⚠️  A variável GROQ_API_KEY não foi encontrada em $SCRIPT_DIR/.env"
         echo "Pulando geração de legenda..."
     else
-        echo "📝 Transcrevendo áudio com a API da Groq (via Docker)..."
+        echo "📝 Transcrevendo áudio com a API da Groq..."
         ARQUIVO_JSON="${NOME_PASTA}/${NOME_ARQUIVO}.json"
         ARQUIVO_JS="${NOME_PASTA}/${NOME_ARQUIVO}.js"
         RAW_JSON="${NOME_PASTA}/${NOME_ARQUIVO}_raw.json"
@@ -74,7 +95,7 @@ if [ "$GERAR_LEGENDA" -eq 1 ]; then
         # Roda o curl e o jq num container alpine descartável
         docker run --rm -e GROQ_API_KEY="${GROQ_API_KEY}" -v "$(pwd):/app" -w /app alpine sh -c "
           apk add -q curl jq &&
-          curl -s -X POST https://api.groq.com/openai/v1/audio/transcriptions \
+          curl -# -X POST https://api.groq.com/openai/v1/audio/transcriptions \
             -H \"Authorization: Bearer \$GROQ_API_KEY\" \
             -F \"file=@$ARQUIVO_SAIDA\" \
             -F \"model=whisper-large-v3\" \
