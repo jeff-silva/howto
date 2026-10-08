@@ -16,6 +16,7 @@
                         <group>
                             <group>
                                 <field name="partner_id" placeholder="Selecione o Cliente"/>
+                                <field name="department_id" placeholder="Ex: PVC Super" required="1"/>
                                 <field name="product_id" invisible="1"/>
                                 <field name="active" invisible="1"/>
                             </group>
@@ -42,7 +43,7 @@
             <field name="name">capp.badge.template.list</field>
             <field name="model">capp.badge.template</field>
             <field name="arch" type="xml">
-                <list string="Modelos de Crachá">
+                <list string="Modelos">
                     <field name="name"/>
                     <field name="partner_id"/>
                 </list>
@@ -50,12 +51,12 @@
         </record>
 
         <record id="action_capp_badge_template" model="ir.actions.act_window">
-            <field name="name">Modelos de Crachá</field>
+            <field name="name">Modelos</field>
             <field name="res_model">capp.badge.template</field>
             <field name="view_mode">list,form</field>
         </record>
 
         <menuitem id="menu_capp_root" name="Gestão CAPP" sequence="10"/>
-        <menuitem id="menu_capp_badge_template" name="Modelos de Crachá" parent="menu_capp_root" action="action_capp_badge_template" sequence="10"/>
+        <menuitem id="menu_capp_badge_template" name="Modelos" parent="menu_capp_root" action="action_capp_badge_template" sequence="20"/>
     </data>
 </odoo>

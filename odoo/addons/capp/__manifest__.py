@@ -8,10 +8,16 @@
     'depends': ['base', 'sale'],
     'data': [
         'security/ir.access.csv',
+        'views/department_views.xml',
         'views/badge_template_views.xml',
         'views/badge_order_views.xml',
         'views/res_partner_views.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'capp/static/src/css/style.css',
+        ],
+    },
     'installable': True,
     'application': True,
 }

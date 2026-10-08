@@ -6,6 +6,7 @@ class BadgeTemplate(models.Model):
 
     name = fields.Char(string='Nome do Modelo', required=True)
     partner_id = fields.Many2one('res.partner', string='Cliente', required=True, ondelete='cascade')
+    department_id = fields.Many2one('capp.department', string='Departamento de Produção')
     product_id = fields.Many2one('product.product', string='Produto (Faturamento)', ondelete='restrict')
     active = fields.Boolean(default=True)
     attribute_ids = fields.One2many('capp.badge.attribute', 'template_id', string='Atributos')

@@ -37,7 +37,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='display_name']" position="after">
                 <field name="capp_billing_type" column_invisible="1"/>
-                <field name="capp_billing_summary" widget="badge" decoration-info="capp_billing_type == 'pre'" decoration-warning="capp_billing_type == 'post'"/>
+                <field name="capp_billing_summary" invisible="not capp_billing_type" widget="badge" decoration-info="capp_billing_type == 'pre'" decoration-warning="capp_billing_type == 'post'"/>
             </xpath>
         </field>
     </record>
@@ -47,6 +47,10 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.res_partner_kanban_view"/>
         <field name="arch" type="xml">
+            <xpath expr="//templates" position="before">
+                <field name="capp_billing_summary"/>
+                <field name="capp_billing_type"/>
+            </xpath>
             <xpath expr="//main" position="inside">
                 <div t-if="record.capp_billing_summary.raw_value" class="mt-1">
                     <field name="capp_billing_type" invisible="1"/>
@@ -63,5 +67,5 @@
         <field name="view_mode">kanban,list,form</field>
     </record>
 
-    <menuitem id="menu_capp_customers" name="Clientes" parent="capp.menu_capp_root" action="action_capp_customers" sequence="5"/>
+    <menuitem id="menu_capp_customers" name="Clientes" parent="capp.menu_capp_root" action="action_capp_customers" sequence="10"/>
 </odoo>

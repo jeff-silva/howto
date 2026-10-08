@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_capp_department_form" model="ir.ui.view">
+            <field name="name">capp.department.form</field>
+            <field name="model">capp.department</field>
+            <field name="arch" type="xml">
+                <form string="Departamento">
+                    <sheet>
+                        <widget name="web_ribbon" title="Inativo" bg_color="bg-danger" invisible="active"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Ex: PVC Super..."/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Etapas">
+                                <field name="stage_ids">
+                                    <list editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_capp_department_list" model="ir.ui.view">
+            <field name="name">capp.department.list</field>
+            <field name="model">capp.department</field>
+            <field name="arch" type="xml">
+                <list string="Departamentos">
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_capp_department" model="ir.actions.act_window">
+            <field name="name">Departamentos</field>
+            <field name="res_model">capp.department</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_capp_department"
+                  name="Departamentos"
+                  parent="capp.menu_capp_root"
+                  action="action_capp_department"
+                  sequence="30"/>
+    </data>
+</odoo>

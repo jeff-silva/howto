@@ -7,7 +7,8 @@
             <form string="Pedido de Crachá">
                 <header>
                     <button name="action_confirm" string="Confirmar Pedido" type="object" class="oe_highlight" invisible="state != 'draft'"/>
-                    <field name="state" widget="statusbar"/>
+                    <button name="action_produce" string="Enviar para Produção" type="object" class="oe_highlight" invisible="state != 'confirmed'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,production,done"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
@@ -53,8 +54,72 @@
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="template_id"/>
-                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'confirmed'"/>
+                <field name="stage_id" widget="badge" decoration-info="1" optional="show"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'confirmed'" decoration-primary="state == 'production'" decoration-success="state == 'done'" decoration-danger="state == 'cancelled'"/>
             </list>
+        </field>
+    </record>
+
+    <record id="view_capp_badge_order_search" model="ir.ui.view">
+        <field name="name">capp.badge.order.search</field>
+        <field name="model">capp.badge.order</field>
+        <field name="arch" type="xml">
+            <search string="Pesquisar Pedidos">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="department_id"/>
+                <group>
+                    <filter string="Etapa" name="group_by_stage" context="{'group_by':'stage_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_capp_badge_order_production_search" model="ir.ui.view">
+        <field name="name">capp.badge.order.production.search</field>
+        <field name="model">capp.badge.order</field>
+        <field name="inherit_id" ref="view_capp_badge_order_search"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <searchpanel>
+                    <field name="department_id" icon="fa-building" enable_counters="1" expand="1"/>
+                </searchpanel>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="capp_badge_order_card_view" model="ir.ui.view">
+        <field name="name">capp.badge.order.card</field>
+        <field name="model">capp.badge.order</field>
+        <field name="arch" type="xml">
+            <card>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="template_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex mb-1 align-items-center justify-content-between">
+                            <field name="name" class="fw-bolder fs-6 ms-1"/>
+                        </div>
+                        <div class="mt-2">
+                            <span><field name="partner_id"/></span>
+                        </div>
+                        <div>
+                            <small class="text-muted"><field name="template_id"/></small>
+                        </div>
+                    </t>
+                </templates>
+            </card>
+        </field>
+    </record>
+
+    <record id="view_capp_badge_order_kanban" model="ir.ui.view">
+        <field name="name">capp.badge.order.kanban</field>
+        <field name="model">capp.badge.order</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" card_id="%(capp_badge_order_card_view)d" default_group_by="stage_id" create="0">
+            </kanban>
         </field>
     </record>
 
@@ -62,7 +127,33 @@
         <field name="name">Pedidos</field>
         <field name="res_model">capp.badge.order</field>
         <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '!=', 'production')]</field>
+        <field name="search_view_id" ref="view_capp_badge_order_search"/>
     </record>
 
-    <menuitem id="menu_capp_badge_order" name="Pedidos" parent="menu_capp_root" action="action_capp_badge_order" sequence="20"/>
+    <record id="action_capp_production_window" model="ir.actions.act_window">
+        <field name="name">Produção</field>
+        <field name="res_model">capp.badge.order</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('state', '=', 'production')]</field>
+        <field name="context">{'default_state': 'production'}</field>
+        <field name="search_view_id" ref="view_capp_badge_order_production_search"/>
+    </record>
+
+    <record id="action_capp_production_server" model="ir.actions.server">
+        <field name="name">Produção</field>
+        <field name="model_id" ref="capp.model_capp_badge_order"/>
+        <field name="state">code</field>
+        <field name="code">
+action = env["ir.actions.act_window"]._for_xml_id("capp.action_capp_production_window")
+first_dep = env['capp.department'].search([], limit=1)
+ctx = {'default_state': 'production'}
+if first_dep:
+    ctx['searchpanel_default_department_id'] = first_dep.id
+action['context'] = ctx
+        </field>
+    </record>
+
+    <menuitem id="menu_capp_badge_order" name="Pedidos" parent="menu_capp_root" action="action_capp_badge_order" sequence="40"/>
+    <menuitem id="menu_capp_production" name="Produção" parent="menu_capp_root" action="action_capp_production_server" sequence="50"/>
 </odoo>

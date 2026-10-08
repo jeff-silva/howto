@@ -1,0 +1,4 @@
+/* Oculta o item "Tudo" (primeiro da lista) no Search Panel do Odoo */
+.o_search_panel_section.o_search_panel_category ul.list-group li.o_search_panel_category_value:first-child {
+    display: none !important;
+}

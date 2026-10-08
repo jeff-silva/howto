@@ -4,3 +4,5 @@ access_capp_badge_attribute,capp.badge.attribute,model_capp_badge_attribute,base
 access_capp_credit_ledger,capp.credit.ledger,model_capp_credit_ledger,base.group_user,permission,1,1,1,1
 access_capp_badge_order,capp.badge.order,model_capp_badge_order,base.group_user,permission,1,1,1,1
 access_capp_badge_value,capp.badge.value,model_capp_badge_value,base.group_user,permission,1,1,1,1
+access_capp_department,capp.department,model_capp_department,base.group_user,permission,1,1,1,1
+access_capp_stage,capp.stage,model_capp_stage,base.group_user,permission,1,1,1,1
