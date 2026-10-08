@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,kind,for_read,for_write,for_create,for_unlink
+access_capp_badge_template,capp.badge.template,model_capp_badge_template,base.group_user,permission,1,1,1,1
+access_capp_badge_attribute,capp.badge.attribute,model_capp_badge_attribute,base.group_user,permission,1,1,1,1
+access_capp_credit_ledger,capp.credit.ledger,model_capp_credit_ledger,base.group_user,permission,1,1,1,1
+access_capp_badge_order,capp.badge.order,model_capp_badge_order,base.group_user,permission,1,1,1,1
+access_capp_badge_value,capp.badge.value,model_capp_badge_value,base.group_user,permission,1,1,1,1

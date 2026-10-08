@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_inherit_capp" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.capp</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="CAPP: Configurações">
+                    <group>
+                        <group string="Financeiro">
+                            <field name="capp_billing_type" widget="radio" options="{'horizontal': true}"/>
+                            <field name="capp_credit_balance" readonly="1" decoration-danger="capp_credit_balance &lt; 0" decoration-success="capp_credit_balance &gt; 0"/>
+                        </group>
+                        <group string="Ajustar Saldo">
+                            <field name="capp_add_credit" placeholder="Ex: 50 ou -20..."/>
+                            <field name="capp_add_credit_desc" placeholder="Ajuste Manual de Saldo"/>
+                        </group>
+                    </group>
+                    <label for="capp_credit_ledger_ids" string="Histórico de Saldo"/>
+                    <field name="capp_credit_ledger_ids" readonly="1">
+                        <list default_order="create_date desc">
+                            <field name="create_date" string="Data"/>
+                            <field name="description"/>
+                            <field name="amount" sum="Total"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_tree_inherit_capp" model="ir.ui.view">
+        <field name="name">res.partner.tree.inherit.capp</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='display_name']" position="after">
+                <field name="capp_billing_type" column_invisible="1"/>
+                <field name="capp_billing_summary" widget="badge" decoration-info="capp_billing_type == 'pre'" decoration-warning="capp_billing_type == 'post'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="res_partner_kanban_inherit_capp" model="ir.ui.view">
+        <field name="name">res.partner.kanban.inherit.capp</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//main" position="inside">
+                <div t-if="record.capp_billing_summary.raw_value" class="mt-1">
+                    <field name="capp_billing_type" invisible="1"/>
+                    <field name="capp_billing_summary" widget="badge" decoration-info="capp_billing_type == 'pre'" decoration-warning="capp_billing_type == 'post'"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Ação e Menu de Clientes -->
+    <record id="action_capp_customers" model="ir.actions.act_window">
+        <field name="name">Clientes</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+
+    <menuitem id="menu_capp_customers" name="Clientes" parent="capp.menu_capp_root" action="action_capp_customers" sequence="5"/>
+</odoo>

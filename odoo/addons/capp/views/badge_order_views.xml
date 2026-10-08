@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_capp_badge_order_form" model="ir.ui.view">
+        <field name="name">capp.badge.order.form</field>
+        <field name="model">capp.badge.order</field>
+        <field name="arch" type="xml">
+            <form string="Pedido de Crachá">
+                <header>
+                    <button name="action_confirm" string="Confirmar Pedido" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_sale_order" type="object" class="oe_stat_button" icon="fa-usd" invisible="not sale_order_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Pedido Venda</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="template_id"/>
+                            <field name="quantity"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Preencher Dados" invisible="not template_id">
+                            <field name="value_ids">
+                                <list editable="bottom" create="0" delete="0">
+                                    <field name="attribute_id" column_invisible="1"/>
+                                    <field name="attribute_type" column_invisible="1"/>
+                                    <field name="attribute_name" readonly="1" force_save="1" decoration-bf="1"/>
+                                    <field name="value_text" readonly="attribute_type == 'file'"/>
+                                    <field name="value_file" readonly="attribute_type != 'file'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_capp_badge_order_list" model="ir.ui.view">
+        <field name="name">capp.badge.order.list</field>
+        <field name="model">capp.badge.order</field>
+        <field name="arch" type="xml">
+            <list string="Pedidos de Crachá">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="template_id"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'confirmed'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_capp_badge_order" model="ir.actions.act_window">
+        <field name="name">Pedidos</field>
+        <field name="res_model">capp.badge.order</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_capp_badge_order" name="Pedidos" parent="menu_capp_root" action="action_capp_badge_order" sequence="20"/>
+</odoo>
