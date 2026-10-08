@@ -16,6 +16,8 @@
     'assets': {
         'web.assets_backend': [
             'capp/static/src/css/style.css',
+            'capp/static/src/js/search_model_patch.js',
+            'capp/static/src/xml/search_bar_patch.xml',
         ],
     },
     'installable': True,

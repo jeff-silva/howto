@@ -1,0 +1,903 @@
+.o_menu_sections, .o_menu_systray {
+  gap: 4px;
+}
+
+/* ---------------------------------
+ * Odoo Community Dark Mode
+ * --------------------------------- */
+
+/* Fonte Global - Stack Moderna (Substitui Google Fonts para evitar bloqueios) */
+body, .o_web_client, .o_action_manager, .o_content, .o_view_controller, 
+h1, h2, h3, h4, h5, h6, input, button, select, textarea {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+/* Fundo Geral e Color Scheme */
+:root {
+    color-scheme: dark !important; /* Força o navegador a renderizar selects nativos no modo escuro */
+}
+.o_web_client, .o_action_manager, .o_content, .o_view_controller,
+.o_kanban_view, .o_kanban_renderer, .o_form_view, .o_form_sheet_bg, .o_form_sheet {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+
+/* Forçar Selects Nativos (como o de Produção) para Escuro */
+select, select option {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+}
+select:focus {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
+}
+
+/* Navbar (Menu Superior) */
+.o_main_navbar {
+    background-color: #1e1e1e !important;
+    border-bottom: 1px solid #333 !important;
+}
+
+/* Painel de Controle e Botões no Topo */
+.o_control_panel {
+    background-color: #1e1e1e !important;
+    border-bottom: 1px solid #333 !important;
+    color: #e0e0e0 !important;
+}
+
+.o_control_panel .btn {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+    border-color: #444 !important;
+}
+.o_control_panel .btn:hover {
+    background-color: #3d3d3d !important;
+}
+
+/* Botões Globais */
+.btn-primary {
+    background-color: #6f42c1 !important; /* Mantém o roxo original do Odoo */
+    color: #fff !important;
+    border-color: #6f42c1 !important;
+}
+.btn-secondary {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+    border-color: #444 !important;
+}
+.btn-secondary:hover {
+    background-color: #3d3d3d !important;
+}
+
+/* Barra de Busca */
+.o_searchview {
+    background-color: #2d2d2d !important;
+    border: 1px solid #444 !important;
+    color: #e0e0e0 !important;
+    border-radius: 6px !important;
+}
+.o_searchview * {
+    background-color: transparent !important;
+    color: #e0e0e0 !important;
+}
+.o_searchview .o_searchview_facet {
+    background-color: #1e1e1e !important;
+    border: 1px solid #444 !important;
+}
+.o_searchview > .btn, .o_searchview > .btn:hover {
+  background: transparent !important;
+}
+
+/* Dropdowns e Menus da busca - Premium Aesthetics */
+.dropdown-menu {
+    background-color: rgba(30, 30, 30, 0.75) !important;
+    backdrop-filter: blur(16px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #e0e0e0 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0,0,0,0.1) !important;
+    padding: 12px 0 !important; /* Ajustado para não causar overflow horizontal */
+    overflow-x: hidden !important; /* Remove barra de rolagem horizontal inútil */
+    width: 300px !important;
+}
+
+/* Scrollbar super elegante GLOBAL */
+::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+}
+::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 10px !important;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4) !important;
+}
+* {
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent !important;
+}
+
+/* Aumenta a largura dos menus principais (ex: Menu de Apps) */
+.o_main_navbar .dropdown-menu,
+header .dropdown-menu,
+.o_navbar_apps_menu .dropdown-menu {
+    min-width: 260px !important;
+}
+.dropdown-menu .dropdown-item {
+    color: #e0e0e0 !important;
+    border-radius: 6px !important;
+    margin: 2px 4px !important;
+    padding: 8px 12px !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+    background-color: rgba(111, 66, 193, 0.15) !important; /* Roxo sutil do Odoo */
+    color: #ffffff !important;
+    transform: translateX(4px);
+}
+.dropdown-menu .dropdown-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    margin: 8px 0 !important;
+}
+/* Títulos das colunas do mega-menu (Filtros, Agrupar Por, Favoritos) */
+.o_dropdown_title, .dropdown-menu .fs-5 {
+    color: #a0a0a0 !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem !important;
+    text-transform: uppercase;
+    margin-bottom: 12px !important;
+}
+.o_dropdown_title_icon {
+    color: #6f42c1 !important; /* Ícone com a cor de destaque do Odoo */
+    margin-right: 6px;
+}
+
+/* ---------------------------------
+ * KANBAN VIEW
+ * --------------------------------- */
+.o_kanban_view .o_kanban_record {
+    background-color: #1e1e1e !important;
+    // border: 1px solid #333 !important;
+    border: none !important;
+    color: #d0d0d0 !important;
+    border-radius: 8px !important;
+    // box-shadow: 0 4px 6px rgba(0,0,0,0.2) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.o_kanban_view .o_kanban_record:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4) !important;
+    border-color: #555 !important;
+}
+.o_kanban_view .o_kanban_record .o_kanban_record_title,
+.o_kanban_view .o_kanban_record strong {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+.o_kanban_view .o_kanban_record .text-muted,
+.o_kanban_view .o_kanban_record span {
+    color: #a0a0a0 !important;
+}
+
+/* ---------------------------------
+ * FORM VIEW (Edição de Registro)
+ * --------------------------------- */
+/* Textos e Labels */
+.o_form_view .o_form_label,
+.o_form_view label,
+.o_td_label,
+.o_form_view .o_field_widget,
+.text-dark, .text-muted {
+    color: #e0e0e0 !important;
+}
+
+/* Inputs de texto no form */
+.o_form_view input, 
+.o_form_view select, 
+.o_form_view textarea {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
+    border: 1px solid #444 !important;
+    border-radius: 4px !important;
+}
+
+/* Botões no topo direito do Form (Vendas, Faturado, Eventos) */
+.o_form_view .oe_button_box .oe_stat_button,
+.o_form_view .o_stat_info {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    border-color: #333 !important;
+}
+.o_form_view .oe_button_box .oe_stat_button:hover {
+    background-color: #2a2a2a !important;
+}
+
+/* Abas (Notebooks - Contatos, Vendas e Compras, etc) */
+.nav-tabs, 
+.o_notebook .nav-tabs {
+    background-color: #1e1e1e !important;
+    border-bottom: 1px solid #333 !important;
+}
+.nav-tabs .nav-link {
+    background-color: #1e1e1e !important;
+    color: #a0a0a0 !important;
+    border-color: transparent !important;
+}
+.nav-tabs .nav-link.active {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+    border-color: #333 !important;
+    border-bottom-color: #2d2d2d !important;
+}
+.tab-content, .o_notebook .tab-pane {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+
+/* ---------------------------------
+ * LIST VIEW (Tabelas)
+ * --------------------------------- */
+.o_list_view .table-responsive .table,
+.table {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+.table thead th {
+    background-color: #1e1e1e !important;
+    border-bottom: 1px solid #333 !important;
+    border-top: none !important;
+    color: #e0e0e0 !important;
+    background-image: none !important;
+}
+.table tbody tr {
+    background-color: #121212 !important;
+    border-bottom: 1px solid #333 !important;
+    color: #e0e0e0 !important;
+}
+.table tbody tr:nth-of-type(odd) {
+    background-color: #1a1a1a !important; 
+}
+.table tbody tr:hover {
+    background-color: #2a2a2a !important;
+}
+.table td, .table th {
+    background-color: transparent !important; 
+    border-top: 1px solid #333 !important;
+}
+
+.fa, .fas, .far, .fal, .fab { color: inherit; }
+
+/* ---------------------------------
+ * CHATTER (Área de Mensagens e Log)
+ * --------------------------------- */
+.o_chatter, 
+.o_chatter_topbar, 
+.o_MessageList,
+.o_MessageList_empty {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+
+/* Fundo de cada mensagem individual */
+.o_chatter .o_Message {
+    background-color: #1e1e1e !important;
+    border: 1px solid #333 !important;
+    border-radius: 8px !important;
+    margin-bottom: 8px !important;
+    color: #d0d0d0 !important;
+}
+
+/* Caixa de digitação de nova mensagem */
+.o_chatter .o_Composer,
+.o_chatter .o_Composer_core {
+    background-color: #1e1e1e !important;
+    border: 1px solid #444 !important;
+    border-radius: 8px !important;
+}
+
+.o_chatter .o_Composer_textInput,
+.o_chatter textarea {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+    border: none !important;
+}
+
+/* ---------------------------------
+ * CORREÇÕES DE PONTOS BRANCOS (Breadcrumbs e Dropdowns)
+ * --------------------------------- */
+/* Botões brancos ou dropdowns de ação (como os 3 pontinhos) */
+.o_control_panel .btn-light,
+.o_control_panel .btn-outline-secondary,
+.o_control_panel .bg-white,
+.o_control_panel .o_cp_action_menus .dropdown-toggle {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    border-color: #333 !important;
+}
+
+/* Título e Breadcrumb que ficaram com fundo branco */
+.o_control_panel .breadcrumb,
+.o_control_panel .breadcrumb-item,
+.o_control_panel .breadcrumb-item.active,
+.o_control_panel input.o_field_char {
+    background-color: transparent !important;
+    color: #ffffff !important;
+}
+
+/* Nuke global em classes de fundo branco do Bootstrap para evitar surpresas */
+.bg-white, .bg-light {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+}
+
+/* ---------------------------------
+ * SCROLLBAR
+ * --------------------------------- */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+::-webkit-scrollbar-track {
+    background: #121212 !important;
+}
+::-webkit-scrollbar-thumb {
+    background: #333 !important;
+    border-radius: 6px;
+    border: 3px solid #121212; /* Dá um efeito de padding */
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #555 !important;
+}
+
+/* ---------------------------------
+ * CHATTER (OWL - Versões mais recentes do Odoo)
+ * --------------------------------- */
+.o-mail-Chatter, 
+.o-mail-Thread, 
+.o-mail-Composer,
+.o-mail-MessageCore,
+.o-mail-Thread-empty,
+.o_ChatterContainer {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+
+.o-mail-Message {
+    background-color: #1e1e1e !important;
+    border: 1px solid #333 !important;
+    border-radius: 8px !important;
+    margin: 8px !important;
+    padding: 8px !important;
+    color: #d0d0d0 !important;
+}
+
+.o-mail-Composer {
+    background-color: #1e1e1e !important;
+    border: 1px solid #444 !important;
+    border-radius: 8px !important;
+    padding: 8px !important;
+}
+
+.o-mail-Composer-input,
+.o-mail-ComposerTextInput textarea {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+    border: none !important;
+}
+
+/* Garante o fundo preto no body/html se o layout estiver quebrado */
+html, body {
+    background-color: #121212 !important;
+}
+
+/* Força o botão dos três pontinhos no título a ser escuro */
+.o_control_panel .o_cp_action_menus button,
+.o_control_panel .o_cp_action_menus .dropdown-toggle {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    border-color: #333 !important;
+}
+
+/* ---------------------------------
+ * CORREÇÃO FINA DO CHATTER (Topbar e Balões)
+ * --------------------------------- */
+/* A barra grossa onde ficam os botões "Enviar Mensagem" */
+.o-mail-Chatter-top,
+.o-mail-Chatter-topbar,
+.o-mail-ChatterTopbar,
+.o_chatter_topbar,
+.o-mail-Chatter-header {
+    background-color: #121212 !important;
+}
+
+.o-mail-Chatter-topbar,
+.o-mail-ChatterTopbar,
+.o_chatter_topbar,
+.o-mail-Chatter-header {
+    border-bottom: 1px solid #333 !important;
+}
+
+/* Força transparência em divs internas do Odoo que usam classes de background utilitárias */
+.o-mail-Chatter .bg-view, 
+.o-mail-Chatter .bg-100, 
+.o-mail-Chatter .bg-200,
+.o-mail-Chatter .bg-white,
+.o-mail-Chatter .bg-light {
+    background-color: transparent !important;
+}
+
+/* Mensagem principal (container invisível) */
+.o-mail-Message {
+    background-color: transparent !important;
+    border: none !important;
+    margin-bottom: 8px !important;
+    padding: 4px 8px !important;
+}
+
+/* Odoo Owl usa essas classes utilitárias para o fundo do balão. Vamos apenas escurecê-las! */
+.o-mail-Message .bg-view, 
+.o-mail-Message .bg-100, 
+.o-mail-Message .bg-200,
+.o-mail-Message .bg-white,
+.o-mail-Message .bg-light,
+.o-mail-Message-bubble,
+.o-mail-MessageBody,
+.o-mail-Message-body {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #e0e0e0 !important;
+}
+
+/* Ajusta o triângulo do balão (se existir) para bater com a nova cor */
+.o-mail-Message-bubble::before,
+.o-mail-Message-bubble::after {
+    border-right-color: #1e1e1e !important;
+    border-left-color: #1e1e1e !important;
+}
+
+/* Textos dentro da área de mensagens para garantir leitura */
+.o-mail-Message p, 
+.o-mail-Message span, 
+.o-mail-Message div {
+    color: #d0d0d0 !important;
+}
+
+/* ---------------------------------
+ * MODAIS (DIALOGS E POPUPS)
+ * --------------------------------- */
+.modal-content {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #444 !important;
+    border-radius: 8px !important;
+}
+
+.modal-header {
+    border-bottom: 1px solid #333 !important;
+}
+
+/* Título do Modal que estava preto */
+.modal-header .modal-title,
+.modal-header h4,
+.modal-header h5 {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+.modal-footer {
+    border-top: 1px solid #333 !important;
+    background-color: #121212 !important;
+    border-bottom-left-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+}
+
+/* Odoo close icon (o X do canto superior direito) */
+.modal-header .btn-close,
+.modal-header .close {
+    color: #ffffff !important;
+    opacity: 0.8 !important;
+    /* Odoo às vezes usa SVGs como background para o X. Isso inverte a cor para branco: */
+    filter: invert(1) grayscale(100%) brightness(200%) !important; 
+}
+
+.modal-header .btn-close:hover,
+.modal-header .close:hover {
+    opacity: 1 !important;
+}
+
+/* ---------------------------------
+ * ÚLTIMOS VAZAMENTOS BRANCOS (Containers e Rodapé)
+ * --------------------------------- */
+/* Nuke total em qualquer fundo que possa vazar no rodapé ou nas laterais */
+.o-mail-Form-chatter,
+.o-mail-ChatterContainer,
+.o-mail-ThreadContainer,
+.o-mail-ComposerContainer,
+.o_action,
+.o_main,
+.o_form_view_container {
+    background-color: #121212 !important;
+}
+
+/* O espaço do lado do botão "Enviar Mensagem" e área inferior */
+.o-mail-Chatter-topbar {
+    background-color: #121212 !important;
+}
+.o-mail-Chatter-topbar * {
+    background-color: transparent !important;
+}
+
+/* Garante que a caixa de texto invisível no rodapé também seja escura */
+.o-mail-Composer {
+    background-color: #1e1e1e !important;
+    border: none !important;
+}
+.o-mail-Composer * {
+    background-color: transparent !important;
+}
+.o-mail-Composer-input {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+}
+
+/* ---------------------------------
+ * BOTÃO DE TRÊS PONTOS (Action Menu Odoo 16/17)
+ * --------------------------------- */
+/* Odoo usa tags sem a classe '.btn' para esses botões em versões novas */
+.o_control_panel .dropdown-toggle,
+.o_control_panel .o-dropdown,
+.o_control_panel .o-dropdown--no-caret,
+.o_control_panel button.o-dropdown,
+.o_control_panel button.dropdown-toggle,
+.o_control_panel .o_dropdown_button,
+.o_control_panel .o_cp_action_menus > div,
+.o_control_panel .o_cp_action_menus button {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    border-color: #333 !important;
+}
+
+/* ---------------------------------
+ * CORREÇÕES DO BOTÃO BOX (Vendas, Faturado) E DROPDOWNS
+ * --------------------------------- */
+/* Remove o fundo cinza da "barra" inteira do oe_button_box que ficava sobrando à direita */
+.o_form_view .oe_button_box {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* O botão "Mais" e o bloco vazio que o Odoo renderiza na caixa de botões */
+.o_form_view .oe_button_box .btn,
+.o_form_view .oe_button_box .oe_stat_button,
+.o_form_view .oe_button_box > div {
+    background-color: transparent !important;
+    border-color: #333 !important;
+}
+
+/* Fix para a leitura do dropdown "Mais" (Número de série, Site, etc) */
+.dropdown-menu .dropdown-item,
+.dropdown-menu .dropdown-item span,
+.dropdown-menu .dropdown-item div,
+.dropdown-menu .dropdown-item a {
+    color: #e0e0e0 !important;
+}
+
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus,
+.dropdown-menu .dropdown-item:hover *,
+.dropdown-menu .dropdown-item:focus * {
+    color: #ffffff !important;
+    background-color: #3d3d3d !important;
+}
+
+/* ---------------------------------
+ * EXTERMÍNIO FINAL DE BARRAS BRANCAS
+ * --------------------------------- */
+/* Barra branca grossa entre o formulário e o Chatter */
+.o_form_view,
+.o_form_sheet_bg,
+.o_form_sheet {
+    border: none !important;
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+}
+
+/* Coluna/Borda branca à esquerda dos botões do Chatter */
+.o-mail-Chatter,
+.o-mail-Chatter-sidebar,
+.o-mail-Chatter-content,
+.o-mail-Form-chatter {
+    background-color: #121212 !important;
+    border: none !important;
+    border-left: none !important;
+    box-shadow: none !important;
+}
+
+/* Mata de vez qualquer classe bg-white ou bg-view que o Odoo teime em colocar */
+.o-mail-Chatter .bg-white,
+.o-mail-Chatter .bg-view,
+.o-mail-Chatter .bg-100 {
+    background-color: #121212 !important;
+}
+
+/* ---------------------------------
+ * SUAVIZAÇÃO DE BORDAS E BOTÃO DO TÍTULO
+ * --------------------------------- */
+/* A borda branca super pesada ao redor de todo o formulário (Form Sheet) */
+.o_form_view .o_form_sheet,
+.o_form_sheet_bg > .o_form_sheet {
+    border: 1px solid #2d2d2d !important; /* Borda bem suave e escura */
+    border-radius: 8px !important; /* Arredondado para dar cara de painel moderno */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
+/* O bendito botão de 3 pontinhos que fica ao lado do nome da empresa no topo do form */
+.o_form_view .oe_title .btn,
+.o_form_view .oe_title .dropdown-toggle,
+.o_form_view .oe_title .bg-white,
+.o_form_view .oe_title .btn-light,
+.o_form_view .oe_title .o-dropdown,
+.o_form_view .oe_title > div {
+    background-color: transparent !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #333 !important;
+}
+
+.o_form_view .oe_title .btn:hover,
+.o_form_view .oe_title .dropdown-toggle:hover {
+    background-color: #2a2a2a !important;
+}
+
+/* ---------------------------------
+ * TELA DE PRODUÇÃO E SEARCH PANEL
+ * --------------------------------- */
+/* Botão branco genérico no título do control panel */
+.o_control_panel .breadcrumb .btn,
+.o_control_panel .breadcrumb > div,
+.o_control_panel h1 .btn {
+    background-color: transparent !important;
+    border: 1px solid #333 !important;
+    color: #e0e0e0 !important;
+}
+
+/* Painel Lateral de Pesquisa (Search Panel) */
+.o_search_panel {
+    background-color: #121212 !important;
+    border-right: 1px solid #333 !important;
+    color: #e0e0e0 !important;
+}
+.o_search_panel .list-group-item {
+    background-color: transparent !important;
+    color: #a0a0a0 !important;
+    border: none !important;
+}
+.o_search_panel .list-group-item.active,
+.o_search_panel .list-group-item:focus,
+.o_search_panel .list-group-item:hover {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+    border-radius: 6px !important;
+}
+
+/* Kanban Agrupado (Colunas) e Tela Vazia (No Content) */
+.o_kanban_group > * {
+  margin-bottom: 8px !important;
+  border-radius: 2px !important;
+}
+
+.o_kanban_view.o_kanban_grouped,
+.o_kanban_group,
+.o_kanban_renderer {
+    background-color: #121212 !important;
+}
+
+.o_kanban_group .o_kanban_header {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid #333 !important;
+}
+
+/* Tela "Nenhum dado para exibir" */
+.o_view_nocontent {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+.o_view_nocontent .o_nocontent_help,
+.o_view_nocontent .o_view_nocontent_empty_folder {
+    color: #a0a0a0 !important;
+}
+.o_kanban_view .bg-white,
+.o_kanban_view .bg-view,
+.o_kanban_view .bg-100 {
+    background-color: #121212 !important;
+}
+
+.o_form_statusbar {
+  background: transparent !important;
+}
+
+.o_statusbar_status {
+  border: 1px solid #ffffff44 !important;
+  background: transparent !important;
+}
+
+.o_kanban_record div {
+  color: #ffffff !important;
+}
+
+/* ---------------------------------
+ * KANBAN DRAG & DROP (Arraste de cards)
+ * --------------------------------- */
+:root, body, .o_kanban_view, .o_kanban_renderer {
+    /* Força variáveis na raiz e na view */
+    --KanbanColumn__highlight-background: #1a1a1a !important;
+    --KanbanColumn__highlight-border: #333333 !important;
+    --KanbanColumn__highlight-selected: #1e1e1e !important;
+    --KanbanColumn__highlight-selected-border: #555555 !important;
+    --Kanban-drop-area-bg: #1a1a1a !important;
+}
+
+/* Nuke total na classe da coluna hoverada! (Ignora a variável e fixa na marra) */
+html body .o_kanban_view .o_kanban_group.o_kanban_hover,
+html body .o_kanban_view .o_kanban_group.o_drop_area,
+html body .o_kanban_view .o_kanban_group.ui-state-hover,
+html body .o_kanban_view .o_kanban_group.ui-state-active {
+    background-color: #1a1a1a !important;
+    background: #1a1a1a !important;
+    box-shadow: none !important;
+}
+
+/* Espaço vazio (fantasma/placeholder) que o card vai ocupar ao soltar */
+.o_kanban_record.o_kanban_ghost,
+.o_kanban_record.o_kanban_dragged,
+.o_kanban_record.ui-sortable-placeholder {
+    background-color: #2d2d2d !important;
+    border: 1px dashed #555 !important;
+    opacity: 0.6 !important;
+}
+
+/* ---------------------------------
+ * GAVETA MOBILE (Burger Menu / Offcanvas)
+ * --------------------------------- */
+.o_burger_menu,
+.offcanvas,
+.o-webclient-burger-menu,
+.o_app_menu_sidebar,
+.o_app_menu_sidebar .o_burger_menu_content,
+.o_app_menu_sidebar nav,
+.o_app_menu_sidebar ul {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+}
+
+/* Topo da gaveta */
+.o_burger_menu .o_burger_menu_topbar,
+.o_app_menu_sidebar .o_sidebar_topbar,
+.offcanvas-header {
+    background-color: #121212 !important;
+    border-bottom: 1px solid #333 !important;
+}
+
+/* Itens da lista do menu */
+.o_burger_menu .o_burger_menu_content .o_burger_menu_section,
+.o_burger_menu .list-group-item,
+.o_burger_menu .nav-link,
+.o_app_menu_sidebar a:not(.btn),
+.o_app_menu_sidebar .nav-link,
+.o_app_menu_sidebar .dropdown-item,
+.offcanvas .list-group-item,
+.offcanvas .nav-link,
+.offcanvas .dropdown-item,
+.o-webclient-burger-menu .nav-link {
+    background-color: transparent !important;
+    color: #e0e0e0 !important;
+    border-color: #333 !important;
+    cursor: pointer !important;
+}
+
+/* Foco e Hover nos itens */
+.o_burger_menu .list-group-item:hover,
+.o_burger_menu .nav-link:hover,
+.o_app_menu_sidebar a:not(.btn):hover,
+.o_app_menu_sidebar .nav-link:hover,
+.o_app_menu_sidebar .dropdown-item:hover,
+.offcanvas .list-group-item:hover,
+.offcanvas .nav-link:hover,
+.offcanvas .dropdown-item:hover {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+}
+
+/* Botão Fechar (X preto) para branco */
+.o_burger_menu .o_burger_menu_close,
+.o_app_menu_sidebar .o_sidebar_close,
+.o_app_menu_sidebar .o_sidebar_close::before,
+.offcanvas-header .btn-close {
+    color: #ffffff !important;
+    opacity: 0.8 !important;
+}
+
+.o_column_title {
+  padding-left: 14px !important;
+}
+
+ul.o_search_panel_field li {
+  color: #ffffff !important;
+}
+
+ul.o_search_panel_field li * {
+  color: inherit !important;
+}
+
+/* ---------------------------------
+ * REFINAMENTO DE CORES (Fontes Muito Escuras)
+ * --------------------------------- */
+/* Títulos dos cards no Kanban */
+.o_kanban_record .o_kanban_record_title,
+.o_kanban_record .o_kanban_record_title span,
+.o_kanban_record strong,
+.o_kanban_record h1, .o_kanban_record h2, .o_kanban_record h3, .o_kanban_record h4,
+.o_kanban_record span.fw-bold,
+.o_kanban_record .fw-bold {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+/* Cabeçalhos das Colunas do Kanban ("Produção (0)", "Impressão (2)") */
+.o_kanban_group .o_kanban_header,
+.o_kanban_group .o_kanban_header_title,
+.o_kanban_group .o_kanban_header_title .o_column_title,
+.o_kanban_group .o_kanban_header_title span {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+/* Opções desativadas no Menu Lateral (Search Panel) */
+.o_search_panel .list-group-item,
+.o_search_panel .list-group-item span,
+.o_search_panel .o_search_panel_label_title {
+    color: #d0d0d0 !important; /* Estava puxando preto ou cinza escuro demais */
+}
+
+/* O último botão de três pontos que faltava (No topo do Kanban) */
+.o_control_panel h1 .dropdown-toggle,
+.o_control_panel h1 .o-dropdown,
+.o_control_panel .breadcrumb .dropdown-toggle,
+.o_control_panel h1 > div > button,
+.o_control_panel .breadcrumb > div > button {
+    background-color: transparent !important;
+    border-color: #333 !important;
+    color: #e0e0e0 !important;
+}
+
+.btn.btn-light, .btn.btn-light::before {
+  background: transparent !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+}
+
+/* ---------------------------------
+ * CORREÇÃO DE TÍTULO ESCURO (Ex: Mapa de Contatos)
+ * --------------------------------- */
+.o_control_panel h1,
+.o_control_panel h2,
+.o_control_panel h3,
+.o_control_panel h4,
+.o_control_panel h5,
+.o_control_panel h6,
+.o_control_panel .o_breadcrumb,
+.o_control_panel .o_breadcrumb .active,
+.o_control_panel .o_breadcrumb li,
+.o_control_panel .o_last_breadcrumb_item,
+.o_control_panel .o_dropdown_title,
+.o_control_panel span.fw-bold {
+    color: #ffffff !important;
+}

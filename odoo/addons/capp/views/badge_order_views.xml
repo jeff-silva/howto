@@ -68,6 +68,7 @@
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="department_id"/>
+                <separator/>
                 <group>
                     <filter string="Etapa" name="group_by_stage" context="{'group_by':'stage_id'}"/>
                 </group>
@@ -82,9 +83,7 @@
         <field name="mode">primary</field>
         <field name="arch" type="xml">
             <xpath expr="//search" position="inside">
-                <searchpanel>
-                    <field name="department_id" icon="fa-building" enable_counters="1" expand="1"/>
-                </searchpanel>
+                <!-- Searchpanel removido para usar os filtros normais -->
             </xpath>
         </field>
     </record>
@@ -136,7 +135,7 @@
         <field name="res_model">capp.badge.order</field>
         <field name="view_mode">kanban,list,form</field>
         <field name="domain">[('state', '=', 'production')]</field>
-        <field name="context">{'default_state': 'production'}</field>
+        <field name="context">{'default_state': 'production', 'capp_production_view': True}</field>
         <field name="search_view_id" ref="view_capp_badge_order_production_search"/>
     </record>
 
@@ -146,10 +145,7 @@
         <field name="state">code</field>
         <field name="code">
 action = env["ir.actions.act_window"]._for_xml_id("capp.action_capp_production_window")
-first_dep = env['capp.department'].search([], limit=1)
-ctx = {'default_state': 'production'}
-if first_dep:
-    ctx['searchpanel_default_department_id'] = first_dep.id
+ctx = {'default_state': 'production', 'capp_production_view': True}
 action['context'] = ctx
         </field>
     </record>
