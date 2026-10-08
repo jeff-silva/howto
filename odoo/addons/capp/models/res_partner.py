@@ -23,11 +23,11 @@ class ResPartner(models.Model):
     @api.depends('capp_billing_type', 'capp_credit_balance')
     def _compute_capp_billing_summary(self):
         for rec in self:
-            if rec.capp_billing_type:
+            if rec.capp_billing_type and rec.capp_credit_balance != 0:
                 prefix = 'Pré' if rec.capp_billing_type == 'pre' else 'Pós'
                 rec.capp_billing_summary = f"{prefix}: {rec.capp_credit_balance}"
             else:
-                rec.capp_billing_summary = ''
+                rec.capp_billing_summary = False
 
     def write(self, vals):
         credits_to_add = vals.pop('capp_add_credit', 0)

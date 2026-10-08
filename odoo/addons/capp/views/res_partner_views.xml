@@ -37,7 +37,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='display_name']" position="after">
                 <field name="capp_billing_type" column_invisible="1"/>
-                <field name="capp_billing_summary" invisible="not capp_billing_type" widget="badge" decoration-info="capp_billing_type == 'pre'" decoration-warning="capp_billing_type == 'post'"/>
+                <field name="capp_billing_summary" invisible="not capp_billing_summary" widget="badge" decoration-info="capp_billing_type == 'pre'" decoration-warning="capp_billing_type == 'post'"/>
             </xpath>
         </field>
     </record>
