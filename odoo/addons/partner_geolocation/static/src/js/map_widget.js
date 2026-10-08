@@ -1,7 +1,7 @@
 /** @odoo-module **/
 
 import { registry } from "@web/core/registry";
-import { Component, onMounted, onWillUnmount, useProps, proxy } from "@odoo/owl";
+import { Component, onMounted, onWillUnmount, onWillUpdateProps, useProps, proxy } from "@odoo/owl";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 
 export class LeafletMapField extends Component {
@@ -41,6 +41,30 @@ export class LeafletMapField extends Component {
             if (this.map) {
                 this.map.remove();
                 this.map = null;
+            }
+        });
+
+        onWillUpdateProps((nextProps) => {
+            // Se o ID do registro mudou (ex: usuário clicou na seta de próximo/anterior)
+            if (this.props.record.resId !== nextProps.record.resId) {
+                if (this.map && this.marker) {
+                    let lat = nextProps.record.data.pg_latitude;
+                    let lng = nextProps.record.data.pg_longitude;
+                    const hasCoords = !!(lat && lng);
+
+                    if (!hasCoords) {
+                        lat = -23.5505;
+                        lng = -46.6333;
+                    }
+
+                    this.map.setView([lat, lng], hasCoords ? 15 : 13);
+                    this.marker.setLatLng([lat, lng]);
+
+                    if (!hasCoords && !nextProps.readonly) {
+                        // Aguarda 1 frame para this.props.record estar atualizado e busca
+                        setTimeout(() => this.geocodeAddressAndSetMap(), 0);
+                    }
+                }
             }
         });
     }
