@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "docker compose up -d --build --force-recreate --remove-orphans",
+    "dev": "ODOO_EXTRA_ARGS=\"--dev=xml,reload\" docker compose up -d --build --force-recreate --remove-orphans",
+    "start": "ODOO_EXTRA_ARGS=\"\" docker compose up -d --build --force-recreate --remove-orphans",
     "stop": "docker compose stop"
   },
   "keywords": [],

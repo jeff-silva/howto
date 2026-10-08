@@ -1,0 +1,12 @@
+.o_leaflet_map_container {
+    height: 100%;
+    width: 100%;
+    min-height: 400px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.leaflet-control-container {
+    z-index: 10;
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="partner_geolocation.LeafletMapField" owl="1">
+        <div style="position: relative; width: 100%; height: 450px;">
+            <!-- Search bar -->
+            <div style="position: absolute; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999; width: 90%; max-width: 500px;">
+                <div class="input-group shadow" style="background: white; border-radius: 5px; overflow: hidden;">
+                    <span class="input-group-text bg-white border-0"><i class="fa fa-search"></i></span>
+                    <input type="text" class="form-control border-0" placeholder="Buscar endereço no mapa..." t-on-input="this.onSearchInput" t-att-value="this.state.searchQuery" style="box-shadow: none;" />
+                </div>
+                <!-- Dropdown results -->
+                <ul class="list-group position-absolute w-100 shadow-sm mt-1" t-if="this.state.searchResults.length > 0" style="max-height: 200px; overflow-y: auto;">
+                    <t t-foreach="this.state.searchResults" t-as="result" t-key="result.place_id">
+                        <li class="list-group-item list-group-item-action" style="cursor: pointer;" t-on-click="() => this.selectSearchResult(result)">
+                            <t t-esc="result.display_name"/>
+                        </li>
+                    </t>
+                </ul>
+            </div>
+            
+            <div t-att-id="this.mapId" class="o_leaflet_map_container" style="width: 100%; height: 450px; min-height: 400px; display: block; z-index: 1;"></div>
+        </div>
+    </t>
+</templates>

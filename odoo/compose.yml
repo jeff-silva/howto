@@ -3,7 +3,7 @@ services:
     image: odoo:latest
     depends_on: [odoo-db]
     ports: [8069:8069]
-    command: ["odoo", "--http-interface=0.0.0.0"]
+    command: odoo --http-interface=0.0.0.0 ${ODOO_EXTRA_ARGS:-}
     environment:
       - PGHOST=odoo-db
       - USER=odoo

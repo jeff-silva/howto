@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_inherit_geolocation" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.geolocation</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Mapa">
+                    <group invisible="1">
+                        <group>
+                            <field name="pg_latitude" string="Latitude"/>
+                            <field name="pg_longitude" string="Longitude"/>
+                        </group>
+                    </group>
+                    <div class="o_partner_geolocation_map_container" style="height: 400px; width: 100%; margin-top: 10px;">
+                        <!-- Using a custom widget on a dummy field or one of the coordinate fields to render the map -->
+                        <field name="pg_latitude" widget="leaflet_map" nolabel="1" class="w-100 d-block"/>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

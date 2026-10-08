@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="partner_geolocation.GlobalMap" owl="1">
+        <div class="o_action o_partner_global_map w-100 h-100 d-flex flex-column" style="background-color: #fff;">
+            <!-- Header for aesthetics -->
+            <div class="o_control_panel d-flex justify-content-between align-items-center p-3 border-bottom">
+                <h2 class="mb-0">Localização de Contatos</h2>
+                <button class="btn btn-primary" t-on-click="loadPartners">
+                    <i class="fa fa-refresh me-2"></i>Atualizar Mapa
+                </button>
+            </div>
+            
+            <!-- Map Container -->
+            <div t-att-id="this.mapId" class="flex-grow-1 w-100" style="min-height: 600px; z-index: 1;"></div>
+        </div>
+    </t>
+</templates>
