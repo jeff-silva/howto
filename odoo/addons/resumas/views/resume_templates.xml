@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="resume_html_template" model="ir.ui.view">
+        <field name="name">resume_html_template</field>
+        <field name="type">qweb</field>
+        <field name="arch" type="xml">
+            <t t-name="resumas.resume_html_template">
+                <html>
+                    
+                    <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+                        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&amp;display=swap" rel="stylesheet"/>
+                        <style>
+                            :root {
+                                --text-main: #111827;
+                                --text-light: #4b5563;
+                                --text-muted: #9ca3af;
+                                --accent: #1f2937;
+                                --border: #e5e7eb;
+                            }
+                            @page {
+                                size: A4;
+                                margin: 20mm 0; /* Margem padrão para páginas 2, 3, etc */
+                            }
+                            @page :first {
+                                margin-top: 0; /* A borda preta gruda no topo apenas na 1ª página */
+                            }
+                            * {
+                                font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+                            }
+                            body { 
+                                color: #111827; 
+                                line-height: 1.6; 
+                                margin: 0; 
+                                padding: 0; 
+                                background-color: #ffffff;
+                            }
+                            .resume-wrapper {
+                                width: 210mm;
+                                min-height: 297mm;
+                                margin: 0 auto;
+                                padding: 60px 70px;
+                                background: #ffffff;
+                                box-sizing: border-box;
+                                border-top: 8px solid #1f2937;
+                            }
+                            /* HEADER */
+                            .header {
+                                display: block;
+                                padding-bottom: 25px;
+                                margin-bottom: 30px;
+                                border-bottom: 1px solid #e5e7eb;
+                            }
+                            .name {
+                                font-size: 38px;
+                                font-weight: 700;
+                                color: #111827;
+                                margin: 0 0 4px 0;
+                                letter-spacing: -1px;
+                                text-transform: uppercase;
+                            }
+                            .label {
+                                font-size: 18px;
+                                font-weight: 400;
+                                color: #4b5563;
+                                margin: 0;
+                                text-transform: uppercase;
+                                letter-spacing: 2px;
+                            }
+                            .contact-info {
+                                margin-top: 20px;
+                                font-size: 14px;
+                                color: #4b5563;
+                            }
+                            .contact-item {
+                                margin-bottom: 4px;
+                            }
+                            .contact-item strong {
+                                color: #1f2937;
+                                font-weight: 600;
+                            }
+                            .contact-item a {
+                                color: #4b5563;
+                                text-decoration: none;
+                            }
+                            
+                            /* SECTION */
+                            .section {
+                                margin-bottom: 35px;
+                                clear: both;
+                            }
+                            .section-title {
+                                font-size: 16px;
+                                font-weight: 700;
+                                text-transform: uppercase;
+                                letter-spacing: 1.5px;
+                                color: #1f2937;
+                                border-bottom: 2px solid #1f2937;
+                                padding-bottom: 6px;
+                                margin-bottom: 20px;
+                                display: inline-block;
+                            }
+                            .section-title + * {
+                                page-break-before: avoid;
+                                break-before: avoid;
+                            }
+
+                            /* GRID for Work / Education */
+                            .item {
+                                margin-bottom: 22px;
+                                page-break-inside: avoid;
+                                break-inside: avoid;
+                            }
+                            .item-header {
+                                display: table;
+                                width: 100%;
+                                margin-bottom: 2px;
+                            }
+                            .item-title {
+                                display: table-cell;
+                                font-size: 16px;
+                                font-weight: 700;
+                                color: #111827;
+                            }
+                            .item-date {
+                                display: table-cell;
+                                text-align: right;
+                                font-size: 13px;
+                                font-weight: 500;
+                                color: #4b5563;
+                            }
+                            .item-subtitle {
+                                font-size: 15px;
+                                font-weight: 500;
+                                font-style: italic;
+                                color: #4b5563;
+                                margin-bottom: 6px;
+                            }
+                            .item-summary {
+                                font-size: 14px;
+                                color: #4b5563;
+                                margin-bottom: 8px;
+                                text-align: justify;
+                            }
+                            .highlights {
+                                margin: 0;
+                                padding-left: 18px;
+                                font-size: 14px;
+                                color: #4b5563;
+                            }
+                            .highlights li {
+                                margin-bottom: 3px;
+                            }
+
+                            /* SKILLS AND LANGUAGES */
+                            .skills-list {
+                                font-size: 14px;
+                                color: #111827;
+                                line-height: 1.8;
+                            }
+                            .skill-item {
+                                margin-bottom: 12px;
+                            }
+                            .skill-name {
+                                font-weight: 600;
+                                color: #1f2937;
+                            }
+                            
+                        </style>
+</head>
+<body>
+                        <main class="resume-wrapper">
+
+                        
+                    
+                            <t t-set="basics" t-value="data.get('basics', {})"/>
+                            
+                            <div class="header">
+                                <h1 class="name"><t t-out="basics.get('name') or 'NOME NÃO INFORMADO'"/></h1>
+                                <h2 class="label"><t t-out="basics.get('label')"/></h2>
+                                <div class="contact-info">
+                                    <t t-if="basics.get('email')">
+                                        <div class="contact-item"><strong>E-mail:</strong> <t t-out="basics.get('email')"/></div>
+                                    </t>
+                                    <t t-if="basics.get('phone')">
+                                        <div class="contact-item"><strong>Celular/Whatsapp:</strong> <t t-out="basics.get('phone')"/></div>
+                                    </t>
+                                    <t t-if="basics.get('url')">
+                                        <div class="contact-item"><strong>URL:</strong> <a t-att-href="basics.get('url')" target="_blank"><t t-out="basics.get('url')"/></a></div>
+                                    </t>
+                                    <t t-if="basics.get('location') and basics.get('location').get('city')">
+                                        <div class="contact-item"><strong>Localização:</strong> <t t-out="basics.get('location').get('city')"/>, <t t-out="basics.get('location').get('countryCode')"/></div>
+                                    </t>
+                                    <t t-foreach="basics.get('profiles', [])" t-as="profile">
+                                        <div class="contact-item" t-if="profile.get('network') and profile.get('url')">
+                                            <strong><t t-out="profile.get('network')"/>:</strong> <a t-att-href="profile.get('url')" target="_blank"><t t-out="profile.get('url')"/></a>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                            
+                            <div class="section" t-if="basics.get('summary')">
+                                <div class="section-title">Perfil Profissional</div>
+                                <div class="item-summary"><t t-out="basics.get('summary')"/></div>
+                            </div>
+
+                            <div class="section" t-if="data.get('work') and len(data.get('work')) &gt; 0 and data.get('work')[0].get('name')">
+                                <div class="section-title">Experiência Profissional</div>
+                                <t t-foreach="data.get('work')" t-as="work">
+                                    <div class="item" t-if="work.get('name')">
+                                        <div class="item-header">
+                                            <div class="item-title"><t t-out="work.get('name')"/></div>
+                                            <div class="item-date"><t t-out="work.get('startDate')"/> — <t t-out="work.get('endDate') or 'Atual'"/></div>
+                                        </div>
+                                        <div class="item-subtitle"><t t-out="work.get('position')"/></div>
+                                        <div class="item-summary"><t t-out="work.get('summary')"/></div>
+                                        <ul class="highlights" t-if="work.get('highlights')">
+                                            <t t-foreach="work.get('highlights')" t-as="h">
+                                                <li t-if="h"><t t-out="h"/></li>
+                                            </t>
+                                        </ul>
+                                    </div>
+                                </t>
+                            </div>
+                            
+                            <div class="section" t-if="data.get('education') and len(data.get('education')) &gt; 0 and data.get('education')[0].get('institution')">
+                                <div class="section-title">Educação</div>
+                                <t t-foreach="data.get('education')" t-as="edu">
+                                    <div class="item" t-if="edu.get('institution')">
+                                        <div class="item-header">
+                                            <div class="item-title"><t t-out="edu.get('institution')"/></div>
+                                            <div class="item-date"><t t-out="edu.get('startDate')"/> — <t t-out="edu.get('endDate') or 'Atual'"/></div>
+                                        </div>
+                                        <div class="item-subtitle"><t t-out="edu.get('studyType')"/> em <t t-out="edu.get('area')"/></div>
+                                        <t t-if="edu.get('score')"><div style="font-size: 13px; color: #4b5563; margin-top: 2px;">Nota/Score: <t t-out="edu.get('score')"/></div></t>
+                                        <ul class="highlights" t-if="edu.get('courses')" style="margin-top: 6px;">
+                                            <t t-foreach="edu.get('courses')" t-as="c">
+                                                <li t-if="c"><t t-out="c"/></li>
+                                            </t>
+                                        </ul>
+                                    </div>
+                                </t>
+                            </div>
+
+                            <div class="section" t-if="data.get('skills') and len(data.get('skills')) &gt; 0 and data.get('skills')[0].get('name')">
+                                <div class="section-title">Habilidades Técnicas</div>
+                                <div class="skills-list">
+                                    <t t-foreach="data.get('skills')" t-as="skill">
+                                        <div class="skill-item" t-if="skill.get('name')">
+                                            <span class="skill-name"><t t-out="skill.get('name')"/></span>
+                                            <t t-if="skill.get('level')"><span style="color: #9ca3af;"> — <t t-out="skill.get('level')"/></span></t>
+                                            <t t-if="skill.get('keywords')">
+                                                <br/>
+                                                <span style="font-size: 13px; color: #4b5563;">
+                                                    <t t-out="', '.join(skill.get('keywords'))"/>
+                                                </span>
+                                            </t>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <div class="section" t-if="data.get('languages') and len(data.get('languages')) &gt; 0 and data.get('languages')[0].get('language')">
+                                <div class="section-title">Idiomas</div>
+                                <div class="skills-list">
+                                    <t t-foreach="data.get('languages')" t-as="lang">
+                                        <div class="skill-item" t-if="lang.get('language')">
+                                            <span class="skill-name"><t t-out="lang.get('language')"/></span>
+                                            <span style="color: #4b5563;"> — <t t-out="lang.get('fluency')"/></span>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <div class="section" t-if="data.get('projects') and len(data.get('projects')) &gt; 0 and data.get('projects')[0].get('name')">
+                                <div class="section-title">Projetos Relevantes</div>
+                                <t t-foreach="data.get('projects')" t-as="proj">
+                                    <div class="item" t-if="proj.get('name')">
+                                        <div class="item-header">
+                                            <div class="item-title"><t t-out="proj.get('name')"/></div>
+                                            <div class="item-date"><t t-out="proj.get('startDate')"/> — <t t-out="proj.get('endDate') or 'Atual'"/></div>
+                                        </div>
+                                        <div class="item-summary"><t t-out="proj.get('description')"/></div>
+                                        <ul class="highlights" t-if="proj.get('highlights')">
+                                            <t t-foreach="proj.get('highlights')" t-as="h">
+                                                <li t-if="h"><t t-out="h"/></li>
+                                            </t>
+                                        </ul>
+                                    </div>
+                                </t>
+                            </div>
+                        </main>
+                    </body>
+                </html>
+            </t>
+        </field>
+    </record>
+</odoo>

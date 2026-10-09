@@ -1,6 +1,6 @@
 services:
   odoo-web:
-    image: odoo:latest
+    build: .
     depends_on: [odoo-db]
     ports: [8069:8069]
     command: odoo --http-interface=0.0.0.0 ${ODOO_EXTRA_ARGS:-}

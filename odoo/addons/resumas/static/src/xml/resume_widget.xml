@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="resumas.ResumeWidget">
+        <div class="resume-widget-container p-3" style="background: #f8f9fa; border-radius: 8px;">
+            
+            <!-- BASICS -->
+            <h3 class="mb-3 text-primary border-bottom pb-2 d-flex align-items-center">
+                <img src="https://api.iconify.design/mdi:account.svg?color=%230d6efd" width="28" height="28" class="me-2"/> Basics
+            </h3>
+            <div class="row mb-2">
+                <div class="col-4">
+                    <label class="fw-bold">Name</label>
+                    <input type="text" class="form-control" t-att-value="this.modelState.resume.basics.name" t-on-change="(ev) => { this.modelState.resume.basics.name = ev.target.value; this.updateJson(); }"/>
+                </div>
+                <div class="col-4">
+                    <label class="fw-bold">Label</label>
+                    <input type="text" class="form-control" t-att-value="this.modelState.resume.basics.label" t-on-change="(ev) => { this.modelState.resume.basics.label = ev.target.value; this.updateJson(); }"/>
+                </div>
+                <div class="col-4">
+                    <label class="fw-bold">Email</label>
+                    <input type="email" class="form-control" t-att-value="this.modelState.resume.basics.email" t-on-change="(ev) => { this.modelState.resume.basics.email = ev.target.value; this.updateJson(); }"/>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-4">
+                    <label class="fw-bold">Phone</label>
+                    <input type="text" class="form-control" t-att-value="this.modelState.resume.basics.phone" t-on-change="(ev) => { this.modelState.resume.basics.phone = ev.target.value; this.updateJson(); }"/>
+                </div>
+                <div class="col-4">
+                    <label class="fw-bold">URL</label>
+                    <input type="text" class="form-control" t-att-value="this.modelState.resume.basics.url" t-on-change="(ev) => { this.modelState.resume.basics.url = ev.target.value; this.updateJson(); }"/>
+                </div>
+                <div class="col-4">
+                    <label class="fw-bold">Image URL</label>
+                    <input type="text" class="form-control" t-att-value="this.modelState.resume.basics.image" t-on-change="(ev) => { this.modelState.resume.basics.image = ev.target.value; this.updateJson(); }"/>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label class="fw-bold">Summary</label>
+                    <textarea class="form-control" t-att-value="this.modelState.resume.basics.summary" t-on-change="(ev) => { this.modelState.resume.basics.summary = ev.target.value; this.updateJson(); }"></textarea>
+                </div>
+            </div>
+            
+            <h5 class="text-secondary mt-3">Location</h5>
+            <div class="row mb-3 bg-white p-2 border rounded">
+                <div class="col-4">
+                    <label>Address</label>
+                    <input type="text" class="form-control" t-att-value="this.modelState.resume.basics.location.address" t-on-change="(ev) => { this.modelState.resume.basics.location.address = ev.target.value; this.updateJson(); }"/>
+                </div>
+                <div class="col-2">
+                    <label>Postal Code</label>
+                    <input type="text" class="form-control" t-att-value="this.modelState.resume.basics.location.postalCode" t-on-change="(ev) => { this.modelState.resume.basics.location.postalCode = ev.target.value; this.updateJson(); }"/>
+                </div>
+                <div class="col-2">
+                    <label>City</label>
+                    <input type="text" class="form-control" t-att-value="this.modelState.resume.basics.location.city" t-on-change="(ev) => { this.modelState.resume.basics.location.city = ev.target.value; this.updateJson(); }"/>
+                </div>
+                <div class="col-2">
+                    <label>Region</label>
+                    <input type="text" class="form-control" t-att-value="this.modelState.resume.basics.location.region" t-on-change="(ev) => { this.modelState.resume.basics.location.region = ev.target.value; this.updateJson(); }"/>
+                </div>
+                <div class="col-2">
+                    <label>Country Code</label>
+                    <input type="text" class="form-control" t-att-value="this.modelState.resume.basics.location.countryCode" t-on-change="(ev) => { this.modelState.resume.basics.location.countryCode = ev.target.value; this.updateJson(); }"/>
+                </div>
+            </div>
+
+            <!-- PROFILES -->
+            <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+                <h4 class="m-0 text-secondary d-flex align-items-center">
+                    <img src="https://api.iconify.design/mdi:share-variant.svg?color=%236c757d" width="24" height="24" class="me-2"/> Profiles
+                </h4>
+                <button class="btn btn-sm btn-outline-primary d-flex align-items-center" t-on-click="() => this.addItem('profiles')">
+                    <img src="https://api.iconify.design/mdi:plus.svg?color=%230d6efd" width="18" height="18" class="me-1"/> Add Profile
+                </button>
+            </div>
+            <div t-ref="this.listRefs.profiles">
+                <div t-foreach="this.modelState.resume.basics.profiles" t-as="profile" t-key="profile_index" class="row mb-2 drag-item" t-att-data-index="profile_index">
+                    <div class="col-1 d-flex align-items-center justify-content-center drag-handle" style="cursor: grab;" title="Arraste para reordenar">
+                        <img src="https://api.iconify.design/mdi:drag.svg?color=%23adb5bd" width="24" height="24"/>
+                    </div>
+                    <div class="col-2"><input type="text" class="form-control" placeholder="Network (Twitter)" t-att-value="profile.network" t-on-change="(ev) => { profile.network = ev.target.value; this.updateJson(); }"/></div>
+                    <div class="col-2"><input type="text" class="form-control" placeholder="Username" t-att-value="profile.username" t-on-change="(ev) => { profile.username = ev.target.value; this.updateJson(); }"/></div>
+                    <div class="col-5"><input type="text" class="form-control" placeholder="URL" t-att-value="profile.url" t-on-change="(ev) => { profile.url = ev.target.value; this.updateJson(); }"/></div>
+                    <div class="col-2 d-flex">
+                        <button class="btn btn-secondary me-1 w-50 d-flex justify-content-center align-items-center" t-on-click="() => this.cloneItem('profiles', profile_index)" title="Clone">
+                            <img src="https://api.iconify.design/mdi:content-copy.svg?color=white" width="18" height="18"/>
+                        </button>
+                        <button class="btn btn-danger w-50 d-flex justify-content-center align-items-center" t-on-click="() => this.removeItem('profiles', profile_index)" title="Remove">
+                            <img src="https://api.iconify.design/mdi:trash-can-outline.svg?color=white" width="18" height="18"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WORK -->
+            <h3 class="mb-3 mt-5 text-primary border-bottom pb-2 d-flex align-items-center">
+                <img src="https://api.iconify.design/mdi:briefcase.svg?color=%230d6efd" width="28" height="28" class="me-2"/> Work Experience
+            </h3>
+            <button class="btn btn-primary mb-3 d-flex align-items-center" t-on-click="() => this.addItem('work')">
+                <img src="https://api.iconify.design/mdi:plus.svg?color=white" width="20" height="20" class="me-2"/> Add Work
+            </button>
+            <div t-ref="this.listRefs.work">
+                <div t-foreach="this.modelState.resume.work" t-as="work" t-key="work_index" class="border p-3 mb-3 bg-white rounded shadow-sm drag-item" t-att-data-index="work_index">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h5 class="m-0 text-secondary drag-handle d-flex align-items-center" style="cursor: grab;" title="Arraste para reordenar">
+                            <img src="https://api.iconify.design/mdi:drag.svg?color=%23adb5bd" width="24" height="24" class="me-2"/> Work #<t t-esc="work_index + 1"/>
+                        </h5>
+                        <div class="d-flex">
+                            <button class="btn btn-sm btn-secondary me-1 d-flex justify-content-center align-items-center" t-on-click="() => this.cloneItem('work', work_index)" title="Clone">
+                                <img src="https://api.iconify.design/mdi:content-copy.svg?color=white" width="16" height="16"/>
+                            </button>
+                            <button class="btn btn-sm btn-danger d-flex justify-content-center align-items-center" t-on-click="() => this.removeItem('work', work_index)" title="Remove">
+                                <img src="https://api.iconify.design/mdi:trash-can-outline.svg?color=white" width="16" height="16"/>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4"><label class="fw-bold">Company</label><input type="text" class="form-control" t-att-value="work.name" t-on-change="(ev) => { work.name = ev.target.value; this.updateJson(); }"/></div>
+                        <div class="col-4"><label class="fw-bold">Position</label><input type="text" class="form-control" t-att-value="work.position" t-on-change="(ev) => { work.position = ev.target.value; this.updateJson(); }"/></div>
+                        <div class="col-4"><label class="fw-bold">URL</label><input type="text" class="form-control" t-att-value="work.url" t-on-change="(ev) => { work.url = ev.target.value; this.updateJson(); }"/></div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-3"><label class="fw-bold">Start Date</label><input type="date" class="form-control" t-att-value="work.startDate" t-on-change="(ev) => { work.startDate = ev.target.value; this.updateJson(); }"/></div>
+                        <div class="col-3"><label class="fw-bold">End Date</label><input type="date" class="form-control" t-att-value="work.endDate" t-on-change="(ev) => { work.endDate = ev.target.value; this.updateJson(); }"/></div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-12"><label class="fw-bold">Summary</label><textarea class="form-control" t-att-value="work.summary" t-on-change="(ev) => { work.summary = ev.target.value; this.updateJson(); }"></textarea></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12"><label class="fw-bold">Highlights (1 per line)</label>
+                        <textarea class="form-control" t-att-value="this.getArrayAsString(work.highlights)" t-on-change="(ev) => { this.setArrayFromString(work, 'highlights', ev.target.value) }"></textarea></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EDUCATION -->
+            <h3 class="mb-3 mt-5 text-primary border-bottom pb-2 d-flex align-items-center">
+                <img src="https://api.iconify.design/mdi:school.svg?color=%230d6efd" width="28" height="28" class="me-2"/> Education
+            </h3>
+            <button class="btn btn-primary mb-3 d-flex align-items-center" t-on-click="() => this.addItem('education')">
+                <img src="https://api.iconify.design/mdi:plus.svg?color=white" width="20" height="20" class="me-2"/> Add Education
+            </button>
+            <div t-ref="this.listRefs.education">
+                <div t-foreach="this.modelState.resume.education" t-as="edu" t-key="edu_index" class="border p-3 mb-3 bg-white rounded shadow-sm drag-item" t-att-data-index="edu_index">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h5 class="m-0 text-secondary drag-handle d-flex align-items-center" style="cursor: grab;" title="Arraste para reordenar">
+                            <img src="https://api.iconify.design/mdi:drag.svg?color=%23adb5bd" width="24" height="24" class="me-2"/> Education #<t t-esc="edu_index + 1"/>
+                        </h5>
+                        <div class="d-flex">
+                            <button class="btn btn-sm btn-secondary me-1 d-flex justify-content-center align-items-center" t-on-click="() => this.cloneItem('education', edu_index)" title="Clone">
+                                <img src="https://api.iconify.design/mdi:content-copy.svg?color=white" width="16" height="16"/>
+                            </button>
+                            <button class="btn btn-sm btn-danger d-flex justify-content-center align-items-center" t-on-click="() => this.removeItem('education', edu_index)" title="Remove">
+                                <img src="https://api.iconify.design/mdi:trash-can-outline.svg?color=white" width="16" height="16"/>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4"><label class="fw-bold">Institution</label><input type="text" class="form-control" t-att-value="edu.institution" t-on-change="(ev) => { edu.institution = ev.target.value; this.updateJson(); }"/></div>
+                        <div class="col-4"><label class="fw-bold">Area</label><input type="text" class="form-control" t-att-value="edu.area" t-on-change="(ev) => { edu.area = ev.target.value; this.updateJson(); }"/></div>
+                        <div class="col-4"><label class="fw-bold">Study Type</label><input type="text" class="form-control" t-att-value="edu.studyType" t-on-change="(ev) => { edu.studyType = ev.target.value; this.updateJson(); }"/></div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-3"><label class="fw-bold">Start Date</label><input type="date" class="form-control" t-att-value="edu.startDate" t-on-change="(ev) => { edu.startDate = ev.target.value; this.updateJson(); }"/></div>
+                        <div class="col-3"><label class="fw-bold">End Date</label><input type="date" class="form-control" t-att-value="edu.endDate" t-on-change="(ev) => { edu.endDate = ev.target.value; this.updateJson(); }"/></div>
+                        <div class="col-2"><label class="fw-bold">Score</label><input type="text" class="form-control" t-att-value="edu.score" t-on-change="(ev) => { edu.score = ev.target.value; this.updateJson(); }"/></div>
+                        <div class="col-4"><label class="fw-bold">URL</label><input type="text" class="form-control" t-att-value="edu.url" t-on-change="(ev) => { edu.url = ev.target.value; this.updateJson(); }"/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12"><label class="fw-bold">Courses (1 per line)</label>
+                        <textarea class="form-control" t-att-value="this.getArrayAsString(edu.courses)" t-on-change="(ev) => { this.setArrayFromString(edu, 'courses', ev.target.value) }"></textarea></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SKILLS -->
+            <h3 class="mb-3 mt-5 text-primary border-bottom pb-2 d-flex align-items-center">
+                <img src="https://api.iconify.design/mdi:star.svg?color=%230d6efd" width="28" height="28" class="me-2"/> Skills
+            </h3>
+            <button class="btn btn-primary mb-3 d-flex align-items-center" t-on-click="() => this.addItem('skills')">
+                <img src="https://api.iconify.design/mdi:plus.svg?color=white" width="20" height="20" class="me-2"/> Add Skill
+            </button>
+            <div t-ref="this.listRefs.skills">
+                <div t-foreach="this.modelState.resume.skills" t-as="skill" t-key="skill_index" class="border p-3 mb-3 bg-white rounded shadow-sm drag-item" t-att-data-index="skill_index">
+                    <div class="d-flex justify-content-between mb-2">
+                        <div class="d-flex align-items-center drag-handle" style="cursor: grab;" title="Arraste para reordenar">
+                            <img src="https://api.iconify.design/mdi:drag.svg?color=%23adb5bd" width="24" height="24"/>
+                        </div>
+                        <div class="row w-100 me-2">
+                            <div class="col-6"><input type="text" class="form-control" placeholder="Name (e.g. Web Development)" t-att-value="skill.name" t-on-change="(ev) => { skill.name = ev.target.value; this.updateJson(); }"/></div>
+                            <div class="col-6"><input type="text" class="form-control" placeholder="Level (e.g. Master)" t-att-value="skill.level" t-on-change="(ev) => { skill.level = ev.target.value; this.updateJson(); }"/></div>
+                        </div>
+                        <div class="d-flex">
+                            <button class="btn btn-secondary me-1 d-flex justify-content-center align-items-center" t-on-click="() => this.cloneItem('skills', skill_index)" title="Clone">
+                                <img src="https://api.iconify.design/mdi:content-copy.svg?color=white" width="16" height="16"/>
+                            </button>
+                            <button class="btn btn-danger d-flex justify-content-center align-items-center" t-on-click="() => this.removeItem('skills', skill_index)" title="Remove">
+                                <img src="https://api.iconify.design/mdi:trash-can-outline.svg?color=white" width="16" height="16"/>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12"><label class="fw-bold">Keywords (1 per line)</label>
+                        <textarea class="form-control" t-att-value="this.getArrayAsString(skill.keywords)" t-on-change="(ev) => { this.setArrayFromString(skill, 'keywords', ev.target.value) }"></textarea></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LANGUAGES -->
+            <h3 class="mb-3 mt-5 text-primary border-bottom pb-2 d-flex align-items-center">
+                <img src="https://api.iconify.design/mdi:translate.svg?color=%230d6efd" width="28" height="28" class="me-2"/> Languages
+            </h3>
+            <button class="btn btn-primary mb-3 d-flex align-items-center" t-on-click="() => this.addItem('languages')">
+                <img src="https://api.iconify.design/mdi:plus.svg?color=white" width="20" height="20" class="me-2"/> Add Language
+            </button>
+            <div t-ref="this.listRefs.languages">
+                <div t-foreach="this.modelState.resume.languages" t-as="lang" t-key="lang_index" class="row mb-2 drag-item" t-att-data-index="lang_index">
+                    <div class="col-1 d-flex align-items-center justify-content-center drag-handle" style="cursor: grab;" title="Arraste para reordenar">
+                        <img src="https://api.iconify.design/mdi:drag.svg?color=%23adb5bd" width="24" height="24"/>
+                    </div>
+                    <div class="col-4"><input type="text" class="form-control" placeholder="Language (English)" t-att-value="lang.language" t-on-change="(ev) => { lang.language = ev.target.value; this.updateJson(); }"/></div>
+                    <div class="col-5"><input type="text" class="form-control" placeholder="Fluency (Native)" t-att-value="lang.fluency" t-on-change="(ev) => { lang.fluency = ev.target.value; this.updateJson(); }"/></div>
+                    <div class="col-2 d-flex">
+                        <button class="btn btn-secondary me-1 w-50 d-flex justify-content-center align-items-center" t-on-click="() => this.cloneItem('languages', lang_index)" title="Clone">
+                            <img src="https://api.iconify.design/mdi:content-copy.svg?color=white" width="16" height="16"/>
+                        </button>
+                        <button class="btn btn-danger w-50 d-flex justify-content-center align-items-center" t-on-click="() => this.removeItem('languages', lang_index)" title="Remove">
+                            <img src="https://api.iconify.design/mdi:trash-can-outline.svg?color=white" width="16" height="16"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROJECTS -->
+            <h3 class="mb-3 mt-5 text-primary border-bottom pb-2 d-flex align-items-center">
+                <img src="https://api.iconify.design/mdi:code-tags.svg?color=%230d6efd" width="28" height="28" class="me-2"/> Projects
+            </h3>
+            <button class="btn btn-primary mb-3 d-flex align-items-center" t-on-click="() => this.addItem('projects')">
+                <img src="https://api.iconify.design/mdi:plus.svg?color=white" width="20" height="20" class="me-2"/> Add Project
+            </button>
+            <div t-ref="this.listRefs.projects">
+                <div t-foreach="this.modelState.resume.projects" t-as="proj" t-key="proj_index" class="border p-3 mb-3 bg-white rounded shadow-sm drag-item" t-att-data-index="proj_index">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h5 class="m-0 text-secondary drag-handle d-flex align-items-center" style="cursor: grab;" title="Arraste para reordenar">
+                            <img src="https://api.iconify.design/mdi:drag.svg?color=%23adb5bd" width="24" height="24" class="me-2"/> Project #<t t-esc="proj_index + 1"/>
+                        </h5>
+                        <div class="d-flex">
+                            <button class="btn btn-sm btn-secondary me-1 d-flex justify-content-center align-items-center" t-on-click="() => this.cloneItem('projects', proj_index)" title="Clone">
+                                <img src="https://api.iconify.design/mdi:content-copy.svg?color=white" width="16" height="16"/>
+                            </button>
+                            <button class="btn btn-sm btn-danger d-flex justify-content-center align-items-center" t-on-click="() => this.removeItem('projects', proj_index)" title="Remove">
+                                <img src="https://api.iconify.design/mdi:trash-can-outline.svg?color=white" width="16" height="16"/>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4"><label class="fw-bold">Name</label><input type="text" class="form-control" t-att-value="proj.name" t-on-change="(ev) => { proj.name = ev.target.value; this.updateJson(); }"/></div>
+                        <div class="col-4"><label class="fw-bold">URL</label><input type="text" class="form-control" t-att-value="proj.url" t-on-change="(ev) => { proj.url = ev.target.value; this.updateJson(); }"/></div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-3"><label class="fw-bold">Start Date</label><input type="date" class="form-control" t-att-value="proj.startDate" t-on-change="(ev) => { proj.startDate = ev.target.value; this.updateJson(); }"/></div>
+                        <div class="col-3"><label class="fw-bold">End Date</label><input type="date" class="form-control" t-att-value="proj.endDate" t-on-change="(ev) => { proj.endDate = ev.target.value; this.updateJson(); }"/></div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-12"><label class="fw-bold">Description</label><textarea class="form-control" t-att-value="proj.description" t-on-change="(ev) => { proj.description = ev.target.value; this.updateJson(); }"></textarea></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12"><label class="fw-bold">Highlights (1 per line)</label>
+                        <textarea class="form-control" t-att-value="this.getArrayAsString(proj.highlights)" t-on-change="(ev) => { this.setArrayFromString(proj, 'highlights', ev.target.value) }"></textarea></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </t>
+</templates>
