@@ -901,3 +901,47 @@ ul.o_search_panel_field li * {
 .o_control_panel span.fw-bold {
     color: #ffffff !important;
 }
+
+/* Oculta o item "Tudo" (primeiro da lista) no Search Panel do Odoo */
+.o_search_panel_section.o_search_panel_category ul.list-group li.o_search_panel_category_value:first-child {
+    display: none !important;
+}
+
+/* ---------------------------------
+ * MODO ESCURO - FIX DE TEXTOS E CORES (Migrado para o CAPP)
+ * --------------------------------- */
+/* Odoo e Bootstrap 5 usam essas variáveis CSS para definir cor. No escuro, elas precisam ser claras! */
+:root, body, .o_web_client, .list-group, .o_kanban_record, .o_search_panel {
+    --list-group-color: #e0e0e0 !important;
+    --list-group-action-color: #e0e0e0 !important;
+    --list-group-disabled-color: #a0a0a0 !important;
+    --list-group-active-color: #ffffff !important;
+    --body-color: #e0e0e0 !important;
+    --secondary-color: #a0a0a0 !important;
+    --dark: #e0e0e0 !important;
+    --text-opacity: 1 !important;
+    --text-color: #e0e0e0 !important;
+}
+
+/* Força brutal em todas as classes utilitárias que tentam deixar o texto preto ou invisível */
+.text-900, .text-800, .text-700, .text-dark, .text-body,
+.text-black, .text-primary, .text-muted, .text-600, .text-500 {
+    color: #e0e0e0 !important;
+}
+
+/* Odoo Search Panel e Kanban - Visibilidade Extrema (Bomba Nuclear) */
+.o_search_panel *,
+.o_search_panel .list-group-item *,
+.o_search_panel .o_search_panel_label_title,
+.o_kanban_record span,
+.o_kanban_record div,
+.o_kanban_record p,
+.o_kanban_group .o_kanban_header_title {
+    color: #e0e0e0 !important;
+    opacity: 1 !important;
+}
+
+/* Mata botões brancos e fundos teimosos de uma vez por todas */
+.bg-white, .bg-light, .bg-view, .btn-light, .bg-100 {
+    background-color: transparent !important;
+}

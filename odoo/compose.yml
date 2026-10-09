@@ -21,6 +21,21 @@ services:
     volumes:
       - odoo-db-data:/var/lib/postgresql/data/pgdata
 
+  html-server:
+    image: nginx:alpine
+    ports: [8081:80]
+    volumes:
+      - ./public:/usr/share/nginx/html:ro
+
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   ports: [5050:80]
+  #   depends_on: [odoo-db]
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: main@grr.la
+  #     PGADMIN_DEFAULT_PASSWORD: main@grr.la
+    
+
 volumes:
   odoo-web-data:
   odoo-db-data:

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loja Simples - Vue 3 + TanStack Query + DaisyUI</title>
+  
+  <!-- DaisyUI -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <!-- Tailwind CSS (Deve vir depois do DaisyUI no CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://esm.sh/vue@3/dist/vue.esm-browser.prod.js",
+        "@tanstack/vue-query": "https://esm.sh/@tanstack/vue-query@5?external=vue"
+      }
+    }
+  </script>
+  
+  <style>
+    [v-cloak] { display: none !important; }
+  </style>
+</head>
+<body class="bg-base-200 min-h-screen p-6 font-sans">
+  
+  <div id="app" v-cloak class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-10">
+      <h1 class="text-4xl font-extrabold text-base-content mb-2">Produtos Disponíveis</h1>
+      <div class="badge badge-primary badge-outline gap-2 p-4 font-semibold shadow-sm">
+        Vue 3 + TanStack Query + DaisyUI
+      </div>
+    </div>
+    
+    <!-- Loading State -->
+    <div v-if="isLoading" class="flex justify-center items-center py-32">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+    
+    <!-- Error State -->
+    <div v-else-if="isError" class="alert alert-error shadow-lg max-w-2xl mx-auto mt-10">
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+      <span><strong>Erro de conexão com o Odoo!</strong> Verifique se o servidor na porta 8069 está rodando e se a rota está ativa.</span>
+    </div>
+    
+    <!-- Data State -->
+    <div v-else-if="products && products.length > 0">
+      
+      <!-- Grid de Produtos usando DaisyUI Cards -->
+      <div :class="{'opacity-50 transition-opacity duration-300 pointer-events-none': isFetching}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        
+        <div v-for="product in products" :key="product.id" class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+          <!-- Se quiséssemos colocar imagem, seria aqui -->
+          <!-- <figure><img src="sua-imagem.jpg" alt="Produto" /></figure> -->
+          
+          <div class="card-body flex flex-col justify-between">
+            <h2 class="card-title text-base-content">
+              {{ product.name }}
+            </h2>
+            
+            <div class="mt-4 flex items-center justify-between">
+              <div class="text-2xl font-black text-success">
+                R$ {{ parseFloat(product.list_price).toFixed(2).replace('.', ',') }}
+              </div>
+              <button class="btn btn-primary btn-sm">Ver</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      
+      <!-- Pagination Controls (DaisyUI Join/Button Group) -->
+      <div v-if="pagination" class="flex justify-center items-center mt-12">
+        <div class="join shadow-md">
+          <button 
+            @click="prevPage" 
+            :disabled="page === 1"
+            class="join-item btn btn-outline btn-primary">
+            « Anterior
+          </button>
+          
+          <button class="join-item btn btn-active pointer-events-none">
+            Página {{ page }} de {{ pagination.pages }}
+          </button>
+          
+          <button 
+            @click="nextPage" 
+            :disabled="page >= pagination.pages"
+            class="join-item btn btn-outline btn-primary">
+            Próxima »
+          </button>
+        </div>
+      </div>
+
+    </div>
+    
+    <!-- Empty State -->
+    <div v-else class="hero bg-base-100 rounded-box shadow-lg py-20 mt-10">
+      <div class="hero-content text-center">
+        <div class="max-w-md">
+          <h1 class="text-3xl font-bold">Poxa vida...</h1>
+          <p class="py-6 text-base-content/70">Nenhum produto marcado com "Pode ser Vendido" foi encontrado no banco de dados do Odoo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createApp, defineComponent, ref, computed } from 'vue';
+    import { VueQueryPlugin, useQuery, keepPreviousData } from '@tanstack/vue-query';
+
+    const fetchProducts = async ({ queryKey }) => {
+      const [_key, page] = queryKey;
+      // Adicionei limit=8 para combinar bem com grids de 4 colunas
+      const response = await fetch(`http://localhost:8069/api/public_products?page=${page}&limit=8`, {
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!response.ok) throw new Error('Erro na resposta da rede');
+      return await response.json();
+    };
+
+    const App = defineComponent({
+      setup() {
+        const page = ref(1);
+        
+        const { data, isLoading, isError, isFetching } = useQuery({
+          queryKey: ['products', page],
+          queryFn: fetchProducts,
+          staleTime: 1000 * 60 * 5,
+          placeholderData: keepPreviousData,
+        });
+
+        const products = computed(() => data.value?.data || []);
+        const pagination = computed(() => data.value?.pagination || null);
+
+        const nextPage = () => {
+          if (pagination.value && page.value < pagination.value.pages) {
+            page.value++;
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Rola pra cima suavemente
+          }
+        };
+
+        const prevPage = () => {
+          if (page.value > 1) {
+            page.value--;
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Rola pra cima suavemente
+          }
+        };
+
+        return { products, pagination, isLoading, isError, isFetching, page, nextPage, prevPage };
+      }
+    });
+
+    const app = createApp(App);
+    app.use(VueQueryPlugin);
+    app.mount('#app');
+  </script>
+</body>
+</html>
