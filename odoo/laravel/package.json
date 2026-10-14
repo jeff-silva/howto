@@ -1,0 +1,13 @@
+{
+  "name": "test-elysiajs",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "OCTANE_WATCH=--watch docker compose up -d --build --force-recreate --remove-orphans",
+    "start": "OCTANE_WATCH= docker compose up -d --build --force-recreate --remove-orphans"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

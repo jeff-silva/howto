@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ODOO_EXTRA_ARGS=\"--dev=xml,reload\" docker compose up -d --build --force-recreate --remove-orphans",
-    "start": "ODOO_EXTRA_ARGS=\"\" docker compose up -d --build --force-recreate --remove-orphans",
-    "stop": "docker compose stop"
+    "dev": "OCTANE_WATCH=--watch docker compose up -d --build --force-recreate --remove-orphans",
+    "start": "OCTANE_WATCH= docker compose up -d --build --force-recreate --remove-orphans"
   },
   "keywords": [],
   "author": "",

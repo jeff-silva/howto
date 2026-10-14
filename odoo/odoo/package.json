@@ -1,0 +1,15 @@
+{
+  "name": "odoo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ODOO_EXTRA_ARGS=\"--dev=xml,reload\" docker compose up -d --build --force-recreate --remove-orphans",
+    "start": "ODOO_EXTRA_ARGS=\"\" docker compose up -d --build --force-recreate --remove-orphans",
+    "stop": "docker compose stop"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

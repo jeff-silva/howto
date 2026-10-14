@@ -1,0 +1,24 @@
+x-app-base: &app-base
+  build: .
+  env_file: [./project/.env]
+  expose: [80]
+  volumes:
+    - ./project:/app
+
+services:
+  test-laravel:
+    <<: *app-base
+    ports: ["80:80", "5173:5173"]
+    command: php artisan octane:start --server=swoole --host=0.0.0.0 --port=80 ${OCTANE_WATCH:-}
+
+  test-laravel-schedule:
+    <<: *app-base
+    command: php artisan schedule:work
+    healthcheck:
+      disable: true
+
+  test-laravel-queue:
+    <<: *app-base
+    command: php artisan queue:work
+    healthcheck:
+      disable: true
