@@ -7,3 +7,4 @@ networks:
 include:
   - ./odoo/compose.yml
   - ./laravel/compose.yml
+  - ./nuxt/compose.yml

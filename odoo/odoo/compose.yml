@@ -3,11 +3,20 @@ services:
     build: .
     depends_on: [odoo-db]
     ports: [8069:8069]
-    command: odoo --http-interface=0.0.0.0 ${ODOO_EXTRA_ARGS:-}
     environment:
+      - HOST=odoo-db
       - PGHOST=odoo-db
       - USER=odoo
       - PASSWORD=myodoo
+      - ENVIRONMENT=${ENVIRONMENT:-dev}
+    command: >
+      sh -c '
+        if [ "$$ENVIRONMENT" = "prod" ]; then
+          /entrypoint.sh odoo --http-interface=0.0.0.0 -d odoo
+        else
+          /entrypoint.sh odoo --http-interface=0.0.0.0 -d odoo --dev=xml,reload
+        fi
+      '
     volumes:
       - odoo-web-data:/var/lib/odoo
       - ./addons:/mnt/extra-addons
@@ -20,21 +29,6 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - odoo-db-data:/var/lib/postgresql/data/pgdata
-
-  # html-server:
-  #   image: nginx:alpine
-  #   ports: [8081:80]
-  #   volumes:
-  #     - ./public:/usr/share/nginx/html:ro
-
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   ports: [5050:80]
-  #   depends_on: [odoo-db]
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: main@grr.la
-  #     PGADMIN_DEFAULT_PASSWORD: main@grr.la
-    
 
 volumes:
   odoo-web-data:

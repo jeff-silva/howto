@@ -1,0 +1,25 @@
+services:
+  nuxt:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./project:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3000
+      - ENVIRONMENT=${ENVIRONMENT:-dev}
+    command: >
+      sh -c '
+        if [ "$$ENVIRONMENT" = "prod" ]; then
+          export NODE_ENV=production
+          if [ ! -d ".output" ]; then
+            npm run build
+          fi
+          node .output/server/index.mjs
+        else
+          export NODE_ENV=development
+          npm run dev -- --host 0.0.0.0 --port 3000
+        fi
+      '

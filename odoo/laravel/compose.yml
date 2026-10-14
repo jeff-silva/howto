@@ -1,6 +1,8 @@
 x-app-base: &app-base
   build: .
   env_file: [./project/.env]
+  environment:
+    - ENVIRONMENT=${ENVIRONMENT:-dev}
   expose: [80]
   volumes:
     - ./project:/app
@@ -9,7 +11,14 @@ services:
   test-laravel:
     <<: *app-base
     ports: ["80:80", "5173:5173"]
-    command: php artisan octane:start --server=swoole --host=0.0.0.0 --port=80 ${OCTANE_WATCH:-}
+    command: >
+      sh -c '
+        if [ "$$ENVIRONMENT" = "prod" ]; then
+          php artisan octane:start --server=swoole --host=0.0.0.0 --port=80
+        else
+          php artisan octane:start --server=swoole --host=0.0.0.0 --port=80 --watch
+        fi
+      '
 
   test-laravel-schedule:
     <<: *app-base

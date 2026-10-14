@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "OCTANE_WATCH=--watch docker compose up -d --build --force-recreate --remove-orphans",
-    "start": "OCTANE_WATCH= docker compose up -d --build --force-recreate --remove-orphans"
+    "dev": "ENVIRONMENT=dev docker compose up -d --build --force-recreate --remove-orphans",
+    "start": "ENVIRONMENT=prod docker compose up -d --build --force-recreate --remove-orphans",
+    "stop": "docker compose stop",
+    "build": ""
   },
   "keywords": [],
   "author": "",
