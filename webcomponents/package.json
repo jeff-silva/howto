@@ -1,0 +1,14 @@
+{
+  "name": "webcomponents",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "docker compose down && ENVIRONMENT=dev docker compose up -d --build --remove-orphans",
+    "start": "docker compose down && ENVIRONMENT=prod docker compose up -d --build --remove-orphans",
+    "stop": "docker compose down"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

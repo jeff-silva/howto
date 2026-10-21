@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Components + Tailwind 4 + DaisyUI</title>
+
+    <!-- Tailwind CSS v4 via CDN Browser Compiler -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- DaisyUI v5 Styles + Temas -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@latest" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/themes.css" rel="stylesheet" type="text/css" />
+
+    <style>
+      /* Estilos para botões e links colocados dentro de slot="dialog-actions" */
+      [slot="dialog-actions"] {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.5rem;
+      }
+      [slot="dialog-actions"] button,
+      [slot="dialog-actions"] a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.45rem 0.95rem;
+        font-family: inherit;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: inherit;
+        background: color-mix(in srgb, currentColor 8%, transparent);
+        border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        line-height: 1.4;
+        white-space: nowrap;
+        transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+        box-sizing: border-box;
+      }
+      [slot="dialog-actions"] button:hover,
+      [slot="dialog-actions"] a:hover {
+        background: color-mix(in srgb, currentColor 14%, transparent);
+        border-color: color-mix(in srgb, currentColor 25%, transparent);
+      }
+    </style>
+
+    <script type="module">
+      import { LitElement, html, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js';
+
+      class UiInput extends LitElement {
+        static properties = {
+          label: { type: String },
+          hint: { type: String },
+          error: { type: String },
+          dark: {
+            converter: {
+              fromAttribute(value) {
+                if (value === 'true' || value === '') return true;
+                if (value === 'false') return false;
+                return value; // 'system' ou string callback
+              },
+              toAttribute(value) {
+                return typeof value === 'function' ? String(value) : value;
+              }
+            }
+          }
+        };
+
+        static styles = css`
+          :host {
+            display: block;
+            margin-bottom: 1.25rem;
+            font-family: inherit;
+            color: inherit;
+            --ui-radius: 0.5rem;
+          }
+
+          .ui-input {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+          }
+
+          /* LABEL */
+          .ui-input__label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.35rem;
+            color: inherit;
+            opacity: 0.9;
+          }
+
+          /* CONTAINER MINIMALISTA E CLEAN */
+          .ui-input__input {
+            display: flex;
+            align-items: flex-start;
+            min-height: 2.35rem;
+            width: 100%;
+            background: transparent;
+            border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+            border-radius: 6px;
+            padding: 2px 4px;
+            cursor: text;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+            box-sizing: border-box;
+          }
+
+          .ui-input__input:has(select) {
+            cursor: pointer;
+          }
+
+          /* Fallback para navegadores legados sem color-mix */
+          @supports not (color: color-mix(in srgb, red, red)) {
+            .ui-input__input {
+              border-color: rgba(127, 127, 127, 0.25);
+            }
+          }
+
+          .ui-input__input:hover {
+            border-color: color-mix(in srgb, currentColor 32%, transparent);
+          }
+
+          /* FOCO NÍTIDO E DISCRETO */
+          .ui-input__input:focus-within {
+            border-color: color-mix(in srgb, currentColor 65%, transparent);
+            box-shadow: 0 0 0 1px color-mix(in srgb, currentColor 65%, transparent);
+          }
+
+          /* INPUTS DE TEXTO, SELECT E TEXTAREA */
+          textarea,
+          select,
+          input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="color"]):not([type="range"]),
+          ::slotted(textarea),
+          ::slotted(select),
+          ::slotted(input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="color"]):not([type="range"])) {
+            flex: 1 1 auto !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            margin: 0 !important;
+            padding: 0.45rem 0.6rem !important;
+            font-size: 0.9rem !important;
+            line-height: 1.45 !important;
+            font-family: inherit !important;
+            color: inherit !important;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            box-sizing: border-box !important;
+          }
+
+          /* AUTOGROW E AJUSTES DE TEXTAREA */
+          textarea,
+          ::slotted(textarea) {
+            field-sizing: content; /* Propriedade nativa do CSS para crescer automaticamente! */
+            min-height: 2.15rem;
+            max-height: 20rem;
+            resize: none;
+            overflow-y: auto;
+          }
+
+          input::placeholder,
+          textarea::placeholder,
+          ::slotted(input::placeholder),
+          ::slotted(textarea::placeholder) {
+            color: inherit;
+            opacity: 0.4;
+          }
+
+          select,
+          ::slotted(select) {
+            cursor: pointer;
+            padding-right: 1.5rem !important;
+          }
+
+          /* SLOTS DE PREPEND E APPEND */
+          slot[name="prepend"],
+          slot[name="append"] {
+            display: contents;
+          }
+
+          /* ELEMENTOS NOS SLOTS PREPEND E APPEND (ALINHADOS AO TOPO COM A 1ª LINHA) */
+          ::slotted([slot="prepend"]),
+          ::slotted([slot="append"]) {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            align-self: flex-start !important;
+            margin: 0 !important;
+            padding: 0.45rem 0.45rem !important;
+            color: inherit !important;
+            opacity: 0.55 !important;
+            font-size: 0.875rem !important;
+            line-height: 1.45 !important;
+            font-weight: 500 !important;
+            user-select: none !important;
+            border: none !important;
+            background: transparent !important;
+            box-sizing: border-box !important;
+          }
+
+          /* BOTÕES NOS SLOTS PREPEND E APPEND */
+          ::slotted(button[slot="append"]),
+          ::slotted(button[slot="prepend"]),
+          ::slotted(a[slot="append"]),
+          ::slotted(a[slot="prepend"]),
+          ::slotted(input[type="button"][slot="append"]),
+          ::slotted(input[type="button"][slot="prepend"]),
+          ::slotted(input[type="submit"][slot="append"]),
+          ::slotted(input[type="submit"][slot="prepend"]) {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            align-self: flex-start !important;
+            padding: 0.3rem 0.75rem !important;
+            font-family: inherit !important;
+            font-size: 0.825rem !important;
+            font-weight: 500 !important;
+            color: inherit !important;
+            background: color-mix(in srgb, currentColor 8%, transparent) !important;
+            border: none !important;
+            border-radius: 4px !important;
+            cursor: pointer !important;
+            text-decoration: none !important;
+            white-space: nowrap !important;
+            margin-top: 3px !important;
+            margin-left: 4px !important;
+            margin-right: 2px !important;
+            transition: background-color 0.15s ease, opacity 0.15s ease !important;
+            box-sizing: border-box !important;
+          }
+
+          ::slotted(button[slot="append"]:hover),
+          ::slotted(button[slot="prepend"]:hover),
+          ::slotted(a[slot="append"]:hover),
+          ::slotted(a[slot="prepend"]:hover) {
+            background: color-mix(in srgb, currentColor 14%, transparent) !important;
+          }
+
+          /* CONTEÚDO DO DIALOG: BLOCO VERTICAL */
+          ::slotted([slot="dialog-body"]) {
+            display: block !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            text-align: left !important;
+          }
+
+          /* AÇÕES DO DIALOG: BOTÕES LADO A LADO */
+          .ui-input__dialog-actions,
+          slot[name="dialog-actions"] {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+            gap: 0.5rem !important;
+            margin-top: 1.25rem !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+          }
+
+          /* BOTÕES E LINKS DENTRO DE DIALOG-ACTIONS */
+          .ui-input__dialog-actions button,
+          .ui-input__dialog-actions a,
+          slot[name="dialog-actions"] button,
+          slot[name="dialog-actions"] a,
+          ::slotted(button[slot="dialog-actions"]),
+          ::slotted(a[slot="dialog-actions"]),
+          ::slotted(input[type="button"][slot="dialog-actions"]),
+          ::slotted(input[type="submit"][slot="dialog-actions"]) {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 0.35rem !important;
+            padding: 0.45rem 0.95rem !important;
+            font-family: inherit !important;
+            font-size: 0.85rem !important;
+            font-weight: 500 !important;
+            color: inherit !important;
+            background: color-mix(in srgb, currentColor 8%, transparent) !important;
+            border: 1px solid color-mix(in srgb, currentColor 16%, transparent) !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            text-decoration: none !important;
+            white-space: nowrap !important;
+            line-height: 1.4 !important;
+            transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease !important;
+            box-sizing: border-box !important;
+          }
+
+          .ui-input__dialog-actions button:hover,
+          .ui-input__dialog-actions a:hover,
+          slot[name="dialog-actions"] button:hover,
+          slot[name="dialog-actions"] a:hover,
+          ::slotted(button[slot="dialog-actions"]:hover),
+          ::slotted(a[slot="dialog-actions"]:hover),
+          ::slotted(input[type="button"][slot="dialog-actions"]:hover),
+          ::slotted(input[type="submit"][slot="dialog-actions"]:hover) {
+            background: color-mix(in srgb, currentColor 14%, transparent) !important;
+            border-color: color-mix(in srgb, currentColor 25%, transparent) !important;
+          }
+
+          .ui-input__dialog-actions button:active,
+          .ui-input__dialog-actions a:active,
+          slot[name="dialog-actions"] button:active,
+          slot[name="dialog-actions"] a:active,
+          ::slotted(button[slot="dialog-actions"]:active),
+          ::slotted(a[slot="dialog-actions"]:active) {
+            opacity: 0.8 !important;
+          }
+
+          /* CASO O USUÁRIO ENVOLVA OS BOTÕES EM UM CONTAINER NO SLOT dialog-actions */
+          ::slotted(div[slot="dialog-actions"]),
+          ::slotted(footer[slot="dialog-actions"]) {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+            gap: 0.5rem !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+          }
+
+          /* HINT E ERROR */
+          .ui-input__hint {
+            font-size: 0.75rem;
+            color: inherit;
+            opacity: 0.6;
+            margin-top: 0.35rem;
+          }
+
+          .ui-input__error {
+            font-size: 0.75rem;
+            color: #ef4444;
+            font-weight: 500;
+            margin-top: 0.35rem;
+            display: none;
+          }
+
+          :host([error]) .ui-input__error {
+            display: block;
+          }
+
+          :host([error]) .ui-input__input {
+            border-color: #ef4444;
+          }
+
+          /* DIALOG LIGHT MODE (PADRÃO) */
+          .ui-input__dialog {
+            border: 1px solid var(--ui-dialog-border, color-mix(in srgb, currentColor 18%, transparent));
+            border-radius: var(--ui-dialog-radius, 10px);
+            background-color: var(--ui-dialog-bg, #ffffff);
+            color: var(--ui-dialog-color, #0f172a);
+            padding: 1.25rem;
+            margin: auto;
+            max-width: 90vw;
+            width: 360px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.15);
+            font-family: inherit;
+            box-sizing: border-box;
+
+            /* Transição de Fade In e Escala Suave */
+            opacity: 0;
+            transform: scale(0.96) translateY(-4px);
+            transition: 
+              opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+          }
+
+          /* DIALOG DARK MODE (ATIVADO AUTOMATICAMENTE VIA IS-DARK) */
+          :host([is-dark]) .ui-input__dialog {
+            background-color: var(--ui-dialog-bg, #18181b);
+            color: var(--ui-dialog-color, #f8fafc);
+            border-color: var(--ui-dialog-border, rgba(255, 255, 255, 0.15));
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.55), 0 8px 10px -6px rgba(0, 0, 0, 0.35);
+          }
+
+          .ui-input__dialog[open] {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+
+          /* Estado de saída suave (Fade Out) */
+          .ui-input__dialog.ui-input__dialog--closing {
+            opacity: 0 !important;
+            transform: scale(0.96) translateY(-4px) !important;
+          }
+
+          @starting-style {
+            .ui-input__dialog[open] {
+              opacity: 0;
+              transform: scale(0.96) translateY(-4px);
+            }
+          }
+
+          .ui-input__dialog::backdrop {
+            background: var(--ui-dialog-backdrop, rgba(0, 0, 0, 0.45));
+            backdrop-filter: blur(2px);
+            opacity: 0;
+            transition: opacity 0.18s ease;
+          }
+
+          .ui-input__dialog[open]::backdrop {
+            opacity: 1;
+          }
+
+          .ui-input__dialog.ui-input__dialog--closing::backdrop {
+            opacity: 0 !important;
+          }
+
+          @starting-style {
+            .ui-input__dialog[open]::backdrop {
+              opacity: 0;
+            }
+          }
+        `;
+
+        constructor() {
+          super();
+          this.label = '';
+          this.hint = '';
+          this.error = '';
+          this.dark = 'system';
+          this._isClosing = false;
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          // Observa alterações de atributos na página (ex: data-theme ou class="dark")
+          this._themeObserver = new MutationObserver(() => this.requestUpdate());
+          this._themeObserver.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme', 'class', 'style']
+          });
+
+          // Observa alterações no tema do SO
+          if (window.matchMedia) {
+            this._systemMedia = window.matchMedia('(prefers-color-scheme: dark)');
+            this._onMediaChange = () => this.requestUpdate();
+            this._systemMedia.addEventListener('change', this._onMediaChange);
+          }
+        }
+
+        disconnectedCallback() {
+          super.disconnectedCallback();
+          if (this._themeObserver) this._themeObserver.disconnect();
+          if (this._systemMedia && this._onMediaChange) {
+            this._systemMedia.removeEventListener('change', this._onMediaChange);
+          }
+        }
+
+        get isDarkMode() {
+          const val = this.dark;
+
+          // 1. Callback via função JS: dark = () => { return true/false; }
+          if (typeof val === 'function') {
+            try {
+              return Boolean(val(this));
+            } catch (err) {
+              console.warn('Erro no callback dark() de ui-input:', err);
+              return false;
+            }
+          }
+
+          // 2. Callback fornecido como string via atributo HTML: dark="() => true"
+          if (typeof val === 'string' && (val.trim().startsWith('()') || val.trim().startsWith('function'))) {
+            try {
+              const fn = new Function('el', `return (${val})(el)`);
+              return Boolean(fn(this));
+            } catch (e) {}
+          }
+
+          // 3. Booleano direto: dark="true" ou dark="false"
+          if (val === true || val === 'true' || val === '') return true;
+          if (val === false || val === 'false') return false;
+
+          // 4. 'system' (ou padrão): detecta se há tema escuro na página ou SO
+          if (val === 'system' || val === undefined || val === null) {
+            const htmlTheme = document.documentElement.getAttribute('data-theme');
+            if (htmlTheme) {
+              const darkThemes = ['dark', 'dim', 'sunset', 'abyss', 'halloween', 'forest', 'black', 'luxury', 'dracula', 'business', 'night', 'coffee'];
+              if (darkThemes.includes(htmlTheme)) return true;
+              return false;
+            }
+            if (document.documentElement.classList.contains('dark')) return true;
+
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          }
+
+          return false;
+        }
+
+        willUpdate(changedProperties) {
+          super.willUpdate(changedProperties);
+          // Reflete o atributo is-dark no :host para ativar as regras CSS
+          this.toggleAttribute('is-dark', this.isDarkMode);
+        }
+
+        dialogOpen() {
+          if (this._isClosing) return;
+          const dialog = this.shadowRoot.querySelector('dialog');
+          if (dialog && !dialog.open) {
+            dialog.classList.remove('ui-input__dialog--closing');
+            dialog.showModal();
+          }
+        }
+
+        dialogClose() {
+          const dialog = this.shadowRoot.querySelector('dialog');
+          if (dialog && dialog.open && !this._isClosing) {
+            this._isClosing = true;
+            dialog.classList.add('ui-input__dialog--closing');
+
+            // Aguarda os 180ms da animação de fade-out antes de fechar o dialog nativo
+            setTimeout(() => {
+              dialog.close();
+              dialog.classList.remove('ui-input__dialog--closing');
+              const input = this.querySelector('input');
+              if (input) input.blur();
+              setTimeout(() => {
+                this._isClosing = false;
+              }, 50);
+            }, 180);
+          }
+        }
+
+        _handleDialogClick(e) {
+          const dialog = this.shadowRoot.querySelector('dialog');
+          if (!dialog) return;
+          const rect = dialog.getBoundingClientRect();
+          const clickedBackdrop = (
+            e.clientX < rect.left ||
+            e.clientX > rect.right ||
+            e.clientY < rect.top ||
+            e.clientY > rect.bottom
+          );
+          if (clickedBackdrop) {
+            this.dialogClose();
+          }
+        }
+
+        _handleContainerClick(e) {
+          if (e.target.closest('button, a, select, textarea, input')) return;
+          const target = this.shadowRoot.querySelector('textarea, input, select') || this.querySelector('textarea, input, select');
+          if (target) {
+            target.focus();
+          }
+        }
+
+        renderSlotDefault() {
+          return html`<slot></slot>`;
+        }
+
+        render() {
+          return html`
+            <div class="ui-input">
+              <div class="ui-input__label">
+                <slot name="label">${this.label || ''}</slot>
+              </div>
+              <div class="ui-input__input" @click="${this._handleContainerClick}">
+                <slot name="prepend"></slot>
+                ${this.renderSlotDefault()}
+                <slot name="append"></slot>
+              </div>
+              <div class="ui-input__hint">
+                <slot name="hint">${this.hint || ''}</slot>
+              </div>
+              <div class="ui-input__error">
+                <slot name="error">${this.error || ''}</slot>
+              </div>
+              <dialog 
+                class="ui-input__dialog" 
+                part="dialog"
+                @click="${this._handleDialogClick}"
+              >
+                <slot name="dialog-body"></slot>
+                <div class="ui-input__dialog-actions">
+                  <slot name="dialog-actions">
+                    <button type="button" @click="${() => this.dialogClose()}">Fechar</button>
+                  </slot>
+                </div>
+              </dialog>
+            </div>
+          `;
+        }
+      };
+
+      class UiInputTextarea extends UiInput {
+        static get properties() {
+          return {
+            ...super.properties,
+            placeholder: { type: String },
+            value: { type: String },
+            rows: { type: Number },
+          };
+        }
+
+        constructor() {
+          super();
+          this.placeholder = '';
+          this.value = '';
+          this.rows = 1;
+        }
+
+        firstUpdated() {
+          super.firstUpdated?.();
+          if (!this.value) {
+            const rawText = Array.from(this.childNodes)
+              .filter(node => node.nodeType === Node.TEXT_NODE)
+              .map(node => node.textContent)
+              .join('')
+              .trim();
+            if (rawText) {
+              this.value = rawText;
+            }
+          }
+        }
+
+        _handleTextareaInput(e) {
+          this.value = e.target.value;
+          // Fallback para navegadores sem suporte a field-sizing: content
+          if (!CSS.supports || !CSS.supports('field-sizing', 'content')) {
+            const el = e.target;
+            el.style.height = 'auto';
+            el.style.height = el.scrollHeight + 'px';
+          }
+        }
+
+        renderSlotDefault() {
+          return html`
+            <textarea 
+              rows="${this.rows || 1}" 
+              placeholder="${this.placeholder || ''}" 
+              .value="${this.value || ''}"
+              @input="${this._handleTextareaInput}"
+            ></textarea>
+          `;
+        }
+      }
+
+      customElements.define('ui-input', UiInput);
+      customElements.define('ui-input-textarea', UiInputTextarea);
+    </script>
+  </head>
+  <body class="min-h-screen bg-base-200 p-8 flex flex-col items-center">
+    <div class="card w-full max-w-md bg-base-100 shadow-xl border border-base-300">
+      <div class="card-body">
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="card-title text-primary">Tailwind 4 + DaisyUI</h2>
+
+          <ui-input>
+            <select 
+              onchange="document.documentElement.setAttribute('data-theme', this.value)"
+            >
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="cupcake">Cupcake</option>
+              <option value="cyberpunk">Cyberpunk</option>
+              <option value="sunset">Sunset</option>
+              <option value="nord">Nord</option>
+            </select>
+          </ui-input>
+          
+        </div>
+
+        <ui-input label="Nome de Usuário">
+          <span slot="prepend">@</span>
+          <input type="text" placeholder="jeff_silva" />
+          <a href="https://google.com" target="_blank" slot="append">Visitar</a>
+          <a href="https://google.com" target="_blank" slot="append">Deletar</a>
+        </ui-input>
+
+        <ui-input label="Valor">
+          <span slot="prepend">R$</span>
+          <input type="text" />
+          <span slot="append">,00</span>
+        </ui-input>
+
+        <!-- Exemplo 2: Input com Dialog -->
+        <ui-input label="Plano de Assinatura">
+          <input 
+            type="text" 
+            placeholder="Clique para escolher plano..." 
+            onfocus="this.closest('ui-input').dialogOpen();" 
+          />
+
+          <div slot="dialog-body">
+            <h3 style="font-weight: 600; font-size: 1rem; margin-bottom: 0.35rem;">Escolha seu Plano</h3>
+            <p style="font-size: 0.85rem; opacity: 0.7; margin-bottom: 1rem;">Selecione uma das opções abaixo:</p>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.25rem;">
+              <button 
+                type="button" 
+                style="display: flex; align-items: center; justify-content: flex-start; width: 100%; text-align: left; padding: 10px 12px; border-radius: 6px; border: 1px solid color-mix(in srgb, currentColor 15%, transparent); background: transparent; color: inherit; cursor: pointer; font-size: 0.9rem;"
+                onclick="this.closest('ui-input').querySelector('input').value = 'Plano Iniciante (Grátis)'; this.closest('ui-input').dialogClose();"
+              >
+                🚀 Plano Iniciante (Grátis)
+              </button>
+              <button 
+                type="button" 
+                style="display: flex; align-items: center; justify-content: flex-start; width: 100%; text-align: left; padding: 10px 12px; border-radius: 6px; border: 1px solid color-mix(in srgb, currentColor 15%, transparent); background: transparent; color: inherit; cursor: pointer; font-size: 0.9rem;"
+                onclick="this.closest('ui-input').querySelector('input').value = 'Plano Pro (R$ 49/mês)'; this.closest('ui-input').dialogClose();"
+              >
+                ⚡ Plano Pro (R$ 49/mês)
+              </button>
+            </div>
+          </div>
+
+          <a href="https://google.com" target="_blank" slot="dialog-actions">Termos</a>
+          <button type="button" slot="dialog-actions" onclick="this.closest('ui-input').dialogClose();">
+            Fechar
+          </button>
+        </ui-input>
+
+        <ui-input>
+          <span slot="prepend">Descrição do produto</span>
+          <textarea name="" id=""></textarea>
+        </ui-input>
+
+        <!-- <ui-input-textarea placeholder="Digite sua mensagem aqui...">
+          <div slot="prepend">Texto</div>
+        </ui-input-textarea> -->
+      </div>
+    </div>
+  </body>
+</html>
