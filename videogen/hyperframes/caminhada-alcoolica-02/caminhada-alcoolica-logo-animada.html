@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Logo Animada - Caminhada Alcoólica</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- GSAP CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: transparent !important;
+      }
+      .clip {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      .layer-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body class="bg-transparent select-none">
+    <div
+      data-hf-id="hf-root-logo-animada"
+      id="root"
+      data-composition-id="caminhada-alcoolica-logo-animada"
+      data-start="0"
+      data-duration="6"
+      data-width="1080"
+      data-height="1920"
+      class="clip relative bg-transparent flex items-center justify-center"
+    >
+      <!-- Container Central da Logo (Mantém a proporção quadrada 1254x1254 do asset) -->
+      <div
+        data-hf-id="hf-logo-stage"
+        id="logo_stage"
+        class="relative w-[920px] h-[920px] flex items-center justify-center drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)]"
+      >
+        <!-- Camada 1: 1ª CAMINHADA -->
+        <img
+          data-hf-id="hf-layer-1"
+          id="layer_1"
+          src="assets/logo-camada-1.png"
+          alt="1ª Caminhada"
+          class="layer-img opacity-0"
+        />
+
+        <!-- Camada 2: ALCOÓLICA -->
+        <img
+          data-hf-id="hf-layer-2"
+          id="layer_2"
+          src="assets/logo-camada-2.png"
+          alt="Alcoólica"
+          class="layer-img opacity-0"
+        />
+
+        <!-- Camada 3: DO BAIRRO JAQUELINE -->
+        <img
+          data-hf-id="hf-layer-3"
+          id="layer_3"
+          src="assets/logo-camada-3.png"
+          alt="Do Bairro Jaqueline"
+          class="layer-img opacity-0"
+        />
+
+        <!-- Camada 4: COPOS -->
+        <img
+          data-hf-id="hf-layer-4"
+          id="layer_4"
+          src="assets/logo-camada-4.png"
+          alt="Copos e Brinde"
+          class="layer-img opacity-0"
+        />
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Configuração inicial das camadas
+      // As camadas 1, 2 e 3 entram da esquerda para a direita
+      // começando um pouco mais baixas (y positivo) e subindo até alinhar no centro,
+      // acompanhando a inclinação natural de ~5° da tipografia.
+      
+      const slideDistanceX = -850;
+      const slideOffsetY = 75; // começa mais baixo e sobe até y: 0
+
+      // Estado inicial (t = 0)
+      tl.set("#layer_1", { x: slideDistanceX, y: slideOffsetY, opacity: 0 });
+      tl.set("#layer_2", { x: slideDistanceX, y: slideOffsetY, opacity: 0 });
+      tl.set("#layer_3", { x: slideDistanceX, y: slideOffsetY, opacity: 0 });
+      tl.set("#layer_4", { scale: 0.15, opacity: 0, transformOrigin: "center 70%" });
+
+      // ====================================================
+      // 1. CAMADA 1: "1ª CAMINHADA"
+      // ====================================================
+      tl.to(
+        "#layer_1",
+        {
+          x: 0,
+          y: 0,
+          opacity: 1,
+          duration: 0.65,
+          ease: "back.out(1.2)"
+        },
+        0.2
+      );
+
+      // ====================================================
+      // 2. CAMADA 2: "ALCOÓLICA"
+      // ====================================================
+      tl.to(
+        "#layer_2",
+        {
+          x: 0,
+          y: 0,
+          opacity: 1,
+          duration: 0.65,
+          ease: "back.out(1.2)"
+        },
+        0.55
+      );
+
+      // ====================================================
+      // 3. CAMADA 3: "DO BAIRRO JAQUELINE"
+      // ====================================================
+      tl.to(
+        "#layer_3",
+        {
+          x: 0,
+          y: 0,
+          opacity: 1,
+          duration: 0.65,
+          ease: "back.out(1.25)"
+        },
+        0.9
+      );
+
+      // ====================================================
+      // 4. CAMADA 4: COPOS (Fade-in + Crescimento com Pop)
+      // ====================================================
+      tl.to(
+        "#layer_4",
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.75,
+          ease: "back.out(1.6)"
+        },
+        1.3
+      );
+
+      // Leve balanço / brinde sutil nos copos após entrarem (micro-interação festiva)
+      tl.to(
+        "#layer_4",
+        {
+          rotation: -3,
+          duration: 0.12,
+          yoyo: true,
+          repeat: 3,
+          ease: "sine.inOut"
+        },
+        2.05
+      );
+
+      window.__timelines["caminhada-alcoolica-logo-animada"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Legenda - Áudio Sério/Triste</title>
+
+    <!-- Google Fonts: Montserrat (Séria, dramática, elegante) e Oswald -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;0,900;1,800&family=Oswald:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              serious: ['"Montserrat"', 'sans-serif'],
+              condensed: ['"Oswald"', 'sans-serif'],
+            },
+            colors: {
+              iceCyan: '#38BDF8',
+              coldSlate: '#CBD5E1',
+              darkNavy: '#0F172A',
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- GSAP CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: transparent !important;
+        font-family: "Montserrat", sans-serif;
+      }
+      .clip {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      /* Efeito dramático / cinema sério com tons frios */
+      .serious-caption {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
+        color: #cbd5e1;
+        text-shadow:
+          -3px -3px 0 #000,
+          3px -3px 0 #000,
+          -3px 3px 0 #000,
+          3px 3px 0 #000,
+          0 8px 30px rgba(0, 0, 0, 0.95);
+      }
+      .serious-word {
+        display: inline-block;
+        transform-origin: center bottom;
+      }
+    </style>
+  </head>
+  <body class="bg-transparent text-white select-none">
+    <div
+      data-hf-id="hf-root-triste"
+      id="root"
+      data-composition-id="audio-triste"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+      class="clip relative bg-transparent font-serious"
+    >
+      <!-- Áudio da narração séria/triste -->
+      <audio
+        data-hf-id="hf-audio-voice-triste"
+        id="voice_audio"
+        src="assets/audio-triste.mp3"
+        data-start="0"
+        data-duration="30"
+      ></audio>
+
+      <!-- Container de Legendas no Topo -->
+      <div
+        data-hf-id="hf-captions-top-triste"
+        id="captions_container"
+        class="absolute inset-0 pointer-events-none z-50 flex justify-center"
+      ></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      const WORDS_DATA = [
+        { "word": "Ainda", "start": 0.12, "end": 0.5 },
+        { "word": "essa", "start": 0.5, "end": 0.72 },
+        { "word": "semana,", "start": 0.72, "end": 1.36 },
+        { "word": "você", "start": 1.36, "end": 1.44 },
+        { "word": "pode", "start": 1.44, "end": 1.72 },
+        { "word": "tomar", "start": 1.72, "end": 1.98 },
+        { "word": "uma", "start": 1.98, "end": 2.18 },
+        { "word": "decisão", "start": 2.18, "end": 2.74 },
+        { "word": "que", "start": 2.74, "end": 2.94 },
+        { "word": "vai", "start": 2.94, "end": 3.1 },
+        { "word": "impactar", "start": 3.1, "end": 3.8 },
+        { "word": "diretamente", "start": 3.8, "end": 4.74 },
+        { "word": "o", "start": 4.74, "end": 4.96 },
+        { "word": "seu", "start": 4.96, "end": 5.06 },
+        { "word": "futuro.", "start": 5.06, "end": 6.1 },
+        { "word": "Faltam", "start": 6.26, "end": 6.54 },
+        { "word": "apenas", "start": 6.54, "end": 7 },
+        { "word": "27", "start": 7, "end": 7.66 },
+        { "word": "dias", "start": 7.66, "end": 8.28 },
+        { "word": "para", "start": 8.28, "end": 8.64 },
+        { "word": "a", "start": 8.64, "end": 8.96 },
+        { "word": "primeira", "start": 8.96, "end": 9.24 },
+        { "word": "caminhada", "start": 9.24, "end": 9.76 },
+        { "word": "alcoólica", "start": 9.76, "end": 10.32 },
+        { "word": "do", "start": 10.32, "end": 10.52 },
+        { "word": "bairro", "start": 10.52, "end": 10.88 },
+        { "word": "Jaqueline.", "start": 10.88, "end": 12.08 },
+        { "word": "Muito", "start": 12.26, "end": 12.48 },
+        { "word": "em", "start": 12.48, "end": 12.66 },
+        { "word": "breve,", "start": 12.66, "end": 13.18 },
+        { "word": "vamos", "start": 13.18, "end": 13.34 },
+        { "word": "viver", "start": 13.34, "end": 13.64 },
+        { "word": "a", "start": 13.64, "end": 13.76 },
+        { "word": "alegria", "start": 13.76, "end": 14.14 },
+        { "word": "de", "start": 14.14, "end": 14.32 },
+        { "word": "celebrar", "start": 14.32, "end": 14.88 },
+        { "word": "a", "start": 14.88, "end": 15 },
+        { "word": "vida", "start": 15, "end": 15.38 },
+        { "word": "durante", "start": 14.88, "end": 15.78 },
+        { "word": "um", "start": 15.78, "end": 15.92 },
+        { "word": "circuito", "start": 15.92, "end": 16.5 },
+        { "word": "de", "start": 16.5, "end": 16.66 },
+        { "word": "seis", "start": 16.66, "end": 17.08 },
+        { "word": "bares", "start": 17.08, "end": 17.5 },
+        { "word": "da", "start": 17.5, "end": 17.66 },
+        { "word": "região,", "start": 17.66, "end": 18.5 },
+        { "word": "com", "start": 18.5, "end": 18.64 },
+        { "word": "open", "start": 18.64, "end": 19.1 },
+        { "word": "bar", "start": 19.1, "end": 19.5 },
+        { "word": "durante", "start": 19.5, "end": 19.9 },
+        { "word": "o", "start": 19.9, "end": 20 },
+        { "word": "trajeto.", "start": 20, "end": 20.64 },
+        { "word": "Os", "start": 21.08, "end": 21.26 },
+        { "word": "ingressos", "start": 21.26, "end": 21.98 },
+        { "word": "são", "start": 21.98, "end": 22.22 },
+        { "word": "limitados.", "start": 22.22, "end": 23.1 },
+        { "word": "Vai", "start": 23.76, "end": 23.9 },
+        { "word": "ficar", "start": 23.9, "end": 24.32 },
+        { "word": "de", "start": 24.32, "end": 24.54 },
+        { "word": "fora", "start": 24.54, "end": 24.92 },
+        { "word": "dessa?", "start": 24.92, "end": 25.82 },
+        { "word": "Entre", "start": 25.96, "end": 26.22 },
+        { "word": "em", "start": 26.22, "end": 26.36 },
+        { "word": "contato", "start": 26.36, "end": 26.96 },
+        { "word": "e", "start": 26.96, "end": 27.2 },
+        { "word": "adquira", "start": 27.2, "end": 27.78 },
+        { "word": "o", "start": 27.78, "end": 27.9 },
+        { "word": "seu", "start": 27.9, "end": 28.04 },
+        { "word": "kit.", "start": 28.04, "end": 28.86 }
+      ];
+
+      // Blocos naturais de fala sincronizados com o ritmo mais cadenciado
+      const CHUNKS = [
+        { startIdx: 0, endIdx: 3 },    // Ainda essa semana,
+        { startIdx: 3, endIdx: 8 },    // você pode tomar uma decisão
+        { startIdx: 8, endIdx: 15 },   // que vai impactar diretamente o seu futuro.
+        { startIdx: 15, endIdx: 19 },  // Faltam apenas 27 dias
+        { startIdx: 19, endIdx: 24 },  // para a primeira caminhada alcoólica
+        { startIdx: 24, endIdx: 27 },  // do bairro Jaqueline.
+        { startIdx: 27, endIdx: 30 },  // Muito em breve,
+        { startIdx: 30, endIdx: 38 },  // vamos viver a alegria de celebrar a vida
+        { startIdx: 38, endIdx: 46 },  // durante um circuito de seis bares da região,
+        { startIdx: 46, endIdx: 52 },  // com open bar durante o trajeto.
+        { startIdx: 52, endIdx: 56 },  // Os ingressos são limitados.
+        { startIdx: 56, endIdx: 61 },  // Vai ficar de fora dessa?
+        { startIdx: 61, endIdx: 64 },  // Entre em contato
+        { startIdx: 64, endIdx: 69 }   // e adquira o seu kit.
+      ];
+
+      const containerSlot = document.getElementById("captions_container");
+
+      CHUNKS.forEach((chunkDef, cIdx) => {
+        const words = WORDS_DATA.slice(chunkDef.startIdx, chunkDef.endIdx);
+        if (!words.length) return;
+
+        const chunkStart = words[0].start;
+        const nextChunkDef = CHUNKS[cIdx + 1];
+        const nextStart = nextChunkDef ? WORDS_DATA[nextChunkDef.startIdx].start : null;
+        const chunkEnd = nextStart ? Math.min(nextStart, words[words.length - 1].end + 0.4) : words[words.length - 1].end + 0.6;
+
+        // Bloco de texto no Topo (top-[10%]) com estilo sério e marcante
+        const chunkBox = document.createElement("div");
+        chunkBox.id = `chunk_${cIdx}`;
+        chunkBox.className =
+          "absolute top-[10%] w-[960px] flex flex-wrap justify-center items-center gap-x-4 gap-y-3 text-[60px] leading-[1.18] text-center serious-caption opacity-0";
+        containerSlot.appendChild(chunkBox);
+
+        // Transição elegante e suave (sem bounce cômico, mantendo o tom sério)
+        tl.set(chunkBox, { opacity: 1, y: -12, scale: 0.98 }, chunkStart);
+        tl.to(chunkBox, { y: 0, scale: 1, duration: 0.22, ease: "power2.out" }, chunkStart);
+        tl.to(chunkBox, { opacity: 0, y: -8, duration: 0.16, ease: "power2.in" }, chunkEnd - 0.16);
+
+        // Spans para cada palavra e animação karaoke sóbria e precisa
+        words.forEach((w) => {
+          const span = document.createElement("span");
+          span.className = "serious-word";
+          span.textContent = w.word;
+          chunkBox.appendChild(span);
+
+          // Palavra falada acende em azul glacial/ciano frio com brilho sutil
+          tl.to(
+            span,
+            {
+              color: "#38bdf8",
+              textShadow:
+                "-3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000, 0 0 25px rgba(56, 189, 248, 0.75)",
+              scale: 1.12,
+              duration: 0.08,
+              ease: "power1.out"
+            },
+            w.start
+          );
+
+          tl.to(
+            span,
+            {
+              color: "#cbd5e1",
+              textShadow:
+                "-3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000, 0 8px 30px rgba(0, 0, 0, 0.95)",
+              scale: 1.0,
+              duration: 0.14,
+              ease: "power1.in"
+            },
+            w.end
+          );
+        });
+      });
+
+      window.__timelines["audio-triste"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

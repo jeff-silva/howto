@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Legenda - Áudio Alegre</title>
+
+    <!-- Google Fonts: Lilita One (Festiva, alegre, amigável) e Permanent Marker -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Permanent+Marker&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              party: ['"Lilita One"', 'cursive', 'sans-serif'],
+              marker: ['"Permanent Marker"', 'cursive'],
+            },
+            colors: {
+              festivalYellow: '#FFE600',
+              festivalOrange: '#F79F1F',
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- GSAP CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: transparent !important;
+        font-family: "Lilita One", cursive, sans-serif;
+      }
+      .clip {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      /* Efeito pop 3D street festival */
+      .party-caption {
+        font-family: "Lilita One", cursive, sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: #ffffff;
+        text-shadow:
+          -3px -3px 0 #000,
+          3px -3px 0 #000,
+          -3px 3px 0 #000,
+          3px 3px 0 #000,
+          5px 5px 0 #000,
+          7px 7px 0 #F79F1F;
+      }
+      .party-word {
+        display: inline-block;
+        transform-origin: center bottom;
+      }
+    </style>
+  </head>
+  <body class="bg-transparent text-white select-none">
+    <div
+      data-hf-id="hf-root-alegre"
+      id="root"
+      data-composition-id="audio-alegre"
+      data-start="0"
+      data-duration="25"
+      data-width="1080"
+      data-height="1920"
+      class="clip relative bg-transparent font-party"
+    >
+      <!-- Áudio da narração -->
+      <audio
+        data-hf-id="hf-audio-voice"
+        id="voice_audio"
+        src="assets/audio-alegre.mp3"
+        data-start="0"
+        data-duration="25"
+      ></audio>
+
+      <!-- Container de Legendas no Topo -->
+      <div
+        data-hf-id="hf-captions-top"
+        id="captions_container"
+        class="absolute inset-0 pointer-events-none z-50 flex justify-center"
+      ></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      const WORDS_DATA = [
+        { "word": "Ainda", "start": 0.04, "end": 0.42 },
+        { "word": "essa", "start": 0.42, "end": 0.6 },
+        { "word": "semana,", "start": 0.6, "end": 1.1 },
+        { "word": "você", "start": 1.1, "end": 1.22 },
+        { "word": "pode", "start": 1.22, "end": 1.44 },
+        { "word": "tomar", "start": 1.44, "end": 1.64 },
+        { "word": "uma", "start": 1.64, "end": 1.8 },
+        { "word": "decisão", "start": 1.8, "end": 2.28 },
+        { "word": "que", "start": 2.28, "end": 2.46 },
+        { "word": "vai", "start": 2.46, "end": 2.6 },
+        { "word": "impactar", "start": 2.6, "end": 3.2 },
+        { "word": "diretamente", "start": 3.2, "end": 4.02 },
+        { "word": "o", "start": 4.02, "end": 4.22 },
+        { "word": "seu", "start": 4.22, "end": 4.3 },
+        { "word": "futuro.", "start": 4.3, "end": 5.24 },
+        { "word": "Faltam", "start": 5.34, "end": 5.56 },
+        { "word": "apenas", "start": 5.56, "end": 5.96 },
+        { "word": "27", "start": 5.96, "end": 6.54 },
+        { "word": "dias", "start": 6.54, "end": 7 },
+        { "word": "para", "start": 7, "end": 7.3 },
+        { "word": "a", "start": 7.3, "end": 7.58 },
+        { "word": "primeira", "start": 7.58, "end": 7.82 },
+        { "word": "caminhada", "start": 7.82, "end": 8.26 },
+        { "word": "alcoólica", "start": 8.26, "end": 8.72 },
+        { "word": "do", "start": 8.72, "end": 8.92 },
+        { "word": "bairro", "start": 8.92, "end": 9.2 },
+        { "word": "Jaqueline.", "start": 9.2, "end": 10.3 },
+        { "word": "Muito", "start": 10.34, "end": 10.54 },
+        { "word": "em", "start": 10.54, "end": 10.7 },
+        { "word": "breve,", "start": 10.7, "end": 11.14 },
+        { "word": "vamos", "start": 11.14, "end": 11.3 },
+        { "word": "viver", "start": 11.3, "end": 11.56 },
+        { "word": "a", "start": 11.56, "end": 11.68 },
+        { "word": "alegria", "start": 11.68, "end": 12 },
+        { "word": "de", "start": 12, "end": 12.16 },
+        { "word": "celebrar", "start": 12.16, "end": 12.62 },
+        { "word": "a", "start": 12.62, "end": 12.74 },
+        { "word": "vida", "start": 12.74, "end": 13.04 },
+        { "word": "durante", "start": 12.86, "end": 13.36 },
+        { "word": "um", "start": 13.36, "end": 13.48 },
+        { "word": "circuito", "start": 13.48, "end": 14 },
+        { "word": "de", "start": 14, "end": 14.12 },
+        { "word": "seis", "start": 14.12, "end": 14.46 },
+        { "word": "bares", "start": 14.46, "end": 14.8 },
+        { "word": "da", "start": 14.8, "end": 14.96 },
+        { "word": "região,", "start": 14.96, "end": 15.62 },
+        { "word": "com", "start": 15.62, "end": 15.76 },
+        { "word": "open", "start": 15.76, "end": 16.1 },
+        { "word": "bar", "start": 16.1, "end": 16.42 },
+        { "word": "durante", "start": 16.42, "end": 16.78 },
+        { "word": "o", "start": 16.78, "end": 16.86 },
+        { "word": "trajeto.", "start": 16.86, "end": 17.38 },
+        { "word": "Os", "start": 17.76, "end": 17.92 },
+        { "word": "ingressos", "start": 17.92, "end": 18.5 },
+        { "word": "são", "start": 18.5, "end": 18.72 },
+        { "word": "limitados.", "start": 18.72, "end": 19.96 },
+        { "word": "Vai", "start": 20.02, "end": 20.16 },
+        { "word": "ficar", "start": 20.16, "end": 20.52 },
+        { "word": "de", "start": 20.52, "end": 20.7 },
+        { "word": "fora", "start": 20.7, "end": 21.04 },
+        { "word": "dessa?", "start": 21.04, "end": 21.7 },
+        { "word": "Entre", "start": 21.98, "end": 22.18 },
+        { "word": "em", "start": 22.18, "end": 22.3 },
+        { "word": "contato", "start": 22.3, "end": 22.82 },
+        { "word": "e", "start": 22.82, "end": 23.04 },
+        { "word": "adquira", "start": 23.04, "end": 23.54 },
+        { "word": "o", "start": 23.54, "end": 23.64 },
+        { "word": "seu", "start": 23.64, "end": 23.78 },
+        { "word": "kit.", "start": 23.78, "end": 24.54 }
+      ];
+
+      // Blocos naturais de fala
+      const CHUNKS = [
+        { startIdx: 0, endIdx: 3 },    // Ainda essa semana,
+        { startIdx: 3, endIdx: 8 },    // você pode tomar uma decisão
+        { startIdx: 8, endIdx: 15 },   // que vai impactar diretamente o seu futuro.
+        { startIdx: 15, endIdx: 19 },  // Faltam apenas 27 dias
+        { startIdx: 19, endIdx: 24 },  // para a primeira caminhada alcoólica
+        { startIdx: 24, endIdx: 27 },  // do bairro Jaqueline.
+        { startIdx: 27, endIdx: 30 },  // Muito em breve,
+        { startIdx: 30, endIdx: 38 },  // vamos viver a alegria de celebrar a vida
+        { startIdx: 38, endIdx: 46 },  // durante um circuito de seis bares da região,
+        { startIdx: 46, endIdx: 52 },  // com open bar durante o trajeto.
+        { startIdx: 52, endIdx: 56 },  // Os ingressos são limitados.
+        { startIdx: 56, endIdx: 61 },  // Vai ficar de fora dessa?
+        { startIdx: 61, endIdx: 64 },  // Entre em contato
+        { startIdx: 64, endIdx: 69 }   // e adquira o seu kit.
+      ];
+
+      const containerSlot = document.getElementById("captions_container");
+
+      CHUNKS.forEach((chunkDef, cIdx) => {
+        const words = WORDS_DATA.slice(chunkDef.startIdx, chunkDef.endIdx);
+        if (!words.length) return;
+
+        const chunkStart = words[0].start;
+        const nextChunkDef = CHUNKS[cIdx + 1];
+        const nextStart = nextChunkDef ? WORDS_DATA[nextChunkDef.startIdx].start : null;
+        const chunkEnd = nextStart ? Math.min(nextStart, words[words.length - 1].end + 0.35) : words[words.length - 1].end + 0.5;
+
+        // Container do bloco posicionado no TOPO (top-[10%])
+        const chunkBox = document.createElement("div");
+        chunkBox.id = `chunk_${cIdx}`;
+        chunkBox.className =
+          "absolute top-[10%] w-[940px] flex flex-wrap justify-center items-center gap-x-5 gap-y-3 text-[66px] leading-[1.12] text-center party-caption opacity-0";
+        containerSlot.appendChild(chunkBox);
+
+        // Animação de entrada e saída do bloco
+        tl.set(chunkBox, { opacity: 1, scale: 0.94, y: -20 }, chunkStart);
+        tl.to(chunkBox, { scale: 1, y: 0, duration: 0.18, ease: "back.out(1.7)" }, chunkStart);
+        tl.to(chunkBox, { opacity: 0, scale: 0.95, duration: 0.12, ease: "power2.in" }, chunkEnd - 0.12);
+
+        // Spans para cada palavra e animação karaoke
+        words.forEach((w) => {
+          const span = document.createElement("span");
+          span.className = "party-word";
+          span.textContent = w.word;
+          chunkBox.appendChild(span);
+
+          // Palavra ativa acende em amarelo/dourado festivo com pop de scale
+          tl.to(
+            span,
+            {
+              color: "#FFE600",
+              scale: 1.2,
+              duration: 0.08,
+              ease: "back.out(2)"
+            },
+            w.start
+          );
+
+          tl.to(
+            span,
+            {
+              color: "#ffffff",
+              scale: 1.0,
+              duration: 0.12,
+              ease: "power1.in"
+            },
+            w.end
+          );
+        });
+      });
+
+      window.__timelines["audio-alegre"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
