@@ -324,6 +324,39 @@
             box-sizing: border-box !important;
           }
 
+          /* SLOT BOTTOM (EXIBIDO ABAIXO DA INPUT QUANDO FOCADA) */
+          .ui-input__bottom {
+            display: none;
+            width: 100%;
+          }
+
+          :host(:focus-within) .ui-input__bottom,
+          .ui-input:focus-within .ui-input__bottom {
+            display: block;
+            animation: uiInputBottomIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+          }
+
+          @keyframes uiInputBottomIn {
+            from {
+              opacity: 0;
+              transform: translateY(-4px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          slot[name="bottom"] {
+            display: block;
+          }
+
+          ::slotted([slot="bottom"]) {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+          }
+
           /* HINT E ERROR */
           .ui-input__hint {
             font-size: 0.75rem;
@@ -550,8 +583,32 @@
           }
         }
 
+        renderPrepend() {
+          return html`<slot name="prepend"></slot>`;
+        }
+
         renderSlotDefault() {
           return html`<slot></slot>`;
+        }
+
+        renderAppend() {
+          return html`<slot name="append"></slot>`;
+        }
+
+        renderBottom() {
+          return html`<slot name="bottom"></slot>`;
+        }
+
+        renderDialogBody() {
+          return html`<slot name="dialog-body"></slot>`;
+        }
+
+        renderDialogActions() {
+          return html`
+            <slot name="dialog-actions">
+              <button type="button" @click="${() => this.dialogClose()}">Fechar</button>
+            </slot>
+          `;
         }
 
         render() {
@@ -561,9 +618,12 @@
                 <slot name="label">${this.label || ''}</slot>
               </div>
               <div class="ui-input__input" @click="${this._handleContainerClick}">
-                <slot name="prepend"></slot>
+                ${this.renderPrepend()}
                 ${this.renderSlotDefault()}
-                <slot name="append"></slot>
+                ${this.renderAppend()}
+              </div>
+              <div class="ui-input__bottom">
+                ${this.renderBottom()}
               </div>
               <div class="ui-input__hint">
                 <slot name="hint">${this.hint || ''}</slot>
@@ -576,11 +636,9 @@
                 part="dialog"
                 @click="${this._handleDialogClick}"
               >
-                <slot name="dialog-body"></slot>
+                ${this.renderDialogBody()}
                 <div class="ui-input__dialog-actions">
-                  <slot name="dialog-actions">
-                    <button type="button" @click="${() => this.dialogClose()}">Fechar</button>
-                  </slot>
+                  ${this.renderDialogActions()}
                 </div>
               </dialog>
             </div>
@@ -588,61 +646,981 @@
         }
       };
 
-      class UiInputTextarea extends UiInput {
+      class UiInputAddress extends UiInput {
+        static get observedAttributes() {
+          return [...(super.observedAttributes || []), 'value'];
+        }
+
         static get properties() {
           return {
             ...super.properties,
             placeholder: { type: String },
-            value: { type: String },
-            rows: { type: Number },
+            value: {
+              type: Object,
+              converter: {
+                fromAttribute(attrVal) {
+                  if (!attrVal) return null;
+                  try {
+                    return JSON.parse(attrVal);
+                  } catch {
+                    return { name: attrVal };
+                  }
+                },
+                toAttribute(propVal) {
+                  if (!propVal) return '';
+                  return typeof propVal === 'object' ? JSON.stringify(propVal) : String(propVal);
+                }
+              }
+            },
+            _draftAddress: { state: true },
+            _isSearchingCep: { state: true },
+            _isSearchingAddress: { state: true },
+            _isSearchingQuery: { state: true },
+            _isLoading: { state: true },
+            _loadingText: { state: true },
+            _searchQuery: { state: true },
+            _searchResults: { state: true }
           };
         }
 
+        static styles = [
+          UiInput.styles,
+          css`
+            :host .ui-input__dialog,
+            .ui-input__dialog {
+              width: 550px !important;
+              max-width: 95vw !important;
+              max-height: 88vh !important;
+              overflow-y: auto !important;
+              padding: 1.25rem 1.4rem !important;
+            }
+
+            .ui-input-address__summary {
+              cursor: pointer !important;
+              text-overflow: ellipsis !important;
+              white-space: nowrap !important;
+              overflow: hidden !important;
+              user-select: none !important;
+            }
+
+            /* HEADER DO FORMULÁRIO */
+            .ui-address-header {
+              margin-bottom: 0.85rem;
+              padding-bottom: 0.5rem;
+              border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+            }
+
+            .ui-address-title {
+              font-size: 1.05rem;
+              font-weight: 600;
+              color: inherit;
+              line-height: 1.3;
+            }
+
+            .ui-address-subtitle {
+              font-size: 0.8rem;
+              opacity: 0.6;
+              margin-top: 0.2rem;
+            }
+
+            /* INDICADOR DE ATIVIDADE / LOADING */
+            .ui-address-activity-bar {
+              display: none;
+              align-items: center;
+              gap: 0.5rem;
+              font-size: 0.75rem;
+              padding: 0.35rem 0.65rem;
+              margin-bottom: 0.65rem;
+              border-radius: 6px;
+              background: color-mix(in srgb, currentColor 8%, transparent);
+              border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+              animation: fadeIn 0.15s ease;
+            }
+
+            .ui-address-activity-bar.is-active {
+              display: flex;
+            }
+
+            .ui-address-spinner {
+              width: 11px;
+              height: 11px;
+              border: 2px solid color-mix(in srgb, currentColor 25%, transparent);
+              border-top-color: currentColor;
+              border-radius: 50%;
+              animation: spin 0.65s linear infinite;
+              flex-shrink: 0;
+            }
+
+            .ui-address-activity-text {
+              font-weight: 500;
+              opacity: 0.9;
+            }
+
+            /* BARRA DE BUSCA */
+            .ui-address-search-box {
+              margin-bottom: 0.75rem;
+            }
+
+            .ui-address-search-box ui-input {
+              margin-bottom: 0 !important;
+            }
+
+            .ui-address-search-results {
+              margin-top: 0.35rem;
+              background-color: var(--ui-dialog-bg, #ffffff);
+              color: var(--ui-dialog-color, #0f172a);
+              border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+              border-radius: 6px;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+
+            :host([is-dark]) .ui-address-search-results {
+              background-color: var(--ui-dialog-bg, #18181b);
+              color: var(--ui-dialog-color, #f8fafc);
+              border-color: rgba(255, 255, 255, 0.2);
+            }
+
+            .ui-address-search-item {
+              display: flex;
+              align-items: flex-start;
+              gap: 0.5rem;
+              padding: 0.5rem 0.65rem;
+              font-size: 0.775rem;
+              cursor: pointer;
+              border-bottom: 1px solid color-mix(in srgb, currentColor 8%, transparent);
+              transition: background-color 0.12s ease;
+              color: inherit;
+              text-align: left;
+            }
+
+            .ui-address-search-item:last-child {
+              border-bottom: none;
+            }
+
+            .ui-address-search-item:hover {
+              background-color: color-mix(in srgb, currentColor 10%, transparent);
+            }
+
+            .ui-address-search-icon {
+              font-size: 0.85rem;
+              line-height: 1.2;
+              opacity: 0.7;
+              flex-shrink: 0;
+            }
+
+            .ui-address-search-text {
+              flex: 1;
+              line-height: 1.35;
+            }
+
+            /* MAPA LEAFLET */
+            .ui-address-map-wrapper {
+              margin-bottom: 0.85rem;
+            }
+
+            .ui-address-map-info {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              font-size: 0.75rem;
+              opacity: 0.8;
+              margin-bottom: 0.35rem;
+              user-select: none;
+            }
+
+            .ui-address-map {
+              width: 100%;
+              height: 190px;
+              border-radius: 6px;
+              border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+              box-sizing: border-box;
+              overflow: hidden;
+              position: relative;
+              z-index: 1;
+            }
+
+            /* GRID RESPONSIVO */
+            .ui-address-grid {
+              display: grid;
+              grid-template-columns: repeat(12, 1fr);
+              gap: 0.65rem 0.55rem;
+            }
+
+            .col-span-12 { grid-column: span 12; }
+            .col-span-8  { grid-column: span 8; }
+            .col-span-7  { grid-column: span 7; }
+            .col-span-6  { grid-column: span 6; }
+            .col-span-5  { grid-column: span 5; }
+            .col-span-4  { grid-column: span 4; }
+            .col-span-3  { grid-column: span 3; }
+            .col-span-2  { grid-column: span 2; }
+
+            @media (max-width: 500px) {
+              .col-span-8, .col-span-7, .col-span-6, .col-span-5, .col-span-4, .col-span-3, .col-span-2 {
+                grid-column: span 12;
+              }
+            }
+
+            .ui-address-grid ui-input {
+              margin-bottom: 0 !important;
+            }
+
+            .ui-address-loading {
+              font-size: 0.725rem;
+              color: #3b82f6;
+              font-style: italic;
+              animation: pulse 1.2s infinite;
+            }
+
+            @keyframes pulse {
+              0%, 100% { opacity: 1; }
+              50% { opacity: 0.4; }
+            }
+
+
+            /* BOTÕES DE AÇÃO */
+            .ui-address-btn {
+              display: inline-flex !important;
+              align-items: center !important;
+              justify-content: center !important;
+              padding: 0.45rem 1rem !important;
+              font-family: inherit !important;
+              font-size: 0.85rem !important;
+              font-weight: 500 !important;
+              color: inherit !important;
+              border-radius: 6px !important;
+              cursor: pointer !important;
+              border: 1px solid transparent !important;
+              transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease !important;
+              box-sizing: border-box !important;
+            }
+
+            .ui-address-btn--cancel {
+              background: color-mix(in srgb, currentColor 8%, transparent) !important;
+              border-color: color-mix(in srgb, currentColor 16%, transparent) !important;
+            }
+
+            .ui-address-btn--cancel:hover {
+              background: color-mix(in srgb, currentColor 14%, transparent) !important;
+            }
+
+            .ui-address-btn--save {
+              background: color-mix(in srgb, currentColor 16%, transparent) !important;
+              border-color: color-mix(in srgb, currentColor 30%, transparent) !important;
+              font-weight: 600 !important;
+            }
+
+            .ui-address-btn--save:hover {
+              background: color-mix(in srgb, currentColor 24%, transparent) !important;
+              border-color: color-mix(in srgb, currentColor 45%, transparent) !important;
+            }
+          `
+        ];
+
         constructor() {
           super();
-          this.placeholder = '';
-          this.value = '';
-          this.rows = 1;
+          this.placeholder = 'Clique para definir o endereço...';
+          this._value = this._normalizeAddress(null);
+          this._draftAddress = { ...this._value };
+          this._isSearchingCep = false;
+          this._isSearchingAddress = false;
+          this._isSearchingQuery = false;
+          this._isLoading = false;
+          this._loadingText = '';
+          this._searchQuery = '';
+          this._searchResults = [];
+          this._searchDebounceTimer = null;
+          this._leafletMap = null;
+          this._leafletMarker = null;
         }
 
-        firstUpdated() {
-          super.firstUpdated?.();
-          if (!this.value) {
+        connectedCallback() {
+          super.connectedCallback();
+          const attrVal = this.getAttribute('value');
+          if (attrVal) {
+            this._value = this._normalizeAddress(attrVal);
+            this._draftAddress = { ...this._value };
+          }
+        }
+
+        attributeChangedCallback(name, oldVal, newVal) {
+          super.attributeChangedCallback(name, oldVal, newVal);
+          if (this._syncingAttribute) return;
+          if (name === 'value' && newVal !== oldVal) {
+            this._value = this._normalizeAddress(newVal);
+            this._draftAddress = { ...this._value };
+            this.requestUpdate();
+          }
+        }
+
+        _normalizeAddress(val) {
+          if (!val) {
+            return {
+              name: '',
+              route: '',
+              number: '',
+              complement: '',
+              zipcode: '',
+              district: '',
+              city: '',
+              state: '',
+              state_code: '',
+              country: '',
+              country_code: '',
+              lat: '',
+              lng: ''
+            };
+          }
+          let obj = val;
+          if (typeof val === 'string') {
+            try {
+              obj = JSON.parse(val);
+            } catch {
+              try {
+                obj = JSON.parse(val.replace(/'/g, '"'));
+              } catch {
+                obj = { name: val, route: val };
+              }
+            }
+          }
+          return {
+            name: obj?.name !== undefined && obj?.name !== null ? String(obj.name) : '',
+            route: obj?.route !== undefined && obj?.route !== null ? String(obj.route) : '',
+            number: obj?.number !== undefined && obj?.number !== null ? String(obj.number) : '',
+            complement: obj?.complement !== undefined && obj?.complement !== null ? String(obj.complement) : '',
+            zipcode: obj?.zipcode !== undefined && obj?.zipcode !== null ? String(obj.zipcode) : '',
+            district: obj?.district !== undefined && obj?.district !== null ? String(obj.district) : '',
+            city: obj?.city !== undefined && obj?.city !== null ? String(obj.city) : '',
+            state: obj?.state !== undefined && obj?.state !== null ? String(obj.state) : '',
+            state_code: obj?.state_code !== undefined && obj?.state_code !== null ? String(obj.state_code) : '',
+            country: obj?.country !== undefined && obj?.country !== null ? String(obj.country) : '',
+            country_code: obj?.country_code !== undefined && obj?.country_code !== null ? String(obj.country_code) : '',
+            lat: obj?.lat !== undefined && obj?.lat !== null ? obj.lat : '',
+            lng: obj?.lng !== undefined && obj?.lng !== null ? obj.lng : ''
+          };
+        }
+
+        get value() {
+          return this._value || this._normalizeAddress(null);
+        }
+
+        set value(val) {
+          const oldVal = this._value;
+          this._value = this._normalizeAddress(val);
+          this._draftAddress = { ...this._value };
+          this.requestUpdate('value', oldVal);
+        }
+
+        firstUpdated(changedProperties) {
+          super.firstUpdated?.(changedProperties);
+          const attrVal = this.getAttribute('value');
+          if (attrVal) {
+            this._value = this._normalizeAddress(attrVal);
+            this._draftAddress = { ...this._value };
+            this.requestUpdate();
+            return;
+          }
+          const isAllEmpty = Object.values(this._value).every(v => v === '');
+          if (isAllEmpty) {
             const rawText = Array.from(this.childNodes)
               .filter(node => node.nodeType === Node.TEXT_NODE)
               .map(node => node.textContent)
               .join('')
               .trim();
             if (rawText) {
-              this.value = rawText;
+              try {
+                this.value = JSON.parse(rawText);
+              } catch (e) {
+                this.value = { name: rawText, route: rawText };
+              }
             }
           }
         }
 
-        _handleTextareaInput(e) {
-          this.value = e.target.value;
-          // Fallback para navegadores sem suporte a field-sizing: content
-          if (!CSS.supports || !CSS.supports('field-sizing', 'content')) {
-            const el = e.target;
-            el.style.height = 'auto';
-            el.style.height = el.scrollHeight + 'px';
+        get formattedValue() {
+          const v = this.value;
+          if (!v) return '';
+
+          const parts = [];
+          const streetParts = [];
+          if (v.route) streetParts.push(v.route);
+          if (v.number) streetParts.push(v.number);
+          if (streetParts.length) parts.push(streetParts.join(', '));
+          if (v.complement) parts.push(v.complement);
+          if (v.district) parts.push(v.district);
+
+          const cityState = [];
+          if (v.city) cityState.push(v.city);
+          if (v.state_code || v.state) cityState.push(v.state_code || v.state);
+          if (cityState.length) parts.push(cityState.join(' - '));
+
+          if (v.zipcode) parts.push(`CEP ${v.zipcode}`);
+
+          const addressText = parts.join(', ');
+
+          if (v.name && addressText) {
+            return `${v.name} - ${addressText}`;
+          }
+          return v.name || addressText || '';
+        }
+
+        dialogOpen() {
+          this._draftAddress = { ...this._value };
+          this._searchQuery = '';
+          this._searchResults = [];
+          this._isLoading = false;
+          this._loadingText = '';
+          super.dialogOpen();
+          setTimeout(async () => {
+            await this.init();
+          }, 80);
+        }
+
+        async init() {
+          if (typeof window.L === "undefined") {
+            await new Promise((resolve, reject) => {
+              document.head.appendChild(
+                Object.assign(document.createElement("link"), {
+                  href: "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
+                  rel: "stylesheet",
+                  onload: resolve,
+                  onerror: reject,
+                }),
+              );
+            });
+
+            await new Promise((resolve, reject) => {
+              document.head.appendChild(
+                Object.assign(document.createElement("script"), {
+                  src: "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
+                  onload: resolve,
+                  onerror: reject,
+                }),
+              );
+            });
+          }
+
+          this.leafletInit();
+        }
+
+        leafletInit() {
+          const mapContainer = this.shadowRoot?.getElementById('address-map');
+          if (!mapContainer || typeof window.L === 'undefined') return;
+
+          // Configura ícones padrão do Leaflet via CDN
+          if (L.Icon && L.Icon.Default) {
+            delete L.Icon.Default.prototype._getIconUrl;
+            L.Icon.Default.mergeOptions({
+              iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+              iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+              shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+            });
+          }
+
+          const hasCoords = Boolean(this._draftAddress.lat && this._draftAddress.lng);
+          const lat = hasCoords ? Number(this._draftAddress.lat) : -23.5505;
+          const lng = hasCoords ? Number(this._draftAddress.lng) : -46.6333;
+          const initialZoom = hasCoords ? 16 : 13;
+
+          if (!this._leafletMap) {
+            this._leafletMap = L.map(mapContainer).setView([lat, lng], initialZoom);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 19,
+              attribution: '&copy; OpenStreetMap'
+            }).addTo(this._leafletMap);
+
+            this._leafletMarker = L.marker([lat, lng], { draggable: true }).addTo(this._leafletMap);
+
+            // Ao arrastar o marcador no mapa
+            this._leafletMarker.on('dragend', (e) => {
+              const pos = e.target.getLatLng();
+              const newLat = Number(pos.lat.toFixed(6));
+              const newLng = Number(pos.lng.toFixed(6));
+              this._updateDraftField('lat', newLat);
+              this._updateDraftField('lng', newLng);
+              this._reverseGeocode(newLat, newLng);
+            });
+
+            // Ao clicar no mapa
+            this._leafletMap.on('click', (e) => {
+              const newLat = Number(e.latlng.lat.toFixed(6));
+              const newLng = Number(e.latlng.lng.toFixed(6));
+              this._leafletMarker.setLatLng([newLat, newLng]);
+              this._updateDraftField('lat', newLat);
+              this._updateDraftField('lng', newLng);
+              this._reverseGeocode(newLat, newLng);
+            });
+          } else {
+            this._leafletMap.setView([lat, lng], initialZoom);
+            this._leafletMarker.setLatLng([lat, lng]);
+          }
+
+          setTimeout(() => {
+            if (this._leafletMap) {
+              this._leafletMap.invalidateSize();
+            }
+          }, 200);
+        }
+
+        _setLoading(active, message = '') {
+          this._isLoading = active;
+          this._loadingText = message;
+          this.requestUpdate();
+        }
+
+        _handleSearchInput(e) {
+          this._searchQuery = e.target.value;
+          clearTimeout(this._searchDebounceTimer);
+          const query = (this._searchQuery || '').trim();
+          if (!query || query.length < 3) {
+            this._searchResults = [];
+            this._setLoading(false);
+            this.requestUpdate();
+            return;
+          }
+          // Debounce de 1000ms conforme solicitado
+          this._setLoading(true, 'Aguardando digitação...');
+          this._searchDebounceTimer = setTimeout(() => {
+            this._executeAddressSearch(query);
+          }, 1000);
+        }
+
+        _handleSearchKeydown(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            clearTimeout(this._searchDebounceTimer);
+            const query = (this._searchQuery || '').trim();
+            if (query.length >= 3) {
+              this._executeAddressSearch(query);
+            }
+          } else if (e.key === 'Escape') {
+            e.target.blur();
           }
         }
 
+        async _executeAddressSearch(query) {
+          try {
+            this._isSearchingQuery = true;
+            this._setLoading(true, `Buscando "${query}" no OpenStreetMap...`);
+
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=5`;
+            const res = await fetch(url, {
+              headers: {
+                'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8'
+              }
+            });
+            const results = await res.json();
+            this._searchResults = Array.isArray(results) ? results : [];
+          } catch (err) {
+            console.warn('Erro ao pesquisar endereço:', err);
+            this._searchResults = [];
+          } finally {
+            this._isSearchingQuery = false;
+            this._setLoading(false);
+          }
+        }
+
+        _selectSearchResult(item) {
+          const lat = Number(item.lat);
+          const lng = Number(item.lon);
+          this._searchQuery = item.display_name;
+
+          if (this._leafletMap && this._leafletMarker) {
+            this._leafletMap.setView([lat, lng], 17);
+            this._leafletMarker.setLatLng([lat, lng]);
+          }
+
+          const a = item.address || {};
+          const route = a.road || a.pedestrian || a.street || a.footway || a.path || '';
+          const number = a.house_number || this._draftAddress.number || '';
+          const district = a.suburb || a.neighbourhood || a.city_district || a.district || '';
+          const city = a.city || a.town || a.municipality || a.village || '';
+          const state = a.state || '';
+          const state_code = a['ISO3166-2-lvl4'] ? a['ISO3166-2-lvl4'].split('-')[1] : (this._draftAddress.state_code || '');
+          const zipcode = a.postcode || '';
+          const country = a.country || 'Brasil';
+          const country_code = (a.country_code || 'br').toUpperCase();
+
+          this._draftAddress = {
+            ...this._draftAddress,
+            name: this._draftAddress.name || item.name || route || '',
+            route: route || this._draftAddress.route,
+            number: number,
+            district: district || this._draftAddress.district,
+            city: city || this._draftAddress.city,
+            state: state || this._draftAddress.state,
+            state_code: state_code || this._draftAddress.state_code,
+            zipcode: zipcode || this._draftAddress.zipcode,
+            country: country || this._draftAddress.country,
+            country_code: country_code || this._draftAddress.country_code,
+            lat: Number(lat.toFixed(6)),
+            lng: Number(lng.toFixed(6))
+          };
+
+          // Desfoca a input para recolher o slot bottom (a lista desaparece da tela sem zerar os dados)
+          const searchInput = this.shadowRoot?.querySelector('.ui-address-search-box input');
+          if (searchInput) {
+            searchInput.blur();
+          }
+
+          this.requestUpdate();
+        }
+
+        async _reverseGeocode(lat, lng) {
+          try {
+            this._isSearchingAddress = true;
+            this._setLoading(true, 'Convertendo coordenadas em endereço...');
+
+            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`;
+            const res = await fetch(url, {
+              headers: {
+                'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8'
+              }
+            });
+            const data = await res.json();
+            if (data && data.address) {
+              const a = data.address;
+              const route = a.road || a.pedestrian || a.street || a.footway || a.path || '';
+              const number = a.house_number || '';
+              const district = a.suburb || a.neighbourhood || a.city_district || a.district || '';
+              const city = a.city || a.town || a.municipality || a.village || '';
+              const state = a.state || '';
+              const state_code = a['ISO3166-2-lvl4'] ? a['ISO3166-2-lvl4'].split('-')[1] : (this._draftAddress.state_code || '');
+              const zipcode = a.postcode || '';
+              const country = a.country || 'Brasil';
+              const country_code = (a.country_code || 'br').toUpperCase();
+
+              this._draftAddress = {
+                ...this._draftAddress,
+                route: route || this._draftAddress.route,
+                number: number || this._draftAddress.number,
+                district: district || this._draftAddress.district,
+                city: city || this._draftAddress.city,
+                state: state || this._draftAddress.state,
+                state_code: state_code || this._draftAddress.state_code,
+                zipcode: zipcode || this._draftAddress.zipcode,
+                country: country || this._draftAddress.country,
+                country_code: country_code || this._draftAddress.country_code,
+                lat: lat,
+                lng: lng
+              };
+            }
+          } catch (err) {
+            console.warn('Falha na geocodificação reversa:', err);
+          } finally {
+            this._isSearchingAddress = false;
+            this._setLoading(false);
+          }
+        }
+
+        _updateDraftField(field, value) {
+          this._draftAddress = {
+            ...this._draftAddress,
+            [field]: value
+          };
+          if ((field === 'lat' || field === 'lng') && this._leafletMarker && this._leafletMap) {
+            const lat = Number(this._draftAddress.lat);
+            const lng = Number(this._draftAddress.lng);
+            if (!isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0) {
+              this._leafletMarker.setLatLng([lat, lng]);
+              this._leafletMap.panTo([lat, lng]);
+            }
+          }
+          this.requestUpdate();
+        }
+
+        async _handleZipcodeChange(e) {
+          const rawVal = e.target.value;
+          this._updateDraftField('zipcode', rawVal);
+
+          const cleanCep = rawVal.replace(/\D/g, '');
+          if (cleanCep.length === 8) {
+            try {
+              this._isSearchingCep = true;
+              this._setLoading(true, `Buscando CEP ${cleanCep} no ViaCEP...`);
+              const res = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`);
+              const data = await res.json();
+              if (!data.erro) {
+                this._draftAddress = {
+                  ...this._draftAddress,
+                  route: data.logradouro || this._draftAddress.route,
+                  district: data.bairro || this._draftAddress.district,
+                  city: data.localidade || this._draftAddress.city,
+                  state_code: data.uf || this._draftAddress.state_code,
+                  state: data.estado || this._draftAddress.state,
+                  country: this._draftAddress.country || 'Brasil',
+                  country_code: this._draftAddress.country_code || 'BR'
+                };
+              }
+            } catch (err) {
+              console.warn('Falha na busca do CEP:', err);
+            } finally {
+              this._isSearchingCep = false;
+              this._setLoading(false);
+            }
+          }
+        }
+
+        _parseCoord(val) {
+          if (val === '' || val === null || val === undefined) return '';
+          const num = Number(val);
+          return !isNaN(num) ? num : val;
+        }
+
+        _handleSave() {
+          const d = this._draftAddress || {};
+          const finalValue = {
+            name: (d.name || '').trim(),
+            route: (d.route || '').trim(),
+            number: (d.number || '').trim(),
+            complement: (d.complement || '').trim(),
+            zipcode: (d.zipcode || '').trim(),
+            district: (d.district || '').trim(),
+            city: (d.city || '').trim(),
+            state: (d.state || '').trim(),
+            state_code: (d.state_code || '').trim().toUpperCase(),
+            country: (d.country || '').trim(),
+            country_code: (d.country_code || '').trim().toUpperCase(),
+            lat: this._parseCoord(d.lat),
+            lng: this._parseCoord(d.lng)
+          };
+          this._value = finalValue;
+          this._syncingAttribute = true;
+          this.setAttribute('value', JSON.stringify(this._value));
+          this._syncingAttribute = false;
+          this.requestUpdate();
+
+          const eventPayload = {
+            detail: { value: this.value },
+            bubbles: true,
+            composed: true
+          };
+          this.dispatchEvent(new CustomEvent('input', eventPayload));
+          this.dispatchEvent(new CustomEvent('change', eventPayload));
+          this.dialogClose();
+        }
+
+        _handleCancel() {
+          this._draftAddress = { ...this._value };
+          this.dialogClose();
+        }
+
         renderSlotDefault() {
+          const displayVal = this.formattedValue;
           return html`
-            <textarea 
-              rows="${this.rows || 1}" 
-              placeholder="${this.placeholder || ''}" 
-              .value="${this.value || ''}"
-              @input="${this._handleTextareaInput}"
-            ></textarea>
+            <input 
+              type="text" 
+              readonly
+              class="ui-input-address__summary"
+              placeholder="${this.placeholder || 'Clique para definir o endereço...'}" 
+              .value="${displayVal}"
+              @click="${() => this.dialogOpen()}"
+              @focus="${() => this.dialogOpen()}"
+              @keydown="${(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.dialogOpen(); } }}"
+              title="${displayVal || 'Clique para definir o endereço'}"
+            />
+          `;
+        }
+
+        renderDialogBody() {
+          const d = this._draftAddress || {};
+          return html`
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+            <slot name="dialog-body">
+              <div class="ui-address-form">
+                <div class="ui-address-header">
+                  <div class="ui-address-title">Editar Endereço</div>
+                  <div class="ui-address-subtitle">Busque digitando, arraste o marcador no mapa ou preencha os campos abaixo</div>
+                </div>
+
+                <!-- Barra de busca com debounce de 1000ms -->
+                <div class="ui-address-search-box">
+                  <ui-input label="Buscar endereço">
+                    <span slot="prepend" style="font-size: 0.95rem; opacity: 0.7;">🔍</span>
+                    <input 
+                      type="text" 
+                      placeholder="Digite um endereço ou local (ex: Av Paulista 1000)..." 
+                      .value="${this._searchQuery || ''}" 
+                      @input="${this._handleSearchInput}"
+                      @keydown="${this._handleSearchKeydown}"
+                    />
+                    ${(this._searchResults && this._searchResults.length > 0) ? html`
+                      <div 
+                        slot="bottom" 
+                        class="ui-address-search-results"
+                        @mousedown="${(e) => e.preventDefault()}"
+                      >
+                        ${this._searchResults.map(item => html`
+                          <div class="ui-address-search-item" @click="${() => this._selectSearchResult(item)}">
+                            <span class="ui-address-search-icon">📍</span>
+                            <span class="ui-address-search-text">${item.display_name}</span>
+                          </div>
+                        `)}
+                      </div>
+                    ` : ''}
+                  </ui-input>
+                </div>
+
+                <!-- Informativo de atividade (consultando API) -->
+                <div class="ui-address-activity-bar ${this._isLoading ? 'is-active' : ''}">
+                  <span class="ui-address-spinner"></span>
+                  <span class="ui-address-activity-text">${this._loadingText}</span>
+                </div>
+
+                <!-- Mapa Leaflet + OpenStreetMap -->
+                <div class="ui-address-map-wrapper">
+                  <div class="ui-address-map-info">
+                    <span>📍 Arraste o marcador ou clique para obter o endereço</span>
+                  </div>
+                  <div id="address-map" class="ui-address-map"></div>
+                </div>
+
+                <div class="ui-address-grid">
+                  <!-- Nome humano do endereço -->
+                  <ui-input label="Identificação / Nome (ex: Casa, Trabalho)" class="col-span-12">
+                    <input 
+                      type="text" 
+                      placeholder="Casa, Trabalho, Escritório..." 
+                      .value="${d.name || ''}" 
+                      @input="${(e) => this._updateDraftField('name', e.target.value)}"
+                    />
+                  </ui-input>
+
+                  <!-- CEP / Zipcode -->
+                  <ui-input label="CEP / Código Postal" class="col-span-5">
+                    <input 
+                      type="text" 
+                      placeholder="00000-000" 
+                      .value="${d.zipcode || ''}" 
+                      @input="${this._handleZipcodeChange}"
+                    />
+                    ${this._isSearchingCep ? html`<span slot="append" class="ui-address-loading">Buscando CEP...</span>` : ''}
+                  </ui-input>
+
+                  <!-- Logradouro / Route -->
+                  <ui-input label="Logradouro / Rua" class="col-span-7">
+                    <input 
+                      type="text" 
+                      placeholder="Rua, Avenida, Alameda..." 
+                      .value="${d.route || ''}" 
+                      @input="${(e) => this._updateDraftField('route', e.target.value)}"
+                    />
+                  </ui-input>
+
+                  <!-- Número -->
+                  <ui-input label="Número" class="col-span-4">
+                    <input 
+                      type="text" 
+                      placeholder="123 ou S/N" 
+                      .value="${d.number || ''}" 
+                      @input="${(e) => this._updateDraftField('number', e.target.value)}"
+                    />
+                  </ui-input>
+
+                  <!-- Complemento -->
+                  <ui-input label="Complemento" class="col-span-4">
+                    <input 
+                      type="text" 
+                      placeholder="Apto, Bloco, Sala..." 
+                      .value="${d.complement || ''}" 
+                      @input="${(e) => this._updateDraftField('complement', e.target.value)}"
+                    />
+                  </ui-input>
+
+                  <!-- Bairro / District -->
+                  <ui-input label="Bairro" class="col-span-4">
+                    <input 
+                      type="text" 
+                      placeholder="Bairro" 
+                      .value="${d.district || ''}" 
+                      @input="${(e) => this._updateDraftField('district', e.target.value)}"
+                    />
+                  </ui-input>
+
+                  <!-- Cidade -->
+                  <ui-input label="Cidade" class="col-span-6">
+                    <input 
+                      type="text" 
+                      placeholder="Cidade" 
+                      .value="${d.city || ''}" 
+                      @input="${(e) => this._updateDraftField('city', e.target.value)}"
+                    />
+                  </ui-input>
+
+                  <!-- Estado / State -->
+                  <ui-input label="Estado" class="col-span-4">
+                    <input 
+                      type="text" 
+                      placeholder="Ex: São Paulo" 
+                      .value="${d.state || ''}" 
+                      @input="${(e) => this._updateDraftField('state', e.target.value)}"
+                    />
+                  </ui-input>
+
+                  <!-- Sigla do Estado / State Code -->
+                  <ui-input label="UF" class="col-span-2">
+                    <input 
+                      type="text" 
+                      placeholder="SP" 
+                      maxlength="2"
+                      style="text-transform: uppercase;"
+                      .value="${d.state_code || ''}" 
+                      @input="${(e) => this._updateDraftField('state_code', e.target.value.toUpperCase())}"
+                    />
+                  </ui-input>
+
+                  <!-- País / Country -->
+                  <ui-input label="País" class="col-span-8">
+                    <input 
+                      type="text" 
+                      placeholder="Brasil" 
+                      .value="${d.country || ''}" 
+                      @input="${(e) => this._updateDraftField('country', e.target.value)}"
+                    />
+                  </ui-input>
+
+                  <!-- Código País / Country Code -->
+                  <ui-input label="Cód. País" class="col-span-4">
+                    <input 
+                      type="text" 
+                      placeholder="BR" 
+                      maxlength="2"
+                      style="text-transform: uppercase;"
+                      .value="${d.country_code || ''}" 
+                      @input="${(e) => this._updateDraftField('country_code', e.target.value.toUpperCase())}"
+                    />
+                  </ui-input>
+                </div>
+              </div>
+            </slot>
+          `;
+        }
+
+        renderDialogActions() {
+          return html`
+            <slot name="dialog-actions">
+              <button 
+                type="button" 
+                class="ui-address-btn ui-address-btn--cancel" 
+                @click="${() => this._handleCancel()}"
+              >
+                Cancelar
+              </button>
+              <button 
+                type="button" 
+                class="ui-address-btn ui-address-btn--save" 
+                @click="${() => this._handleSave()}"
+              >
+                Salvar Endereço
+              </button>
+            </slot>
           `;
         }
       }
 
       customElements.define('ui-input', UiInput);
-      customElements.define('ui-input-textarea', UiInputTextarea);
+      customElements.define('ui-input-address', UiInputAddress);
     </script>
   </head>
   <body class="min-h-screen bg-base-200 p-8 flex flex-col items-center">
@@ -719,9 +1697,11 @@
           <textarea name="" id=""></textarea>
         </ui-input>
 
-        <!-- <ui-input-textarea placeholder="Digite sua mensagem aqui...">
-          <div slot="prepend">Texto</div>
-        </ui-input-textarea> -->
+        <!-- Componente UiInputAddress 100% autônomo (sem necessidade de JS externo) -->
+        <ui-input-address 
+          label="Endereço de Entrega"
+          value='{"name":"Apartamento Centro","zipcode":"01310-100","route":"Avenida Paulista","number":"1578","complement":"Apto 82","district":"Bela Vista","city":"São Paulo","state":"São Paulo","state_code":"SP","country":"Brasil","country_code":"BR","lat":-23.561414,"lng":-46.6558819}'
+        ></ui-input-address>
       </div>
     </div>
   </body>
