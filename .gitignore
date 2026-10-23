@@ -3,5 +3,6 @@ node_modules
 !.vscode/extensions
 .env
 curriculum
+study
 **/renders/
 *.mov
