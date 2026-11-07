@@ -1,6 +1,0 @@
-networks:
-  default:
-    name: main_network
-
-include:
-  - ./hyperframes/compose.yml

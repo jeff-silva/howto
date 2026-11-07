@@ -1,6 +1,0 @@
-A promotional vertical video (9:16) for a local community event called "1ª Caminhada Alcoólica do Bairro Jaqueline". 
-The video starts with a serious, dramatic tone and a suspenseful atmosphere. A charismatic local Brazilian man looks directly into the camera with a very serious and important expression, as if making a crucial political statement. 
-On-screen text appears matching the spoken script: "Ainda essa semana você pode tomar uma decisão que vai impactar diretamente o seu futuro..."
-After a brief dramatic pause of 2 seconds, the mood completely shifts to energetic, fun, and celebratory. The speaker breaks into a smile, holding a branded t-shirt or event kit cup, and the text changes to: "Faltam apenas 27 dias para a 1ª Caminhada Alcoólica do Bairro Jaqueline!"
-The background transitions dynamically to show a lively group of friends laughing, walking through a neighborhood street, and stopping by vibrant local bars for an open bar circuit. 
-Dynamic camera movement, bright and festive daytime lighting, highly engaging social media style, high quality, vibrant colors.
