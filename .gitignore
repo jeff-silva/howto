@@ -2,6 +2,7 @@ node_modules
 .vscode/*
 !.vscode/extensions
 .env
-curriculum
+curriculum/output
 study
 **/renders/
+max
