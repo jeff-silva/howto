@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="corporate">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conservadora BH - Azul Serviços | Terceirização de Limpeza e Portaria em BH</title>
+  <meta name="description" content="Há 24 anos no mercado mineiro. Terceirização de serviços de limpeza e conservação, portaria 24h, vigia, zeladoria, recepção e mão de obra especializada em Belo Horizonte e região." />
+  <meta name="keywords" content="conservadora bh, terceirização de limpeza bh, portaria 24 horas belo horizonte, azul serviços, azul service, zeladoria bh, mão de obra terceirizada mg" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://www.azulservice.com.br/" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Conservadora BH - Azul Serviços" />
+  <meta property="og:title" content="Conservadora BH - Azul Serviços | Terceirização de Limpeza e Portaria em BH" />
+  <meta property="og:description" content="24 anos de experiência em terceirização de limpeza, portaria 24h, zeladoria e mão de obra especializada em Belo Horizonte. Alocação em até 48h." />
+  <meta property="og:url" content="https://www.azulservice.com.br/" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Conservadora BH - Azul Serviços | Terceirização em BH" />
+  <meta name="twitter:description" content="Terceirização de limpeza, portaria 24h, zeladoria e mão de obra especializada em Belo Horizonte." />
+
+  <!-- Structured Data (LocalBusiness) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Conservadora BH - Azul Serviços",
+      "url": "https://www.azulservice.com.br/",
+      "telephone": "+55-31-2520-1211",
+      "email": "contato@azulservice.com.br",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "R. Maestro Francisco Flôres, 318 - São Luiz",
+        "addressLocality": "Belo Horizonte",
+        "addressRegion": "MG",
+        "postalCode": "31270-740",
+        "addressCountry": "BR"
+      },
+      "openingHours": "Mo-Fr 08:00-17:00",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "35"
+      },
+      "sameAs": [
+        "https://www.instagram.com/azulservicebh/",
+        "https://www.facebook.com/AzulService/"
+      ]
+    }
+  </script>
+
+  <!-- DaisyUI + Tailwind CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            azul: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              600: '#1d4ed8',
+              700: '#1e40af',
+              800: '#1e3a8a',
+              900: '#0f172a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+  <!-- Iconify CDN -->
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+  <div id="app">
+    <!-- Top Info Bar -->
+    <div class="bg-azul-900 text-slate-200 text-xs py-2 px-4 hidden md:block">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-6">
+          <span class="inline-flex items-center gap-1.5"><iconify-icon icon="mdi:map-marker" width="15" height="15"></iconify-icon> R. Maestro Francisco Flôres, 318 - São Luiz (Pampulha), Belo Horizonte - MG</span>
+          <span class="inline-flex items-center gap-1.5"><iconify-icon icon="mdi:clock-outline" width="15" height="15"></iconify-icon> Seg a Sex: até 17:00</span>
+        </div>
+        <div class="flex items-center gap-4 shrink-0">
+          <a href="tel:+553125201211" class="hover:text-white font-medium inline-flex items-center gap-1.5 whitespace-nowrap">
+            <iconify-icon icon="mdi:phone" width="15" height="15"></iconify-icon> (31) 2520-1211
+          </a>
+          <a href="https://www.instagram.com/azulservicebh/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram" class="hover:text-white inline-flex items-center">
+            <iconify-icon icon="mdi:instagram" width="18" height="18"></iconify-icon>
+          </a>
+          <a href="https://www.facebook.com/AzulService/" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook" class="hover:text-white inline-flex items-center">
+            <iconify-icon icon="mdi:facebook" width="18" height="18"></iconify-icon>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="sticky top-0 z-50 bg-azul-900/95 backdrop-blur border-b border-white/10 shadow-sm text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <!-- Logo -->
+          <a href="#" class="flex items-center">
+            <img
+              src="https://www.azulservice.com.br/wp-content/uploads/elementor/thumbs/logo-azul-service-pp394ryku65srvhz4113j4okvtwmi08veeuuptzmyo.png"
+              alt="Azul Service - Conservadora BH"
+              class="h-10 w-auto object-contain"
+            />
+          </a>
+
+          <!-- Desktop Nav (Megamenu DaisyUI) -->
+          <nav class="hidden md:flex items-center gap-5 text-sm font-medium text-slate-200">
+            <template v-for="item in menu" :key="item.label">
+              <!-- Megamenu (quando tem children) -->
+              <div v-if="item.children" class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="inline-flex items-center gap-1 hover:text-cyan-300 transition py-2">
+                  {{ item.label }} <iconify-icon icon="mdi:chevron-down" width="16" height="16"></iconify-icon>
+                </div>
+                <div
+                  tabindex="0"
+                  :class="item.columns === 2 ? 'w-[520px] p-5' : 'w-80 p-4'"
+                  class="dropdown-content z-50 mt-5 shadow-2xl bg-azul-900 text-slate-100 rounded-lg border border-white/15"
+                >
+                  <div class="text-xs font-bold uppercase tracking-wider text-cyan-300 mb-3">{{ item.subtitle }}</div>
+                  <div :class="item.columns === 2 ? 'grid grid-cols-2 gap-2' : 'space-y-1.5'">
+                    <template v-for="child in item.children" :key="child.label">
+                      <button
+                        v-if="child.action === 'quote'"
+                        @click="selectServiceForQuote(child.label)"
+                        class="flex items-start gap-2.5 p-2.5 rounded-md hover:bg-white/10 text-left transition w-full"
+                      >
+                        <iconify-icon :icon="child.icon" width="20" height="20" class="text-cyan-300 shrink-0 mt-0.5"></iconify-icon>
+                        <div>
+                          <div class="font-semibold text-white text-xs">{{ child.label }}</div>
+                          <div v-if="child.description" class="text-[11px] text-slate-300 line-clamp-1">{{ child.description }}</div>
+                        </div>
+                      </button>
+                      <a
+                        v-else
+                        :href="child.href"
+                        :target="child.external ? '_blank' : undefined"
+                        :rel="child.external ? 'noopener' : undefined"
+                        class="block p-2 rounded-md hover:bg-white/10 text-xs text-slate-200 hover:text-cyan-300"
+                      >
+                        {{ child.label }}
+                      </a>
+                    </template>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Standard / Custom Class Link -->
+              <a v-else :href="item.href" :target="item.external ? '_blank' : undefined" :rel="item.external ? 'noopener' : undefined" :class="item.class || 'hover:text-cyan-300 transition'">
+                {{ item.label }}
+              </a>
+            </template>
+          </nav>
+
+          <!-- Mobile Menu Button -->
+          <button @click="openMobileMenu" class="md:hidden btn btn-ghost btn-sm" aria-label="Abrir menu">
+            <iconify-icon icon="mdi:menu" width="24" height="24"></iconify-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile DaisyUI Dialog (Fullscreen Centered Dark) -->
+      <dialog id="mobile-dialog" class="modal modal-middle">
+        <div class="modal-box bg-azul-900 text-slate-100 w-screen h-screen max-w-none max-h-none rounded-none flex flex-col justify-center items-center relative p-6">
+          <button @click="closeMobileMenu" class="btn btn-sm btn-circle btn-ghost text-white hover:bg-white/10 absolute top-4 right-4" aria-label="Fechar menu">
+            <iconify-icon icon="mdi:close" width="24" height="24"></iconify-icon>
+          </button>
+          <div class="w-full max-w-xs">
+            <div v-if="mobileNavStack.length > 0" class="flex items-center justify-between mb-4 pb-2 border-b border-white/15">
+              <button @click="mobileNavStack.pop()" class="btn btn-ghost btn-sm gap-1 text-slate-200 hover:bg-white/10">
+                <iconify-icon icon="mdi:chevron-left" width="20" height="20"></iconify-icon> Voltar
+              </button>
+              <button @click="mobileNavStack = []" class="btn btn-ghost btn-xs text-cyan-300 hover:bg-white/10">
+                Início
+              </button>
+            </div>
+
+            <span class="block font-extrabold text-white text-2xl mb-6 text-center">
+              {{ mobileNavStack.length ? mobileNavStack[mobileNavStack.length - 1].title : 'Navegação' }}
+            </span>
+
+            <nav class="flex flex-col divide-y divide-white/10 w-full text-left">
+              <template v-for="item in (mobileNavStack.length ? mobileNavStack[mobileNavStack.length - 1].items : menu)" :key="item.label">
+                <button
+                  v-if="item.children"
+                  @click="mobileNavStack.push({ title: item.label, items: item.children })"
+                  class="flex items-center justify-between w-full py-3.5 px-3 rounded-lg hover:bg-white/10 font-medium text-slate-100 transition"
+                >
+                  <span>{{ item.label }}</span>
+                  <iconify-icon icon="mdi:chevron-right" width="20" height="20" class="text-slate-400"></iconify-icon>
+                </button>
+                <button
+                  v-else-if="item.action === 'quote'"
+                  @click="closeMobileMenu(); selectServiceForQuote(item.label)"
+                  class="flex items-center gap-3 w-full py-3.5 px-3 rounded-lg hover:bg-white/10 font-medium text-slate-100 text-left transition"
+                >
+                  <iconify-icon v-if="item.icon" :icon="item.icon" width="20" height="20" class="text-cyan-300 shrink-0"></iconify-icon>
+                  <span>{{ item.label }}</span>
+                </button>
+                <a
+                  v-else
+                  @click="closeMobileMenu"
+                  :href="item.href"
+                  :target="item.external ? '_blank' : undefined"
+                  :rel="item.external ? 'noopener' : undefined"
+                  :class="item.class ? item.class + ' w-full mt-2' : 'flex items-center justify-between w-full py-3.5 px-3 rounded-lg hover:bg-white/10 font-medium text-slate-100 transition'"
+                >
+                  <span>{{ item.label }}</span>
+                </a>
+              </template>
+            </nav>
+          </div>
+        </div>
+      </dialog>
+    </header>
+
+    <!-- Hero Section -->
+    <main>
+    <section class="relative bg-azul-900 text-white overflow-hidden">
+      <!-- Background Image + Overlay -->
+      <div
+        class="absolute inset-0 bg-cover bg-center opacity-50"
+        style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80');"
+      ></div>
+      <div class="absolute inset-0 bg-gradient-to-br from-azul-900/75 via-azul-900/60 to-azul-800/70"></div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid lg:grid-cols-12 gap-12 items-center">
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide">
+            <span class="text-yellow-400">★ 4,9</span>
+            <span>35 avaliações no Google • 24 anos de mercado mineiro</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight">
+            Cuidamos do seu espaço em BH há <span class="text-cyan-300">24 anos</span>
+          </h1>
+
+          <p class="text-slate-100 text-lg max-w-2xl leading-relaxed">
+            Na <strong>Conservadora BH - Azul Serviços</strong>, você conta com equipes treinadas de limpeza, portaria 24h e mão de obra especializada para empresas e condomínios — com alocação rápida em até <strong>48 horas</strong>.
+          </p>
+
+          <div class="flex flex-wrap gap-4 pt-2">
+            <a href="#contato" class="btn btn-lg bg-white text-azul-900 hover:bg-slate-100 border-none font-bold">
+              Fazer Cotação Online
+            </a>
+            <a href="tel:+553125201211" class="btn btn-lg btn-outline text-white border-white/40 hover:bg-white/10 hover:border-white inline-flex items-center gap-2">
+              <iconify-icon icon="mdi:phone" width="20" height="20"></iconify-icon> (31) 2520-1211
+            </a>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4 pt-6 border-t border-white/15 max-w-lg">
+            <div>
+              <div class="text-2xl font-extrabold">24 anos</div>
+              <div class="text-xs text-slate-300">de atuação em MG</div>
+            </div>
+            <div>
+              <div class="text-2xl font-extrabold">Até 48h</div>
+              <div class="text-xs text-slate-300">para alocar equipe</div>
+            </div>
+            <div>
+              <div class="text-2xl font-extrabold">24 horas</div>
+              <div class="text-xs text-slate-300">portaria e vigia</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Quote Card in Hero -->
+        <div class="lg:col-span-5">
+          <div class="card bg-white text-slate-800 shadow-2xl border border-slate-100">
+            <div class="card-body p-6 sm:p-8">
+              <h2 class="text-xl font-bold text-azul-900">Atendimento Rápido</h2>
+              <p class="text-sm text-slate-500 mb-4">Receba uma proposta sob medida para o seu negócio ou condomínio.</p>
+
+              <form @submit.prevent="submitQuote" class="space-y-3">
+                <div class="form-control">
+                  <label class="label py-1"><span class="label-text font-medium text-slate-700">Nome ou Empresa *</span></label>
+                  <input v-model="quote.name" type="text" placeholder="Ex: Condomínio Residencial / João Silva" class="input input-bordered w-full bg-white" required />
+                </div>
+
+                <div class="form-control">
+                  <label class="label py-1"><span class="label-text font-medium text-slate-700">Telefone / WhatsApp *</span></label>
+                  <input v-model="quote.phone" type="tel" placeholder="(31) 99999-9999" class="input input-bordered w-full bg-white" required />
+                </div>
+
+                <div class="form-control">
+                  <label class="label py-1"><span class="label-text font-medium text-slate-700">Serviço desejado *</span></label>
+                  <select v-model="quote.service" class="select select-bordered w-full bg-white" required>
+                    <option value="" disabled>Selecione um serviço</option>
+                    <option v-for="s in services" :key="s.id" :value="s.title">{{ s.title }}</option>
+                  </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full bg-azul-700 hover:bg-azul-800 border-none text-white mt-2">
+                  Solicitar Orçamento
+                </button>
+              </form>
+
+              <div v-if="quote.submitted" class="alert alert-success mt-4 text-sm py-2.5 flex items-center gap-2">
+                <iconify-icon icon="mdi:check-circle" width="20" height="20"></iconify-icon>
+                <span>Solicitação registrada! Nossa equipe entrará em contato em breve.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Segments Strip -->
+    <section class="bg-white border-b border-slate-200 py-6">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-center md:justify-between gap-6 text-sm font-semibold text-slate-600">
+        <span class="text-xs uppercase tracking-wider text-slate-400">Segmentos Atendidos:</span>
+        <span class="inline-flex items-center gap-2"><iconify-icon icon="mdi:office-building" width="18" height="18" class="text-azul-700"></iconify-icon> Condomínios</span>
+        <span class="inline-flex items-center gap-2"><iconify-icon icon="mdi:domain" width="18" height="18" class="text-azul-700"></iconify-icon> Empresas Privadas</span>
+        <span class="inline-flex items-center gap-2"><iconify-icon icon="mdi:bank" width="18" height="18" class="text-azul-700"></iconify-icon> Órgãos Públicos</span>
+        <span class="inline-flex items-center gap-2"><iconify-icon icon="mdi:store" width="18" height="18" class="text-azul-700"></iconify-icon> Comércios e Indústrias</span>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="servicos" class="py-16 lg:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-azul-600 font-bold text-sm uppercase tracking-wider">Nossas Soluções</span>
+        <h2 class="text-3xl font-extrabold text-azul-900 mt-2">Serviços Terceirizados Especializados</h2>
+        <p class="text-slate-600 mt-3">
+          Atendemos empresas públicas e privadas, condomínios, indústrias e comércios em Belo Horizonte e região metropolitana.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div v-for="service in services" :key="service.id" class="card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200">
+          <div class="card-body p-6">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-azul-50 to-cyan-50 text-azul-700 flex items-center justify-center mb-3 border border-cyan-100">
+              <iconify-icon :icon="service.icon" width="26" height="26"></iconify-icon>
+            </div>
+            <h3 class="font-bold text-lg text-azul-900">{{ service.title }}</h3>
+            <p class="text-sm text-slate-600 leading-relaxed mt-1">{{ service.description }}</p>
+            <div class="card-actions mt-4 pt-3 border-t border-slate-100">
+              <button @click="selectServiceForQuote(service.title)" class="text-sm font-semibold text-azul-700 hover:text-azul-900">
+                Solicitar cotação →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section id="diferenciais" class="bg-white border-y border-slate-200 py-16 lg:py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="text-azul-600 font-bold text-sm uppercase tracking-wider">Por que a Azul Serviços?</span>
+          <h2 class="text-3xl font-extrabold text-azul-900 mt-2">Agilidade, Preço Justo e Mão de Obra Qualificada</h2>
+          <p class="text-slate-600 mt-4 leading-relaxed">
+            Com sede na região da Pampulha em Belo Horizonte, simplificamos a gestão de terceirização para que você foque no seu negócio enquanto cuidamos da operação com rigor e responsabilidade.
+          </p>
+
+          <ul class="mt-6 space-y-4">
+            <li class="flex items-start gap-3">
+              <span class="badge badge-primary bg-azul-700 border-none text-white mt-1"><iconify-icon icon="mdi:check" width="14" height="14"></iconify-icon></span>
+              <div>
+                <strong class="text-azul-900 block">Disponibilização em até 48h</strong>
+                <span class="text-sm text-slate-600">Atendimento ágil inclusive para demandas de curto prazo e serviços específicos.</span>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="badge badge-primary bg-azul-700 border-none text-white mt-1"><iconify-icon icon="mdi:check" width="14" height="14"></iconify-icon></span>
+              <div>
+                <strong class="text-azul-900 block">24 anos de experiência em MG</strong>
+                <span class="text-sm text-slate-600">Solidez no atendimento a órgãos públicos e empresas privadas.</span>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="badge badge-primary bg-azul-700 border-none text-white mt-1"><iconify-icon icon="mdi:check" width="14" height="14"></iconify-icon></span>
+              <div>
+                <strong class="text-azul-900 block">Colaboradores treinados</strong>
+                <span class="text-sm text-slate-600">Equipe preparada para limpeza técnica, portaria 24h, controle de acesso e apoio operacional.</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="bg-azul-50 rounded-2xl p-8 border border-azul-100 space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-4xl font-extrabold text-azul-900">4,9 / 5,0</div>
+              <div class="text-sm text-slate-600">Baseado em 35 avaliações no Google</div>
+            </div>
+            <div class="text-yellow-500 text-2xl">★★★★★</div>
+          </div>
+          <div class="divider my-2"></div>
+          <div class="space-y-4" id="avaliacoes">
+            <div v-for="(review, idx) in reviews" :key="idx" class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+              <p class="text-sm text-slate-700 italic">"{{ review.text }}"</p>
+              <div class="text-xs font-semibold text-azul-700 mt-2">— {{ review.author }} • Google</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact & Map Section -->
+    <section id="contato" class="py-16 bg-slate-100 border-t border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-10">
+        <div class="lg:col-span-5 space-y-6">
+          <div>
+            <span class="text-azul-600 font-bold text-sm uppercase tracking-wider">Contato</span>
+            <h2 class="text-3xl font-extrabold text-azul-900 mt-1">Fale com a Conservadora BH</h2>
+            <p class="text-slate-600 mt-2 text-sm">
+              Entre em contato para agendar uma visita técnica ou solicitar um orçamento personalizado.
+            </p>
+          </div>
+
+          <div class="space-y-4 text-sm">
+            <div class="flex items-start gap-3">
+              <iconify-icon icon="mdi:map-marker" width="22" height="22" class="text-azul-700 shrink-0 mt-0.5"></iconify-icon>
+              <div>
+                <strong class="block text-azul-900">Endereço</strong>
+                <span class="text-slate-600">R. Maestro Francisco Flôres, 318 - São Luiz, Belo Horizonte - MG, 31270-740</span>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <iconify-icon icon="mdi:phone" width="22" height="22" class="text-azul-700 shrink-0 mt-0.5"></iconify-icon>
+              <div>
+                <strong class="block text-azul-900">Telefone</strong>
+                <a href="tel:+553125201211" class="text-azul-700 font-semibold hover:underline">(31) 2520-1211</a>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <iconify-icon icon="mdi:email-outline" width="22" height="22" class="text-azul-700 shrink-0 mt-0.5"></iconify-icon>
+              <div>
+                <strong class="block text-azul-900">E-mail</strong>
+                <a href="mailto:contato@azulservice.com.br" class="text-azul-700 font-semibold hover:underline">contato@azulservice.com.br</a>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <iconify-icon icon="mdi:clock-outline" width="22" height="22" class="text-azul-700 shrink-0 mt-0.5"></iconify-icon>
+              <div>
+                <strong class="block text-azul-900">Horário de Funcionamento</strong>
+                <span class="text-slate-600">Segunda a Sexta • Fecha às 17:00</span>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <iconify-icon icon="mdi:web" width="22" height="22" class="text-azul-700 shrink-0 mt-0.5"></iconify-icon>
+              <div>
+                <strong class="block text-azul-900">Canais Oficiais</strong>
+                <div class="flex gap-3 mt-1">
+                  <a href="https://www.azulservice.com.br/" target="_blank" rel="noopener" class="link link-primary">Site Oficial</a>
+                  <a href="https://www.instagram.com/azulservicebh/" target="_blank" rel="noopener" class="link link-primary">Instagram</a>
+                  <a href="https://www.facebook.com/AzulService/" target="_blank" rel="noopener" class="link link-primary">Facebook</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <div class="card bg-white shadow-md border border-slate-200 overflow-hidden h-full min-h-[360px]">
+            <iframe
+              title="Localização da Conservadora BH - Azul Serviços"
+              src="https://www.google.com/maps?q=R.+Maestro+Francisco+Fl%C3%B4res,+318+-+S%C3%A3o+Luiz,+Belo+Horizonte+-+MG,+31270-740&output=embed"
+              class="w-full h-full min-h-[360px] border-0"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-azul-900 text-slate-400 py-8 text-center text-xs border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-4 space-y-1.5">
+        <p class="font-semibold text-slate-200">Conservadora BH - Azul Serviços (Azul Service Serviços Gerais)</p>
+        <p>R. Maestro Francisco Flôres, 318 - São Luiz, Belo Horizonte - MG • (31) 2520-1211</p>
+        <p class="text-slate-500 pt-1">
+          Desenvolvido por <a href="https://labscript.dev" target="_blank" rel="noopener" class="text-slate-300 hover:text-white underline">labscript.dev</a>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a
+      href="https://wa.me/553125201211?text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20uma%20cota%C3%A7%C3%A3o%20com%20a%20Azul%20Servi%C3%A7os."
+      target="_blank"
+      rel="noopener"
+      aria-label="Falar no WhatsApp"
+      class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg hover:shadow-xl transition-transform hover:scale-105"
+    >
+      <iconify-icon icon="mdi:whatsapp" width="32" height="32"></iconify-icon>
+    </a>
+  </div>
+
+  <script>
+    const { createApp, reactive } = Vue;
+
+    createApp({
+      setup() {
+        const scope = reactive({
+          mobileNavStack: [],
+          menu: [
+            { label: 'Home', href: '#' },
+            { label: 'Sobre nós', href: '#diferenciais' },
+            {
+              label: 'Serviços',
+              href: '#servicos',
+              subtitle: 'Nossos Serviços em BH',
+              columns: 2,
+              children: [
+                { label: 'Limpeza e Conservação', icon: 'mdi:broom', description: 'Pisos, paredes, tetos, sanitários, vidraças e jardins.', action: 'quote' },
+                { label: 'Portaria e Vigia 24h', icon: 'mdi:shield-account', description: 'Controle de acesso e vigilância patrimonial.', action: 'quote' },
+                { label: 'Zeladoria e Manutenção', icon: 'mdi:wrench-outline', description: 'Zeladores e manutenção predial geral.', action: 'quote' },
+                { label: 'Recepção e Atendimento', icon: 'mdi:account-tie-voice', description: 'Recepcionistas e suporte administrativo.', action: 'quote' },
+                { label: 'Copa e Cozinha', icon: 'mdi:coffee-outline', description: 'Profissionais para escritórios e clínicas.', action: 'quote' },
+                { label: 'Manobristas', icon: 'mdi:car-key', description: 'Organização de garagens e estacionamentos.', action: 'quote' },
+                { label: 'Locação de Mão de Obra', icon: 'mdi:account-hard-hat', description: 'Terceirização rápida em até 48h.', action: 'quote' },
+                { label: 'Consultoria Administrativa', icon: 'mdi:chart-box-outline', description: 'Apoio operacional para empresas.', action: 'quote' }
+              ]
+            },
+            {
+              label: 'Blog',
+              href: 'https://www.azulservice.com.br/blog/',
+              subtitle: 'Artigos sobre Terceirização',
+              columns: 1,
+              children: [
+                { label: 'Benefícios da terceirização de serviços', href: 'https://www.azulservice.com.br/por-que-terceirizar/', external: true },
+                { label: 'Como manter uma parceria sustentável', href: 'https://www.azulservice.com.br/por-que-terceirizar-2/', external: true },
+                { label: '3 principais mitos sobre terceirização', href: 'https://www.azulservice.com.br/por-que-terceirizar-3/', external: true },
+                { label: 'Como encontrar uma boa limpeza conservadora?', href: 'https://www.azulservice.com.br/como-encontrar-uma-boa-limpeza-conservadora/', external: true }
+              ]
+            },
+            { label: 'Currículos', href: 'https://www.azulservice.com.br/trabalhe-conosco/', external: true },
+            {
+              label: 'Orçamentos',
+              href: '#contato',
+            },
+            {
+              label: 'Área do Cliente',
+              href: 'cliente.html',
+              class: 'btn btn-outline btn-sm border-cyan-300 text-cyan-300 hover:bg-cyan-300 hover:text-azul-900 hover:border-cyan-300 px-3'
+            },
+          ],
+          quote: {
+            name: '',
+            phone: '',
+            service: '',
+            submitted: false
+          },
+          services: [
+              {
+                id: 1,
+                icon: 'mdi:broom',
+                title: 'Limpeza e Conservação',
+                description: 'Limpeza profissional de pisos, paredes, tetos, sanitários, vidraças e jardins para empresas e condomínios.'
+              },
+              {
+                id: 2,
+                icon: 'mdi:shield-account',
+                title: 'Portaria e Vigia 24h',
+                description: 'Controle de acesso, portaria presencial e vigilância patrimonial preventiva 24 horas em BH.'
+              },
+              {
+                id: 3,
+                icon: 'mdi:wrench-outline',
+                title: 'Zeladoria e Manutenção',
+                description: 'Zeladores, manutenção predial geral e conservação contínua para condomínios e edifícios comerciais.'
+              },
+              {
+                id: 4,
+                icon: 'mdi:account-tie-voice',
+                title: 'Recepção e Atendimento',
+                description: 'Recepcionistas treinadas, atendimento ao público e suporte administrativo ou telemarketing.'
+              },
+              {
+                id: 5,
+                icon: 'mdi:coffee-outline',
+                title: 'Copa e Cozinha',
+                description: 'Profissionais de copa e cozinha para escritórios, clínicas, instituições e ambientes corporativos.'
+              },
+              {
+                id: 6,
+                icon: 'mdi:car-key',
+                title: 'Manobristas',
+                description: 'Equipe qualificada para organização de garagens, estacionamentos e recepção de veículos.'
+              },
+              {
+                id: 7,
+                icon: 'mdi:account-hard-hat',
+                title: 'Locação de Mão de Obra',
+                description: 'Terceirização rápida em até 48h, incluindo serviços de carga e descarga e demandas de curto prazo.'
+              },
+              {
+                id: 8,
+                icon: 'mdi:chart-box-outline',
+                title: 'Consultoria Administrativa',
+                description: 'Apoio operacional e consultoria administrativa para empresas públicas e privadas.'
+              }
+            ],
+            reviews: [
+              {
+                text: 'Ótima empresa super qualificada, ótimo preço, justo, profissionais qualificados.',
+                author: 'Cliente verificado'
+              },
+              {
+                text: 'Fico impressionado com a dedicação e empenho de todos os colaboradores.',
+                author: 'Cliente verificado'
+              },
+              {
+                text: 'Agilidade, excelentes preços e mão de obra qualificada!!!',
+                author: 'Cliente verificado'
+              }
+            ],
+          openMobileMenu() {
+            scope.mobileNavStack = [];
+            document.getElementById('mobile-dialog')?.showModal();
+          },
+          closeMobileMenu() {
+            document.getElementById('mobile-dialog')?.close();
+          },
+          selectServiceForQuote(serviceTitle) {
+            scope.quote.service = serviceTitle;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          },
+          submitQuote() {
+            const text = `Olá! Gostaria de solicitar uma cotação:\n*Nome/Empresa:* ${scope.quote.name}\n*Telefone:* ${scope.quote.phone}\n*Serviço:* ${scope.quote.service}`;
+            window.open(`https://wa.me/553125201211?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+            scope.quote.submitted = true;
+            setTimeout(() => {
+              scope.quote.name = '';
+              scope.quote.phone = '';
+              scope.quote.service = '';
+            }, 500);
+          }
+        });
+
+        return scope;
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

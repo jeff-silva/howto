@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="corporate">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Área do Cliente | Azul Serviços - Conservadora BH</title>
+
+  <!-- DaisyUI + Tailwind CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            azul: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              600: '#1d4ed8',
+              700: '#1e40af',
+              800: '#1e3a8a',
+              900: '#0f172a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+  <!-- Iconify CDN -->
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <div id="app" class="drawer lg:drawer-open min-h-screen">
+    <input id="client-drawer" type="checkbox" class="drawer-toggle" />
+
+    <!-- Main Content Area -->
+    <div class="drawer-content flex flex-col min-h-screen">
+      <!-- Top Navbar -->
+      <header class="bg-white border-b border-slate-200 sticky top-0 z-30 h-16 px-4 sm:px-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <label for="client-drawer" class="btn btn-ghost btn-sm lg:hidden" aria-label="Abrir menu">
+            <iconify-icon icon="mdi:menu" width="22" height="22"></iconify-icon>
+          </label>
+          <div>
+            <h1 class="font-bold text-azul-900 text-base sm:text-lg leading-tight">{{ currentMenuTitle }}</h1>
+            <span class="text-xs text-slate-500 hidden sm:inline">Condomínio Residencial Pampulha • Contrato #2026-041</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="hidden sm:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full text-xs">
+            <span class="w-6 h-6 rounded-full bg-azul-700 text-white flex items-center justify-center font-bold text-[11px]">JS</span>
+            <span class="text-slate-700">Logado como: <strong>João Silva (Síndico)</strong></span>
+          </div>
+          <a href="index.html" class="btn btn-ghost btn-sm gap-1.5">
+            <iconify-icon icon="mdi:arrow-left" width="18" height="18"></iconify-icon>
+            Voltar ao Site
+          </a>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <main class="p-4 sm:p-8 flex-1 space-y-6 max-w-6xl w-full mx-auto">
+        <!-- View: Visão Geral -->
+        <template v-if="activeSection === 'overview'">
+          <div class="alert bg-azul-50 border border-azul-100 text-azul-900 text-sm">
+            <iconify-icon icon="mdi:information-outline" width="22" height="22" class="text-azul-700 shrink-0"></iconify-icon>
+            <div>
+              <strong>Demonstração do Portal do Cliente:</strong> É assim que o seu cliente (síndico, empresa ou órgão público) acompanha a equipe alocada, baixa 2ª via de boletos, pede materiais de limpeza e agenda serviços extras com a <strong>Azul Serviços</strong>.
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div class="stat bg-white rounded-2xl border border-slate-200 shadow-sm">
+              <div class="stat-figure text-azul-700"><iconify-icon icon="mdi:file-document-check-outline" width="28" height="28"></iconify-icon></div>
+              <div class="stat-title text-xs">Contratos Ativos</div>
+              <div class="stat-value text-2xl text-azul-900">2</div>
+              <div class="stat-desc">Portaria 24h + Limpeza</div>
+            </div>
+            <div class="stat bg-white rounded-2xl border border-slate-200 shadow-sm">
+              <div class="stat-figure text-azul-700"><iconify-icon icon="mdi:account-group-outline" width="28" height="28"></iconify-icon></div>
+              <div class="stat-title text-xs">Equipe em Posto</div>
+              <div class="stat-value text-2xl text-azul-900">{{ team.length }}</div>
+              <div class="stat-desc text-emerald-600 font-medium">100% presente hoje</div>
+            </div>
+            <div class="stat bg-white rounded-2xl border border-slate-200 shadow-sm">
+              <div class="stat-figure text-azul-700"><iconify-icon icon="mdi:receipt-text-outline" width="28" height="28"></iconify-icon></div>
+              <div class="stat-title text-xs">Próxima Fatura</div>
+              <div class="stat-value text-2xl text-azul-900">R$ 14.800</div>
+              <div class="stat-desc">Vencimento: 10/12/2026</div>
+            </div>
+            <div class="stat bg-white rounded-2xl border border-slate-200 shadow-sm">
+              <div class="stat-figure text-azul-700"><iconify-icon icon="mdi:headset" width="28" height="28"></iconify-icon></div>
+              <div class="stat-title text-xs">Chamados Abertos</div>
+              <div class="stat-value text-2xl text-azul-900">{{ ticketsCount }}</div>
+              <div class="stat-desc">Atendimento em até 48h</div>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="card bg-white border border-slate-200 shadow-sm">
+              <div class="card-body p-6">
+                <h2 class="font-bold text-azul-900 text-base mb-3">Ações Rápidas</h2>
+                <div class="grid grid-cols-2 gap-3">
+                  <button @click="activeSection = 'invoices'" class="btn btn-outline btn-sm justify-start gap-2">
+                    <iconify-icon icon="mdi:barcode" width="18" height="18"></iconify-icon> 2ª Via de Boleto
+                  </button>
+                  <button @click="activeSection = 'orders'" class="btn btn-outline btn-sm justify-start gap-2">
+                    <iconify-icon icon="mdi:cart-plus" width="18" height="18"></iconify-icon> Pedir Material
+                  </button>
+                  <button @click="activeSection = 'schedule'" class="btn btn-outline btn-sm justify-start gap-2">
+                    <iconify-icon icon="mdi:calendar-clock" width="18" height="18"></iconify-icon> Agendar Visita
+                  </button>
+                  <button @click="activeSection = 'docs'" class="btn btn-outline btn-sm justify-start gap-2">
+                    <iconify-icon icon="mdi:shield-check-outline" width="18" height="18"></iconify-icon> Baixar CNDs
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card bg-azul-900 text-white shadow-sm">
+              <div class="card-body p-6 justify-between">
+                <div>
+                  <span class="badge bg-azul-600 border-none text-white text-xs mb-2">Supervisor Responsável</span>
+                  <h2 class="font-bold text-lg">Rodrigo Almeida</h2>
+                  <p class="text-slate-300 text-sm mt-1">Última visita técnica realizada em 14/11/2026 • Avaliação: 5,0 ★</p>
+                </div>
+                <div class="mt-4">
+                  <button @click="activeSection = 'schedule'" class="btn btn-sm bg-white text-azul-900 hover:bg-slate-100 border-none">
+                    Agendar Nova Supervisão
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <!-- View: Equipe & Ponto -->
+        <div v-if="activeSection === 'team'" class="card bg-white border border-slate-200 shadow-sm">
+          <div class="card-body p-6">
+            <h2 class="text-lg font-bold text-azul-900 mb-4">Profissionais Alocados no Posto</h2>
+            <div class="overflow-x-auto">
+              <table class="table table-zebra">
+                <thead>
+                  <tr>
+                    <th>Colaborador</th>
+                    <th>Função</th>
+                    <th>Turno</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="member in team" :key="member.name">
+                    <td class="font-semibold">{{ member.name }}</td>
+                    <td>{{ member.role }}</td>
+                    <td>{{ member.shift }}</td>
+                    <td><span class="badge badge-success badge-sm text-white">{{ member.status }}</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- View: 2ª Via e NF-e -->
+        <div v-if="activeSection === 'invoices'" class="card bg-white border border-slate-200 shadow-sm">
+          <div class="card-body p-6">
+            <h2 class="text-lg font-bold text-azul-900 mb-4">2ª Via de Boletos e Notas Fiscais</h2>
+            <div class="overflow-x-auto">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Referência</th>
+                    <th>Vencimento</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="inv in invoices" :key="inv.ref">
+                    <td class="font-semibold">{{ inv.ref }}</td>
+                    <td>{{ inv.due }}</td>
+                    <td>{{ inv.amount }}</td>
+                    <td>
+                      <span :class="inv.status === 'Pago' ? 'badge-success text-white' : 'badge-warning'" class="badge badge-sm">
+                        {{ inv.status }}
+                      </span>
+                    </td>
+                    <td class="flex gap-2">
+                      <button @click="notifyMock('Boleto de ' + inv.ref + ' baixado!')" class="btn btn-ghost btn-xs gap-1 text-azul-700">
+                        <iconify-icon icon="mdi:barcode" width="16" height="16"></iconify-icon> 2ª Via
+                      </button>
+                      <button @click="notifyMock('NF-e de ' + inv.ref + ' baixada!')" class="btn btn-ghost btn-xs gap-1 text-slate-600">
+                        <iconify-icon icon="mdi:file-pdf-box" width="16" height="16"></iconify-icon> NF-e
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- View: Pedidos de Material -->
+        <div v-if="activeSection === 'orders'" class="card bg-white border border-slate-200 shadow-sm max-w-2xl">
+          <div class="card-body p-6">
+            <h2 class="text-lg font-bold text-azul-900 mb-1">Pedido de Materiais e Insumos</h2>
+            <p class="text-sm text-slate-500 mb-4">Solicite reposição de produtos de limpeza diretamente para o seu posto.</p>
+            <form @submit.prevent="submitOrder" class="space-y-4">
+              <div class="form-control">
+                <label class="label py-1"><span class="label-text font-medium">Item / Kit</span></label>
+                <select v-model="order.item" class="select select-bordered w-full bg-white" required>
+                  <option value="" disabled>Selecione o material</option>
+                  <option>Kit Limpeza Mensal Completo</option>
+                  <option>Detergente Neutro 5L + Desinfetante 5L</option>
+                  <option>Sacos de Lixo 100L (Fardo 100 un)</option>
+                  <option>Papel Toalha / Higiênico Institucional</option>
+                </select>
+              </div>
+              <div class="form-control">
+                <label class="label py-1"><span class="label-text font-medium">Quantidade</span></label>
+                <input v-model="order.qty" type="number" min="1" class="input input-bordered w-full bg-white" required />
+              </div>
+              <button type="submit" class="btn btn-primary bg-azul-700 hover:bg-azul-800 border-none text-white">
+                Enviar Pedido
+              </button>
+            </form>
+            <div v-if="order.submitted" class="alert alert-success mt-4 text-sm">
+              <iconify-icon icon="mdi:check-circle" width="20" height="20"></iconify-icon>
+              <span>Pedido registrado! Previsão de entrega em até 24h.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- View: Agendamentos -->
+        <div v-if="activeSection === 'schedule'" class="card bg-white border border-slate-200 shadow-sm max-w-2xl">
+          <div class="card-body p-6">
+            <h2 class="text-lg font-bold text-azul-900 mb-1">Agendar Visita ou Serviço Extra</h2>
+            <p class="text-sm text-slate-500 mb-4">Escolha a data e o tipo de atendimento desejado.</p>
+            <form @submit.prevent="submitSchedule" class="space-y-4">
+              <div class="form-control">
+                <label class="label py-1"><span class="label-text font-medium">Tipo de Agendamento</span></label>
+                <select v-model="schedule.type" class="select select-bordered w-full bg-white" required>
+                  <option value="" disabled>Selecione</option>
+                  <option>Visita Técnica de Supervisão</option>
+                  <option>Limpeza Pós-Obra / Pesada</option>
+                  <option>Lavagem de Vidraças / Fachada</option>
+                  <option>Reunião de Alinhamento</option>
+                </select>
+              </div>
+              <div class="form-control">
+                <label class="label py-1"><span class="label-text font-medium">Data Preferencial</span></label>
+                <input v-model="schedule.date" type="date" class="input input-bordered w-full bg-white" required />
+              </div>
+              <button type="submit" class="btn btn-primary bg-azul-700 hover:bg-azul-800 border-none text-white">
+                Confirmar Agendamento
+              </button>
+            </form>
+            <div v-if="schedule.submitted" class="alert alert-success mt-4 text-sm">
+              <iconify-icon icon="mdi:check-circle" width="20" height="20"></iconify-icon>
+              <span>Agendamento solicitado com sucesso!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- View: Documentos & CND -->
+        <div v-if="activeSection === 'docs'" class="card bg-white border border-slate-200 shadow-sm">
+          <div class="card-body p-6">
+            <h2 class="text-lg font-bold text-azul-900 mb-1">Documentos, Certidões e Compliance</h2>
+            <p class="text-sm text-slate-500 mb-4">Transparência total para a gestão do seu condomínio ou empresa.</p>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div v-for="doc in docs" :key="doc.name" class="flex items-center justify-between p-4 rounded-xl border border-slate-200">
+                <div class="flex items-center gap-3">
+                  <iconify-icon icon="mdi:file-certificate-outline" width="24" height="24" class="text-azul-700"></iconify-icon>
+                  <div>
+                    <div class="font-semibold text-sm text-azul-900">{{ doc.name }}</div>
+                    <div class="text-xs text-slate-500">Validade: {{ doc.validity }}</div>
+                  </div>
+                </div>
+                <button @click="notifyMock('Download de ' + doc.name)" class="btn btn-ghost btn-xs text-azul-700">Baixar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- View: Chamados -->
+        <div v-if="activeSection === 'ticket'" class="card bg-white border border-slate-200 shadow-sm max-w-xl">
+          <div class="card-body p-6">
+            <h2 class="text-lg font-bold text-azul-900 mb-1">Abrir Chamado Operacional</h2>
+            <p class="text-sm text-slate-500 mb-4">Solicite cobertura de posto, substituição ou suporte rápido.</p>
+            <form @submit.prevent="submitTicket" class="space-y-4">
+              <div class="form-control">
+                <label class="label py-1"><span class="label-text font-medium">Assunto</span></label>
+                <select v-model="ticket.type" class="select select-bordered w-full bg-white" required>
+                  <option value="" disabled>Selecione</option>
+                  <option>Cobertura / Substituição de Posto</option>
+                  <option>Ajuste de Escala / Horário</option>
+                  <option>Dúvida Financeira</option>
+                  <option>Outros</option>
+                </select>
+              </div>
+              <div class="form-control">
+                <label class="label py-1"><span class="label-text font-medium">Descrição</span></label>
+                <textarea v-model="ticket.description" rows="3" placeholder="Descreva sua solicitação..." class="textarea textarea-bordered w-full bg-white" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary bg-azul-700 hover:bg-azul-800 border-none text-white">
+                Enviar Chamado
+              </button>
+            </form>
+            <div v-if="ticket.submitted" class="alert alert-success mt-4 text-sm">
+              <iconify-icon icon="mdi:check-circle" width="20" height="20"></iconify-icon>
+              <span>Chamado registrado! (Simulação de mockup)</span>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="bg-white border-t border-slate-200 py-4 px-6 text-center text-xs text-slate-500">
+        Área do Cliente (Mockup) • Conservadora BH - Azul Serviços • Desenvolvido por
+        <a href="https://labscript.dev" target="_blank" rel="noopener" class="text-azul-700 underline">labscript.dev</a>
+      </footer>
+    </div>
+
+    <!-- Sidebar Drawer -->
+    <aside class="drawer-side z-40">
+      <label for="client-drawer" aria-label="Fechar menu" class="drawer-overlay"></label>
+      <div class="w-64 min-h-full bg-azul-900 text-slate-200 flex flex-col p-4">
+        <div class="flex items-center gap-3 px-2 py-3 mb-4 border-b border-white/10">
+          <img
+            src="https://www.azulservice.com.br/wp-content/uploads/elementor/thumbs/logo-azul-service-pp394ryku65srvhz4113j4okvtwmi08veeuuptzmyo.png"
+            alt="Azul Service"
+            class="h-9 w-auto object-contain"
+          />
+        </div>
+
+        <nav class="flex flex-col gap-1 flex-1">
+          <button
+            v-for="item in sidebarMenu"
+            :key="item.id"
+            @click="selectSection(item.id)"
+            :class="activeSection === item.id ? 'bg-azul-700 text-white font-semibold shadow-sm' : 'text-slate-300 hover:bg-white/10 hover:text-white'"
+            class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-left transition w-full"
+          >
+            <iconify-icon :icon="item.icon" width="20" height="20"></iconify-icon>
+            <span>{{ item.label }}</span>
+          </button>
+        </nav>
+
+        <div class="pt-4 border-t border-white/10 text-xs text-slate-400 px-2">
+          <p class="font-semibold text-slate-200">Suporte Direto</p>
+          <p class="mt-0.5">(31) 2520-1211</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const { createApp, reactive, computed } = Vue;
+
+    createApp({
+      setup() {
+        const scope = reactive({
+          activeSection: 'overview',
+          ticketsCount: 1,
+          sidebarMenu: [
+            { id: 'overview', label: 'Visão Geral', icon: 'mdi:view-dashboard-outline' },
+            { id: 'team', label: 'Equipe & Ponto', icon: 'mdi:account-group-outline' },
+            { id: 'invoices', label: '2ª Via e NF-e', icon: 'mdi:barcode' },
+            { id: 'orders', label: 'Pedidos de Material', icon: 'mdi:cart-outline' },
+            { id: 'schedule', label: 'Agendamentos', icon: 'mdi:calendar-clock-outline' },
+            { id: 'docs', label: 'Documentos & CND', icon: 'mdi:file-certificate-outline' },
+            { id: 'ticket', label: 'Chamados', icon: 'mdi:headset' }
+          ],
+          team: [
+            { name: 'Carlos Eduardo', role: 'Porteiro 24h', shift: 'Diurno (06h–18h)', status: 'Ativo' },
+            { name: 'Marcos Vinícius', role: 'Porteiro 24h', shift: 'Noturno (18h–06h)', status: 'Ativo' },
+            { name: 'Maria Aparecida', role: 'Auxiliar de Limpeza', shift: 'Comercial (08h–17h)', status: 'Ativo' },
+            { name: 'José Roberto', role: 'Zelador', shift: 'Comercial (08h–17h)', status: 'Ativo' }
+          ],
+          invoices: [
+            { ref: 'Dezembro/2026', due: '10/12/2026', amount: 'R$ 14.800,00', status: 'Em aberto' },
+            { ref: 'Novembro/2026', due: '10/11/2026', amount: 'R$ 14.800,00', status: 'Pago' },
+            { ref: 'Outubro/2026', due: '10/10/2026', amount: 'R$ 14.800,00', status: 'Pago' }
+          ],
+          docs: [
+            { name: 'CND Federal / INSS', validity: '31/12/2026' },
+            { name: 'CRF / FGTS Regularidade', validity: '15/12/2026' },
+            { name: 'CNDT Trabalhista', validity: '20/01/2027' },
+            { name: 'PCMSO / PGR Atualizado', validity: '10/08/2027' }
+          ],
+          order: { item: '', qty: 1, submitted: false },
+          schedule: { type: '', date: '', submitted: false },
+          ticket: { type: '', description: '', submitted: false },
+          selectSection(id) {
+            scope.activeSection = id;
+            const drawer = document.getElementById('client-drawer');
+            if (drawer) drawer.checked = false;
+          },
+          notifyMock(msg) {
+            alert(msg + ' (Simulação de mockup)');
+          },
+          submitOrder() {
+            scope.order.submitted = true;
+          },
+          submitSchedule() {
+            scope.schedule.submitted = true;
+          },
+          submitTicket() {
+            scope.ticketsCount += 1;
+            scope.ticket.submitted = true;
+          }
+        });
+
+        scope.currentMenuTitle = computed(() => {
+          return scope.sidebarMenu.find(m => m.id === scope.activeSection)?.label || 'Área do Cliente';
+        });
+
+        return scope;
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

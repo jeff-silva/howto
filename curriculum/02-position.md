@@ -1,39 +1,87 @@
-Who We Are
+EVOLUA ENERGIA PARTICIPACOES S/A
+Analista de Qualidade (QA) - Júnior
 
-Pronto AI is a global leader in commercializing autonomous vehicle (AV) technology, deploying Autonomous Haulage Systems (AHS) that automate operations in mines, quarries, and construction sites worldwide. While much of the industry remains in R&D, we deliver real, production-ready autonomy that is already operating in the field.
+Belo Horizonte, Minas Gerais
 
-We are on a mission to make mining operations safer, smarter, and more efficient through cutting-edge technology, and we are building toward becoming the world’s first profitable AV technology company.
+Candidate-se no site da empresa
 
-About The Role
 
-We’re seeking a Full Stack Engineer to join our founding team who will design and build critical software interfaces that connect our physical AI to the digital world - keeping our applications reliable, secure and fast as we grow.
 
-What You’ll Do
+Candidate-se no site da empresa
+Suas qualificações para esta vaga
 
-Build end-to-end applications and APIs that power our autonomous vehicle platforms and systems.
-Architect and implement real-time user-interfaces for internal and external customers.
-Build modern frontend and backend experiences that surface insights from high-dimensional data.
-Debug complex issues across our engineering and data stack.
-Partner with product, design, and engineering to take systems from concept to production.
-Drive code reviews, testing, and documentation, and mentor engineers as you grow into technical leadership.
+Editar
+Aplicações de IA
+Jira
+SQL
+Colaboração com partes interessadas
+Kanban
+Python
+Identificação de problemas de software
+C#
+Controle de versão
+REST
+Automação
+TypeScript
+Playwright
+Diagnóstico e solução de problemas
+Rastreamento de problemas
+Desenvolvimento ágil de software
+Cypress
+Habilidade de Escrita
+Habilidade de Comunicação
+Você também têm estas qualificações?
 
-What We’re Looking For
+X
+Selenium
 
-2+ years building fullstack systems, with proficiency in Typescript, Python, or a similar language.
-Deep understanding of RESTful APIs, microservices, and distributed systems
-Experience building real-time systems with stateful protocols (websockets, gRPC streaming)
-Strong command of relational and/or NoSQL databases (PostgreSQL, MongoDB, Redis).
-Excellent debugging and problem-solving instincts under production pressure.
+X
+Salesforce
 
-Why join us 
+X
+Ferramentas de teste manual
 
-Work on real, production-deployed autonomy.
-Build technology that directly improves safety, efficiency, and productivity.
-Tackle complex challenges in demanding, real-world environments.
-Be part of a fast-moving team with high ownership and impact.
-See your work deployed and making a difference in the field.
-Collaborate closely with experienced engineers and industry operators.
+X
+Testes funcionais de controle de qualidade
 
-What Else You Need To Know
+Mostrar mais
 
-This role is based in our Belo Horizonte office location. As a company driven by innovation and continuous change, close collaboration is essential. We’re constantly reimagining our industry, creating new products, and refining our processes, and we do our best work together. That’s why all of our office-based teams work onsite, five days a week.
+Sobre a Evolua
+A Evolua Energia é uma empresa mineira do setor elétrico que atua no mercado livre de energia e em geração distribuída. A tecnologia está no centro do nosso negócio, da jornada de contratação digital ao relacionamento com o cliente, e queremos que produto seja o motor dessa evolução.
+
+Sobre o time
+Você fará parte do time de Produto e Tecnologia, organizado em squads multidisciplinares que trabalham com Scrum e Kanban. QA atua lado a lado com desenvolvedores e Product Owners, do refinamento à entrega.
+
+Nosso ambiente envolve CRM, APIs e integrações entre sistemas, aplicações web e mobile e infraestrutura em nuvem.
+
+Missão da vaga
+Garantir que cada entrega chegue ao cliente funcionando, aproximando qualidade e desenvolvimento desde o início do ciclo. Você também vai apoiar a evolução da automação de testes do time.
+
+Responsabilidades
+Participar do refinamento das histórias de usuário, ajudando a escrever critérios de aceite claros e testáveis.
+Planejar, escrever e executar casos de teste funcionais, exploratórios e de regressão em aplicações web, mobile e integrações.
+Testar APIs REST, validando contratos, regras de negócio e cenários de erro.
+Investigar cenários de borda e falhas silenciosas, que não aparecem na tela mas deixam dados inconsistentes.
+Registrar e acompanhar bugs com evidências, passos de reprodução e impacto, até a correção e o reteste.
+Validar entregas em ambientes de homologação antes de cada liberação para produção.
+Apoiar a construção e manutenção de testes automatizados.
+Manter atualizadas as evidências e a documentação de testes.
+Usar ferramentas de IA no dia a dia de QA, seguindo as boas práticas de segurança e privacidade de dados.
+Requisitos obrigatórios
+Formação em andamento ou concluída em Análise e Desenvolvimento de Sistemas, Ciência da Computação, Sistemas de Informação, Engenharia de Software ou áreas afins.
+Conhecimento dos fundamentos de teste: tipos e níveis de teste, técnicas de caso de teste (partição de equivalência, valor-limite), ciclo de vida de um bug.
+Noções de testes de API REST (requisição, resposta, códigos HTTP, JSON).
+Noções de SQL para consulta e conferência de dados.
+Vivência ou conhecimento de metodologias ágeis (Scrum ou Kanban).
+Boa comunicação escrita e verbal, curiosidade e atenção a detalhes.
+Diferenciais
+Experiência testando plataformas de CRM, como Salesforce.
+Contato com automação de testes: Playwright, Cypress ou Selenium para web; Appium ou Detox para mobile.
+Noções de lógica de programação em JavaScript/TypeScript, C# ou Python.
+Uso de Git e de pipelines de CI/CD.
+Experiência com ferramentas de gestão de testes e bugs, como Azure DevOps ou Jira.
+Certificação CTFL (ISTQB/BSTQB).
+Uso prático de ferramentas de IA generativa no trabalho de QA.
+Conhecimento do setor de energia.
+Quer fazer parte de uma empresa que valoriza inovação, crescimento e pessoas? Vem evoluir com a gente!
+#VemPraEvolua #CarreiraDeFuturo #EnergiaQueTransforma #GreatPlaceToWork

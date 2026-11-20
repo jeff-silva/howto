@@ -22,7 +22,7 @@ Forte domínio de engenharia de software aplicada (Clean Architecture, SOLID, De
 ## Competências Técnicas (Hard Skills)
 
 - **Back-end:** Node.js, C# .NET, Python (FastAPI, Pydantic, async SQLAlchemy), NestJS, Express, PHP (Laravel, CakePHP), RESTful APIs, OpenAPI, WebSockets, Microsserviços.
-- **Front-end:** TypeScript, JavaScript (ES6+), React.js, Next.js, TanStack Start, Vue.js (Vue 2/3, Nuxt.js), Inertia.js, AngularJS, Vuetify, Tailwind CSS, HTML5, CSS3/SASS.
+- **Front-end:** TypeScript, JavaScript (ES6+), React.js, Next.js, TanStack Start, Vue.js (Vue 2/3, Nuxt.js), Inertia.js, AngularJS, Vuetify, Tailwind CSS, Leaflet, OpenLayers, MapLibre, GeoJSON, HTML5, CSS3/SASS.
 - **Bancos de Dados & Caching:** PostgreSQL, MySQL, Redis (Cache e Filas Assíncronas), MongoDB (Auditoria e Telemetria), Firebase, Supabase.
 - **DevOps, Cloud & Infraestrutura:** Docker, Docker Compose, OpenShift, Linux/Unix, AWS, GCP, VPS, CI/CD (GitHub Actions), Nginx, AzuraCast.
 - **Arquitetura & Engenharia de Software:** Clean Architecture, Clean Code, SOLID, Design Patterns, Persistência Poliglota, TDD e Testes Automatizados (pytest, Vitest, Testing Library), Migração de Legado para Microsserviços.
@@ -36,14 +36,14 @@ Forte domínio de engenharia de software aplicada (Clean Architecture, SOLID, De
 ### Desenvolvedor Full Stack & Tech Lead — CardCom
 *Período: 12/2023 - 10/2026 | Localização: Belo Horizonte, Brasil*
 
-Liderança técnica de equipe multidisciplinar e atuação Full Stack na reengenharia do ecossistema tecnológico e automação do fluxo industrial de produção de cartões.
+Liderança técnica de equipe multidisciplinar, atuação como Product Owner (PO) do ecossistema Capp/Codewe (levantamento de requisitos, priorização de backlog, definição de critérios de aceite e validação de entregas) e atuação Full Stack na reengenharia tecnológica e automação do fluxo industrial de produção de cartões.
 
 - **Reengenharia de Arquitetura:** Conduziu a migração estratégica de um monólito legado em PHP (Laravel) para uma arquitetura orientada a microsserviços desacoplados em Node.js (NestJS), reduzindo a latência média das APIs em **45%** (de ~450ms para menos de 90ms).
 - **Otimização de Performance, Cache e Filas:** Eliminou gargalos de concorrência orquestrando Redis para cache estratégico e processamento de filas assíncronas com vazão superior a **120.000 jobs diários**, integrando comunicação em tempo real via WebSockets.
 - **Persistência Poliglota e Observabilidade:** Implementou MongoDB como banco NoSQL secundário para trilhas de auditoria e telemetria de filas, reduzindo a carga de I/O no banco transacional PostgreSQL em mais de **40%**.
 - **Automação Industrial de Produção:** Automatizou o fluxo produtivo de cartões de ponta a ponta, reduzindo o tempo de ciclo operacional em **65%** e eliminando mais de **90%** das intervenções manuais.
-- **Liderança Técnica e Governança:** Liderou tecnicamente time de **6 desenvolvedores**, estabeleceu padrões de código (Clean Architecture, SOLID) e conduziu revisões diárias de código no GitHub, reduzindo bugs críticos em produção em **35%**.
-- **Interfaces Reativas de Gestão:** Desenvolveu portais administrativos e dashboards interativos com Vue.js, React.js, Inertia.js e Tailwind CSS conteinerizados via Docker, atendendo mais de **100 usuários operacionais simultâneos**.
+- **Liderança Técnica e Governança:** Liderou tecnicamente time de **3 desenvolvedores**, estabeleceu padrões de código (Clean Architecture, SOLID) e conduziu revisões diárias de código no GitHub, reduzindo bugs críticos em produção em **35%**.
+- **Interfaces Reativas de Gestão:** Desenvolveu portais administrativos e dashboards interativos com Vue.js, React.js, Inertia.js, Tailwind CSS e mapas interativos (Leaflet, OpenLayers, MapLibre) conteinerizados via Docker, atendendo mais de **100 usuários operacionais simultâneos**.
 - **IA Aplicada & SDD:** Adotou agentes de IA (Claude Code, Antigravity) e Spec-Driven Development (SDD) no fluxo de engenharia para otimização de código, geração de testes automatizados e documentação técnica.
 
 ---
@@ -53,7 +53,7 @@ Liderança técnica de equipe multidisciplinar e atuação Full Stack na reengen
 
 Atuação internacional remota integrada diretamente ao time de engenharia australiano no desenvolvimento e sustentação da plataforma de aluguel por temporada.
 
-- **Desenvolvimento Full Stack & Escala:** Construção e evolução contínua da plataforma central com Nuxt.js/Vue.js e APIs RESTful em PHP (Laravel), sustentando catálogo ativo com mais de **15.000 propriedades cadastradas**.
+- **Desenvolvimento Full Stack & Escala:** Construção e evolução contínua da plataforma central com Nuxt.js/Vue.js, mapas interativos (Leaflet, OpenLayers, MapLibre) e APIs RESTful em PHP (Laravel), sustentando catálogo ativo com mais de **15.000 propriedades cadastradas**.
 - **Sustentação e Resolução de Incidentes:** Diagnóstico e resolução de bugs críticos em produção, atingindo SLA médio de resolução inferior a **4 horas** e aumentando o uptime da aplicação para **99,8%**.
 - **Colaboração Internacional & Ágil:** Atuação diária 100% em inglês com time ágil distribuído (Scrum/Kanban), participando de entregas quinzenais de sprints e revisões de código via GitHub.
 - **Extensibilidade e Plugins:** Desenvolvimento de plugins customizados para WordPress, automatizando a sincronização bidirecional de reservas e dados de parceiros externos via APIs REST.
@@ -78,7 +78,7 @@ Responsável pela construção e evolução de interfaces de usuário em aplica�
 
 Atuação na arquitetura técnica, desenvolvimento e sustentação de portais corporativos e plataformas web de alto tráfego (+1 milhão de pageviews/mês).
 
-- **Engenharia Full Stack:** Desenvolvimento de sistemas web modulares integrando front-ends reativos em Vue.js e React.js a serviços de back-end em PHP (Laravel e CakePHP).
+- **Engenharia Full Stack:** Desenvolvimento de sistemas web modulares integrando front-ends reativos em Vue.js e React.js (incluindo mapas interativos com Leaflet, OpenLayers e MapLibre) a serviços de back-end em PHP (Laravel e CakePHP).
 - **Persistência Poliglota & Otimização SQL:** Migração e sustentação de esquemas relacionais e NoSQL (PostgreSQL, MySQL e MongoDB), otimizando consultas complexas com redução de até **50%** no tempo de execução de queries críticas.
 - **Alta Disponibilidade e Performance de APIs:** Construção de rotinas RESTful com cache estratégico, suportando picos de tráfego com estabilidade contínua de **99,9%**.
 - **Qualidade e Entrega Contínua:** Aplicação de Clean Code e Design Patterns em ciclos ágeis de Scrum/Kanban, viabilizando deploys contínuos sem indisponibilidade.
@@ -88,10 +88,10 @@ Atuação na arquitetura técnica, desenvolvimento e sustentação de portais co
 ### Desenvolvedor Full Stack — Labscript
 *Período: 10/2017 - 10/2020 | Localização: Belo Horizonte, Brasil*
 
-Atuação independente em P&D, consultoria e engenharia de produtos Full Stack, experimentando e entregando soluções com arquiteturas modernas em Python, TypeScript e IA.
+Atuação independente em P&D, consultoria, gestão de produto como Product Owner (PO) e engenharia de produtos Full Stack, experimentando e entregando soluções com arquiteturas modernas em Python, TypeScript e IA.
 
-- **Engenharia Full Stack (C# .NET, Python & React/TypeScript):** Desenvolvimento de aplicações web completas utilizando C# .NET, Python (FastAPI, Pydantic, async SQLAlchemy), TypeScript, React.js, Next.js e TanStack Start com tipagem estática estrita.
-- **Bancos de Dados & Containers:** Modelagem relacional em PostgreSQL (migrations, índices e transações), APIs RESTful com contratos OpenAPI e conteinerização/orquestração via Docker, Docker Compose e OpenShift.
+- **Engenharia Full Stack (C# .NET, Python & React/TypeScript):** Desenvolvimento de aplicações web completas utilizando C# .NET, Python (FastAPI, Pydantic, async SQLAlchemy), TypeScript, React.js, Next.js, TanStack Start e soluções de mapas/geoespacial (Leaflet, OpenLayers, MapLibre, GeoJSON) com tipagem estática estrita.
+- **Bancos de Dados, Mensageria & Containers:** Modelagem relacional em PostgreSQL (migrations, índices e transações), mensageria assíncrona com Kafka, APIs RESTful com contratos OpenAPI e conteinerização/orquestração via Docker, Docker Compose e OpenShift.
 - **Qualidade & Automação:** Implementação de suítes de testes automatizados (pytest, Vitest, Testing Library) e pipelines de CI/CD no GitHub Actions.
 - **IA & Prototipagem Rápida:** Integração de fluxos com LLMs, uso de agentes de IA (Claude Code, Antigravity) e Spec-Driven Development (SDD) em experimentos SaaS multi-tenant.
 
@@ -137,7 +137,7 @@ Liderança no desenvolvimento de aplicações web corporativas de transformaçã
 
 ## Formação Acadêmica
 
-- **Bacharelado em Inteligência Artificial** — UniCesumar *(07/2022 - Presente)*
+- **Bacharelado em Inteligência Artificial** — UniCesumar *(07/2025 - Presente)*
 - **Bacharelado em Desenvolvimento de Sistemas Web** — WebBH *(03/2006 - 09/2010)*
 
 ---
