@@ -52,6 +52,13 @@
     }
   </script>
 
+  <!-- Preconnects for faster CDN & Image loading -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin />
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+  <link rel="preconnect" href="https://code.iconify.design" crossorigin />
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+
   <!-- DaisyUI + Tailwind CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -74,16 +81,16 @@
     }
   </script>
 
-  <!-- Vue 3 CDN -->
-  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <!-- Vue 3 CDN (deferred) -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js" defer></script>
 
-  <!-- Iconify CDN -->
-  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <!-- Iconify CDN (deferred) -->
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts (non-blocking) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
 
   <style>
     body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
@@ -241,7 +248,7 @@
       <!-- Background Image + Overlay -->
       <div
         class="absolute inset-0 bg-cover bg-center opacity-50"
-        style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80');"
+        style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=960&q=70&fm=webp');"
       ></div>
       <div class="absolute inset-0 bg-gradient-to-br from-azul-900/75 via-azul-900/60 to-azul-800/70"></div>
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid lg:grid-cols-12 gap-12 items-center">
@@ -513,7 +520,8 @@
   </div>
 
   <script>
-    const { createApp, reactive } = Vue;
+    window.addEventListener('DOMContentLoaded', () => {
+      const { createApp, reactive } = Vue;
 
     createApp({
       setup() {
@@ -657,6 +665,7 @@
         return scope;
       }
     }).mount('#app');
+    });
   </script>
 </body>
 </html>
