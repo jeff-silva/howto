@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal do Cliente | Conservadora Legionários</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" />
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            legion: {
+              950: '#090d16',
+              900: '#111827',
+              800: '#1f2937'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+  <div id="app" class="min-h-screen flex flex-col md:flex-row">
+    <!-- Sidebar -->
+    <aside class="w-full md:w-64 bg-legion-950 text-white shrink-0 flex flex-col">
+      <div class="p-5 border-b border-white/10 flex items-center gap-2.5">
+        <span class="w-9 h-9 rounded-lg bg-amber-500 text-legion-950 flex items-center justify-center shrink-0">
+          <iconify-icon icon="mdi:shield-crown" width="22" height="22"></iconify-icon>
+        </span>
+        <div class="leading-tight">
+          <span class="font-extrabold text-sm block">Legionários</span>
+          <span class="text-[11px] text-amber-400 font-semibold">Portal do Cliente</span>
+        </div>
+      </div>
+
+      <nav class="p-3 space-y-1 flex-1">
+        <button
+          v-for="tab in tabs"
+          :key="tab.id"
+          @click="activeTab = tab.id"
+          :class="activeTab === tab.id ? 'bg-amber-500 text-legion-950 font-bold' : 'text-slate-300 hover:bg-white/5'"
+          class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm transition text-left"
+        >
+          <iconify-icon :icon="tab.icon" width="20" height="20"></iconify-icon>
+          <span>{{ tab.label }}</span>
+        </button>
+      </nav>
+
+      <div class="p-4 border-t border-white/10 text-xs text-slate-400 space-y-2">
+        <a href="index.html" class="flex items-center gap-2 text-amber-400 hover:text-amber-300 font-semibold">
+          <iconify-icon icon="mdi:arrow-left" width="16" height="16"></iconify-icon>
+          Voltar ao Site
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col min-w-0">
+      <!-- Header -->
+      <header class="bg-white border-b border-slate-200 px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 class="text-xl font-extrabold text-legion-950">{{ currentTabLabel }}</h1>
+          <p class="text-xs text-slate-500">Condomínio Residencial Tupi • Contrato #2026-018</p>
+        </div>
+        <div class="flex items-center gap-3 bg-slate-100 px-3.5 py-2 rounded-full">
+          <span class="w-7 h-7 rounded-full bg-legion-950 text-amber-400 text-xs font-bold flex items-center justify-center">CS</span>
+          <span class="text-xs font-semibold text-slate-700">Carlos Silva (Síndico)</span>
+        </div>
+      </header>
+
+      <div class="p-6 space-y-6 max-w-6xl w-full">
+        <!-- Demo Notice -->
+        <div class="rounded-2xl bg-amber-50 border border-amber-200 p-4 flex items-start gap-3 text-sm text-amber-950">
+          <iconify-icon icon="mdi:information-outline" class="text-amber-600 shrink-0 mt-0.5" width="20" height="20"></iconify-icon>
+          <p>
+            <strong>Demonstração do Portal do Cliente:</strong> é assim que o seu cliente (síndico ou empresa) acompanha a equipe alocada, baixa 2ª via de boletos, pede materiais e agenda serviços extras com a <strong>Conservadora Legionários</strong>.
+          </p>
+        </div>
+
+        <!-- Tab: Visão Geral -->
+        <div v-if="activeTab === 'overview'" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white rounded-2xl p-5 border border-slate-200">
+            <span class="text-xs text-slate-500 font-semibold">Contratos Ativos</span>
+            <p class="text-3xl font-extrabold text-legion-950 mt-1">2</p>
+            <span class="text-xs text-slate-500">Portaria 24h + Limpeza</span>
+          </div>
+          <div class="bg-white rounded-2xl p-5 border border-slate-200">
+            <span class="text-xs text-slate-500 font-semibold">Equipe em Posto</span>
+            <p class="text-3xl font-extrabold text-legion-950 mt-1">5</p>
+            <span class="text-xs text-emerald-600 font-semibold">100% presente hoje</span>
+          </div>
+          <div class="bg-white rounded-2xl p-5 border border-slate-200">
+            <span class="text-xs text-slate-500 font-semibold">Próxima Fatura</span>
+            <p class="text-3xl font-extrabold text-legion-950 mt-1">R$ 16.400</p>
+            <span class="text-xs text-slate-500">Vencimento: 10/12/2026</span>
+          </div>
+          <div class="bg-white rounded-2xl p-5 border border-slate-200">
+            <span class="text-xs text-slate-500 font-semibold">Chamados Abertos</span>
+            <p class="text-3xl font-extrabold text-legion-950 mt-1">1</p>
+            <span class="text-xs text-amber-600 font-semibold">Atendimento 24h</span>
+          </div>
+        </div>
+
+        <!-- Tab: Equipe & Ponto -->
+        <div v-if="activeTab === 'equipe' || activeTab === 'overview'" class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+          <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+            <h2 class="font-bold text-legion-950">Equipe Alocada</h2>
+            <span class="text-xs text-emerald-600 font-semibold">Atualizado agora</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="table table-sm w-full">
+              <thead>
+                <tr class="text-slate-500">
+                  <th>Colaborador</th>
+                  <th>Função</th>
+                  <th>Turno</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="m in equipe" :key="m.nome">
+                  <td class="font-semibold">{{ m.nome }}</td>
+                  <td>{{ m.funcao }}</td>
+                  <td>{{ m.turno }}</td>
+                  <td><span class="badge badge-success badge-sm text-white">{{ m.status }}</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab: 2ª Via e NF-e -->
+        <div v-if="activeTab === 'financeiro'" class="bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
+          <h2 class="font-bold text-legion-950">Boletos e Notas Fiscais</h2>
+          <div v-for="f in faturas" :key="f.mes" class="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-sm">
+            <div>
+              <strong class="block text-legion-950">{{ f.mes }}</strong>
+              <span class="text-xs text-slate-500">Vencimento {{ f.venc }} • {{ f.valor }}</span>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-xs btn-outline">2ª Via Boleto</button>
+              <button class="btn btn-xs bg-amber-500 border-0 text-legion-950">NF-e PDF</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Pedidos / Agendamentos / Chamados -->
+        <div v-if="['materiais', 'agendamentos', 'chamados'].includes(activeTab)" class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+          <h2 class="font-bold text-legion-950">{{ currentTabLabel }}</h2>
+          <p class="text-sm text-slate-600">Solicite diretamente pelo portal com acompanhamento em tempo real pela equipe Legionários.</p>
+          <div class="flex flex-wrap gap-3">
+            <a href="https://wa.me/5531992074842" target="_blank" rel="noopener" class="btn bg-amber-500 hover:bg-amber-600 border-0 text-legion-950 font-bold">
+              <iconify-icon icon="mdi:plus" width="18" height="18"></iconify-icon>
+              Nova Solicitação
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    createApp({
+      data() {
+        return {
+          activeTab: 'overview',
+          tabs: [
+            { id: 'overview', label: 'Visão Geral', icon: 'mdi:view-dashboard-outline' },
+            { id: 'equipe', label: 'Equipe & Ponto', icon: 'mdi:account-group-outline' },
+            { id: 'financeiro', label: '2ª Via e NF-e', icon: 'mdi:barcode-scan' },
+            { id: 'materiais', label: 'Pedidos de Material', icon: 'mdi:cart-outline' },
+            { id: 'agendamentos', label: 'Agendamentos', icon: 'mdi:calendar-check-outline' },
+            { id: 'chamados', label: 'Chamados 24h', icon: 'mdi:headset' }
+          ],
+          equipe: [
+            { nome: 'Marcos Oliveira', funcao: 'Porteiro 24h', turno: '06h - 18h', status: 'Em posto' },
+            { nome: 'Rafael Souza', funcao: 'Porteiro 24h', turno: '18h - 06h', status: 'Escala' },
+            { nome: 'Sandra Lima', funcao: 'Aux. de Limpeza', turno: '08h - 17h', status: 'Em posto' },
+            { nome: 'José Ferreira', funcao: 'Zelador', turno: '08h - 17h', status: 'Em posto' }
+          ],
+          faturas: [
+            { mes: 'Dezembro / 2026', venc: '10/12/2026', valor: 'R$ 16.400,00' },
+            { mes: 'Novembro / 2026', venc: '10/11/2026', valor: 'R$ 16.400,00' }
+          ]
+        };
+      },
+      computed: {
+        currentTabLabel() {
+          return this.tabs.find(t => t.id === this.activeTab)?.label || 'Visão Geral';
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

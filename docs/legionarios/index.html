@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conservadora Legionários | Portaria, Limpeza e Facilities em BH</title>
+  <meta name="description" content="Conservadora Legionários em Belo Horizonte e região desde 2017. Portaria 24h, limpeza profissional, zeladoria, segurança patrimonial, manutenção predial e jardinagem." />
+  <meta property="og:title" content="Conservadora Legionários | Portaria, Limpeza e Facilities em BH" />
+  <meta property="og:description" content="Soluções completas em terceirização de serviços para condomínios e empresas em BH. Atendimento 24 horas." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Conservadora Legionários",
+    "telephone": "+55-31-99207-4842",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "R. José Lins do Rêgo, 83 - Tupi",
+      "addressLocality": "Belo Horizonte",
+      "addressRegion": "MG",
+      "postalCode": "31842-350",
+      "addressCountry": "BR"
+    },
+    "openingHours": "Mo-Su 00:00-23:59",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "16"
+    }
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" />
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            legion: {
+              950: '#090d16',
+              900: '#111827',
+              800: '#1f2937',
+              gold: '#f59e0b',
+              goldDark: '#d97706'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+  <div id="app" class="min-h-screen flex flex-col">
+    <!-- Top Bar -->
+    <header class="sticky top-0 z-40 bg-legion-950/95 backdrop-blur border-b border-white/10 text-white">
+      <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+        <a href="#" class="flex items-center gap-2.5 font-extrabold tracking-tight text-lg">
+          <span class="w-9 h-9 rounded-lg bg-amber-500 text-legion-950 flex items-center justify-center">
+            <iconify-icon icon="mdi:shield-crown" width="22" height="22"></iconify-icon>
+          </span>
+          <span>Conservadora <span class="text-amber-400">Legionários</span></span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-200">
+          <a href="#servicos" class="hover:text-amber-400 transition">Serviços</a>
+          <a href="#avaliacoes" class="hover:text-amber-400 transition">Avaliações</a>
+          <a href="#contato" class="hover:text-amber-400 transition">Contato</a>
+          <a href="client.html" class="hover:text-amber-400 transition inline-flex items-center gap-1.5">
+            <iconify-icon icon="mdi:account-key-outline" width="18" height="18"></iconify-icon>
+            Área do Cliente
+          </a>
+          <a href="https://wa.me/5531992074842" target="_blank" rel="noopener" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-legion-950 font-bold transition">
+            Orçamento 24h
+          </a>
+        </nav>
+
+        <button @click="mobileMenu = !mobileMenu" class="md:hidden p-2 rounded-lg hover:bg-white/10" aria-label="Abrir menu">
+          <iconify-icon :icon="mobileMenu ? 'mdi:close' : 'mdi:menu'" width="26" height="26"></iconify-icon>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div v-if="mobileMenu" class="md:hidden bg-legion-900 border-t border-white/10 px-4 py-4 space-y-3 text-sm">
+        <a href="#servicos" @click="mobileMenu = false" class="block py-2 text-slate-200 hover:text-amber-400">Serviços</a>
+        <a href="#avaliacoes" @click="mobileMenu = false" class="block py-2 text-slate-200 hover:text-amber-400">Avaliações</a>
+        <a href="#contato" @click="mobileMenu = false" class="block py-2 text-slate-200 hover:text-amber-400">Contato & Localização</a>
+        <a href="client.html" class="block py-2 text-amber-400 font-semibold">Área do Cliente</a>
+        <a href="https://wa.me/5531992074842" target="_blank" rel="noopener" class="block text-center py-2.5 rounded-lg bg-amber-500 text-legion-950 font-bold">
+          Solicitar Orçamento 24h
+        </a>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-legion-950 via-legion-900 to-slate-900 text-white py-14 md:py-20">
+      <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-12 gap-10 items-center">
+        <div class="md:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider">
+            <iconify-icon icon="mdi:star" width="16" height="16"></iconify-icon>
+            4,9★ no Google • Desde 2017 em BH e Região
+          </div>
+
+          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
+            Terceirização com <span class="text-amber-400">Força, Ordem e Confiança</span> 24 horas
+          </h1>
+
+          <p class="text-slate-300 text-lg leading-relaxed max-w-2xl">
+            Soluções completas para condomínios e empresas de pequeno, médio e grande porte: portaria, limpeza profissional, zeladoria, segurança patrimonial e manutenção predial.
+          </p>
+
+          <div class="flex flex-wrap gap-3 pt-2">
+            <span class="px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold text-slate-200 flex items-center gap-2">
+              <iconify-icon icon="mdi:clock-check-outline" class="text-amber-400" width="18" height="18"></iconify-icon>
+              Atendimento 24h
+            </span>
+            <span class="px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold text-slate-200 flex items-center gap-2">
+              <iconify-icon icon="mdi:shield-check-outline" class="text-amber-400" width="18" height="18"></iconify-icon>
+              Equipe Treinada
+            </span>
+            <span class="px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold text-slate-200 flex items-center gap-2">
+              <iconify-icon icon="mdi:office-building-outline" class="text-amber-400" width="18" height="18"></iconify-icon>
+              Condomínios & Empresas
+            </span>
+          </div>
+        </div>
+
+        <!-- Quick Quote Form -->
+        <div class="md:col-span-5">
+          <form @submit.prevent="enviarOrcamento" class="bg-white text-slate-800 rounded-2xl p-6 md:p-7 shadow-2xl space-y-4">
+            <div>
+              <h2 class="text-xl font-extrabold text-legion-950">Cotação Rápida</h2>
+              <p class="text-sm text-slate-500">Receba uma proposta sob medida direto no WhatsApp.</p>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Nome ou Condomínio *</label>
+              <input v-model="form.nome" type="text" required placeholder="Ex: Condomínio Residencial / Carlos" class="input input-bordered w-full bg-slate-50" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Telefone / WhatsApp *</label>
+              <input v-model="form.telefone" type="tel" required placeholder="(31) 99999-9999" class="input input-bordered w-full bg-slate-50" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Serviço Desejado *</label>
+              <select v-model="form.servico" required class="select select-bordered w-full bg-slate-50">
+                <option value="" disabled>Selecione um serviço</option>
+                <option v-for="s in servicos" :key="s.titulo" :value="s.titulo">{{ s.titulo }}</option>
+              </select>
+            </div>
+
+            <button type="submit" class="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-legion-950 font-extrabold text-base transition flex items-center justify-center gap-2">
+              <iconify-icon icon="mdi:whatsapp" width="22" height="22"></iconify-icon>
+              Solicitar Orçamento
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="servicos" class="py-16 max-w-7xl mx-auto px-4 w-full">
+      <div class="text-center max-w-2xl mx-auto mb-12 space-y-2">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-amber-600">Nossos Serviços</span>
+        <h2 class="text-3xl font-extrabold text-legion-950">Soluções Completas em Facilities</h2>
+        <p class="text-slate-600">Um único parceiro para cuidar da segurança, limpeza e manutenção do seu patrimônio.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div v-for="s in servicos" :key="s.titulo" class="bg-white rounded-2xl p-6 border border-slate-200 hover:border-amber-400 hover:shadow-lg transition">
+          <div class="w-12 h-12 rounded-xl bg-amber-500/15 text-amber-600 flex items-center justify-center mb-4">
+            <iconify-icon :icon="s.icone" width="26" height="26"></iconify-icon>
+          </div>
+          <h3 class="font-bold text-lg text-legion-950 mb-1.5">{{ s.titulo }}</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">{{ s.desc }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="avaliacoes" class="bg-legion-950 text-white py-16">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-amber-400">Prova Social</span>
+            <h2 class="text-3xl font-extrabold mt-1">Nota 4,9★ no Google</h2>
+            <p class="text-slate-400 text-sm mt-1">Baseado em 16 avaliações reais de clientes em Belo Horizonte e região.</p>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <div v-for="av in avaliacoes" :key="av.texto" class="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-3">
+            <div class="flex text-amber-400 gap-0.5">
+              <iconify-icon v-for="n in 5" :key="n" icon="mdi:star" width="18" height="18"></iconify-icon>
+            </div>
+            <p class="text-slate-200 text-sm leading-relaxed">"{{ av.texto }}"</p>
+            <span class="block text-xs text-slate-400 font-semibold">Avaliação verificada no Google</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact & Location Section -->
+    <section id="contato" class="py-16 max-w-7xl mx-auto px-4 w-full">
+      <div class="bg-white rounded-3xl border border-slate-200 p-6 md:p-10 grid md:grid-cols-2 gap-8 items-center">
+        <div class="space-y-5">
+          <span class="text-xs font-extrabold uppercase tracking-widest text-amber-600">Contato & Localização</span>
+          <h2 class="text-3xl font-extrabold text-legion-950">Fale com a Conservadora Legionários</h2>
+
+          <div class="space-y-3 text-sm text-slate-700">
+            <p class="flex items-start gap-3">
+              <iconify-icon icon="mdi:map-marker" class="text-amber-600 shrink-0 mt-0.5" width="20" height="20"></iconify-icon>
+              <span><strong>Endereço:</strong> R. José Lins do Rêgo, 83 - Tupi, Belo Horizonte - MG, 31842-350</span>
+            </p>
+            <p class="flex items-center gap-3">
+              <iconify-icon icon="mdi:whatsapp" class="text-emerald-600 shrink-0" width="20" height="20"></iconify-icon>
+              <span><strong>WhatsApp / Celular:</strong> (31) 99207-4842</span>
+            </p>
+            <p class="flex items-center gap-3">
+              <iconify-icon icon="mdi:phone" class="text-amber-600 shrink-0" width="20" height="20"></iconify-icon>
+              <span><strong>Telefone Fixo:</strong> (31) 3636-2104</span>
+            </p>
+            <p class="flex items-center gap-3">
+              <iconify-icon icon="mdi:clock-outline" class="text-amber-600 shrink-0" width="20" height="20"></iconify-icon>
+              <span><strong>Funcionamento:</strong> Aberto 24 horas</span>
+            </p>
+          </div>
+
+          <div class="flex flex-wrap gap-3 pt-2">
+            <a href="https://www.google.com/maps/search/?api=1&query=R.+Jos%C3%A9+Lins+do+R%C3%AAgo,+83+-+Tupi,+Belo+Horizonte+-+MG,+31842-350" target="_blank" rel="noopener" class="px-4 py-2.5 rounded-xl bg-legion-950 text-white text-sm font-bold hover:bg-legion-800 transition inline-flex items-center gap-2">
+              <iconify-icon icon="mdi:google-maps" width="18" height="18"></iconify-icon> Abrir no Maps
+            </a>
+            <a href="https://www.instagram.com/conservadoralegionarios/" target="_blank" rel="noopener" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-100 transition inline-flex items-center gap-2">
+              <iconify-icon icon="mdi:instagram" width="18" height="18"></iconify-icon> Instagram
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=100067476624486" target="_blank" rel="noopener" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-100 transition inline-flex items-center gap-2">
+              <iconify-icon icon="mdi:facebook" width="18" height="18"></iconify-icon> Facebook
+            </a>
+            <a href="https://br.linkedin.com/company/conservadora-legionarios" target="_blank" rel="noopener" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-100 transition inline-flex items-center gap-2">
+              <iconify-icon icon="mdi:linkedin" width="18" height="18"></iconify-icon> LinkedIn
+            </a>
+          </div>
+        </div>
+
+        <div class="rounded-2xl overflow-hidden border border-slate-200 h-72 bg-slate-100">
+          <iframe
+            title="Mapa Conservadora Legionários"
+            class="w-full h-full border-0"
+            loading="lazy"
+            src="https://maps.google.com/maps?q=R.%20Jos%C3%A9%20Lins%20do%20R%C3%AAgo,%2083%20-%20Tupi,%20Belo%20Horizonte%20-%20MG&t=&z=15&ie=UTF8&iwloc=&output=embed"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-legion-950 text-slate-400 py-8 text-center text-xs border-t border-white/10 mt-auto">
+      <div class="max-w-7xl mx-auto px-4 space-y-1.5">
+        <p class="font-semibold text-slate-200">Conservadora Legionários — WM Conservadora e Serviços de Terceirização LTDA</p>
+        <p>R. José Lins do Rêgo, 83 - Tupi, Belo Horizonte - MG • (31) 99207-4842 / (31) 3636-2104</p>
+        <p class="text-slate-500 pt-1">
+          Desenvolvido por <a href="https://labscript.dev" target="_blank" rel="noopener" class="text-slate-300 hover:text-white underline">labscript.dev</a>
+          • <a href="proposta.html" class="text-amber-400 hover:text-amber-300 underline">Ver Proposta de Modernização</a>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Floating WhatsApp -->
+    <a
+      href="https://wa.me/5531992074842?text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento%20com%20a%20Conservadora%20Legion%C3%A1rios."
+      target="_blank"
+      rel="noopener"
+      aria-label="Falar no WhatsApp"
+      class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg transition-transform hover:scale-105"
+    >
+      <iconify-icon icon="mdi:whatsapp" width="32" height="32"></iconify-icon>
+    </a>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    createApp({
+      data() {
+        return {
+          mobileMenu: false,
+          form: { nome: '', telefone: '', servico: '' },
+          servicos: [
+            { titulo: 'Portaria 24h', icone: 'mdi:shield-account', desc: 'Controle de acesso rigoroso e atendimento profissional para condomínios e empresas.' },
+            { titulo: 'Limpeza Profissional', icone: 'mdi:broom', desc: 'Higienização completa de áreas comuns, escritórios, vidros e ambientes corporativos.' },
+            { titulo: 'Zeladoria', icone: 'mdi:account-hard-hat', desc: 'Acompanhamento diário da rotina predial, vistorias e suporte aos moradores.' },
+            { titulo: 'Segurança Patrimonial', icone: 'mdi:cctv', desc: 'Proteção contínua para eventos, comércios, indústrias e condomínios.' },
+            { titulo: 'Manutenção Predial', icone: 'mdi:tools', desc: 'Reparos preventivos e corretivos para manter a infraestrutura sempre em dia.' },
+            { titulo: 'Jardinagem & Paisagismo', icone: 'mdi:sprout', desc: 'Poda, adubação e conservação de áreas verdes com acabamento impecável.' },
+            { titulo: 'Dedetização', icone: 'mdi:bug-outline', desc: 'Controle seguro de pragas urbanas para residências, condomínios e empresas.' },
+            { titulo: 'Caixa de Gordura & Água', icone: 'mdi:water-check', desc: 'Limpeza, desinfecção e higienização de alto padrão para garantir qualidade da água.' }
+          ],
+          avaliacoes: [
+            { texto: 'Ótimo atendimento, ótimo serviço, pessoal muito bem preparado, recomendo!' },
+            { texto: 'Profissionais competentes e comprometidos com a qualidade dos serviços prestados.' },
+            { texto: 'Muito boa, comunicação fácil e transparente, trabalho excelente.' }
+          ]
+        };
+      },
+      methods: {
+        enviarOrcamento() {
+          const msg = `Olá! Meu nome é ${this.form.nome} (${this.form.telefone}) e gostaria de um orçamento para: ${this.form.servico}.`;
+          window.open(`https://wa.me/5531992074842?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

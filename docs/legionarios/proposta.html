@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proposta de Modernização | Conservadora Legionários</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            legion: {
+              950: '#090d16',
+              900: '#111827',
+              800: '#1f2937'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-950 text-white h-dvh w-screen flex items-center justify-center overflow-hidden">
+  <div class="relative w-full h-full sm:max-w-[430px] sm:h-[92vh] sm:rounded-xl sm:border sm:border-white/15 sm:shadow-2xl overflow-hidden bg-legion-950 flex flex-col">
+    <!-- Stories Progress Bar -->
+    <div id="stories-bar" class="absolute top-0 left-0 right-0 z-30 flex gap-1 px-3 pt-3 pb-4 bg-gradient-to-b from-black/60 to-transparent"></div>
+
+    <swiper-container
+      id="proposta-swiper"
+      init="false"
+      class="w-full flex-1 min-h-0"
+      keyboard="true"
+    >
+      <!-- Slide 1: Capa -->
+      <swiper-slide class="flex items-center justify-center bg-gradient-to-br from-legion-950 via-legion-900 to-slate-900 p-6">
+        <div class="w-full text-center space-y-5">
+          <div class="w-16 h-16 rounded-2xl bg-amber-500 text-legion-950 flex items-center justify-center mx-auto shadow-lg">
+            <iconify-icon icon="mdi:shield-crown" width="38" height="38"></iconify-icon>
+          </div>
+          <h1 class="text-3xl font-extrabold leading-tight">
+            Proposta de <span class="text-amber-400">Modernização</span>
+            de sistemas
+          </h1>
+          <p class="text-slate-200 text-base leading-relaxed">
+            Olá! Muito obrigado pelo seu tempo <br>
+            e atenção ao analisar esta proposta <br>
+            para a <strong>Conservadora Legionários</strong>.
+          </p>
+          <p class="text-xs text-slate-400 pt-2">Leia com atenção, vai ser rapidinho.</p>
+          <button
+            onclick="document.getElementById('proposta-swiper').swiper.slideNext()"
+            class="mt-4 inline-flex items-center gap-3 px-6 py-3.5 rounded-2xl bg-amber-500/15 border border-amber-400/40 text-amber-300 text-base font-semibold hover:bg-amber-500/25 transition leading-snug"
+          >
+            <span>Prossiga para ver<br>o que vamos criar</span>
+            <iconify-icon icon="mdi:chevron-right" width="24" height="24" class="text-amber-400 shrink-0"></iconify-icon>
+          </button>
+        </div>
+      </swiper-slide>
+
+      <!-- Slide 2: Novo Site no Ar -->
+      <swiper-slide class="flex flex-col justify-center bg-gradient-to-b from-slate-950 via-legion-900 to-slate-950 p-6 pt-10 space-y-6">
+        <h2 class="text-3xl font-extrabold leading-tight">Novo Site <span class="text-amber-400">no Ar 24h</span></h2>
+
+        <p class="flex items-start gap-3 text-red-300 text-lg leading-snug">
+          <iconify-icon icon="mdi:close-circle" width="24" height="24" class="shrink-0 mt-1"></iconify-icon>
+          <span><strong>Hoje:</strong> o site oficial está fora do ar e o antigo no Wix não passa a força da marca.</span>
+        </p>
+
+        <p class="flex items-start gap-3 text-emerald-300 text-lg leading-snug">
+          <iconify-icon icon="mdi:check-circle" width="24" height="24" class="shrink-0 mt-1"></iconify-icon>
+          <span><strong>Novo Site:</strong> página institucional moderna, rápida e no ar 24 horas para captar novos contratos.</span>
+        </p>
+
+        <div class="flex flex-wrap gap-2 pt-2">
+          <span class="px-3 py-1.5 rounded-full bg-white/10 text-xs font-semibold text-amber-300">🛡️ Identidade forte</span>
+          <span class="px-3 py-1.5 rounded-full bg-white/10 text-xs font-semibold text-emerald-300">⚡ Carregamento rápido</span>
+        </div>
+      </swiper-slide>
+
+      <!-- Slide 3: Cotação Rápida -->
+      <swiper-slide class="flex flex-col justify-center bg-gradient-to-b from-slate-950 via-legion-900 to-slate-950 p-6 pt-10 space-y-6">
+        <h2 class="text-3xl font-extrabold leading-tight">Cotação <span class="text-amber-400">Rápida</span></h2>
+
+        <p class="flex items-start gap-3 text-emerald-300 text-lg leading-snug">
+          <iconify-icon icon="mdi:check-circle" width="24" height="24" class="shrink-0 mt-1"></iconify-icon>
+          <span><strong>Formulário na 1ª Tela:</strong> o síndico ou empresa escolhe o serviço (Portaria, Limpeza, Zeladoria) e envia direto no WhatsApp.</span>
+        </p>
+
+        <p class="flex items-start gap-3 text-emerald-300 text-lg leading-snug">
+          <iconify-icon icon="mdi:check-circle" width="24" height="24" class="shrink-0 mt-1"></iconify-icon>
+          <span><strong>Atendimento 24h:</strong> botão flutuante do WhatsApp sempre visível para fechar orçamentos mais rápido.</span>
+        </p>
+
+        <div class="flex flex-wrap gap-2 pt-2">
+          <span class="px-3 py-1.5 rounded-full bg-white/10 text-xs font-semibold text-amber-300">⚡ Cotação na capa</span>
+          <span class="px-3 py-1.5 rounded-full bg-white/10 text-xs font-semibold text-emerald-300">💬 Direto no WhatsApp</span>
+        </div>
+      </swiper-slide>
+
+      <!-- Slide 4: Prova Social do Google -->
+      <swiper-slide class="flex flex-col justify-center bg-gradient-to-b from-slate-950 via-legion-900 to-slate-950 p-6 pt-10 space-y-6">
+        <h2 class="text-3xl font-extrabold leading-tight">Prova Social <span class="text-yellow-300">do Google</span></h2>
+
+        <p class="flex items-start gap-3 text-emerald-300 text-lg leading-snug">
+          <iconify-icon icon="mdi:check-circle" width="24" height="24" class="shrink-0 mt-1"></iconify-icon>
+          <span><strong>Nota 4,9★ em Destaque:</strong> exibimos a excelente reputação da Legionários logo no topo do site.</span>
+        </p>
+
+        <p class="flex items-start gap-3 text-emerald-300 text-lg leading-snug">
+          <iconify-icon icon="mdi:check-circle" width="24" height="24" class="shrink-0 mt-1"></iconify-icon>
+          <span><strong>Depoimentos Reais:</strong> avaliações verificadas do Google que geram confiança imediata em quem pesquisa.</span>
+        </p>
+
+        <div class="flex flex-wrap gap-2 pt-2">
+          <span class="px-3 py-1.5 rounded-full bg-white/10 text-xs font-semibold text-yellow-300">⭐ 4,9★ no Google</span>
+          <span class="px-3 py-1.5 rounded-full bg-white/10 text-xs font-semibold text-emerald-300">💬 16 avaliações reais</span>
+        </div>
+      </swiper-slide>
+
+      <!-- Slide 5: Localização & SEO -->
+      <swiper-slide class="flex flex-col justify-center bg-gradient-to-b from-slate-950 via-legion-900 to-slate-950 p-6 pt-10 space-y-6">
+        <h2 class="text-3xl font-extrabold leading-tight">Localização & <span class="text-amber-400">Google</span></h2>
+
+        <p class="flex items-start gap-3 text-emerald-300 text-lg leading-snug">
+          <iconify-icon icon="mdi:check-circle" width="24" height="24" class="shrink-0 mt-1"></iconify-icon>
+          <span><strong>Mapa & Contato Unificados:</strong> endereço no Tupi (BH), telefones, funcionamento 24h e redes sociais em um só lugar.</span>
+        </p>
+
+        <p class="flex items-start gap-3 text-emerald-300 text-lg leading-snug">
+          <iconify-icon icon="mdi:check-circle" width="24" height="24" class="shrink-0 mt-1"></iconify-icon>
+          <span><strong>Pronto para o Google:</strong> dados estruturados <code class="text-amber-300">LocalBusiness</code> e stack leve para ranquear melhor em BH.</span>
+        </p>
+
+        <div class="flex flex-wrap gap-2 pt-2">
+          <span class="px-3 py-1.5 rounded-full bg-white/10 text-xs font-semibold text-amber-300">📍 Mapa interativo</span>
+          <span class="px-3 py-1.5 rounded-full bg-white/10 text-xs font-semibold text-emerald-300">🔍 SEO LocalBusiness</span>
+        </div>
+      </swiper-slide>
+
+      <!-- Slide 6: Portal do Cliente -->
+      <swiper-slide class="flex flex-col justify-center bg-gradient-to-b from-legion-900 via-legion-950 to-slate-950 p-6 pt-10 space-y-4">
+        <span class="inline-block w-fit px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold uppercase tracking-wider">Diferencial 1/2</span>
+        <h2 class="text-3xl font-extrabold leading-tight">Portal do <span class="text-amber-400">Cliente</span></h2>
+
+        <p class="flex items-start gap-3 text-emerald-300 text-base leading-snug">
+          <iconify-icon icon="mdi:check-circle" width="22" height="22" class="shrink-0 mt-0.5"></iconify-icon>
+          <span><strong>Visão Geral:</strong> contratos ativos, equipe presente e próxima fatura.</span>
+        </p>
+
+        <p class="flex items-start gap-3 text-emerald-300 text-base leading-snug">
+          <iconify-icon icon="mdi:check-circle" width="22" height="22" class="shrink-0 mt-0.5"></iconify-icon>
+          <span><strong>Equipe & Ponto:</strong> porteiros, zeladores e auxiliares alocados com turno e status.</span>
+        </p>
+
+        <p class="flex items-start gap-3 text-emerald-300 text-base leading-snug">
+          <iconify-icon icon="mdi:check-circle" width="22" height="22" class="shrink-0 mt-0.5"></iconify-icon>
+          <span><strong>2ª Via e NF-e:</strong> boletos e notas fiscais sempre à mão para o síndico.</span>
+        </p>
+
+        <p class="flex items-start gap-3 text-emerald-300 text-base leading-snug">
+          <iconify-icon icon="mdi:check-circle" width="22" height="22" class="shrink-0 mt-0.5"></iconify-icon>
+          <span><strong>Pedidos & Chamados 24h:</strong> solicitação de materiais, agendamentos e suporte direto.</span>
+        </p>
+
+        <div class="flex flex-wrap gap-2 pt-2">
+          <span class="px-3 py-1.5 rounded-full bg-white/10 text-xs font-semibold text-amber-300">🔑 Acesso exclusivo</span>
+          <span class="px-3 py-1.5 rounded-full bg-white/10 text-xs font-semibold text-emerald-300">📄 Boletos e equipe</span>
+        </div>
+      </swiper-slide>
+
+      <!-- Slide 7: Gestão com ERP Próprio -->
+      <swiper-slide class="flex flex-col justify-between bg-gradient-to-b from-legion-900 via-legion-950 to-slate-950 p-6 pt-10">
+        <div class="space-y-4">
+          <span class="inline-block px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold uppercase tracking-wider">Diferencial 2/2</span>
+          <h2 class="text-3xl font-extrabold leading-tight">Gestão com <span class="text-amber-400">ERP Próprio</span></h2>
+        </div>
+
+        <div class="space-y-4 mt-6 mb-auto text-sm">
+          <div class="flex items-start gap-2.5 text-emerald-400">
+            <iconify-icon icon="mdi:check-circle" class="text-xl shrink-0 mt-0.5"></iconify-icon>
+            <p><strong class="block text-emerald-300">Financeiro & Contratos:</strong> faturamento recorrente, boletos, NF-e e fluxo de caixa integrados.</p>
+          </div>
+          <div class="flex items-start gap-2.5 text-emerald-400">
+            <iconify-icon icon="mdi:check-circle" class="text-xl shrink-0 mt-0.5"></iconify-icon>
+            <p><strong class="block text-emerald-300">RH, Escalas & Estoque:</strong> controle de colaboradores, postos 24h, férias e insumos de limpeza.</p>
+          </div>
+          <div class="flex items-start gap-2.5 text-emerald-400">
+            <iconify-icon icon="mdi:check-circle" class="text-xl shrink-0 mt-0.5"></iconify-icon>
+            <p><strong class="block text-emerald-300">100% Customizável:</strong> adaptado à rotina da Conservadora Legionários, crescendo junto com a empresa.</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 pb-2">
+          <span class="px-3 py-1.5 rounded-full bg-white/10 text-xs font-semibold text-amber-300">⚙️ Sob medida</span>
+          <span class="px-3 py-1.5 rounded-full bg-white/10 text-xs font-semibold text-emerald-300">📈 Controle total</span>
+        </div>
+      </swiper-slide>
+
+      <!-- Slide 8: Resumo do que Entregaremos & Contato -->
+      <swiper-slide class="flex flex-col justify-between bg-gradient-to-br from-legion-950 via-legion-900 to-slate-950 p-6 pt-10">
+        <div class="space-y-3">
+          <span class="inline-block px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold uppercase tracking-wider">Resumo</span>
+          <h2 class="text-3xl font-extrabold leading-tight">Resumo do que <span class="text-amber-400">Entregaremos</span></h2>
+        </div>
+
+        <div class="space-y-4 mt-6 mb-auto text-sm">
+          <div class="flex items-start gap-2.5 text-emerald-400">
+            <iconify-icon icon="mdi:check-circle" class="text-xl shrink-0 mt-0.5"></iconify-icon>
+            <p><strong class="block text-emerald-300">Novo Site no Ar 24h:</strong> presença digital profissional, rápida e pronta para gerar orçamentos no WhatsApp.</p>
+          </div>
+          <div class="flex items-start gap-2.5 text-emerald-400">
+            <iconify-icon icon="mdi:check-circle" class="text-xl shrink-0 mt-0.5"></iconify-icon>
+            <p><strong class="block text-emerald-300">Portal para o Seu Cliente:</strong> painel exclusivo para síndicos e empresas acompanharem equipe, materiais e boletos.</p>
+          </div>
+          <div class="flex items-start gap-2.5 text-emerald-400">
+            <iconify-icon icon="mdi:check-circle" class="text-xl shrink-0 mt-0.5"></iconify-icon>
+            <p><strong class="block text-emerald-300">Painel para Gerenciar Tudo:</strong> ERP completo para controlar contratos, escalas 24h, estoque e financeiro.</p>
+          </div>
+
+          <p class="text-slate-300 text-sm leading-relaxed pt-2">
+            Muito obrigado pelo seu tempo! Vamos agendar uma conversa rápida para tirar dúvidas e alinhar os próximos passos.
+          </p>
+
+          <div class="flex flex-col gap-3 pt-2">
+            <a
+              href="https://wa.me/message/F4VM6UHHEPSDC1"
+              target="_blank"
+              rel="noopener"
+              class="px-5 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-base transition inline-flex items-center justify-center gap-2"
+            >
+              <iconify-icon icon="mdi:whatsapp" width="24" height="24"></iconify-icon> Chamar no WhatsApp
+            </a>
+            <button
+              type="button"
+              onclick="navigator.clipboard.writeText('labscript.dev@gmail.com'); this.querySelector('span').textContent = 'E-mail copiado!'; setTimeout(() => this.querySelector('span').textContent = 'labscript.dev@gmail.com', 2000);"
+              class="px-5 py-4 rounded-xl border border-white/25 hover:bg-white/10 text-white font-semibold text-base transition inline-flex items-center justify-center gap-2"
+            >
+              <iconify-icon icon="mdi:content-copy" width="22" height="22"></iconify-icon>
+              <span>labscript.dev@gmail.com</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-2 pb-2 text-center">
+          <p class="text-xs">
+            <a href="index.html" class="text-amber-400 hover:text-amber-300 underline font-semibold">Visitar Conservadora Legionários</a>
+          </p>
+          <p class="text-xs text-slate-400">
+            Desenvolvido por <a href="https://labscript.dev" target="_blank" rel="noopener" class="text-amber-400 underline">labscript.dev</a>
+          </p>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+
+    <!-- Bottom Controls Bar (50px) -->
+    <div class="h-[50px] shrink-0 bg-legion-900 border-t border-white/10 px-4 flex items-center justify-between gap-2">
+      <button
+        onclick="document.getElementById('proposta-swiper').swiper.slidePrev()"
+        class="w-9 h-9 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition"
+        aria-label="Slide anterior"
+      >
+        <iconify-icon icon="mdi:chevron-left" width="24" height="24"></iconify-icon>
+      </button>
+
+      <span id="slide-counter" class="text-xs font-semibold text-slate-300 tabular-nums shrink-0">1 / 8</span>
+
+      <button
+        onclick="document.getElementById('proposta-swiper').swiper.slideNext()"
+        class="w-9 h-9 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition"
+        aria-label="Próximo slide"
+      >
+        <iconify-icon icon="mdi:chevron-right" width="24" height="24"></iconify-icon>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const swiperEl = document.getElementById('proposta-swiper');
+    const counterEl = document.getElementById('slide-counter');
+    const storiesBar = document.getElementById('stories-bar');
+
+    const match = window.location.hash.match(/^#slide-(\d+)$/);
+    if (match) {
+      const idx = Math.max(0, parseInt(match[1], 10) - 1);
+      swiperEl.setAttribute('initial-slide', idx);
+    }
+
+    swiperEl.initialize();
+
+    const updateUI = () => {
+      const s = swiperEl.swiper;
+      if (!s) return;
+      const total = s.slides.length;
+      const current = s.activeIndex;
+
+      history.replaceState(null, '', `#slide-${current + 1}`);
+
+      if (counterEl) {
+        counterEl.textContent = `${current + 1} / ${total}`;
+      }
+
+      if (storiesBar) {
+        if (storiesBar.children.length !== total) {
+          storiesBar.innerHTML = '';
+          for (let i = 0; i < total; i++) {
+            const bar = document.createElement('button');
+            bar.setAttribute('aria-label', `Ir para slide ${i + 1}`);
+            bar.className = 'h-1 flex-1 rounded-full transition-all duration-200 cursor-pointer';
+            bar.onclick = () => s.slideTo(i);
+            storiesBar.appendChild(bar);
+          }
+        }
+        Array.from(storiesBar.children).forEach((bar, i) => {
+          bar.className = `h-1 flex-1 rounded-full transition-all duration-200 cursor-pointer ${i <= current ? 'bg-amber-400' : 'bg-white/25'}`;
+        });
+      }
+    };
+
+    swiperEl.addEventListener('swiperslidechange', updateUI);
+    setTimeout(updateUI, 50);
+  </script>
+</body>
+</html>
