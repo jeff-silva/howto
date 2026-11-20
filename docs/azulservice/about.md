@@ -1,5 +1,23 @@
 # Proposta de Modernização de Sistemas — Azul Serviços
 
+## Dados da Empresa
+- **Nome Fantasia:** Conservadora BH - Azul Serviços (Azul Service Soluções)
+- **Razão Social:** AZUL SERVICE SERVICOS GERAIS LTDA - ME
+- **CNPJ:** 42.497.483/0001-21
+- **Tempo de Mercado:** 24 anos no mercado mineiro (atendimento a empresas públicas e privadas)
+- **Segmento:** Terceirização de serviços de limpeza e conservação, portaria e vigia 24h, locação de mão de obra especializada (disponibilização em até 48h) e consultoria administrativa
+- **Endereço Principal (Sede Pampulha):** R. Maestro Francisco Flôres, 318 - São Luiz, Belo Horizonte - MG, CEP 31270-740
+- **Endereço Cadastral (Serasa/Receita):** R. José do Patrocínio, 268, Sala 4 - Padre Eustáquio, Belo Horizonte - MG, CEP 30720-390
+- **Telefone:** (31) 2520-1211
+- **Horário de Funcionamento:** Fecha às 17:00
+- **Site Oficial:** https://www.azulservice.com.br
+- **Link de Compromissos / Contato:** https://bit.ly/azulservice
+- **Instagram:** https://www.instagram.com/azulservicebh/ (@azulservicebh — +10,4 mil seguidores)
+- **Facebook:** https://www.facebook.com/AzulService/ (+230 seguidores)
+- **Avaliações:** 4,9★ no Google (35 avaliações) | 5,0 no Facebook (1 avaliação)
+
+---
+
 ## 1. Site Mais Bonito e Rápido
 - **Visual Atualizado:** design moderno e profissional que valoriza a marca Azul Serviços.
 - **Carregamento Ágil:** páginas mais leves para abrir rápido no celular e no computador.
