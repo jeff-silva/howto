@@ -1,0 +1,84 @@
+{{- $r := ds "report" -}}
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relatório ATS &amp; Carta — {{ default "Vaga" $r.company }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-950 text-gray-100 antialiased min-h-screen py-10 px-4">
+  <div class="max-w-3xl mx-auto space-y-6">
+    <header class="border-b border-gray-800 pb-4">
+      <h1 class="text-2xl font-bold text-white">Relatório ATS &amp; Candidatura</h1>
+      {{- if has $r "company" }}
+      <p class="text-sm text-gray-400 mt-1">Empresa: <span class="text-gray-200 font-medium">{{ $r.company }}</span></p>
+      {{- end }}
+    </header>
+
+    <section class="bg-gray-900 border border-gray-800 rounded-xl p-6 space-y-4">
+      <h2 class="text-lg font-semibold text-white">1. Relatório ATS</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-gray-950 border border-gray-800 rounded-lg p-4">
+          <div class="text-xs text-gray-400 uppercase">Aderência Inicial</div>
+          <div class="text-2xl font-bold text-amber-400 mt-1">{{ $r.initial_adherence }}%</div>
+        </div>
+        <div class="bg-gray-950 border border-gray-800 rounded-lg p-4">
+          <div class="text-xs text-gray-400 uppercase">Aderência Após Adaptação</div>
+          <div class="text-2xl font-bold text-emerald-400 mt-1">{{ $r.final_adherence }}%</div>
+        </div>
+      </div>
+
+      {{- if and (has $r "alerts") (gt (len $r.alerts) 0) }}
+      <div class="bg-red-950/40 border border-red-800/60 rounded-lg p-4">
+        <h3 class="text-sm font-semibold text-red-300 mb-2">Alertas Críticos ATS (Riscos de Rejeição)</h3>
+        <ul class="list-disc list-inside text-sm text-red-200 space-y-1">
+          {{- range $r.alerts }}
+          <li>{{ . }}</li>
+          {{- end }}
+        </ul>
+      </div>
+      {{- end }}
+
+      <div>
+        <h3 class="text-sm font-semibold text-gray-200 mb-2">Dicas de Melhoria</h3>
+        {{- if and (has $r "tips") (gt (len $r.tips) 0) }}
+        <ul class="list-disc list-inside text-sm text-gray-300 space-y-1">
+          {{- range $r.tips }}
+          <li>{{ . }}</li>
+          {{- end }}
+        </ul>
+        {{- else }}
+        <p class="text-sm text-gray-400">Nada a melhorar.</p>
+        {{- end }}
+      </div>
+    </section>
+
+    <section class="bg-gray-900 border border-gray-800 rounded-xl p-6 space-y-4">
+      <h2 class="text-lg font-semibold text-white">2. Carta de Apresentação &amp; E-mail</h2>
+      <div>
+        <label class="block text-xs font-medium text-gray-400 uppercase mb-1">Carta de Apresentação</label>
+        <textarea rows="5" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-3 text-sm text-gray-200 focus:outline-none focus:border-gray-600">{{ $r.cover_letter }}</textarea>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-400 uppercase mb-1">Assunto do E-mail</label>
+        <input type="text" value="{{ $r.email_subject }}" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-3 text-sm text-gray-200 focus:outline-none focus:border-gray-600" />
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-400 uppercase mb-1">Corpo do E-mail</label>
+        <textarea rows="5" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-3 text-sm text-gray-200 focus:outline-none focus:border-gray-600">{{ $r.email_body }}</textarea>
+      </div>
+    </section>
+
+    {{- if and (has $r "skills_to_study") (gt (len $r.skills_to_study) 0) }}
+    <section class="bg-gray-900 border border-gray-800 rounded-xl p-6 space-y-3">
+      <h2 class="text-lg font-semibold text-white">3. Skills para Estudar ({{ len $r.skills_to_study }})</h2>
+      <ul class="list-disc list-inside text-sm text-gray-300 space-y-1 columns-2">
+        {{- range $r.skills_to_study }}
+        <li>{{ . }}</li>
+        {{- end }}
+      </ul>
+    </section>
+    {{- end }}
+  </div>
+</body>
+</html>

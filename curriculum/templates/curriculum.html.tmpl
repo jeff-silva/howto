@@ -1,0 +1,105 @@
+{{- $r := ds "resume" -}}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ $r.basics.name }} - Currículo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    @page { size: A4; margin: 16mm; }
+    body { font-family: "Inter", sans-serif; }
+  </style>
+</head>
+<body class="bg-white text-gray-900 antialiased">
+  <header class="border-b border-gray-200">
+    <div class="max-w-3xl mx-auto px-6 py-8">
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ $r.basics.name }}</h1>
+      <p class="mt-1 text-base font-semibold text-gray-800">{{ $r.basics.label }}</p>
+      <div class="mt-3 space-y-1 text-xs text-gray-700">
+        {{- if $r.basics.email }}
+        <div><span class="font-semibold text-gray-900">E-mail:</span> {{ $r.basics.email }}</div>
+        {{- end }}
+        {{- if $r.basics.phone }}
+        <div><span class="font-semibold text-gray-900">Telefone / WhatsApp:</span> {{ $r.basics.phone }}</div>
+        {{- end }}
+        {{- if $r.basics.url }}
+        <div><span class="font-semibold text-gray-900">Site:</span> <a href="{{ $r.basics.url }}" class="underline">{{ $r.basics.url }}</a></div>
+        {{- end }}
+        {{- if $r.basics.location }}
+        <div><span class="font-semibold text-gray-900">Localização:</span> {{ $r.basics.location.city }}, {{ $r.basics.location.region }}, {{ if has $r.basics.location "country" }}{{ $r.basics.location.country }}{{ else }}{{ $r.basics.location.countryCode }}{{ end }}</div>
+        {{- end }}
+        {{- range $r.basics.profiles }}
+        <div><span class="font-semibold text-gray-900">{{ .network }}:</span> <a href="{{ .url }}" class="text-gray-700 underline">{{ .url }}</a></div>
+        {{- end }}
+      </div>
+    </div>
+  </header>
+  <main class="max-w-3xl mx-auto px-6 py-8">
+    {{- if $r.basics.summary }}
+    <section class="mb-6">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-gray-900 mb-3 after:content-[''] after:block after:w-8 after:h-1 after:bg-gray-900 after:mt-1">Resumo Profissional</h2>
+      <p class="text-sm leading-relaxed text-gray-700 whitespace-pre-line">{{ $r.basics.summary }}</p>
+    </section>
+    {{- end }}
+
+    {{- if $r.skills }}
+    <section class="mb-6">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-gray-900 mb-3 after:content-[''] after:block after:w-8 after:h-1 after:bg-gray-900 after:mt-1">Competências Técnicas</h2>
+      <div class="text-sm">
+        {{- range $r.skills }}
+        <div class="mb-2"><span class="font-semibold text-gray-900">{{ .name }}:</span> <span class="text-gray-700">{{ join .keywords ", " }}</span></div>
+        {{- end }}
+      </div>
+    </section>
+    {{- end }}
+
+    {{- if $r.work }}
+    <section class="mb-6">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-gray-900 mb-3 after:content-[''] after:block after:w-8 after:h-1 after:bg-gray-900 after:mt-1">Experiência Profissional</h2>
+      {{- range $r.work }}
+      <div class="mb-5 break-inside-avoid">
+        <div class="mb-0.5">
+          <div class="text-base font-semibold text-gray-900">{{ .position }} <span class="font-normal text-gray-600">— {{ .name }}</span></div>
+          <div class="text-xs font-medium text-gray-500">{{ .startDate }} - {{ if has . "endDate" }}{{ .endDate }}{{ else }}Atual{{ end }}{{ if has . "location" }} | {{ .location }}{{ end }}</div>
+        </div>
+        {{- if .summary }}
+        <p class="mt-1 text-sm text-gray-700">{{ .summary }}</p>
+        {{- end }}
+        {{- if .highlights }}
+        <ul class="mt-1.5 space-y-1 text-sm">
+          {{- range .highlights }}
+          <li class="ml-4 list-disc text-gray-700">{{ . }}</li>
+          {{- end }}
+        </ul>
+        {{- end }}
+      </div>
+      {{- end }}
+    </section>
+    {{- end }}
+
+    {{- if $r.education }}
+    <section class="mb-6">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-gray-900 mb-3 after:content-[''] after:block after:w-8 after:h-1 after:bg-gray-900 after:mt-1">Formação Acadêmica</h2>
+      {{- range $r.education }}
+      <div class="mb-2">
+        <div class="text-sm font-semibold text-gray-900">{{ .studyType }} em {{ .area }} <span class="font-normal text-gray-600">— {{ .institution }}</span></div>
+        <div class="text-xs font-medium text-gray-500">{{ .startDate }} - {{ if has . "endDate" }}{{ .endDate }}{{ else }}Atual{{ end }}</div>
+      </div>
+      {{- end }}
+    </section>
+    {{- end }}
+
+    {{- if $r.languages }}
+    <section>
+      <h2 class="text-xs font-bold uppercase tracking-wider text-gray-900 mb-3 after:content-[''] after:block after:w-8 after:h-1 after:bg-gray-900 after:mt-1">Idiomas</h2>
+      <div class="space-y-1">
+        {{- range $r.languages }}
+        <div class="text-sm text-gray-700"><span class="font-semibold text-gray-900">{{ .language }}:</span> {{ .fluency }}</div>
+        {{- end }}
+      </div>
+    </section>
+    {{- end }}
+  </main>
+</body>
+</html>

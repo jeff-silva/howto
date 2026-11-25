@@ -1,6 +1,8 @@
-Desenvolvedor(a) Full Stack Java Sr.
+Marcela
+Desenvolvedor Full Stack Pleno
 
-Florianópolis, Santa Catarina
+Belo Horizonte, Minas Gerais
+R$ 5.000 (fornecido pela empresa)
 
 Candidatura rápida
 
@@ -10,76 +12,86 @@ Candidatura rápida
 Suas qualificações para esta vaga
 
 Editar
+Desenvolvedor Back-end
 Controle de versão
-Requisitos de Negócios
-Design de Sistema
-Manutenção de aplicações
-Desenvolvimento Full Stack
-Projeto de arquitetura de sistemas
-Design de aplicações
-Git
-MySQL
+SQL
+Frameworks JavaScript
+Documentação de software
+Automação
+Integração de sistemas
+TypeScript
+Manutenção de código
+Diagnóstico e solução de problemas
+Desenvolvimento de funcionalidades voltadas ao usuário
+Implementação de IA
+Identificação de problemas do sistema
+Escrita Técnica
 Graduação
+Aplicativos web
+Execução de testes de garantia da qualidade
 Engenharia de software
-Análise de Requisitos
+Implementação de interface do usuário (UI)
+Projetos de modelagem de dados
+Feedback sobre código
+PostgreSQL
+GitHub Actions
+Solução de problemas técnicos
 Você também têm estas qualificações?
 
 X
-JPA
+Suporte a softwares empresariais
+VAGA ABERTA | DESENVOLVEDOR FULL STACK PLENO
 
-X
-JSP
+INFORMAÇÕES DA VAGA
 
-X
-Hibernate
-Estamos em busca de um(a) Desenvolvedor(a) Full Stack para fazer parte da nossa equipe de Desenvolvimento, atuando na criação e na evolução de soluções com Java EE, JSF e Primefaces.
+Cargo: Desenvolvedor Full Stack
+Área: Tecnologia da Informação
+Local: Belo Horizonte/MG
+Modelo de trabalho: Presencial
+Salário: R$ 5.000,00
+Quantidade de vagas: 1
+OBJETIVO DO CARGO
 
-Principais atividades:
+Buscamos um profissional para desenvolver e manter o TEG+, nosso ERP web próprio, que já está em produção. O profissional será responsável pela criação de novas funcionalidades, integrações e automações, além de prestar suporte de segundo nível ao sistema.
 
-Desenvolver, melhorar e corrigir funcionalidades dos sistemas da empresa;
-Dimensionar requisitos e auxiliar na arquitetura e na escolha de ferramentas;
-Entender e discutir regras de negócio, propondo soluções de software e usabilidade.
-Requisitos:
+PRINCIPAIS RESPONSABILIDADES
 
-Experiência sólida como desenvolvedor(a) full-stack, comprovada por projetos ou tempo de atuação;
-Domínio de Java (versão 8 ou superior);
-Vivência com Java EE, Hibernate/JPA e JSF com Primefaces;
-Conhecimento em banco de dados MySQL;
-Experiência com versionamento de código (Git);
-Ensino superior completo.
-Benefícios:
+Desenvolvimento de telas e funcionalidades (front-end e back-end).
+Modelagem de banco de dados: tabelas, views, funções e regras de acesso.
+Criação e manutenção de integrações e automações (webhooks, APIs, WhatsApp e IA).
+Correção de erros e suporte N2 ao sistema.
+Realização de testes e documentação técnica.
+REQUISITOS OBRIGATÓRIOS
 
-Remuneração competitiva;
-Wellhub (Gympass), com 4 planos gratuitos;
-Auxílio alimentação/refeição Caju: R$ 1.000;
-Auxílio mobilidade;
-Plano de Saúde e Odontológico Nacional Bradesco, sem coparticipação e sem desconto em folha;
-Day Off no mês do aniversário.
-Informações da vaga:
+Experiência comprovada com React e TypeScript.
+Conhecimento em SQL e PostgreSQL (consultas, views, funções e índices).
+Experiência com Git e GitHub (branches, pull requests e code review).
+Desenvolvimento e consumo de APIs REST.
+REQUISITOS DESEJÁVEIS
 
-Modelo de trabalho: Híbrido, com 3 dias presenciais no Estreito, em Florianópolis/SC, e 2 dias em home office.
-Tipo de vaga: Efetivo CLT
+Conhecimento em Supabase (RLS, Auth e Edge Functions) e TanStack Query.
+Experiência com Vercel e GitHub Actions (CI/CD).
+Integração com Inteligência Artificial (IA/LLMs).
+FORMAÇÃO
+
+Ensino superior completo ou em andamento em Ciência da Computação, Sistemas de Informação, Engenharia de Software ou áreas relacionadas.
+
+Pagamento: R$5.000,00 por mês
 
 Benefícios:
 
 Assistência médica
 Assistência odontológica
-Auxílio-combustível
-Convênios e descontos comerciais
+Seguro de vida
 Vale-alimentação
-Vale-refeição
 Vale-transporte
-Possibilidade de deslocamento/mudança de local:
+Local do trabalho: Presencial
 
-Florianópolis, SC: Deslocar-se ou se mudar para o local da vaga antes de começar a trabalhar (Obrigatório)
-Pergunta(s) de seleção:
 
-Quantos anos de experiência você tem como desenvolvedor(a) full-stack? Descreva suas principais responsabilidades, as tecnologias que utilizou e o tipo de sistema em que atuou.
-Você já atuou como líder de equipe?
-Você tem experiência com crédito consignado ou sistemas de folha de pagamento? Quais?
-Há quanto tempo você trabalha com JavaServer (JSF ou JSP)? Liste as principais bibliotecas utilizadas.
-Experiência:
+Mostrar menos
 
-JSF (Obrigatório)
-Java 8+ (Obrigatório)
-Local do trabalho: Remoto híbrido para Florianópolis, SC
+Base
+O salário mínimo é de R$ 5.000 e o salário máximo é de R$ 5.000.
+R$ 5.000/mês (fornecido pela empresa)
+Belo Horizonte, Minas Gerais
+Caso a empresa inclua um salário ou uma faixa salarial em uma vaga, nós o exibimos como “Estimativa da empresa”. Caso a vaga não tenha informações de salário, o Glassdoor exibe uma “Estimativa do Glassdoor”, se disponível. Para saber mais sobre as “Estimativas do Glassdoor”, consulte nossa página de Perguntas frequentes.
