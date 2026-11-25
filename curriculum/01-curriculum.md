@@ -90,7 +90,7 @@ Atuação na arquitetura técnica, desenvolvimento e sustentação de portais co
 
 Atuação independente em P&D, consultoria, gestão de produto como Product Owner (PO) e engenharia de produtos Full Stack, experimentando e entregando soluções com arquiteturas modernas em Python, TypeScript e IA.
 
-- **Engenharia Full Stack (C# .NET, Python & React/TypeScript):** Desenvolvimento de aplicações web completas utilizando C# .NET, Python (FastAPI, Pydantic, async SQLAlchemy), TypeScript, React.js, Next.js, TanStack Start e soluções de mapas/geoespacial (Leaflet, OpenLayers, MapLibre, GeoJSON) com tipagem estática estrita.
+- **Engenharia Full Stack (C# .NET, Java, Python & React/TypeScript):** Desenvolvimento de aplicações web completas utilizando C# .NET, Java, Python (FastAPI, Pydantic, async SQLAlchemy), TypeScript, React.js, Next.js, TanStack Start e soluções de mapas/geoespacial (Leaflet, OpenLayers, MapLibre, GeoJSON) com tipagem estática estrita.
 - **Bancos de Dados, Mensageria & Containers:** Modelagem relacional em PostgreSQL (migrations, índices e transações), mensageria assíncrona com Kafka, APIs RESTful com contratos OpenAPI e conteinerização/orquestração via Docker, Docker Compose e OpenShift.
 - **Qualidade & Automação:** Implementação de suítes de testes automatizados (pytest, Vitest, Testing Library) e pipelines de CI/CD no GitHub Actions.
 - **IA & Prototipagem Rápida:** Integração de fluxos com LLMs, uso de agentes de IA (Claude Code, Antigravity) e Spec-Driven Development (SDD) em experimentos SaaS multi-tenant.
