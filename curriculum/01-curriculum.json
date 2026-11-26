@@ -1,5 +1,12 @@
 {
   "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "meta": {
+    "info": [
+      "não é PCD",
+      "último salário: R$ 8.000",
+      "pretensão salarial: R$ 8.000 PJ / R$ 6.000 CLT"
+    ]
+  },
   "basics": {
     "name": "Jeferson Silva",
     "label": "Desenvolvedor Full Stack & Tech Lead | Node.js | TypeScript | PHP (Laravel) | Vue.js | React | AWS & GCP | Arquitetura de Microsserviços",
@@ -137,7 +144,7 @@
       "endDate": "2026-10",
       "summary": "Liderança técnica de equipe multidisciplinar, atuação como Product Owner (PO) do ecossistema Capp/Codewe (levantamento de requisitos, priorização de backlog, definição de critérios de aceite e validação de entregas) e atuação Full Stack na reengenharia tecnológica e automação do fluxo industrial de produção de cartões.",
       "highlights": [
-        "Reengenharia de Arquitetura: Conduziu a migração estratégica de um monólito legado em PHP (Laravel) para uma arquitetura orientada a microsserviços desacoplados em Node.js (NestJS), reduzindo a latência média das APIs em 45% (de ~450ms para menos de 90ms).",
+        "Reengenharia de Arquitetura: Conduziu a migração estratégica de um monólito legado em PHP (Laravel) para uma arquitetura orientada a microsserviços desacoplados em Node.js (NestJS) com autenticação via OAuth 2.0 / JWT / SSO, reduzindo a latência média das APIs em 45% (de ~450ms para menos de 90ms).",
         "Otimização de Performance, Cache e Filas: Eliminou gargalos de concorrência orquestrando Redis para cache estratégico e processamento de filas assíncronas com vazão superior a 120.000 jobs diários, integrando comunicação em tempo real via WebSockets.",
         "Persistência Poliglota e Observabilidade: Implementou MongoDB como banco NoSQL secundário para trilhas de auditoria e telemetria de filas, reduzindo a carga de I/O no banco transacional PostgreSQL em mais de 40%.",
         "Automação Industrial de Produção: Automatizou o fluxo produtivo de cartões de ponta a ponta, reduzindo o tempo de ciclo operacional em 65% e eliminando mais de 90% das intervenções manuais.",
@@ -198,9 +205,10 @@
       "summary": "Atuação independente em P&D, consultoria, gestão de produto como Product Owner (PO) e engenharia de produtos Full Stack, experimentando e entregando soluções com arquiteturas modernas em Python, TypeScript e IA.",
       "highlights": [
         "Engenharia Full Stack (C# .NET, Java, Python & React/TypeScript): Desenvolvimento de aplicações web completas utilizando C# .NET, Java, Python (FastAPI, Pydantic, async SQLAlchemy), TypeScript, React.js, Next.js, TanStack Start, TanStack Query e soluções de mapas/geoespacial (Leaflet, OpenLayers, MapLibre, GeoJSON) com tipagem estática estrita.",
-        "Bancos de Dados, Mensageria & Containers: Modelagem relacional em PostgreSQL (migrations, índices e transações), mensageria assíncrona com Kafka, APIs RESTful com contratos OpenAPI e conteinerização/orquestração via Docker, Docker Compose e OpenShift.",
-        "Qualidade & Automação: Implementação de suítes de testes automatizados (pytest, Vitest, Testing Library) e pipelines de CI/CD no GitHub Actions.",
-        "IA & Prototipagem Rápida: Integração de fluxos com LLMs, uso de agentes de IA (Claude Code, Antigravity) e Spec-Driven Development (SDD) em experimentos SaaS multi-tenant."
+        "Bancos de Dados, Mensageria & Containers: Modelagem relacional em PostgreSQL (migrations, índices e transações), mensageria assíncrona com Kafka, APIs RESTful com contratos OpenAPI, autenticação OAuth 2.0 / JWT / SSO e conteinerização/orquestração via Docker, Docker Compose e OpenShift.",
+        "Qualidade & Automação: Implementação de suítes de testes automatizados (pytest, Vitest, Testing Library), pipelines de CI/CD no GitHub Actions e deploy na Vercel.",
+        "Gráficos 3D & Jogos: Desenvolvimento de experiências 3D e jogos na web utilizando Three.js, Babylon.js, A-Frame e arquitetura ECS (Entity Component System).",
+        "IA & Prototipagem Rápida: Integração de fluxos com LLMs (LLM Chain, RAG, embeddings e bancos vetoriais), automação de workflows com n8n, conformidade com LGPD em dados sensíveis, uso de agentes de IA (Claude Code, Antigravity) e Spec-Driven Development (SDD) em experimentos SaaS multi-tenant."
       ]
     },
     {
