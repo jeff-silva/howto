@@ -80,7 +80,7 @@
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="18"
+      data-duration="10"
       data-width="1080"
       data-height="1920"
     >
@@ -91,7 +91,7 @@
 
     <script type="module">
       import * as THREE from 'three';
-      import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+      import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
       import { makeCharacter, applyFaceState } from './3d/characters/makeCharacter.js';
 
       // ==========================================
@@ -223,7 +223,7 @@
         skin: '#381e0f',
         height: 1.06,
         build: 1.05,
-        top: { color: '#18181b', stripe: '#f4f4f5', sleeves: 'short' },
+        top: { color: '#18181b', sleeves: 'short' },
         bottom: { color: '#18181b', type: 'shorts' },
         shoes: '#09090b',
         hair: { style: 'bald' }
@@ -264,43 +264,101 @@
       scene.add(juiz.root);
 
       // ==========================================
-      // 4. PERSONAGEM (CENA 3): CHAVES EM GLB RIGADO (BLENDER DOCKER)
+      // 3.5 RETARGETING MIXAMO FBX -> SKELETON.JS (JUIZ)
       // ==========================================
-      const grupoChaves = new THREE.Group();
-      grupoChaves.visible = false;
-      scene.add(grupoChaves);
+      const MIXAMO_TO_JOINT = [
+        ['hips', 'mixamorigHips'],
+        ['spine', 'mixamorigSpine'],
+        ['chest', 'mixamorigSpine2'],
+        ['neck', 'mixamorigNeck'],
+        ['head', 'mixamorigHead'],
+        ['armL', 'mixamorigLeftArm'],
+        ['forearmL', 'mixamorigLeftForeArm'],
+        ['handL', 'mixamorigLeftHand'],
+        ['legL', 'mixamorigLeftUpLeg'],
+        ['shinL', 'mixamorigLeftLeg'],
+        ['footL', 'mixamorigLeftFoot'],
+        ['legR', 'mixamorigRightUpLeg'],
+        ['shinR', 'mixamorigRightLeg'],
+        ['footR', 'mixamorigRightFoot'],
+      ];
 
-      let chavesMixer = null;
-      let chavesAction = null;
-      let chavesModel = null;
-      const chavesBones = {};
+      let juizFbxRoot = null;
+      let juizCapoeiraMixer = null;
+      let juizCapoeiraDuration = 3.4;
+      const mixamoBones = {};
+      const restWorldQuatInv = {};
+      let restHipsY = 100;
 
-      const gltfLoader = new GLTFLoader();
-      gltfLoader.load('./assets/characters/chaves.glb', (gltf) => {
-        chavesModel = gltf.scene;
-        chavesModel.traverse((child) => {
-          if (child.isMesh) {
-            child.castShadow = true;
-            child.receiveShadow = true;
-          }
-          if (child.isBone) {
-            chavesBones[child.name] = child;
+      const _qSrc = new THREE.Quaternion();
+      const _qParent = new THREE.Quaternion();
+      const _qTarget = new THREE.Quaternion();
+      const _vHips = new THREE.Vector3();
+
+      function applyMixamoToCharacter(character) {
+        if (!juizFbxRoot) return;
+        juizFbxRoot.updateMatrixWorld(true);
+        character.root.updateMatrixWorld(true);
+
+        const hipsBone = mixamoBones['mixamorigHips'];
+        if (hipsBone) {
+          hipsBone.getWorldPosition(_vHips);
+          const scale = 0.68 / (restHipsY || 100);
+          character.joints.hips.position.set(_vHips.x * scale, _vHips.y * scale, _vHips.z * scale);
+        }
+
+        for (const [jointName, mixamoName] of MIXAMO_TO_JOINT) {
+          const srcBone = mixamoBones[mixamoName];
+          const tgtJoint = character.joints[jointName];
+          const restInv = restWorldQuatInv[mixamoName];
+          if (!srcBone || !tgtJoint || !restInv) continue;
+
+          srcBone.getWorldQuaternion(_qSrc);
+          _qTarget.copy(_qSrc).multiply(restInv);
+
+          tgtJoint.parent.getWorldQuaternion(_qParent);
+          tgtJoint.quaternion.copy(_qParent).invert().multiply(_qTarget);
+          tgtJoint.updateMatrixWorld(false);
+        }
+      }
+
+      // Carrega a animação Mixamo (capoeira.fbx) para aplicar ao juiz (retargeting)
+      const fbxLoader = new FBXLoader();
+      fbxLoader.load('./assets/animations/capoeira.fbx', (fbx) => {
+        juizFbxRoot = fbx;
+        juizFbxRoot.visible = false;
+        scene.add(juizFbxRoot);
+
+        juizFbxRoot.updateMatrixWorld(true);
+        juizFbxRoot.traverse((child) => {
+          if (child.isBone || child.name.startsWith('mixamorig')) {
+            mixamoBones[child.name.replace(':', '')] = child;
           }
         });
-        chavesModel.position.set(0, 0, 0);
-        chavesModel.scale.set(1.15, 1.15, 1.15);
-        grupoChaves.add(chavesModel);
 
-        if (gltf.animations && gltf.animations.length > 0) {
-          chavesMixer = new THREE.AnimationMixer(chavesModel);
-          chavesAction = chavesMixer.clipAction(gltf.animations[0]);
-          chavesAction.setLoop(THREE.LoopRepeat);
-          chavesAction.play();
+        for (const [, mixamoName] of MIXAMO_TO_JOINT) {
+          const b = mixamoBones[mixamoName];
+          if (b) {
+            restWorldQuatInv[mixamoName] = b.getWorldQuaternion(new THREE.Quaternion()).invert();
+          }
+        }
+        if (mixamoBones['mixamorigHips']) {
+          const p = mixamoBones['mixamorigHips'].getWorldPosition(new THREE.Vector3());
+          if (p.y > 1) restHipsY = p.y;
+        }
+
+        if (fbx.animations && fbx.animations.length > 0) {
+          const clip = fbx.animations[0];
+          juizCapoeiraDuration = clip.duration || 3.4;
+          juizCapoeiraMixer = new THREE.AnimationMixer(juizFbxRoot);
+          const act = juizCapoeiraMixer.clipAction(clip);
+          act.setLoop(THREE.LoopRepeat);
+          act.play();
         }
       });
 
       // ==========================================
-      // 5. TIMELINE GSAP (CENA 1 + CENA 2 + CENA 3)
+      // 4. TIMELINE GSAP (CENA 1 + CENA 2)
       // ==========================================
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
@@ -312,7 +370,6 @@
       tl.call(() => {
         camTarget.set(0, 0.45, 0);
         juiz.root.visible = false;
-        grupoChaves.visible = false;
         vitima.root.visible = true;
         atacante.root.visible = true;
 
@@ -358,91 +415,58 @@
       tl.to(".flash-fx", { opacity: 0, duration: 0.25 }, 5.0);
 
       // ------------------------------------------
-      // CENA 2: 5.0s a 10.0s (JUIZ MOSTRA O CARTÃO)
+      // CENA 2: 5.0s a 10.0s (JUIZ EXECUTANDO CAPOEIRA COM CARTÃO VERMELHO LEVANTADO)
       // ------------------------------------------
+      tl.set(vitima.root, { visible: false }, 5.0);
+      tl.set(atacante.root, { visible: false }, 5.0);
+      tl.set(juiz.root, { visible: true }, 5.0);
+      tl.set(juiz.root.position, { x: 0, y: 0, z: 0 }, 5.0);
+      tl.set(apitoGroup, { visible: false }, 5.0);
+      tl.set(cartaoVermelho, { visible: true }, 5.0);
+      tl.set(juiz.joints.armR.rotation, { x: 2.75, y: 0.05, z: 0.12 }, 5.0);
+      tl.set(juiz.joints.forearmR.rotation, { x: 0.15, y: 0, z: 0 }, 5.0);
+      tl.set(juiz.joints.handR.rotation, { x: 0, y: 0, z: 0 }, 5.0);
+      tl.set(camTarget, { x: -0.1, y: 1.05, z: 0 }, 5.0);
+
       tl.call(() => {
-        vitima.root.visible = false;
-        atacante.root.visible = false;
-        grupoChaves.visible = false;
-        juiz.root.visible = true;
-        juiz.root.position.set(0, 0, 0);
-
-        camera.position.set(0, 1.35, 4.2);
-        camTarget.set(0, 1.05, 0);
-
         applyFaceState(juiz, {
-          eyeOpen: 1.3,
-          browRaise: -0.6,
-          browTilt: -0.9,
-          smile: -0.8,
-          mouthOpen: 0.35
+          eyeOpen: 1.15,
+          browRaise: 0.2,
+          browTilt: 0.2,
+          smile: 0.7,
+          mouthOpen: 0.1
         });
       }, null, 5.0);
 
       tl.fromTo(camera.position,
-        { y: 1.35, z: 4.2 },
-        { y: 1.45, z: 3.3, duration: 4.5, ease: "power2.out" },
+        { x: -0.35, y: 1.35, z: 5.1 },
+        { x: 0.15, y: 1.3, z: 4.6, duration: 4.8, ease: "power1.inOut", immediateRender: false },
         5.0
       );
 
-      tl.to(juiz.joints.armR.rotation, { x: 0.4, y: -0.8, z: 0.3, duration: 0.7, ease: "power2.inOut" }, 5.5);
-      tl.to(juiz.joints.forearmR.rotation, { x: -1.4, duration: 0.7, ease: "power2.inOut" }, 5.5);
-      tl.call(() => { cartaoVermelho.visible = true; }, null, 6.2);
-
-      tl.to(juiz.joints.armR.rotation, { x: 2.85, y: 0.1, z: -0.25, duration: 0.7, ease: "back.out(1.8)" }, 6.3);
-      tl.to(juiz.joints.forearmR.rotation, { x: 0.1, duration: 0.7, ease: "power2.out" }, 6.3);
-      tl.to(juiz.joints.armL.rotation, { x: 0.9, y: 0.4, z: 0.7, duration: 0.6, ease: "power2.out" }, 6.7);
-      tl.to(juiz.joints.head.rotation, { x: -0.15, duration: 0.1, repeat: 20, yoyo: true, ease: "sine.inOut" }, 6.5);
-
-      // Transição Flash 2 para a Turma do Chaves
-      tl.to(".flash-fx", { opacity: 1, duration: 0.15 }, 9.85);
-      tl.to(".flash-fx", { opacity: 0, duration: 0.25 }, 10.0);
-
-      // ------------------------------------------
-      // CENA 3: 10.0s a 18.0s (CHAVES EM GLB RIGADO APLAUDINDO)
-      // ------------------------------------------
-      tl.call(() => {
-        juiz.root.visible = false;
-        grupoChaves.visible = true;
-
-        // Câmera centralizada e enquadrando o Chaves de corpo inteiro no 9:16
-        camera.position.set(0, 1.1, 3.2);
-        camTarget.set(0, 0.9, 0);
-      }, null, 10.0);
-
-      // Câmera dá uma leve aproximação cinematográfica no Chaves
-      tl.fromTo(camera.position,
-        { x: 0, y: 1.05, z: 3.4 },
-        { x: 0, y: 1.15, z: 2.6, duration: 7.5, ease: "power1.out" },
-        10.1
+      const juizCapoeiraState = { t: 0 };
+      tl.fromTo(juizCapoeiraState,
+        { t: 0 },
+        {
+          t: 5.0,
+          duration: 5.0,
+          ease: "none",
+          onUpdate: () => {
+            if (juizCapoeiraMixer) {
+              juizCapoeiraMixer.setTime(juizCapoeiraState.t % juizCapoeiraDuration);
+              applyMixamoToCharacter(juiz);
+            }
+          }
+        },
+        5.0
       );
-
-      tl.fromTo(camTarget,
-        { x: 0, y: 0.85, z: 0 },
-        { x: 0, y: 1.05, z: 0, duration: 7.5, ease: "power1.out" },
-        10.1
-      );
-
-      // Inicia a animação de Palmas embutida no GLB aos 10.0s
-      tl.call(() => {
-        if (chavesAction) {
-          chavesAction.reset();
-          chavesAction.timeScale = 1.6; // Ritmo animado de aplausos
-          chavesAction.play();
-        }
-      }, null, 10.05);
 
       // Registra a timeline no HyperFrames
       window.__timelines["main"] = tl;
       tl.seek(0);
 
       // Loop do Three.js
-      const clock = new THREE.Clock();
       function loop() {
-        const delta = clock.getDelta();
-        if (chavesMixer && grupoChaves.visible) {
-          chavesMixer.update(delta);
-        }
         camera.lookAt(camTarget);
         renderer.render(scene, camera);
         requestAnimationFrame(loop);
