@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Animações 3D Sob Medida - Labscript Studio</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=JetBrains+Mono:wght@600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./node_modules/three/build/three.module.js",
+          "three/addons/": "./node_modules/three/examples/jsm/"
+        }
+      }
+    </script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #060913;
+        font-family: "Montserrat", sans-serif;
+      }
+
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+
+      #tela3d {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1080px;
+        height: 1920px;
+        z-index: 1;
+      }
+
+      .vinheta {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        pointer-events: none;
+        background: radial-gradient(circle at 50% 50%, transparent 55%, rgba(3, 5, 12, 0.82) 100%);
+      }
+
+      .flash-fx {
+        position: absolute;
+        inset: 0;
+        z-index: 15;
+        background: #ffffff;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* Card de Apresentação do Serviço de Animação 3D */
+      .card-studio {
+        position: absolute;
+        top: 200px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 20;
+        background: rgba(15, 23, 42, 0.92);
+        border: 2px solid rgba(236, 72, 153, 0.5);
+        padding: 26px 44px;
+        border-radius: 28px;
+        backdrop-filter: blur(18px);
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        opacity: 0;
+        transform: translate(-50%, -20px) scale(0.9);
+        pointer-events: none;
+      }
+
+      .badge-studio {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 20px;
+        color: #f472b6;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      .title-studio {
+        font-size: 42px;
+        font-weight: 900;
+        color: #ffffff;
+        text-align: center;
+        line-height: 1.15;
+      }
+
+      .subtitle-studio {
+        color: #38bdf8;
+        font-size: 26px;
+        font-weight: 800;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="12"
+      data-width="1080"
+      data-height="1920"
+    >
+      <canvas id="tela3d" data-start="0" data-track-index="0"></canvas>
+      <div class="vinheta"></div>
+      <div class="flash-fx" data-start="0" data-track-index="1"></div>
+
+      <div class="card-studio clip" data-start="0" data-duration="12">
+        <div class="badge-studio">LABSCRIPT 3D & MOTION</div>
+        <div class="title-studio">Vídeos 3D que Retêm & Vendem</div>
+        <div class="subtitle-studio">Reels • TikTok • Shorts • Explainer</div>
+      </div>
+    </div>
+
+    <script type="module">
+      import * as THREE from 'three';
+      import { makeCharacter, applyFaceState } from './3d/characters/makeCharacter.js';
+
+      // ==========================================
+      // 1. SETUP DO THREE.JS (CANVAS VERTICAL 1080x1920)
+      // ==========================================
+      const canvas = document.getElementById('tela3d');
+      const W = 1080;
+      const H = 1920;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      renderer.setPixelRatio(1);
+      renderer.setSize(W, H);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color('#070b16');
+      scene.fog = new THREE.FogExp2('#070b16', 0.035);
+
+      const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 100);
+
+      // Iluminação de Estúdio Publicitário (Luzes de 3 Pontos)
+      const hemiLight = new THREE.HemisphereLight('#f472b6', '#0f172a', 0.85);
+      scene.add(hemiLight);
+
+      const keyLight = new THREE.DirectionalLight('#ffffff', 3.0);
+      keyLight.position.set(5, 12, 7);
+      keyLight.castShadow = true;
+      keyLight.shadow.mapSize.width = 1024;
+      keyLight.shadow.mapSize.height = 1024;
+      scene.add(keyLight);
+
+      const fillLight = new THREE.DirectionalLight('#38bdf8', 2.2);
+      fillLight.position.set(-6, 5, -5);
+      scene.add(fillLight);
+
+      const rimLight = new THREE.DirectionalLight('#ec4899', 2.0);
+      rimLight.position.set(6, 4, -6);
+      scene.add(rimLight);
+
+      // ==========================================
+      // 2. PALCO DO ESTÚDIO DE ANIMAÇÃO
+      // ==========================================
+      const grupoStudio = new THREE.Group();
+      scene.add(grupoStudio);
+
+      // Pedestal giratório moderno de exibição
+      const pedestal = new THREE.Mesh(
+        new THREE.CylinderGeometry(4.2, 4.5, 0.35, 48),
+        new THREE.MeshStandardMaterial({
+          color: '#0f172a',
+          metalness: 0.6,
+          roughness: 0.3
+        })
+      );
+      pedestal.position.y = -0.18;
+      pedestal.receiveShadow = true;
+      grupoStudio.add(pedestal);
+
+      // Anel de neon no contorno do pedestal
+      const anelNeon = new THREE.Mesh(
+        new THREE.TorusGeometry(4.35, 0.04, 16, 64),
+        new THREE.MeshBasicMaterial({ color: '#ec4899' })
+      );
+      anelNeon.rotation.x = Math.PI / 2;
+      grupoStudio.add(anelNeon);
+
+      // Claquete de Cinema 3D Decorativa
+      const grupoClaquete = new THREE.Group();
+      grupoClaquete.position.set(-2.2, 0.45, 1.2);
+      grupoClaquete.rotation.y = Math.PI / 6;
+
+      const corpoClaquete = new THREE.Mesh(
+        new THREE.BoxGeometry(0.85, 0.65, 0.08),
+        new THREE.MeshStandardMaterial({ color: '#18181b', roughness: 0.4 })
+      );
+      corpoClaquete.castShadow = true;
+      grupoClaquete.add(corpoClaquete);
+
+      const barraTopo = new THREE.Mesh(
+        new THREE.BoxGeometry(0.85, 0.14, 0.09),
+        new THREE.MeshStandardMaterial({ color: '#facc15', roughness: 0.3 })
+      );
+      barraTopo.position.y = 0.38;
+      grupoClaquete.add(barraTopo);
+
+      grupoStudio.add(grupoClaquete);
+
+      // Câmera de Cinema Estilizada em Tripé
+      const grupoCam = new THREE.Group();
+      grupoCam.position.set(2.4, 0.8, 1.0);
+      grupoCam.rotation.y = -Math.PI / 4;
+
+      const camCorpo = new THREE.Mesh(
+        new THREE.BoxGeometry(0.65, 0.45, 0.85),
+        new THREE.MeshStandardMaterial({ color: '#27272a', metalness: 0.8, roughness: 0.2 })
+      );
+      camCorpo.castShadow = true;
+      grupoCam.add(camCorpo);
+
+      const lente = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.18, 0.22, 0.4, 16),
+        new THREE.MeshStandardMaterial({ color: '#09090b', metalness: 0.9, roughness: 0.1 })
+      );
+      lente.rotation.x = Math.PI / 2;
+      lente.position.z = -0.55;
+      grupoCam.add(lente);
+
+      grupoStudio.add(grupoCam);
+
+      // ==========================================
+      // 3. PERSONAGEM CRIATIVO / ANIMADOR LABSCRIPT
+      // ==========================================
+      const animador = makeCharacter({
+        name: 'animador',
+        skin: '#f3cfae',
+        height: 1.05,
+        build: 0.95,
+        top: {
+          color: '#ec4899', // Moletom Rosa/Magenta Moderno
+          sleeves: 'long'
+        },
+        bottom: {
+          color: '#18181b', // Calça preta
+          type: 'pants'
+        },
+        shoes: '#ffffff', // Tênis branco moderno
+        hair: {
+          style: 'curly',
+          color: '#262626'
+        },
+        hat: {
+          type: 'cap',
+          color: '#0284c7' // Boné estiloso virado pra trás
+        },
+        face: {
+          glasses: true
+        }
+      });
+
+      animador.root.position.set(0, 0, 0);
+      grupoStudio.add(animador.root);
+
+      // Expressão amigável e confiante
+      applyFaceState(animador, {
+        eyeOpen: 1.1,
+        browRaise: 0.2,
+        smile: 0.8,
+        mouthOpen: 0.05
+      });
+
+      // ==========================================
+      // 4. TIMELINE GSAP: APRESENTAÇÃO DO SERVIÇO
+      // ==========================================
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Câmera inicial focada e aproximando no formato 9:16
+      tl.set(camera.position, { x: 0, y: 1.45, z: 4.8 }, 0);
+      tl.call(() => {
+        camera.lookAt(0, 1.1, 0);
+      }, null, 0);
+
+      // Entrada do Card de Oferta do Serviço
+      tl.to(".card-studio", {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.85,
+        ease: "back.out(1.5)"
+      }, 0.5);
+
+      // Rotação sutil da plataforma de estúdio
+      tl.to(grupoStudio.rotation, {
+        y: Math.PI * 0.4,
+        duration: 12,
+        ease: "power1.inOut"
+      }, 0);
+
+      // Animação do Animador: Acena com a mão convidando o cliente
+      tl.to(animador.joints.armR.rotation, {
+        x: 1.5,
+        z: -0.6,
+        duration: 0.6,
+        ease: "back.out(1.5)"
+      }, 1.0);
+
+      // Aceno de mão (wave)
+      tl.to(animador.joints.forearmR.rotation, {
+        z: -0.4,
+        duration: 0.25,
+        repeat: 7,
+        yoyo: true,
+        ease: "sine.inOut"
+      }, 1.4);
+
+      // Aos 3.5s ele aponta com orgulho para o trabalho e para a câmera
+      tl.to(animador.joints.armR.rotation, {
+        x: 1.1,
+        y: -0.3,
+        z: -0.2,
+        duration: 0.6,
+        ease: "power2.out"
+      }, 3.5);
+
+      // Piscar de olhos natural
+      tl.call(() => {
+        applyFaceState(animador, { eyeOpen: 0.1, smile: 0.8 });
+      }, null, 2.5);
+      tl.call(() => {
+        applyFaceState(animador, { eyeOpen: 1.1, smile: 0.8 });
+      }, null, 2.7);
+
+      tl.call(() => {
+        applyFaceState(animador, { eyeOpen: 0.1, smile: 0.8 });
+      }, null, 5.5);
+      tl.call(() => {
+        applyFaceState(animador, { eyeOpen: 1.1, smile: 0.8 });
+      }, null, 5.7);
+
+      // Câmera faz um zoom elegante valorizando a qualidade da iluminação e do personagem
+      tl.to(camera.position, {
+        y: 1.35,
+        z: 3.4,
+        duration: 5,
+        ease: "power2.out"
+      }, 2.0);
+
+      // Claquete bate no início (ação de corte de cinema)
+      tl.to(barraTopo.rotation, {
+        z: 0.35,
+        duration: 0.3,
+        repeat: 1,
+        yoyo: true,
+        ease: "power3.in"
+      }, 0.8);
+
+      // Registra a timeline no HyperFrames
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+
+      // Loop do Three.js
+      function loop() {
+        camera.lookAt(0, 1.15, 0);
+        renderer.render(scene, camera);
+        requestAnimationFrame(loop);
+      }
+      loop();
+    </script>
+  </body>
+</html>

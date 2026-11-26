@@ -55,51 +55,6 @@
         z-index: 1;
       }
 
-      /* Camada de UI em 2D */
-      .ui-layer {
-        position: absolute;
-        inset: 0;
-        z-index: 10;
-        pointer-events: none;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 120px 60px;
-      }
-
-      .placar {
-        background: rgba(10, 15, 22, 0.85);
-        border: 2px solid rgba(255, 255, 255, 0.1);
-        border-radius: 24px;
-        padding: 24px 36px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(10px);
-      }
-
-      .tempo-jogo {
-        font-family: "Teko", sans-serif;
-        font-size: 56px;
-        color: #facc15;
-        letter-spacing: 2px;
-      }
-
-      .teams {
-        font-size: 32px;
-        font-weight: 800;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-      }
-
-      .vs {
-        color: #ef4444;
-        font-size: 24px;
-      }
-
       /* Flash de transição entre cenas */
       .flash-fx {
         position: absolute;
@@ -125,7 +80,7 @@
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="12"
+      data-duration="18"
       data-width="1080"
       data-height="1920"
     >
@@ -136,6 +91,7 @@
 
     <script type="module">
       import * as THREE from 'three';
+      import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
       import { makeCharacter, applyFaceState } from './3d/characters/makeCharacter.js';
 
       // ==========================================
@@ -155,16 +111,17 @@
 
       const scene = new THREE.Scene();
       scene.background = new THREE.Color('#0a160d');
-      scene.fog = new THREE.FogExp2('#0a160d', 0.035);
+      scene.fog = new THREE.FogExp2('#0a160d', 0.025);
 
       const camera = new THREE.PerspectiveCamera(40, W / H, 0.1, 100);
+      const camTarget = new THREE.Vector3(0, 0.45, 0);
 
       // Iluminação de estádio noturno
       const hemiLight = new THREE.HemisphereLight('#c4e2ff', '#1f3d23', 0.85);
       scene.add(hemiLight);
 
-      const dirLight = new THREE.DirectionalLight('#ffffff', 2.5);
-      dirLight.position.set(3, 8, 5);
+      const dirLight = new THREE.DirectionalLight('#ffffff', 2.8);
+      dirLight.position.set(4, 10, 6);
       dirLight.castShadow = true;
       dirLight.shadow.mapSize.width = 1024;
       dirLight.shadow.mapSize.height = 1024;
@@ -174,10 +131,12 @@
       backlight.position.set(-4, 5, -5);
       scene.add(backlight);
 
-      // Gramado
-      const gramaGeo = new THREE.PlaneGeometry(100, 100);
+      // ==========================================
+      // 2. ELEMENTOS DO ESTÁDIO
+      // ==========================================
+      const gramaGeo = new THREE.PlaneGeometry(120, 120);
       const gramaMat = new THREE.MeshStandardMaterial({
-        color: '#2b7830',
+        color: '#246b29',
         roughness: 0.9,
         flatShading: true
       });
@@ -186,15 +145,13 @@
       grama.receiveShadow = true;
       scene.add(grama);
 
-      // Linhas do campo
-      const linhaGeo = new THREE.PlaneGeometry(0.14, 25);
+      const linhaGeo = new THREE.PlaneGeometry(0.14, 30);
       const linhaMat = new THREE.MeshBasicMaterial({ color: '#ffffff' });
       const linha = new THREE.Mesh(linhaGeo, linhaMat);
       linha.rotation.x = -Math.PI / 2;
       linha.position.set(0.6, 0.005, 0);
       scene.add(linha);
 
-      // Bola de futebol
       const bola = new THREE.Mesh(
         new THREE.SphereGeometry(0.14, 12, 10),
         new THREE.MeshStandardMaterial({ color: '#f8fafc', roughness: 0.3 })
@@ -203,34 +160,32 @@
       bola.position.set(0.6, 0.14, 0);
       scene.add(bola);
 
-      // Arquibancada ao fundo
       const arquibancada = new THREE.Group();
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 6; i++) {
         const degrau = new THREE.Mesh(
-          new THREE.BoxGeometry(40, 1.2, 2),
+          new THREE.BoxGeometry(50, 1.3, 2.2),
           new THREE.MeshStandardMaterial({ color: i % 2 === 0 ? '#1e293b' : '#334155' })
         );
-        degrau.position.set(0, i * 1.0 + 0.5, -9 - i * 1.8);
+        degrau.position.set(0, i * 1.1 + 0.5, -11 - i * 2.0);
         arquibancada.add(degrau);
       }
       scene.add(arquibancada);
 
       // ==========================================
-      // 2. PERSONAGENS
+      // 3. PERSONAGENS (CENA 1 & 2): MULHERES & JUIZ
       // ==========================================
-      // Função auxiliar para criar salto alto nos pés
       function addSaltoAlto(char, cor) {
         for (const side of ['footL', 'footR']) {
           const salto = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.015, 0.01, 0.08, 6),
+            new THREE.CylinderGeometry(0.015, 0.01, 0.09, 6),
             new THREE.MeshStandardMaterial({ color: cor, roughness: 0.3 })
           );
-          salto.position.set(0, -0.04, -0.07);
+          salto.position.set(0, -0.045, -0.07);
           char.joints[side].add(salto);
         }
       }
 
-      // --- Mulher 1: Vítima (Vestido Preto Curto) ---
+      // Mulher 1: Vítima (Vestido Preto Curto)
       const vitima = makeCharacter({
         name: 'vitima',
         skin: '#f3cfae',
@@ -239,40 +194,33 @@
         top: { color: '#09090b', sleeves: 'short' },
         bottom: { color: '#09090b', type: 'skirt' },
         shoes: '#09090b',
-        hair: { style: 'long', color: '#c2410c' } // Ruiva
+        hair: { style: 'long', color: '#c2410c' }
       });
+      addSaltoAlto(vitima, '#000000');
       vitima.root.position.set(0.6, 0, 0);
       vitima.root.rotation.y = Math.PI / 2;
       scene.add(vitima.root);
 
-      // --- Mulher 2: Infratora do Carrinho (Vestido Vermelho Curto) ---
+      // Mulher 2: Infratora do Carrinho (Vestido Vermelho Curto e Salto Alto)
       const atacante = makeCharacter({
         name: 'atacante',
         skin: '#e0ac69',
         height: 0.98,
         build: 0.92,
-        top: { color: '#dc2626', sleeves: 'short' }, // Vermelho vivo
+        top: { color: '#dc2626', sleeves: 'short' },
         bottom: { color: '#dc2626', type: 'skirt' },
         shoes: '#dc2626',
-        hair: { style: 'ponytail', color: '#171717' } // Rabo de cavalo preto
+        hair: { style: 'ponytail', color: '#171717' }
       });
       addSaltoAlto(atacante, '#991b1b');
       atacante.root.position.set(-3.5, 0, 0);
       atacante.root.rotation.y = Math.PI / 2;
       scene.add(atacante.root);
 
-      // Expressão furiosa na mulher de vermelho
-      applyFaceState(atacante, {
-        eyeOpen: 1.2,
-        browRaise: -0.5,
-        browTilt: -0.8,
-        smile: -0.6
-      });
-
-      // --- Juiz de Futebol (Careca, All-Black) ---
+      // Juiz de Futebol (Careca, All-Black)
       const juiz = makeCharacter({
         name: 'juiz',
-        skin: '#381e0f', // Pele negra retinta
+        skin: '#381e0f',
         height: 1.06,
         build: 1.05,
         top: { color: '#18181b', stripe: '#f4f4f5', sleeves: 'short' },
@@ -280,7 +228,6 @@
         shoes: '#09090b',
         hair: { style: 'bald' }
       });
-      // Escudo FIFA no peito
       const escudoFifa = new THREE.Mesh(
         new THREE.BoxGeometry(0.06, 0.075, 0.01),
         new THREE.MeshStandardMaterial({ color: '#2563eb', roughness: 0.3 })
@@ -288,16 +235,6 @@
       escudoFifa.position.set(0.12, 0.18, 0.14);
       juiz.joints.chest.add(escudoFifa);
 
-      // Cartão amarelo no bolso
-      const cartaoAmareloBolso = new THREE.Mesh(
-        new THREE.BoxGeometry(0.045, 0.06, 0.005),
-        new THREE.MeshStandardMaterial({ color: '#facc15', roughness: 0.2 })
-      );
-      cartaoAmareloBolso.position.set(-0.12, 0.21, 0.138);
-      cartaoAmareloBolso.rotation.z = 0.1;
-      juiz.joints.chest.add(cartaoAmareloBolso);
-
-      // Apito na boca
       const apitoGroup = new THREE.Group();
       const apitoCorpo = new THREE.Mesh(
         new THREE.CylinderGeometry(0.015, 0.018, 0.06, 8),
@@ -308,7 +245,6 @@
       apitoGroup.position.set(0, 0.08, 0.24);
       juiz.joints.head.add(apitoGroup);
 
-      // Cartão Vermelho na mão do juiz
       const cartaoVermelho = new THREE.Mesh(
         new THREE.BoxGeometry(0.09, 0.14, 0.004),
         new THREE.MeshStandardMaterial({
@@ -323,140 +259,116 @@
       cartaoVermelho.visible = false;
       juiz.joints.handR.add(cartaoVermelho);
 
-      // Juiz começa fora de cena / posicionado para a cena 2
       juiz.root.position.set(0, 0, 5.0);
       juiz.root.visible = false;
       scene.add(juiz.root);
 
       // ==========================================
-      // 3. TIMELINE GSAP: CENA 1 (CARRINHO) + CENA 2 (JUIZ)
+      // 4. PERSONAGEM (CENA 3): CHAVES EM GLB RIGADO (BLENDER DOCKER)
+      // ==========================================
+      const grupoChaves = new THREE.Group();
+      grupoChaves.visible = false;
+      scene.add(grupoChaves);
+
+      let chavesMixer = null;
+      let chavesAction = null;
+      let chavesModel = null;
+      const chavesBones = {};
+
+      const gltfLoader = new GLTFLoader();
+      gltfLoader.load('./assets/characters/chaves.glb', (gltf) => {
+        chavesModel = gltf.scene;
+        chavesModel.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+          if (child.isBone) {
+            chavesBones[child.name] = child;
+          }
+        });
+        chavesModel.position.set(0, 0, 0);
+        chavesModel.scale.set(1.15, 1.15, 1.15);
+        grupoChaves.add(chavesModel);
+
+        if (gltf.animations && gltf.animations.length > 0) {
+          chavesMixer = new THREE.AnimationMixer(chavesModel);
+          chavesAction = chavesMixer.clipAction(gltf.animations[0]);
+          chavesAction.setLoop(THREE.LoopRepeat);
+          chavesAction.play();
+        }
+      });
+
+      // ==========================================
+      // 5. TIMELINE GSAP (CENA 1 + CENA 2 + CENA 3)
       // ==========================================
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
 
       // ------------------------------------------
-      // CENA 1: 0.0s a 5.0s (CARRINHO REAL DE FUTEBOL EM PERFIL)
+      // CENA 1: 0.0s a 5.0s (CARRINHO EM PERFIL)
       // ------------------------------------------
-      // Câmera perfeitamente centralizada na vertical para o formato 9:16
-      // Altura em y = 1.0 (olhando na linha da cintura) e z = 7.5 para um plano geral bem distribuído
       tl.set(camera.position, { x: 0, y: 1.05, z: 7.2 }, 0);
       tl.call(() => {
-        camera.lookAt(0, 0.45, 0); // Foco no centro da tela
+        camTarget.set(0, 0.45, 0);
         juiz.root.visible = false;
+        grupoChaves.visible = false;
         vitima.root.visible = true;
         atacante.root.visible = true;
 
-        // Vítima olha para a direita (+X) conduzindo a bola
         vitima.root.rotation.set(0, Math.PI / 2, 0);
         vitima.root.position.set(0.6, 0, 0);
 
-        // Atacante de vermelho também olha para a direita (+X)
         atacante.root.rotation.set(0, Math.PI / 2, 0);
         atacante.root.position.set(-3.5, 0, 0);
       }, null, 0);
 
-      // Vítima conduz a bola para a direita
       tl.to(bola.position, { x: 1.3, z: 0, duration: 1.8, ease: "power1.out" }, 0);
       tl.to(vitima.joints.legL.rotation, { x: -0.5, duration: 0.35, repeat: 4, yoyo: true }, 0);
       tl.to(vitima.joints.legR.rotation, { x: 0.5, duration: 0.35, repeat: 4, yoyo: true }, 0);
 
-      // Mulher de vermelho corre velozmente até engatar o carrinho (0s a 1.2s)
       tl.to(atacante.root.position, { x: -1.8, duration: 1.1, ease: "power1.in" }, 0);
       tl.to(atacante.joints.legL.rotation, { x: -0.8, duration: 0.22, repeat: 5, yoyo: true }, 0);
       tl.to(atacante.joints.legR.rotation, { x: 0.8, duration: 0.22, repeat: 5, yoyo: true }, 0);
 
-      // ==========================================
-      // FASE DO CARRINHO (1.2s a 2.1s):
-      // Ela gira o corpo e desliza TOTALMENTE ACIMA DA GRAMA (y = 0.18)
-      // ==========================================
-      // 1. Desce a raiz do corpo mantendo-a na superfície do gramado (sem afundar no chão!)
-      tl.to(atacante.root.position, {
-        y: 0.18,
-        duration: 0.35,
-        ease: "power2.in"
-      }, 1.2);
+      // O Carrinho
+      tl.to(atacante.root.position, { y: 0.18, duration: 0.35, ease: "power2.in" }, 1.1);
+      tl.to(atacante.root.rotation, { z: -1.35, x: -0.15, y: Math.PI / 2 + 0.15, duration: 0.35, ease: "power2.out" }, 1.1);
+      tl.to(atacante.joints.legR.rotation, { x: -1.55, z: -0.2, duration: 0.35, ease: "power2.out" }, 1.1);
+      tl.to(atacante.joints.shinR.rotation, { x: 0, duration: 0.35 }, 1.1);
+      tl.to(atacante.joints.legL.rotation, { x: 0.85, z: 0.35, duration: 0.35, ease: "power2.out" }, 1.1);
+      tl.to(atacante.joints.shinL.rotation, { x: -1.4, duration: 0.35 }, 1.1);
+      tl.to(atacante.joints.armL.rotation, { x: 1.1, z: 0.8, duration: 0.35 }, 1.1);
+      tl.to(atacante.joints.armR.rotation, { x: -0.5, z: -0.6, duration: 0.35 }, 1.1);
 
-      // 2. O corpo deita de lado no gramado
-      tl.to(atacante.root.rotation, {
-        z: -1.35, // Deitada de lado
-        x: -0.15,
-        y: Math.PI / 2 + 0.15,
-        duration: 0.35,
-        ease: "power2.out"
-      }, 1.2);
+      tl.to(atacante.root.position, { x: 0.5, duration: 0.85, ease: "power2.out" }, 1.25);
 
-      // 3. Perna direita com salto esticada rasante na grama
-      tl.to(atacante.joints.legR.rotation, {
-        x: -1.55,
-        z: -0.2,
-        duration: 0.35,
-        ease: "power2.out"
-      }, 1.2);
-      tl.to(atacante.joints.shinR.rotation, { x: 0, duration: 0.35 }, 1.2);
-
-      // 4. Perna esquerda dobrada de apoio
-      tl.to(atacante.joints.legL.rotation, {
-        x: 0.85,
-        z: 0.35,
-        duration: 0.35,
-        ease: "power2.out"
-      }, 1.2);
-      tl.to(atacante.joints.shinL.rotation, { x: -1.4, duration: 0.35 }, 1.2);
-
-      // 5. Braço esquerdo apoiando no gramado
-      tl.to(atacante.joints.armL.rotation, { x: 1.1, z: 0.8, duration: 0.35 }, 1.2);
-      tl.to(atacante.joints.armR.rotation, { x: -0.5, z: -0.6, duration: 0.35 }, 1.2);
-
-      // 6. O DESLIZE: desliza pelo gramado até a bola e a vítima
-      tl.to(atacante.root.position, {
-        x: 0.5,
-        duration: 0.85,
-        ease: "power2.out"
-      }, 1.25);
-
-      // 1.95s: O PÉ ATINGE A BOLA E A CANELA DA MULHER DE PRETO
-      tl.to(vitima.root.position, {
-        x: 1.9,
-        y: 0.95, // Voa pra cima
-        duration: 0.6,
-        ease: "power2.out"
-      }, 1.95);
-
-      // Vítima gira e cai sentada/deitada na grama (y = 0.18, sem afundar!)
-      tl.to(vitima.root.rotation, {
-        z: 2.1,
-        x: 0.7,
-        duration: 0.7,
-        ease: "power2.out"
-      }, 1.95);
+      // Impacto
+      tl.to(vitima.root.position, { x: 1.9, y: 0.95, duration: 0.6, ease: "power2.out" }, 1.95);
+      tl.to(vitima.root.rotation, { z: 2.1, x: 0.7, duration: 0.7, ease: "power2.out" }, 1.95);
       tl.to(vitima.joints.legL.rotation, { x: 1.2, z: 0.5, duration: 0.5 }, 1.95);
       tl.to(vitima.joints.legR.rotation, { x: -1.0, z: -0.4, duration: 0.5 }, 1.95);
       tl.to(vitima.root.position, { y: 0.18, duration: 0.5, ease: "bounce.out" }, 2.55);
 
-      // A bola sai voando com o chute
       tl.to(bola.position, { x: 4.8, y: 0.9, z: -1.5, duration: 1.4, ease: "power2.out" }, 1.95);
-
-      // Impacto sutil da câmera
       tl.to(camera.position, { x: "+=0.06", y: "+=0.05", duration: 0.05, repeat: 5, yoyo: true }, 1.95);
 
-      // ------------------------------------------
-      // TRANSIÇÃO FLASH: 4.8s a 5.0s
-      // ------------------------------------------
+      // Transição Flash 1
       tl.to(".flash-fx", { opacity: 1, duration: 0.15 }, 4.85);
       tl.to(".flash-fx", { opacity: 0, duration: 0.25 }, 5.0);
 
       // ------------------------------------------
-      // CENA 2: 5.0s a 12.0s (JUIZ CENTRALIZADO NO MEIO DA TELA)
+      // CENA 2: 5.0s a 10.0s (JUIZ MOSTRA O CARTÃO)
       // ------------------------------------------
       tl.call(() => {
         vitima.root.visible = false;
         atacante.root.visible = false;
+        grupoChaves.visible = false;
         juiz.root.visible = true;
         juiz.root.position.set(0, 0, 0);
 
-        // Juiz enquadrado perfeitamente no centro vertical (y da câmera = 1.3, lookAt = 1.05)
         camera.position.set(0, 1.35, 4.2);
-        camera.lookAt(0, 1.05, 0);
+        camTarget.set(0, 1.05, 0);
 
         applyFaceState(juiz, {
           eyeOpen: 1.3,
@@ -467,124 +379,71 @@
         });
       }, null, 5.0);
 
-      // Juiz se aproxima com a câmera
       tl.fromTo(camera.position,
         { y: 1.35, z: 4.2 },
         { y: 1.45, z: 3.3, duration: 4.5, ease: "power2.out" },
         5.0
       );
+
+      tl.to(juiz.joints.armR.rotation, { x: 0.4, y: -0.8, z: 0.3, duration: 0.7, ease: "power2.inOut" }, 5.5);
+      tl.to(juiz.joints.forearmR.rotation, { x: -1.4, duration: 0.7, ease: "power2.inOut" }, 5.5);
+      tl.call(() => { cartaoVermelho.visible = true; }, null, 6.2);
+
+      tl.to(juiz.joints.armR.rotation, { x: 2.85, y: 0.1, z: -0.25, duration: 0.7, ease: "back.out(1.8)" }, 6.3);
+      tl.to(juiz.joints.forearmR.rotation, { x: 0.1, duration: 0.7, ease: "power2.out" }, 6.3);
+      tl.to(juiz.joints.armL.rotation, { x: 0.9, y: 0.4, z: 0.7, duration: 0.6, ease: "power2.out" }, 6.7);
+      tl.to(juiz.joints.head.rotation, { x: -0.15, duration: 0.1, repeat: 20, yoyo: true, ease: "sine.inOut" }, 6.5);
+
+      // Transição Flash 2 para a Turma do Chaves
+      tl.to(".flash-fx", { opacity: 1, duration: 0.15 }, 9.85);
+      tl.to(".flash-fx", { opacity: 0, duration: 0.25 }, 10.0);
+
+      // ------------------------------------------
+      // CENA 3: 10.0s a 18.0s (CHAVES EM GLB RIGADO APLAUDINDO)
+      // ------------------------------------------
       tl.call(() => {
-        vitima.root.visible = false;
-        atacante.root.visible = false;
-        juiz.root.visible = true;
-        juiz.root.position.set(0, 0, 0);
+        juiz.root.visible = false;
+        grupoChaves.visible = true;
 
-        // Câmera do juiz em plano médio mais aberto
-        camera.position.set(0, 1.6, 4.0);
-        camera.lookAt(0, 1.3, 0);
+        // Câmera centralizada e enquadrando o Chaves de corpo inteiro no 9:16
+        camera.position.set(0, 1.1, 3.2);
+        camTarget.set(0, 0.9, 0);
+      }, null, 10.0);
 
-        applyFaceState(juiz, {
-          eyeOpen: 1.3,
-          browRaise: -0.6,
-          browTilt: -0.9,
-          smile: -0.8,
-          mouthOpen: 0.35
-        });
-      }, null, 5.0);
-
-      // Juiz se aproxima com a câmera
+      // Câmera dá uma leve aproximação cinematográfica no Chaves
       tl.fromTo(camera.position,
-        { y: 1.55, z: 4.0 },
-        { y: 1.65, z: 3.2, duration: 4.5, ease: "power2.out" },
-        5.0
+        { x: 0, y: 1.05, z: 3.4 },
+        { x: 0, y: 1.15, z: 2.6, duration: 7.5, ease: "power1.out" },
+        10.1
       );
 
-      // 6.0s: Juiz leva a mão no bolso do peito
-      tl.to(juiz.joints.armR.rotation, {
-        x: 0.4,
-        y: -0.8,
-        z: 0.3,
-        duration: 0.7,
-        ease: "power2.inOut"
-      }, 5.8);
-
-      tl.to(juiz.joints.forearmR.rotation, {
-        x: -1.4,
-        duration: 0.7,
-        ease: "power2.inOut"
-      }, 5.8);
-
-      // 6.7s: Tira o cartão vermelho do bolso
-      tl.call(() => { cartaoVermelho.visible = true; }, null, 6.7);
-
-      // 7.0s: LEVANTA O CARTÃO VERMELHO NO ALTO COM FORÇA!
-      tl.to(juiz.joints.armR.rotation, {
-        x: 2.85,
-        y: 0.1,
-        z: -0.25,
-        duration: 0.7,
-        ease: "back.out(1.8)"
-      }, 6.8);
-
-      tl.to(juiz.joints.forearmR.rotation, {
-        x: 0.1,
-        duration: 0.7,
-        ease: "power2.out"
-      }, 6.8);
-
-      // Braço esquerdo aponta mandando sair de campo
-      tl.to(juiz.joints.armL.rotation, {
-        x: 0.9,
-        y: 0.4,
-        z: 0.7,
-        duration: 0.6,
-        ease: "power2.out"
-      }, 7.2);
-
-      // Cabeça vibra apitando sem parar
-      tl.to(juiz.joints.head.rotation, {
-        x: -0.15,
-        duration: 0.1,
-        repeat: 24,
-        yoyo: true,
-        ease: "sine.inOut"
-      }, 7.0);
-
-      // UI do apito
-      tl.fromTo(".som-apito",
-        { opacity: 0, scale: 0.5 },
-        { opacity: 1, scale: 1.1, duration: 0.3, ease: "back.out" },
-        7.0
-      );
-      tl.to(".som-apito", { opacity: 0, scale: 1.3, duration: 0.4 }, 8.8);
-
-      // Banner "EXPULSO! CARTÃO VERMELHO"
-      tl.fromTo(".card-alert",
-        { opacity: 0, scale: 0.4, y: 50 },
-        { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(2)" },
-        7.4
+      tl.fromTo(camTarget,
+        { x: 0, y: 0.85, z: 0 },
+        { x: 0, y: 1.05, z: 0, duration: 7.5, ease: "power1.out" },
+        10.1
       );
 
-      // Zoom final nos olhos furiosos e no cartão
-      tl.to(camera.position, {
-        y: 1.63,
-        z: 1.95,
-        duration: 3.5,
-        ease: "power2.out"
-      }, 7.5);
-
-      // Atualiza o relógio do jogo
+      // Inicia a animação de Palmas embutida no GLB aos 10.0s
       tl.call(() => {
-        const el = document.getElementById('relogio-jogo');
-        if (el) el.textContent = '89:55';
-      }, null, 7.5);
+        if (chavesAction) {
+          chavesAction.reset();
+          chavesAction.timeScale = 1.6; // Ritmo animado de aplausos
+          chavesAction.play();
+        }
+      }, null, 10.05);
 
       // Registra a timeline no HyperFrames
       window.__timelines["main"] = tl;
       tl.seek(0);
 
       // Loop do Three.js
+      const clock = new THREE.Clock();
       function loop() {
+        const delta = clock.getDelta();
+        if (chavesMixer && grupoChaves.visible) {
+          chavesMixer.update(delta);
+        }
+        camera.lookAt(camTarget);
         renderer.render(scene, camera);
         requestAnimationFrame(loop);
       }
