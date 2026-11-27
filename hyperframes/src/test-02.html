@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Roda de Capoeira - HyperFrames 3D</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./node_modules/three/build/three.module.js",
+          "three/addons/": "./node_modules/three/examples/jsm/"
+        }
+      }
+    </script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #0d131a;
+      }
+
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+
+      #tela3d {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1080px;
+        height: 1920px;
+        z-index: 1;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+      }
+
+      .vinheta {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        pointer-events: none;
+        background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.7) 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="5.0"
+      data-width="1080"
+      data-height="1920"
+    >
+      <canvas id="tela3d" data-start="0" data-track-index="0"></canvas>
+      <div class="vinheta"></div>
+    </div>
+
+    <script type="module">
+      import * as THREE from 'three';
+      import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+      import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+      import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
+      import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+
+      // ==========================================
+      // 0. SHADERS PS1 GLOBAIS (VERTEX SNAPPING, AFFINE UV, DITHERING 8x8)
+      // ==========================================
+      THREE.ShaderChunk.uv_pars_vertex += '\nvarying float vPs1Affine;\n';
+      THREE.ShaderChunk.uv_pars_fragment += '\nvarying float vPs1Affine;\n';
+
+      THREE.ShaderChunk.project_vertex = `
+        vec4 mvPosition = vec4( transformed, 1.0 );
+        #ifdef USE_BATCHING
+          mvPosition = batchingMatrix * mvPosition;
+        #endif
+        #ifdef USE_INSTANCING
+          mvPosition = instanceMatrix * mvPosition;
+        #endif
+        mvPosition = modelViewMatrix * mvPosition;
+        gl_Position = projectionMatrix * mvPosition;
+
+        float ps1Dist = length(mvPosition.xyz);
+        float ps1Affine = ps1Dist + (gl_Position.w * 8.0) / max(ps1Dist, 0.001) * 0.5;
+        #ifdef USE_MAP
+          vMapUv *= ps1Affine;
+        #endif
+        vPs1Affine = ps1Affine;
+
+        vec2 ps1Res = vec2(180.0, 320.0);
+        gl_Position.xyz /= gl_Position.w;
+        gl_Position.xy = floor(ps1Res * gl_Position.xy) / ps1Res;
+        gl_Position.xyz *= gl_Position.w;
+      `;
+
+      THREE.ShaderChunk.map_fragment = `
+        #ifdef USE_MAP
+          vec4 sampledDiffuseColor = texture2D( map, vMapUv / max(vPs1Affine, 0.001) );
+          #ifdef DECODE_VIDEO_TEXTURE
+            sampledDiffuseColor = sRGBTransferEOTF( sampledDiffuseColor );
+          #endif
+          diffuseColor *= sampledDiffuseColor;
+        #endif
+      `;
+
+      THREE.ShaderChunk.dithering_pars_fragment += `
+        vec4 ps1RGBtoYUV(vec4 rgba) {
+          vec4 yuva;
+          yuva.r = rgba.r * 0.2126 + 0.7152 * rgba.g + 0.0722 * rgba.b;
+          yuva.g = (rgba.b - yuva.r) / 1.8556;
+          yuva.b = (rgba.r - yuva.r) / 1.5748;
+          yuva.a = rgba.a;
+          yuva.gb += 0.5;
+          return yuva;
+        }
+        vec4 ps1YUVtoRGB(vec4 yuva) {
+          yuva.gb -= 0.5;
+          return vec4(
+            yuva.r * 1.0 + yuva.g * 0.0 + yuva.b * 1.5748,
+            yuva.r * 1.0 + yuva.g * -0.187324 + yuva.b * -0.468124,
+            yuva.r * 1.0 + yuva.g * 1.8556 + yuva.b * 0.0,
+            yuva.a
+          );
+        }
+        float ps1DitherChannelError(float col, float colMin, float colMax) {
+          float range = abs(colMin - colMax);
+          float aRange = abs(col - colMin);
+          return range > 0.00001 ? (aRange / range) : 0.0;
+        }
+        const float ps1Dither0[8] = float[8](0.0, 32.0, 8.0, 40.0, 2.0, 34.0, 10.0, 42.0);
+        const float ps1Dither1[8] = float[8](48.0, 16.0, 56.0, 24.0, 50.0, 18.0, 58.0, 26.0);
+        const float ps1Dither2[8] = float[8](12.0, 44.0, 4.0, 36.0, 14.0, 46.0, 6.0, 38.0);
+        const float ps1Dither3[8] = float[8](60.0, 28.0, 52.0, 20.0, 62.0, 30.0, 54.0, 22.0);
+        const float ps1Dither4[8] = float[8](3.0, 35.0, 11.0, 43.0, 1.0, 33.0, 9.0, 41.0);
+        const float ps1Dither5[8] = float[8](51.0, 19.0, 59.0, 27.0, 49.0, 17.0, 57.0, 25.0);
+        const float ps1Dither6[8] = float[8](15.0, 47.0, 7.0, 39.0, 13.0, 45.0, 5.0, 37.0);
+        const float ps1Dither7[8] = float[8](63.0, 31.0, 55.0, 23.0, 61.0, 29.0, 53.0, 21.0);
+        float ps1Dither8x8(vec2 position, float scale, float brightness) {
+          int x = int(mod(position.x / scale, 8.0));
+          int y = int(mod(position.y / scale, 8.0));
+          float d = 0.0;
+          if (x == 0) d = ps1Dither0[y];
+          else if (x == 1) d = ps1Dither1[y];
+          else if (x == 2) d = ps1Dither2[y];
+          else if (x == 3) d = ps1Dither3[y];
+          else if (x == 4) d = ps1Dither4[y];
+          else if (x == 5) d = ps1Dither5[y];
+          else if (x == 6) d = ps1Dither6[y];
+          else if (x == 7) d = ps1Dither7[y];
+          float limit = (d + 1.0) / 64.0;
+          return brightness < limit ? 0.0 : 1.0;
+        }
+        vec4 ps1DitherAndPosterize(vec2 position, vec4 color, float colorDepth, float ditherScale) {
+          vec4 yuv = ps1RGBtoYUV(color);
+          vec4 col1 = floor(yuv * colorDepth) / colorDepth;
+          vec4 col2 = ceil(yuv * colorDepth) / colorDepth;
+          yuv.x = mix(col1.x, col2.x, ps1Dither8x8(position, ditherScale, ps1DitherChannelError(yuv.x, col1.x, col2.x)));
+          yuv.y = mix(col1.y, col2.y, ps1Dither8x8(position, ditherScale, ps1DitherChannelError(yuv.y, col1.y, col2.y)));
+          yuv.z = mix(col1.z, col2.z, ps1Dither8x8(position, ditherScale, ps1DitherChannelError(yuv.z, col1.z, col2.z)));
+          return ps1YUVtoRGB(yuv);
+        }
+      `;
+
+      THREE.ShaderChunk.dithering_fragment = `
+        #ifdef DITHERING
+          gl_FragColor.rgb = dithering( gl_FragColor.rgb );
+        #endif
+        gl_FragColor = ps1DitherAndPosterize(gl_FragCoord.xy, gl_FragColor, 15.0, 1.0);
+      `;
+
+      // ==========================================
+      // 1. SETUP DO THREE.JS (BAIXA RESOLUÇÃO PS1)
+      // ==========================================
+      const canvas = document.getElementById('tela3d');
+      const W = 1080;
+      const H = 1920;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
+      renderer.setPixelRatio(1);
+      renderer.setSize(Math.round(W / 4), Math.round(H / 4), false);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.05;
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color('#0a160d');
+      scene.fog = new THREE.FogExp2('#0a160d', 0.025);
+
+      const camera = new THREE.PerspectiveCamera(40, W / H, 0.1, 100);
+      const camTarget = new THREE.Vector3(0, 0.85, 0);
+
+      const hemiLight = new THREE.HemisphereLight('#c4e2ff', '#1f3d23', 0.85);
+      scene.add(hemiLight);
+
+      const dirLight = new THREE.DirectionalLight('#ffffff', 2.8);
+      dirLight.position.set(4, 10, 6);
+      dirLight.castShadow = true;
+      dirLight.shadow.mapSize.width = 1024;
+      dirLight.shadow.mapSize.height = 1024;
+      scene.add(dirLight);
+
+      const backlight = new THREE.DirectionalLight('#38bdf8', 1.8);
+      backlight.position.set(-4, 5, -5);
+      scene.add(backlight);
+
+      // ==========================================
+      // 2. ELEMENTOS DO ESTÁDIO
+      // ==========================================
+      const grama = new THREE.Mesh(
+        new THREE.PlaneGeometry(120, 120),
+        new THREE.MeshStandardMaterial({ color: '#246b29', roughness: 0.9, flatShading: true })
+      );
+      grama.rotation.x = -Math.PI / 2;
+      grama.receiveShadow = true;
+      scene.add(grama);
+
+      const linha = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.14, 30),
+        new THREE.MeshBasicMaterial({ color: '#ffffff' })
+      );
+      linha.rotation.x = -Math.PI / 2;
+      linha.position.set(0.6, 0.005, 0);
+      scene.add(linha);
+
+      const arquibancada = new THREE.Group();
+      for (let i = 0; i < 6; i++) {
+        const degrau = new THREE.Mesh(
+          new THREE.BoxGeometry(50, 1.3, 2.2),
+          new THREE.MeshStandardMaterial({ color: i % 2 === 0 ? '#1e293b' : '#334155' })
+        );
+        degrau.position.set(0, i * 1.1 + 0.5, -11 - i * 2.0);
+        arquibancada.add(degrau);
+      }
+      scene.add(arquibancada);
+
+      // ==========================================
+      // 3. HOMENS GORDOS (GLB) + TEXTURAS UV + CAPOEIRA
+      // ==========================================
+      const texLoader = new THREE.TextureLoader();
+
+      function loadPs1Texture(url) {
+        const tex = texLoader.load(url);
+        tex.flipY = false;
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.minFilter = THREE.LinearFilter;
+        tex.magFilter = THREE.NearestFilter;
+        tex.generateMipmaps = false;
+        return tex;
+      }
+
+      function createGlbWrapper(textureUrl) {
+        const root = new THREE.Group();
+        scene.add(root);
+        return { root, model: null, mixer: null, duration: 1.0, ready: false, textureUrl };
+      }
+
+      let capoeiraClipForGlb = null;
+      function tryBindGlbClip(wrapper) {
+        if (!wrapper.model || !capoeiraClipForGlb || wrapper.mixer) return;
+        wrapper.mixer = new THREE.AnimationMixer(wrapper.model);
+        const action = wrapper.mixer.clipAction(capoeiraClipForGlb);
+        action.setLoop(THREE.LoopRepeat);
+        action.play();
+        wrapper.duration = capoeiraClipForGlb.duration || 1.0;
+        wrapper.ready = true;
+      }
+
+      function setupGlbWrapper(wrapper, glbScene) {
+        wrapper.model = glbScene;
+        wrapper.root.add(glbScene);
+        const outfitTex = loadPs1Texture(wrapper.textureUrl);
+        glbScene.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = false;
+            child.geometry = child.geometry.clone();
+            child.geometry.deleteAttribute('normal');
+            child.geometry = mergeVertices(child.geometry);
+            child.geometry.computeVertexNormals();
+            if (child.material) {
+              child.material = child.material.clone();
+              child.material.flatShading = false;
+              child.material.map = outfitTex;
+              child.material.color.setHex(0xffffff);
+              child.material.roughness = 0.85;
+              child.material.needsUpdate = true;
+            }
+          }
+          if (child.isBone || child.name.startsWith('mixamorig')) {
+            child.name = child.name.replace(':', '');
+          }
+        });
+        tryBindGlbClip(wrapper);
+      }
+
+      const gordo1 = createGlbWrapper('./assets/characters/homem_gordo_casual.png');
+      const gordo2 = createGlbWrapper('./assets/characters/homem_gordo_terno.png');
+
+      new GLTFLoader().load('./assets/characters/homem_gordo.glb', (gltf) => {
+        const gordo2Scene = SkeletonUtils.clone(gltf.scene);
+        setupGlbWrapper(gordo1, gltf.scene);
+        setupGlbWrapper(gordo2, gordo2Scene);
+      });
+
+      new FBXLoader().load('./assets/animations/capoeira.fbx', (fbx) => {
+        if (!fbx.animations || fbx.animations.length === 0) return;
+        const srcClip = fbx.animations[0].clone();
+        srcClip.tracks = srcClip.tracks.map((tr) => {
+          const cloned = tr.clone();
+          cloned.name = cloned.name.replace(':', '');
+          if (cloned.name.endsWith('.position')) {
+            for (let i = 0; i < cloned.values.length; i++) {
+              cloned.values[i] *= 0.01;
+            }
+          }
+          return cloned;
+        });
+        capoeiraClipForGlb = srcClip;
+        tryBindGlbClip(gordo1);
+        tryBindGlbClip(gordo2);
+      });
+
+      function applyCapoeira(wrapper, timeSec) {
+        if (!wrapper.ready || !wrapper.mixer) return;
+        wrapper.mixer.setTime(timeSec % wrapper.duration);
+      }
+
+      // ==========================================
+      // 4. TIMELINE GSAP (0.0s a 5.0s)
+      // ==========================================
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      tl.set(gordo1.root.position, { x: -0.65, y: 0, z: 0.15 }, 0);
+      tl.set(gordo1.root.rotation, { x: 0, y: Math.PI / 2, z: 0 }, 0);
+
+      tl.set(gordo2.root.position, { x: 0.65, y: 0, z: -0.15 }, 0);
+      tl.set(gordo2.root.rotation, { x: 0, y: -Math.PI / 2, z: 0 }, 0);
+
+      tl.set(camera.position, { x: 0, y: 1.55, z: 7.0 }, 0);
+      tl.set(camTarget, { x: 0, y: 0.85, z: 0 }, 0);
+      tl.to(camera.position,
+        { x: 0.45, y: 1.65, z: 6.6, duration: 5.0, ease: "sine.inOut", immediateRender: false },
+        0
+      );
+
+      const animState = { t: 0 };
+      tl.fromTo(animState, { t: 0 }, { t: 5.0, duration: 5.0, ease: "none" }, 0);
+
+      window.__timelines["main"] = tl;
+      const _urlT = parseFloat(new URLSearchParams(window.location.search).get('t'));
+      tl.seek(Number.isFinite(_urlT) ? _urlT : 0);
+
+      function loop() {
+        const t = tl.time();
+        applyCapoeira(gordo1, t);
+        applyCapoeira(gordo2, t + 1.85);
+        camera.lookAt(camTarget);
+        renderer.render(scene, camera);
+        requestAnimationFrame(loop);
+      }
+      loop();
+    </script>
+  </body>
+</html>

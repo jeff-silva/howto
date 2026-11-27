@@ -413,8 +413,7 @@
               state.bones[child.name.replace(':', '')] = child;
             }
           });
-          for (const [, mixamoName] of MIXAMO_TO_JOINT_ALL) {
-            const b = state.bones[mixamoName];
+          for (const [mixamoName, b] of Object.entries(state.bones)) {
             if (b) state.restInv[mixamoName] = b.getWorldQuaternion(new THREE.Quaternion()).invert();
           }
           if (state.bones['mixamorigHips']) {
@@ -578,7 +577,8 @@
 
       // Registra a timeline no HyperFrames
       window.__timelines["main"] = tl;
-      tl.seek(0);
+      const _urlT = parseFloat(new URLSearchParams(window.location.search).get('t'));
+      tl.seek(Number.isFinite(_urlT) ? _urlT : 0);
 
       // Loop do Three.js
       const _pAtacante = new THREE.Vector3();
