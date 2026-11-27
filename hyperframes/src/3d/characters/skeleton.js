@@ -77,8 +77,8 @@ export function buildSkeleton() {
   const root = new THREE.Group();
   root.name = 'root';
   const joints = {};
-  const make = (name, parent, x, y, z) => {
-    const j = new THREE.Object3D();
+  const make = (name, parent, x, y, z, asBone = false) => {
+    const j = asBone ? new THREE.Bone() : new THREE.Object3D();
     j.name = name;
     j.position.set(x, y, z);
     parent.add(j);
@@ -86,9 +86,9 @@ export function buildSkeleton() {
     return j;
   };
 
-  const hips = make('hips', root, 0, HIP_HEIGHT, 0);
-  const spine = make('spine', hips, 0, DIMS.spine, 0);
-  const chest = make('chest', spine, 0, DIMS.abdomen, 0);
+  const hips = make('hips', root, 0, HIP_HEIGHT, 0, true);
+  const spine = make('spine', hips, 0, DIMS.spine, 0, true);
+  const chest = make('chest', spine, 0, DIMS.abdomen, 0, true);
   const neck = make('neck', chest, 0, DIMS.chest, 0);
   make('head', neck, 0, DIMS.neck, 0);
   // Tronco e cabeça giram primeiro em Y (guinada) e depois inclinam: movimento mais natural.

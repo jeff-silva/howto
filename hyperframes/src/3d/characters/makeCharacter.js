@@ -4,7 +4,7 @@
 
 import * as THREE from 'three';
 import { buildSkeleton, DIMS, headSurface } from './skeleton.js';
-import { mat, rbox, sphere, cylinder, torus, ico, mesh } from './helpers.js';
+import { mat, rbox, sphere, cylinder, torus, ico, mesh, buildSkinnedTorsoGeometry, createTorsoTexture } from './helpers.js';
 import { addHair, addHat, addGlasses, addFacialHair, addHeld } from './parts.js';
 
 export const DEFAULT_CONFIG = {
@@ -13,6 +13,9 @@ export const DEFAULT_CONFIG = {
   skin: '#e8b58a',
   height: 1,        // escala uniforme (adulto = 1, criança ≈ 0.65)
   build: 1,         // largura do corpo (0.85 magro ... 1.3 largo)
+  silhouette: 'male', // 'male' (triângulo invertido) | 'female' (violão) | 'neutral'
+  fat: 0,           // 0..1+ volume de barriga/gordura
+  bust: null,       // null = automático pela silhueta (0.6 female, 0 male)
   headScale: 1,     // cabeça maior/menor
   top: { color: '#4a90d9', stripe: null, sleeves: 'short' },   // sleeves: short | long
   bottom: { color: '#3b4a6b', type: 'pants' },                 // type: pants | shorts | skirt
@@ -126,14 +129,36 @@ export function makeCharacter(userConfig = {}) {
   const bottomColor = c.bottom.color;
   const legsCovered = c.bottom.type === 'pants';
 
-  // ---- tronco ----
-  mesh(rbox(0.34 * w, 0.17, 0.22, 0.05), bottomColor, { pos: [0, 0.04, 0], parent: joints.hips });
-  mesh(rbox(0.36 * w, 0.23, 0.23, 0.05), c.top.color, { pos: [0, 0.09, 0], parent: joints.spine });
-  mesh(rbox(0.43 * w, 0.33, 0.26, 0.07), c.top.color, { pos: [0, 0.14, 0], parent: joints.chest });
-  if (c.top.stripe) {
-    mesh(rbox(0.445 * w, 0.045, 0.275, 0.012), c.top.stripe, { pos: [0, 0.2, 0], parent: joints.chest });
-    mesh(rbox(0.445 * w, 0.045, 0.275, 0.012), c.top.stripe, { pos: [0, 0.07, 0], parent: joints.chest });
+  // ---- tronco único dobrável (SkinnedMesh) ----
+  const hasCustomTex = typeof c.top.draw === 'function';
+  const torsoGeo = buildSkinnedTorsoGeometry(D, w, {
+    silhouette: c.silhouette,
+    fat: c.fat,
+    bust: c.bust,
+    hasStripe: !hasCustomTex && Boolean(c.top.stripe),
+  });
+  let torsoMats;
+  if (hasCustomTex) {
+    const tex = createTorsoTexture({
+      topColor: c.top.color,
+      bottomColor,
+      stripeColor: c.top.stripe || null,
+      drawTop: c.top.draw,
+    });
+    const texMat = new THREE.MeshStandardMaterial({ map: tex, flatShading: false, roughness: 0.65, metalness: 0 });
+    torsoMats = [texMat, texMat];
+  } else {
+    torsoMats = c.top.stripe
+      ? [mat(bottomColor), mat(c.top.color), mat(c.top.stripe)]
+      : [mat(bottomColor), mat(c.top.color)];
   }
+  const torsoMesh = new THREE.SkinnedMesh(torsoGeo, torsoMats);
+  torsoMesh.castShadow = true;
+  torsoMesh.receiveShadow = true;
+  torsoMesh.frustumCulled = false;
+  joints.hips.add(torsoMesh);
+  root.updateMatrixWorld(true);
+  torsoMesh.bind(new THREE.Skeleton([joints.hips, joints.spine, joints.chest]));
   mesh(cylinder(0.05, 0.055, 0.1, 7), c.skin, { pos: [0, 0.03, 0], parent: joints.neck });
 
   // ---- braços ----

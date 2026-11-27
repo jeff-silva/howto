@@ -80,7 +80,7 @@
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="10"
+      data-duration="13.1"
       data-width="1080"
       data-height="1920"
     >
@@ -191,6 +191,7 @@
         skin: '#f3cfae',
         height: 0.96,
         build: 0.88,
+        silhouette: 'female',
         top: { color: '#09090b', sleeves: 'short' },
         bottom: { color: '#09090b', type: 'skirt' },
         shoes: '#09090b',
@@ -207,6 +208,7 @@
         skin: '#e0ac69',
         height: 0.98,
         build: 0.92,
+        silhouette: 'female',
         top: { color: '#dc2626', sleeves: 'short' },
         bottom: { color: '#dc2626', type: 'skirt' },
         shoes: '#dc2626',
@@ -217,23 +219,82 @@
       atacante.root.rotation.y = Math.PI / 2;
       scene.add(atacante.root);
 
-      // Juiz de Futebol (Careca, All-Black)
+      // Juiz de Futebol (Camisa Amarela com Textura Procedural, Short Preto, Relógio)
       const juiz = makeCharacter({
         name: 'juiz',
         skin: '#381e0f',
         height: 1.06,
         build: 1.05,
-        top: { color: '#18181b', sleeves: 'short' },
+        silhouette: 'male',
+        top: {
+          color: '#eab308',
+          sleeves: 'short',
+          draw: (ctx, W, H) => {
+            // Costura sutil dos bolsos no peito
+            ctx.strokeStyle = 'rgba(0,0,0,0.22)';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(W * 0.31, H * 0.16, W * 0.13, H * 0.17);
+            ctx.strokeRect(W * 0.56, H * 0.16, W * 0.13, H * 0.17);
+
+            // Escudo esquerdo (Arbitragem Paulista estilizado)
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(W * 0.33, H * 0.18, W * 0.09, H * 0.12);
+            ctx.fillStyle = '#dc2626';
+            ctx.fillRect(W * 0.37, H * 0.23, W * 0.05, H * 0.07);
+            ctx.fillStyle = '#18181b';
+            ctx.font = 'bold 11px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('ARB', W * 0.375, H * 0.215);
+
+            // Escudo direito (FPF estilizado)
+            ctx.fillStyle = '#dc2626';
+            ctx.fillRect(W * 0.58, H * 0.18, W * 0.09, H * 0.055);
+            ctx.fillStyle = '#facc15';
+            ctx.font = 'bold 15px sans-serif';
+            ctx.fillText('FPF', W * 0.625, H * 0.222);
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(W * 0.58, H * 0.235, W * 0.09, H * 0.065);
+            ctx.fillStyle = '#18181b';
+            for (let i = 0; i < 4; i++) {
+              ctx.fillRect(W * (0.585 + i * 0.022), H * 0.235, W * 0.011, H * 0.065);
+            }
+
+            // Patrocínio central (ODONTO company estilizado)
+            ctx.fillStyle = '#18181b';
+            ctx.fillRect(W * 0.35, H * 0.36, W * 0.30, H * 0.105);
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = 'bold 26px sans-serif';
+            ctx.fillText('ODONTO', W * 0.50, H * 0.415);
+            ctx.font = 'bold 17px sans-serif';
+            ctx.fillText('company', W * 0.50, H * 0.452);
+          }
+        },
         bottom: { color: '#18181b', type: 'shorts' },
         shoes: '#09090b',
         hair: { style: 'bald' }
       });
-      const escudoFifa = new THREE.Mesh(
-        new THREE.BoxGeometry(0.06, 0.075, 0.01),
-        new THREE.MeshStandardMaterial({ color: '#2563eb', roughness: 0.3 })
+
+      // Relógio no pulso esquerdo do juiz
+      const relogioGroup = new THREE.Group();
+      const pulseira = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.058, 0.058, 0.036, 12),
+        new THREE.MeshStandardMaterial({ color: '#111827', roughness: 0.5 })
       );
-      escudoFifa.position.set(0.12, 0.18, 0.14);
-      juiz.joints.chest.add(escudoFifa);
+      relogioGroup.add(pulseira);
+      const caixaRelogio = new THREE.Mesh(
+        new THREE.BoxGeometry(0.048, 0.046, 0.018),
+        new THREE.MeshStandardMaterial({ color: '#374151', metalness: 0.6, roughness: 0.3 })
+      );
+      caixaRelogio.position.set(0, 0, 0.056);
+      relogioGroup.add(caixaRelogio);
+      const visorRelogio = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.036, 0.034),
+        new THREE.MeshStandardMaterial({ color: '#0f172a', emissive: '#38bdf8', emissiveIntensity: 0.35 })
+      );
+      visorRelogio.position.set(0, 0, 0.066);
+      relogioGroup.add(visorRelogio);
+      relogioGroup.position.set(0, -0.20, 0);
+      juiz.joints.forearmL.add(relogioGroup);
 
       const apitoGroup = new THREE.Group();
       const apitoCorpo = new THREE.Mesh(
@@ -254,8 +315,8 @@
           emissiveIntensity: 0.3
         })
       );
-      cartaoVermelho.position.set(0, -0.08, 0);
-      cartaoVermelho.rotation.x = Math.PI / 2;
+      cartaoVermelho.position.set(0, -0.10, 0.02);
+      cartaoVermelho.rotation.set(0.15, 0, 0);
       cartaoVermelho.visible = false;
       juiz.joints.handR.add(cartaoVermelho);
 
@@ -264,9 +325,9 @@
       scene.add(juiz.root);
 
       // ==========================================
-      // 3.5 RETARGETING MIXAMO FBX -> SKELETON.JS (JUIZ)
+      // 3.5 RETARGETING GENÉRICO MIXAMO FBX -> SKELETON.JS
       // ==========================================
-      const MIXAMO_TO_JOINT = [
+      const MIXAMO_TO_JOINT_ALL = [
         ['hips', 'mixamorigHips'],
         ['spine', 'mixamorigSpine'],
         ['chest', 'mixamorigSpine2'],
@@ -275,6 +336,9 @@
         ['armL', 'mixamorigLeftArm'],
         ['forearmL', 'mixamorigLeftForeArm'],
         ['handL', 'mixamorigLeftHand'],
+        ['armR', 'mixamorigRightArm'],
+        ['forearmR', 'mixamorigRightForeArm'],
+        ['handR', 'mixamorigRightHand'],
         ['legL', 'mixamorigLeftUpLeg'],
         ['shinL', 'mixamorigLeftLeg'],
         ['footL', 'mixamorigLeftFoot'],
@@ -283,79 +347,106 @@
         ['footR', 'mixamorigRightFoot'],
       ];
 
-      let juizFbxRoot = null;
-      let juizCapoeiraMixer = null;
-      let juizCapoeiraDuration = 3.4;
-      const mixamoBones = {};
-      const restWorldQuatInv = {};
-      let restHipsY = 100;
-
       const _qSrc = new THREE.Quaternion();
       const _qParent = new THREE.Quaternion();
+      const _qRoot = new THREE.Quaternion();
       const _qTarget = new THREE.Quaternion();
       const _vHips = new THREE.Vector3();
-
-      function applyMixamoToCharacter(character) {
-        if (!juizFbxRoot) return;
-        juizFbxRoot.updateMatrixWorld(true);
-        character.root.updateMatrixWorld(true);
-
-        const hipsBone = mixamoBones['mixamorigHips'];
-        if (hipsBone) {
-          hipsBone.getWorldPosition(_vHips);
-          const scale = 0.68 / (restHipsY || 100);
-          character.joints.hips.position.set(_vHips.x * scale, _vHips.y * scale, _vHips.z * scale);
-        }
-
-        for (const [jointName, mixamoName] of MIXAMO_TO_JOINT) {
-          const srcBone = mixamoBones[mixamoName];
-          const tgtJoint = character.joints[jointName];
-          const restInv = restWorldQuatInv[mixamoName];
-          if (!srcBone || !tgtJoint || !restInv) continue;
-
-          srcBone.getWorldQuaternion(_qSrc);
-          _qTarget.copy(_qSrc).multiply(restInv);
-
-          tgtJoint.parent.getWorldQuaternion(_qParent);
-          tgtJoint.quaternion.copy(_qParent).invert().multiply(_qTarget);
-          tgtJoint.updateMatrixWorld(false);
-        }
-      }
-
-      // Carrega a animação Mixamo (capoeira.fbx) para aplicar ao juiz (retargeting)
+      const _qLeftArmOffset = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI / 2);
+      const _qRightArmOffset = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), -Math.PI / 2);
       const fbxLoader = new FBXLoader();
-      fbxLoader.load('./assets/animations/capoeira.fbx', (fbx) => {
-        juizFbxRoot = fbx;
-        juizFbxRoot.visible = false;
-        scene.add(juizFbxRoot);
 
-        juizFbxRoot.updateMatrixWorld(true);
-        juizFbxRoot.traverse((child) => {
-          if (child.isBone || child.name.startsWith('mixamorig')) {
-            mixamoBones[child.name.replace(':', '')] = child;
+      function createMixamoRetargeter(fbxUrl, excludeJoints = []) {
+        const excluded = new Set(excludeJoints);
+        const state = {
+          fbxRoot: null,
+          mixer: null,
+          duration: 1.0,
+          bones: {},
+          restInv: {},
+          restHipsY: 100,
+          apply(character, timeSec, loop = true) {
+            if (!state.fbxRoot || !state.mixer) return;
+            const t = loop ? (timeSec % state.duration) : Math.min(timeSec, state.duration - 0.001);
+            state.mixer.setTime(t);
+            state.fbxRoot.updateMatrixWorld(true);
+            character.root.updateMatrixWorld(true);
+            character.root.getWorldQuaternion(_qRoot);
+
+            const hipsBone = state.bones['mixamorigHips'];
+            if (hipsBone) {
+              hipsBone.getWorldPosition(_vHips);
+              const scale = 0.68 / (state.restHipsY || 100);
+              character.joints.hips.position.set(_vHips.x * scale, _vHips.y * scale, _vHips.z * scale);
+            }
+
+            for (const [jointName, mixamoName] of MIXAMO_TO_JOINT_ALL) {
+              if (excluded.has(jointName)) continue;
+              const srcBone = state.bones[mixamoName];
+              const tgtJoint = character.joints[jointName];
+              const rInv = state.restInv[mixamoName];
+              if (!srcBone || !tgtJoint || !rInv) continue;
+
+              srcBone.getWorldQuaternion(_qSrc);
+              _qTarget.copy(_qSrc).multiply(rInv);
+              if (jointName === 'armL' || jointName === 'forearmL' || jointName === 'handL') {
+                _qTarget.multiply(_qLeftArmOffset);
+              } else if (jointName === 'armR' || jointName === 'forearmR' || jointName === 'handR') {
+                _qTarget.multiply(_qRightArmOffset);
+              }
+              _qTarget.premultiply(_qRoot);
+
+              tgtJoint.parent.getWorldQuaternion(_qParent);
+              tgtJoint.quaternion.copy(_qParent).invert().multiply(_qTarget);
+              tgtJoint.updateMatrixWorld(false);
+            }
+          }
+        };
+
+        fbxLoader.load(fbxUrl, (fbx) => {
+          state.fbxRoot = fbx;
+          fbx.visible = false;
+          scene.add(fbx);
+          fbx.updateMatrixWorld(true);
+          fbx.traverse((child) => {
+            if (child.isBone || child.name.startsWith('mixamorig')) {
+              state.bones[child.name.replace(':', '')] = child;
+            }
+          });
+          for (const [, mixamoName] of MIXAMO_TO_JOINT_ALL) {
+            const b = state.bones[mixamoName];
+            if (b) state.restInv[mixamoName] = b.getWorldQuaternion(new THREE.Quaternion()).invert();
+          }
+          if (state.bones['mixamorigHips']) {
+            const p = state.bones['mixamorigHips'].getWorldPosition(new THREE.Vector3());
+            if (p.y > 1) state.restHipsY = p.y;
+          }
+          if (fbx.animations && fbx.animations.length > 0) {
+            const clip = fbx.animations[0];
+            state.duration = clip.duration || 1.0;
+            state.mixer = new THREE.AnimationMixer(fbx);
+            const act = state.mixer.clipAction(clip);
+            act.setLoop(THREE.LoopRepeat);
+            act.play();
           }
         });
 
-        for (const [, mixamoName] of MIXAMO_TO_JOINT) {
-          const b = mixamoBones[mixamoName];
-          if (b) {
-            restWorldQuatInv[mixamoName] = b.getWorldQuaternion(new THREE.Quaternion()).invert();
-          }
-        }
-        if (mixamoBones['mixamorigHips']) {
-          const p = mixamoBones['mixamorigHips'].getWorldPosition(new THREE.Vector3());
-          if (p.y > 1) restHipsY = p.y;
-        }
+        return state;
+      }
 
-        if (fbx.animations && fbx.animations.length > 0) {
-          const clip = fbx.animations[0];
-          juizCapoeiraDuration = clip.duration || 3.4;
-          juizCapoeiraMixer = new THREE.AnimationMixer(juizFbxRoot);
-          const act = juizCapoeiraMixer.clipAction(clip);
-          act.setLoop(THREE.LoopRepeat);
-          act.play();
+      const correndoRetargeter = createMixamoRetargeter('./assets/animations/correndo.fbx');
+      const carrinhoRetargeter = createMixamoRetargeter('./assets/animations/carrinho.fbx');
+      const levandoRetargeter = createMixamoRetargeter('./assets/animations/levando-carrinho.fbx');
+      const capoeiraRetargeter = createMixamoRetargeter('./assets/animations/capoeira.fbx', ['armR', 'forearmR', 'handR']);
+      const salsaRetargeter = createMixamoRetargeter('./assets/animations/salsa.fbx');
+      const machucadoRetargeter = createMixamoRetargeter('./assets/animations/machucado-chao.fbx');
+
+      function resetPose(character) {
+        character.joints.hips.position.set(0, 0.68, 0);
+        for (const j of Object.values(character.joints)) {
+          j.quaternion.identity();
         }
-      });
+      }
 
       // ==========================================
       // 4. TIMELINE GSAP (CENA 1 + CENA 2)
@@ -364,69 +455,62 @@
       const tl = gsap.timeline({ paused: true });
 
       // ------------------------------------------
-      // CENA 1: 0.0s a 5.0s (CARRINHO EM PERFIL)
+      // CENA 1: 0.0s a 3.10s (CORRENDO + CARRINHO + LEVANDO CARRINHO + CÂMERA SEGUINDO)
       // ------------------------------------------
-      tl.set(camera.position, { x: 0, y: 1.05, z: 7.2 }, 0);
-      tl.call(() => {
-        camTarget.set(0, 0.45, 0);
-        juiz.root.visible = false;
-        vitima.root.visible = true;
-        atacante.root.visible = true;
+      tl.set(juiz.root, { visible: false }, 0);
+      tl.set(vitima.root, { visible: true }, 0);
+      tl.set(atacante.root, { visible: true }, 0);
+      tl.set(vitima.root.rotation, { x: 0, y: Math.PI / 2, z: 0 }, 0);
+      tl.set(vitima.root.position, { x: -0.5, y: 0, z: 0 }, 0);
+      tl.set(vitima.joints.hips.position, { x: 0, y: 0.68, z: 0 }, 0);
+      tl.set(atacante.root.rotation, { x: 0, y: Math.PI / 2, z: 0 }, 0);
+      tl.set(atacante.root.position, { x: -3.4, y: 0, z: 0 }, 0);
+      tl.set(atacante.joints.hips.position, { x: 0, y: 0.68, z: 0 }, 0);
 
-        vitima.root.rotation.set(0, Math.PI / 2, 0);
-        vitima.root.position.set(0.6, 0, 0);
+      tl.to(bola.position, { x: 1.3, z: 0, duration: 1.5, ease: "power1.out" }, 0);
+      tl.to(vitima.root.position, { x: 0.6, duration: 1.5, ease: "none" }, 0);
+      tl.to(atacante.root.position, { x: -2.0, duration: 0.85, ease: "none" }, 0);
 
-        atacante.root.rotation.set(0, Math.PI / 2, 0);
-        atacante.root.position.set(-3.5, 0, 0);
-      }, null, 0);
+      // O Carrinho via carrinho.fbx (0.85s -> 2.61s)
+      const atacanteCarrinhoState = { t: 0 };
+      tl.set(atacanteCarrinhoState, { t: 0 }, 0);
+      tl.to(atacanteCarrinhoState, {
+        t: 1.76,
+        duration: 1.76,
+        ease: "none",
+        onUpdate: () => {
+          carrinhoRetargeter.apply(atacante, atacanteCarrinhoState.t, false);
+        }
+      }, 0.85);
 
-      tl.to(bola.position, { x: 1.3, z: 0, duration: 1.8, ease: "power1.out" }, 0);
-      tl.to(vitima.joints.legL.rotation, { x: -0.5, duration: 0.35, repeat: 4, yoyo: true }, 0);
-      tl.to(vitima.joints.legR.rotation, { x: 0.5, duration: 0.35, repeat: 4, yoyo: true }, 0);
+      // Vítima levando o carrinho e caindo via levando-carrinho.fbx (1.50s -> 3.10s)
+      const vitimaLevandoState = { t: 0 };
+      tl.set(vitimaLevandoState, { t: 0 }, 0);
+      tl.to(vitimaLevandoState, {
+        t: 1.60,
+        duration: 1.60,
+        ease: "none",
+        onUpdate: () => {
+          levandoRetargeter.apply(vitima, vitimaLevandoState.t, false);
+        }
+      }, 1.50);
 
-      tl.to(atacante.root.position, { x: -1.8, duration: 1.1, ease: "power1.in" }, 0);
-      tl.to(atacante.joints.legL.rotation, { x: -0.8, duration: 0.22, repeat: 5, yoyo: true }, 0);
-      tl.to(atacante.joints.legR.rotation, { x: 0.8, duration: 0.22, repeat: 5, yoyo: true }, 0);
-
-      // O Carrinho
-      tl.to(atacante.root.position, { y: 0.18, duration: 0.35, ease: "power2.in" }, 1.1);
-      tl.to(atacante.root.rotation, { z: -1.35, x: -0.15, y: Math.PI / 2 + 0.15, duration: 0.35, ease: "power2.out" }, 1.1);
-      tl.to(atacante.joints.legR.rotation, { x: -1.55, z: -0.2, duration: 0.35, ease: "power2.out" }, 1.1);
-      tl.to(atacante.joints.shinR.rotation, { x: 0, duration: 0.35 }, 1.1);
-      tl.to(atacante.joints.legL.rotation, { x: 0.85, z: 0.35, duration: 0.35, ease: "power2.out" }, 1.1);
-      tl.to(atacante.joints.shinL.rotation, { x: -1.4, duration: 0.35 }, 1.1);
-      tl.to(atacante.joints.armL.rotation, { x: 1.1, z: 0.8, duration: 0.35 }, 1.1);
-      tl.to(atacante.joints.armR.rotation, { x: -0.5, z: -0.6, duration: 0.35 }, 1.1);
-
-      tl.to(atacante.root.position, { x: 0.5, duration: 0.85, ease: "power2.out" }, 1.25);
-
-      // Impacto
-      tl.to(vitima.root.position, { x: 1.9, y: 0.95, duration: 0.6, ease: "power2.out" }, 1.95);
-      tl.to(vitima.root.rotation, { z: 2.1, x: 0.7, duration: 0.7, ease: "power2.out" }, 1.95);
-      tl.to(vitima.joints.legL.rotation, { x: 1.2, z: 0.5, duration: 0.5 }, 1.95);
-      tl.to(vitima.joints.legR.rotation, { x: -1.0, z: -0.4, duration: 0.5 }, 1.95);
-      tl.to(vitima.root.position, { y: 0.18, duration: 0.5, ease: "bounce.out" }, 2.55);
-
-      tl.to(bola.position, { x: 4.8, y: 0.9, z: -1.5, duration: 1.4, ease: "power2.out" }, 1.95);
-      tl.to(camera.position, { x: "+=0.06", y: "+=0.05", duration: 0.05, repeat: 5, yoyo: true }, 1.95);
-
-      // Transição Flash 1
-      tl.to(".flash-fx", { opacity: 1, duration: 0.15 }, 4.85);
-      tl.to(".flash-fx", { opacity: 0, duration: 0.25 }, 5.0);
+      tl.to(bola.position, { x: 4.8, y: 0.9, z: -1.5, duration: 1.4, ease: "power2.out" }, 1.50);
 
       // ------------------------------------------
-      // CENA 2: 5.0s a 10.0s (JUIZ EXECUTANDO CAPOEIRA COM CARTÃO VERMELHO LEVANTADO)
+      // CENA 2: 3.10s a 8.10s (CORTE DIRETO PARA O JUIZ NA CAPOEIRA COM CARTÃO)
       // ------------------------------------------
-      tl.set(vitima.root, { visible: false }, 5.0);
-      tl.set(atacante.root, { visible: false }, 5.0);
-      tl.set(juiz.root, { visible: true }, 5.0);
-      tl.set(juiz.root.position, { x: 0, y: 0, z: 0 }, 5.0);
-      tl.set(apitoGroup, { visible: false }, 5.0);
-      tl.set(cartaoVermelho, { visible: true }, 5.0);
-      tl.set(juiz.joints.armR.rotation, { x: 2.75, y: 0.05, z: 0.12 }, 5.0);
-      tl.set(juiz.joints.forearmR.rotation, { x: 0.15, y: 0, z: 0 }, 5.0);
-      tl.set(juiz.joints.handR.rotation, { x: 0, y: 0, z: 0 }, 5.0);
-      tl.set(camTarget, { x: -0.1, y: 1.05, z: 0 }, 5.0);
+      const CUT_AT = 3.10;
+      tl.set(vitima.root, { visible: false }, CUT_AT);
+      tl.set(atacante.root, { visible: false }, CUT_AT);
+      tl.set(juiz.root, { visible: true }, CUT_AT);
+      tl.set(juiz.root.position, { x: 0, y: 0, z: 0 }, CUT_AT);
+      tl.set(apitoGroup, { visible: false }, CUT_AT);
+      tl.set(cartaoVermelho, { visible: true }, CUT_AT);
+      tl.set(juiz.joints.armR.rotation, { x: 2.75, y: 0.05, z: 0.12 }, CUT_AT);
+      tl.set(juiz.joints.forearmR.rotation, { x: 0.15, y: 0, z: 0 }, CUT_AT);
+      tl.set(juiz.joints.handR.rotation, { x: 0, y: 0, z: 0 }, CUT_AT);
+      tl.set(camTarget, { x: -0.1, y: 1.05, z: 0 }, CUT_AT);
 
       tl.call(() => {
         applyFaceState(juiz, {
@@ -436,12 +520,12 @@
           smile: 0.7,
           mouthOpen: 0.1
         });
-      }, null, 5.0);
+      }, null, CUT_AT);
 
       tl.fromTo(camera.position,
         { x: -0.35, y: 1.35, z: 5.1 },
         { x: 0.15, y: 1.3, z: 4.6, duration: 4.8, ease: "power1.inOut", immediateRender: false },
-        5.0
+        CUT_AT
       );
 
       const juizCapoeiraState = { t: 0 };
@@ -452,13 +536,44 @@
           duration: 5.0,
           ease: "none",
           onUpdate: () => {
-            if (juizCapoeiraMixer) {
-              juizCapoeiraMixer.setTime(juizCapoeiraState.t % juizCapoeiraDuration);
-              applyMixamoToCharacter(juiz);
-            }
+            capoeiraRetargeter.apply(juiz, juizCapoeiraState.t, true);
           }
         },
-        5.0
+        CUT_AT
+      );
+
+      // ------------------------------------------
+      // CENA 3: 8.10s a 13.10s (PLANO ABERTO: SALSA + MACHUCADA NO CHÃO + JUIZ OLHANDO)
+      // ------------------------------------------
+      const SCENE3_AT = 8.10;
+      tl.set(vitima.root, { visible: true }, SCENE3_AT);
+      tl.set(atacante.root, { visible: true }, SCENE3_AT);
+      tl.set(juiz.root, { visible: true }, SCENE3_AT);
+
+      tl.set(atacante.root.position, { x: -0.95, y: 0, z: 0.25 }, SCENE3_AT);
+      tl.set(atacante.root.rotation, { x: 0, y: 0.25, z: 0 }, SCENE3_AT);
+
+      tl.set(vitima.root.position, { x: 0.45, y: 0, z: 1.05 }, SCENE3_AT);
+      tl.set(vitima.root.rotation, { x: 0, y: -0.35, z: 0 }, SCENE3_AT);
+
+      tl.set(juiz.root.position, { x: 0.72, y: 0, z: -0.55 }, SCENE3_AT);
+      tl.set(juiz.root.rotation, { x: 0, y: -0.35, z: 0 }, SCENE3_AT);
+      tl.set(cartaoVermelho, { visible: true }, SCENE3_AT);
+
+      tl.set(camera.position, { x: 0, y: 1.55, z: 7.6 }, SCENE3_AT);
+      tl.set(camTarget, { x: 0, y: 0.85, z: 0.1 }, SCENE3_AT);
+
+      tl.call(() => {
+        applyFaceState(atacante, { smile: 0.9, eyeOpen: 1.1 });
+        applyFaceState(vitima, { eyeOpen: 0.3, browRaise: 0.5, browTilt: 0.6, smile: -0.8, mouthOpen: 0.6 });
+        applyFaceState(juiz, { eyeOpen: 1.2, browRaise: -0.5, browTilt: -0.7, smile: -0.6, mouthOpen: 0.2 });
+      }, null, SCENE3_AT);
+
+      const scene3AnimState = { t: 0 };
+      tl.fromTo(scene3AnimState,
+        { t: 0 },
+        { t: 5.0, duration: 5.0, ease: "none" },
+        SCENE3_AT
       );
 
       // Registra a timeline no HyperFrames
@@ -466,7 +581,47 @@
       tl.seek(0);
 
       // Loop do Three.js
+      const _pAtacante = new THREE.Vector3();
+      const _pVitima = new THREE.Vector3();
+      function smoothstep01(e0, e1, x) {
+        const u = Math.max(0, Math.min(1, (x - e0) / (e1 - e0)));
+        return u * u * (3 - 2 * u);
+      }
+
       function loop() {
+        const t = tl.time();
+        if (t < CUT_AT) {
+          if (t < 0.85) {
+            correndoRetargeter.apply(atacante, t, true);
+          } else {
+            carrinhoRetargeter.apply(atacante, t - 0.85, false);
+          }
+          if (t < 1.50) {
+            correndoRetargeter.apply(vitima, t + 0.25, true);
+          } else {
+            levandoRetargeter.apply(vitima, t - 1.50, false);
+          }
+          // Câmera segue primeiro a atacante e, após o impacto (1.50s), passa a seguir a vítima
+          atacante.joints.hips.getWorldPosition(_pAtacante);
+          vitima.joints.hips.getWorldPosition(_pVitima);
+          const alpha = smoothstep01(1.45, 1.85, t);
+          const fx = THREE.MathUtils.lerp(_pAtacante.x, _pVitima.x, alpha);
+          const fy = THREE.MathUtils.lerp(Math.max(0.45, _pAtacante.y), Math.max(0.45, _pVitima.y), alpha);
+          const fz = THREE.MathUtils.lerp(_pAtacante.z, _pVitima.z, alpha);
+          camTarget.set(fx, fy, fz);
+          camera.position.set(fx, 1.25, 6.2);
+        } else if (t < SCENE3_AT) {
+          capoeiraRetargeter.apply(juiz, t - CUT_AT, true);
+        } else {
+          // Cena 3: plano aberto com as 2 animações + juiz parado olhando para a mulher de vermelho
+          salsaRetargeter.apply(atacante, t - SCENE3_AT, true);
+          machucadoRetargeter.apply(vitima, t - SCENE3_AT, true);
+          resetPose(juiz);
+          juiz.joints.armR.rotation.set(2.75, 0.05, 0.12);
+          juiz.joints.forearmR.rotation.set(0.15, 0, 0);
+          juiz.joints.head.rotation.set(0.08, -0.55, 0);
+          juiz.joints.neck.rotation.set(0, -0.15, 0);
+        }
         camera.lookAt(camTarget);
         renderer.render(scene, camera);
         requestAnimationFrame(loop);
