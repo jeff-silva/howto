@@ -159,7 +159,7 @@ export function makeCharacter(userConfig = {}) {
   joints.hips.add(torsoMesh);
   root.updateMatrixWorld(true);
   torsoMesh.bind(new THREE.Skeleton([joints.hips, joints.spine, joints.chest]));
-  mesh(cylinder(0.05, 0.055, 0.1, 7), c.skin, { pos: [0, 0.03, 0], parent: joints.neck });
+  mesh(cylinder(0.05, 0.055, 0.1, 14), c.skin, { pos: [0, 0.03, 0], parent: joints.neck });
 
   // ---- braços ----
   for (const side of ['L', 'R']) {
@@ -169,14 +169,17 @@ export function makeCharacter(userConfig = {}) {
     mesh(sphere(0.055), c.skin, { pos: [0, -0.035, 0], parent: joints['hand' + side] });
   }
 
-  // ---- pernas ----
+  // ---- pernas (cilindros suaves + joelho esférico) ----
   for (const side of ['L', 'R']) {
-    mesh(rbox(0.145 * w, 0.32, 0.145, 0.05), c.bottom.type === 'skirt' ? c.skin : bottomColor, { pos: [0, -0.14, 0], parent: joints['leg' + side] });
-    mesh(rbox(0.12 * w, 0.3, 0.12, 0.04), legsCovered ? bottomColor : c.skin, { pos: [0, -0.13, 0], parent: joints['shin' + side] });
+    const thighColor = c.bottom.type === 'skirt' ? c.skin : bottomColor;
+    const shinColor = legsCovered ? bottomColor : c.skin;
+    mesh(cylinder(0.072 * w, 0.062 * w, 0.32, 16), thighColor, { pos: [0, -0.14, 0], parent: joints['leg' + side] });
+    mesh(sphere(0.061 * w, 12, 8), shinColor, { pos: [0, 0, 0], parent: joints['shin' + side] });
+    mesh(cylinder(0.060 * w, 0.048 * w, 0.3, 16), shinColor, { pos: [0, -0.13, 0], parent: joints['shin' + side] });
     mesh(rbox(0.14 * w, 0.11, 0.25, 0.045), c.shoes, { pos: [0, -0.045, 0.05], parent: joints['foot' + side] });
   }
   if (c.bottom.type === 'skirt') {
-    mesh(cylinder(0.2 * w, 0.28 * w, 0.26, 9), bottomColor, { pos: [0, -0.07, 0], parent: joints.hips });
+    mesh(cylinder(0.2 * w, 0.28 * w, 0.26, 18), bottomColor, { pos: [0, -0.07, 0], parent: joints.hips });
   }
 
   // ---- cabeça ----
