@@ -1,14 +1,67 @@
+<!--
+Cena 1:
+Texto: Você precisa fazer um video explicativo, com imagens e gráficos.
+Imagem: Cena começa com 3 nubens (balões de pensamento) apenas enquadradas,
+mostrando respectivamente um gráfico, um quadro com uma imagem e interrogações.
+A camera desce e enquadra o personagem da cintura pra cima
+fazendo essa expressão com suor na testa: 😬
+
+Cena 1:
+Texto: Mas não fala bem para a câmera, nem domina muito ferramentas de edição.
+Imagem:
+
+Cena 2:
+Texto: Essa é a animação explicativa.
+Imagem:
+
+Cena 3:
+Texto: São animações simples, feitas sem levar muito tempo e que retém atenção.
+Imagem:
+
+Cena 4:
+Texto: Elas ajudam a entender algo detalhadamente.
+Imagem:
+
+Cena 5:
+Texto: É uma ótima ferramenta para explicar como funciona um serviço.
+Imagem:
+
+Cena 6:
+Texto: Ou ainda, dar detalhes sobre como participar de uma promoção.
+Imagem:
+
+Cena 7:
+Texto: Ou talvez comparar seu produto com o da concorrência.
+Imagem:
+
+Cena 8:
+Texto: A ideia, você decide. A execução é com a Labscript.
+Imagem:
+
+Cena 9:
+Texto: Você pede e a Lab cria o video pra você em até um dia.
+Imagem:
+
+Cena 10:
+Texto: Rápido, fácil e sem gastar muito.
+Imagem:
+
+Cena 11:
+Texto: Fale com a Lab, vamos colocar sua ideia em prática.
+Imagem:
+
+-->
 <!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>Animações 3D Sob Medida - Labscript Studio</title>
+    <title>Animação Explicativa 3D - Labscript</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=JetBrains+Mono:wght@600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=JetBrains+Mono:wght@600;700&display=swap"
       rel="stylesheet"
     />
 
@@ -60,7 +113,7 @@
         inset: 0;
         z-index: 5;
         pointer-events: none;
-        background: radial-gradient(circle at 50% 50%, transparent 55%, rgba(3, 5, 12, 0.82) 100%);
+        background: radial-gradient(circle at 50% 50%, transparent 56%, rgba(3, 5, 12, 0.78) 100%);
       }
 
       .flash-fx {
@@ -72,48 +125,110 @@
         pointer-events: none;
       }
 
-      /* Card de Apresentação do Serviço de Animação 3D */
-      .card-studio {
+      .hud-top {
         position: absolute;
-        top: 200px;
-        left: 50%;
-        transform: translateX(-50%);
+        top: 110px;
+        left: 70px;
+        right: 70px;
         z-index: 20;
-        background: rgba(15, 23, 42, 0.92);
-        border: 2px solid rgba(236, 72, 153, 0.5);
-        padding: 26px 44px;
-        border-radius: 28px;
-        backdrop-filter: blur(18px);
-        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8);
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 10px;
-        opacity: 0;
-        transform: translate(-50%, -20px) scale(0.9);
+        gap: 14px;
         pointer-events: none;
       }
 
-      .badge-studio {
+      .pill-topic {
         font-family: "JetBrains Mono", monospace;
-        font-size: 20px;
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
         color: #f472b6;
+        background: rgba(15, 23, 42, 0.88);
+        border: 2px solid rgba(244, 114, 182, 0.45);
+        padding: 12px 28px;
+        border-radius: 999px;
+      }
+
+      .title-topic {
+        font-size: 52px;
+        font-weight: 900;
+        color: #ffffff;
+        text-align: center;
+        line-height: 1.12;
+        text-shadow: 0 8px 30px rgba(0, 0, 0, 0.75);
+      }
+
+      .cta-card {
+        position: absolute;
+        top: 250px;
+        left: 80px;
+        right: 80px;
+        z-index: 22;
+        background: rgba(15, 23, 42, 0.94);
+        border: 2px solid rgba(56, 189, 248, 0.55);
+        border-radius: 28px;
+        padding: 32px 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        opacity: 0;
+        pointer-events: none;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.75);
+      }
+
+      .cta-badge {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 22px;
+        color: #38bdf8;
         letter-spacing: 2px;
         text-transform: uppercase;
       }
 
-      .title-studio {
-        font-size: 42px;
+      .cta-main {
+        font-size: 48px;
         font-weight: 900;
         color: #ffffff;
         text-align: center;
         line-height: 1.15;
       }
 
-      .subtitle-studio {
-        color: #38bdf8;
-        font-size: 26px;
+      .cta-sub {
+        font-size: 28px;
         font-weight: 800;
+        color: #facc15;
+        text-align: center;
+      }
+
+      .subtitle-wrap {
+        position: absolute;
+        bottom: 165px;
+        left: 60px;
+        right: 60px;
+        z-index: 25;
+        display: flex;
+        justify-content: center;
+        pointer-events: none;
+      }
+
+      .subtitle-box {
+        background: rgba(6, 9, 19, 0.86);
+        border: 2px solid rgba(255, 255, 255, 0.14);
+        border-radius: 22px;
+        padding: 18px 30px;
+        font-size: 40px;
+        font-weight: 900;
+        line-height: 1.25;
+        color: #e2e8f0;
+        text-align: center;
+        max-width: 960px;
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65);
+      }
+
+      .subtitle-box .w-active {
+        color: #facc15;
       }
     </style>
   </head>
@@ -122,18 +237,28 @@
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="12"
+      data-duration="44.2"
       data-width="1080"
       data-height="1920"
     >
+      <audio id="narration" src="./assets/tts/labscript-animation/audio.mp3" data-start="0"></audio>
       <canvas id="tela3d" data-start="0" data-track-index="0"></canvas>
       <div class="vinheta"></div>
       <div class="flash-fx" data-start="0" data-track-index="1"></div>
 
-      <div class="card-studio clip" data-start="0" data-duration="12">
-        <div class="badge-studio">LABSCRIPT 3D & MOTION</div>
-        <div class="title-studio">Vídeos 3D que Retêm & Vendem</div>
-        <div class="subtitle-studio">Reels • TikTok • Shorts • Explainer</div>
+      <div class="hud-top">
+        <div id="hud-pill" class="pill-topic">VÍDEO EXPLICATIVO</div>
+        <div id="hud-title" class="title-topic">Imagens &amp; Gráficos 3D</div>
+      </div>
+
+      <div id="cta-card" class="cta-card">
+        <div class="cta-badge">LABSCRIPT • ATÉ 1 DIA</div>
+        <div class="cta-main">Fale com a Lab</div>
+        <div class="cta-sub">Rápido, fácil e sem gastar muito</div>
+      </div>
+
+      <div class="subtitle-wrap">
+        <div id="subtitle-box" class="subtitle-box"></div>
       </div>
     </div>
 
@@ -142,7 +267,7 @@
       import { makeCharacter, applyFaceState } from './3d/characters/makeCharacter.js';
 
       // ==========================================
-      // 1. SETUP DO THREE.JS (CANVAS VERTICAL 1080x1920)
+      // 1. SETUP DO THREE.JS (1080x1920)
       // ==========================================
       const canvas = document.getElementById('tela3d');
       const W = 1080;
@@ -158,233 +283,620 @@
 
       const scene = new THREE.Scene();
       scene.background = new THREE.Color('#070b16');
-      scene.fog = new THREE.FogExp2('#070b16', 0.035);
+      scene.fog = new THREE.FogExp2('#070b16', 0.032);
 
-      const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 100);
+      const camera = new THREE.PerspectiveCamera(42, W / H, 0.1, 100);
+      const camTarget = new THREE.Vector3(0, 1.05, 0);
 
-      // Iluminação de Estúdio Publicitário (Luzes de 3 Pontos)
-      const hemiLight = new THREE.HemisphereLight('#f472b6', '#0f172a', 0.85);
-      scene.add(hemiLight);
+      // Iluminação de estúdio 3 pontos
+      scene.add(new THREE.HemisphereLight('#c4e2ff', '#0f172a', 0.9));
 
-      const keyLight = new THREE.DirectionalLight('#ffffff', 3.0);
-      keyLight.position.set(5, 12, 7);
+      const keyLight = new THREE.DirectionalLight('#ffffff', 2.8);
+      keyLight.position.set(4.5, 11, 7);
       keyLight.castShadow = true;
       keyLight.shadow.mapSize.width = 1024;
       keyLight.shadow.mapSize.height = 1024;
       scene.add(keyLight);
 
-      const fillLight = new THREE.DirectionalLight('#38bdf8', 2.2);
-      fillLight.position.set(-6, 5, -5);
+      const fillLight = new THREE.DirectionalLight('#38bdf8', 1.9);
+      fillLight.position.set(-6, 5, -4);
       scene.add(fillLight);
 
-      const rimLight = new THREE.DirectionalLight('#ec4899', 2.0);
+      const rimLight = new THREE.DirectionalLight('#ec4899', 1.8);
       rimLight.position.set(6, 4, -6);
       scene.add(rimLight);
 
       // ==========================================
-      // 2. PALCO DO ESTÚDIO DE ANIMAÇÃO
+      // 2. PALCO PRINCIPAL
       // ==========================================
-      const grupoStudio = new THREE.Group();
-      scene.add(grupoStudio);
+      const stageGroup = new THREE.Group();
+      scene.add(stageGroup);
 
-      // Pedestal giratório moderno de exibição
       const pedestal = new THREE.Mesh(
-        new THREE.CylinderGeometry(4.2, 4.5, 0.35, 48),
-        new THREE.MeshStandardMaterial({
-          color: '#0f172a',
-          metalness: 0.6,
-          roughness: 0.3
-        })
+        new THREE.CylinderGeometry(4.6, 4.9, 0.36, 48),
+        new THREE.MeshStandardMaterial({ color: '#0f172a', metalness: 0.55, roughness: 0.35 })
       );
       pedestal.position.y = -0.18;
       pedestal.receiveShadow = true;
-      grupoStudio.add(pedestal);
+      stageGroup.add(pedestal);
 
-      // Anel de neon no contorno do pedestal
       const anelNeon = new THREE.Mesh(
-        new THREE.TorusGeometry(4.35, 0.04, 16, 64),
+        new THREE.TorusGeometry(4.7, 0.045, 16, 64),
         new THREE.MeshBasicMaterial({ color: '#ec4899' })
       );
       anelNeon.rotation.x = Math.PI / 2;
-      grupoStudio.add(anelNeon);
+      stageGroup.add(anelNeon);
 
-      // Claquete de Cinema 3D Decorativa
-      const grupoClaquete = new THREE.Group();
-      grupoClaquete.position.set(-2.2, 0.45, 1.2);
-      grupoClaquete.rotation.y = Math.PI / 6;
-
-      const corpoClaquete = new THREE.Mesh(
-        new THREE.BoxGeometry(0.85, 0.65, 0.08),
-        new THREE.MeshStandardMaterial({ color: '#18181b', roughness: 0.4 })
-      );
-      corpoClaquete.castShadow = true;
-      grupoClaquete.add(corpoClaquete);
-
-      const barraTopo = new THREE.Mesh(
-        new THREE.BoxGeometry(0.85, 0.14, 0.09),
-        new THREE.MeshStandardMaterial({ color: '#facc15', roughness: 0.3 })
-      );
-      barraTopo.position.y = 0.38;
-      grupoClaquete.add(barraTopo);
-
-      grupoStudio.add(grupoClaquete);
-
-      // Câmera de Cinema Estilizada em Tripé
-      const grupoCam = new THREE.Group();
-      grupoCam.position.set(2.4, 0.8, 1.0);
-      grupoCam.rotation.y = -Math.PI / 4;
-
-      const camCorpo = new THREE.Mesh(
-        new THREE.BoxGeometry(0.65, 0.45, 0.85),
-        new THREE.MeshStandardMaterial({ color: '#27272a', metalness: 0.8, roughness: 0.2 })
-      );
-      camCorpo.castShadow = true;
-      grupoCam.add(camCorpo);
-
-      const lente = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.18, 0.22, 0.4, 16),
-        new THREE.MeshStandardMaterial({ color: '#09090b', metalness: 0.9, roughness: 0.1 })
-      );
-      lente.rotation.x = Math.PI / 2;
-      lente.position.z = -0.55;
-      grupoCam.add(lente);
-
-      grupoStudio.add(grupoCam);
+      const gridHelper = new THREE.GridHelper(28, 28, '#1e293b', '#0f172a');
+      gridHelper.position.y = -0.36;
+      scene.add(gridHelper);
 
       // ==========================================
-      // 3. PERSONAGEM CRIATIVO / ANIMADOR LABSCRIPT
+      // 3. PERSONAGENS (CLIENTE + ANIMADOR LABSCRIPT)
       // ==========================================
+      const cliente = makeCharacter({
+        name: 'cliente',
+        skin: '#e8be9e',
+        height: 1.0,
+        build: 0.95,
+        top: { color: '#2563eb', sleeves: 'short' },
+        bottom: { color: '#1e293b', type: 'pants' },
+        shoes: '#e2e8f0',
+        hair: { style: 'short', color: '#292524' },
+        face: { glasses: false }
+      });
+      scene.add(cliente.root);
+
       const animador = makeCharacter({
         name: 'animador',
         skin: '#f3cfae',
-        height: 1.05,
-        build: 0.95,
-        top: {
-          color: '#ec4899', // Moletom Rosa/Magenta Moderno
-          sleeves: 'long'
-        },
-        bottom: {
-          color: '#18181b', // Calça preta
-          type: 'pants'
-        },
-        shoes: '#ffffff', // Tênis branco moderno
-        hair: {
-          style: 'curly',
-          color: '#262626'
-        },
-        hat: {
-          type: 'cap',
-          color: '#0284c7' // Boné estiloso virado pra trás
-        },
-        face: {
-          glasses: true
+        height: 1.04,
+        build: 0.96,
+        top: { color: '#ec4899', sleeves: 'long' },
+        bottom: { color: '#18181b', type: 'pants' },
+        shoes: '#ffffff',
+        hair: { style: 'curly', color: '#262626' },
+        hat: { type: 'cap', color: '#0284c7' },
+        face: { glasses: true }
+      });
+      scene.add(animador.root);
+
+      function resetPose(ch) {
+        ch.joints.hips.position.set(0, 0.68, 0);
+        for (const j of Object.values(ch.joints)) {
+          j.rotation.set(0, 0, 0);
         }
-      });
-
-      animador.root.position.set(0, 0, 0);
-      grupoStudio.add(animador.root);
-
-      // Expressão amigável e confiante
-      applyFaceState(animador, {
-        eyeOpen: 1.1,
-        browRaise: 0.2,
-        smile: 0.8,
-        mouthOpen: 0.05
-      });
+      }
 
       // ==========================================
-      // 4. TIMELINE GSAP: APRESENTAÇÃO DO SERVIÇO
+      // 4. PROPS 3D DAS CENAS EXPLICATIVAS
       // ==========================================
-      window.__timelines = window.__timelines || {};
+      // 4A. Cena 1: Gota de suor na testa + Nuvens de ideias com gráficos e exclamações (0s - 4.42s)
+      const sweatDrop = new THREE.Group();
+      const sweatMat = new THREE.MeshStandardMaterial({
+        color: '#38bdf8',
+        emissive: '#0284c7',
+        emissiveIntensity: 0.45,
+        roughness: 0.15,
+        metalness: 0.1
+      });
+      const sweatBall = new THREE.Mesh(new THREE.SphereGeometry(0.036, 14, 14), sweatMat);
+      const sweatTip = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.075, 14), sweatMat);
+      sweatTip.position.y = 0.042;
+      sweatDrop.add(sweatBall, sweatTip);
+      sweatDrop.position.set(0.14, 0.15, 0.21);
+      sweatDrop.visible = false;
+      cliente.joints.head.add(sweatDrop);
+
+      const propCharts = new THREE.Group();
+      scene.add(propCharts);
+
+      function makeCloudCluster(scale = 1) {
+        const g = new THREE.Group();
+        const cloudMat = new THREE.MeshStandardMaterial({ color: '#f8fafc', roughness: 0.55, emissive: '#e2e8f0', emissiveIntensity: 0.18 });
+        const puffs = [
+          [0, 0, 0, 0.24],
+          [-0.20, -0.02, 0.02, 0.18],
+          [0.20, -0.02, 0.02, 0.18],
+          [-0.10, 0.13, 0.02, 0.17],
+          [0.10, 0.13, 0.02, 0.17]
+        ];
+        for (const [px, py, pz, r] of puffs) {
+          const m = new THREE.Mesh(new THREE.SphereGeometry(r * scale, 16, 14), cloudMat);
+          m.position.set(px * scale, py * scale, pz * scale);
+          m.scale.z = 0.55;
+          g.add(m);
+        }
+        return g;
+      }
+
+      function makeExclamation(colorHex = '#ef4444', scale = 1) {
+        const g = new THREE.Group();
+        const mat = new THREE.MeshStandardMaterial({ color: colorHex, emissive: colorHex, emissiveIntensity: 0.35, roughness: 0.3 });
+        const stem = new THREE.Mesh(new THREE.BoxGeometry(0.045 * scale, 0.16 * scale, 0.045 * scale), mat);
+        stem.position.y = 0.06 * scale;
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.028 * scale, 10, 10), mat);
+        dot.position.y = -0.06 * scale;
+        g.add(stem, dot);
+        return g;
+      }
+
+      // Nuvem esquerda: mini gráfico de barras + exclamação
+      const cloudLeft = makeCloudCluster(1.05);
+      cloudLeft.position.set(-0.58, 1.98, 0.08);
+      const barColors = ['#38bdf8', '#f472b6', '#facc15'];
+      const barMeshes = [];
+      for (let i = 0; i < 3; i++) {
+        const bm = new THREE.Mesh(
+          new THREE.BoxGeometry(0.065, 0.22, 0.05),
+          new THREE.MeshStandardMaterial({ color: barColors[i], emissive: barColors[i], emissiveIntensity: 0.2, roughness: 0.3 })
+        );
+        bm.position.set(-0.11 + i * 0.085, -0.02, 0.14);
+        cloudLeft.add(bm);
+        barMeshes.push(bm);
+      }
+      const exclLeft = makeExclamation('#ef4444', 0.9);
+      exclLeft.position.set(0.17, 0.02, 0.15);
+      exclLeft.rotation.z = -0.15;
+      cloudLeft.add(exclLeft);
+      const dotL1 = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 10), new THREE.MeshStandardMaterial({ color: '#f8fafc' }));
+      dotL1.position.set(0.24, -0.25, 0.02);
+      cloudLeft.add(dotL1);
+      propCharts.add(cloudLeft);
+
+      // Nuvem direita: quadro de imagem + exclamações
+      const cloudRight = makeCloudCluster(1.05);
+      cloudRight.position.set(0.58, 1.98, 0.08);
+      const imgFrame = new THREE.Mesh(
+        new THREE.BoxGeometry(0.26, 0.19, 0.04),
+        new THREE.MeshStandardMaterial({ color: '#1e293b', roughness: 0.4 })
+      );
+      imgFrame.position.set(-0.06, 0.0, 0.14);
+      const imgSky = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.15, 0.045), new THREE.MeshBasicMaterial({ color: '#38bdf8' }));
+      const imgSun = new THREE.Mesh(new THREE.SphereGeometry(0.028, 10, 10), new THREE.MeshBasicMaterial({ color: '#facc15' }));
+      imgSun.position.set(0.05, 0.03, 0.025);
+      const imgHill = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.08, 3), new THREE.MeshBasicMaterial({ color: '#22c55e' }));
+      imgHill.position.set(-0.03, -0.025, 0.025);
+      imgFrame.add(imgSky, imgSun, imgHill);
+      cloudRight.add(imgFrame);
+      const exclRight = makeExclamation('#f97316', 0.9);
+      exclRight.position.set(0.16, 0.02, 0.15);
+      exclRight.rotation.z = 0.15;
+      cloudRight.add(exclRight);
+      const dotR1 = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 10), new THREE.MeshStandardMaterial({ color: '#f8fafc' }));
+      dotR1.position.set(-0.24, -0.25, 0.02);
+      cloudRight.add(dotR1);
+      propCharts.add(cloudRight);
+
+      // Nuvem topo: exclamações de pressão
+      const cloudTop = makeCloudCluster(0.85);
+      cloudTop.position.set(0.0, 2.34, -0.08);
+      const exclT1 = makeExclamation('#ef4444', 0.95);
+      exclT1.position.set(-0.06, 0.02, 0.13);
+      exclT1.rotation.z = 0.12;
+      const exclT2 = makeExclamation('#facc15', 0.95);
+      exclT2.position.set(0.06, 0.02, 0.13);
+      exclT2.rotation.z = -0.12;
+      cloudTop.add(exclT1, exclT2);
+      propCharts.add(cloudTop);
+
+      // 4B. Câmera intimidadora + blocos de timeline complexa (4.4s - 8.8s)
+      const propCameraStress = new THREE.Group();
+      scene.add(propCameraStress);
+      const bigCam = new THREE.Group();
+      bigCam.position.set(1.1, 1.35, 0.55);
+      bigCam.rotation.y = -0.65;
+      const camBody = new THREE.Mesh(
+        new THREE.BoxGeometry(0.55, 0.4, 0.72),
+        new THREE.MeshStandardMaterial({ color: '#334155', metalness: 0.7, roughness: 0.25 })
+      );
+      const camLens = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.16, 0.2, 0.35, 16),
+        new THREE.MeshStandardMaterial({ color: '#09090b', metalness: 0.9, roughness: 0.1 })
+      );
+      camLens.rotation.x = Math.PI / 2;
+      camLens.position.z = 0.45;
+      const recDot = new THREE.Mesh(
+        new THREE.SphereGeometry(0.06, 12, 12),
+        new THREE.MeshBasicMaterial({ color: '#ef4444' })
+      );
+      recDot.position.set(0.2, 0.16, 0.32);
+      bigCam.add(camBody, camLens, recDot);
+      propCameraStress.add(bigCam);
+
+      const timelineBars = [];
+      for (let i = 0; i < 6; i++) {
+        const tb = new THREE.Mesh(
+          new THREE.BoxGeometry(0.55 + (i % 3) * 0.2, 0.1, 0.06),
+          new THREE.MeshStandardMaterial({ color: i % 2 === 0 ? '#f43f5e' : '#f59e0b', roughness: 0.4 })
+        );
+        tb.position.set(-1.05 + (i % 2) * 0.35, 0.95 + i * 0.18, 0.15);
+        propCameraStress.add(tb);
+        timelineBars.push(tb);
+      }
+
+      // 4C. Órbita simples + atenção (8.8s - 19.1s)
+      const propExplainer = new THREE.Group();
+      scene.add(propExplainer);
+      const playTri = new THREE.Mesh(
+        new THREE.ConeGeometry(0.32, 0.48, 3),
+        new THREE.MeshStandardMaterial({ color: '#facc15', roughness: 0.25, metalness: 0.3 })
+      );
+      playTri.rotation.z = -Math.PI / 2;
+      playTri.position.set(-1.15, 1.55, 0.2);
+      const gearGroup = new THREE.Group();
+      gearGroup.position.set(1.15, 1.45, 0.1);
+      const gearCore = new THREE.Mesh(
+        new THREE.TorusGeometry(0.3, 0.09, 12, 24),
+        new THREE.MeshStandardMaterial({ color: '#38bdf8', metalness: 0.5, roughness: 0.3 })
+      );
+      gearGroup.add(gearCore);
+      for (let i = 0; i < 6; i++) {
+        const tooth = new THREE.Mesh(
+          new THREE.BoxGeometry(0.14, 0.14, 0.14),
+          new THREE.MeshStandardMaterial({ color: '#ec4899', roughness: 0.3 })
+        );
+        const ang = (i / 6) * Math.PI * 2;
+        tooth.position.set(Math.cos(ang) * 0.4, Math.sin(ang) * 0.4, 0);
+        gearGroup.add(tooth);
+      }
+      propExplainer.add(playTri, gearGroup);
+
+      // 4D. Serviço: 3 etapas conectadas (19.1s - 22.9s)
+      const propService = new THREE.Group();
+      scene.add(propService);
+      const stepColors = ['#38bdf8', '#a855f7', '#34d399'];
+      for (let i = 0; i < 3; i++) {
+        const card = new THREE.Mesh(
+          new THREE.BoxGeometry(0.55, 0.55, 0.12),
+          new THREE.MeshStandardMaterial({ color: stepColors[i], roughness: 0.35 })
+        );
+        card.position.set(-1.15 + i * 1.15, 1.85, -0.35);
+        propService.add(card);
+        if (i < 2) {
+          const link = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.03, 0.03, 0.55, 8),
+            new THREE.MeshBasicMaterial({ color: '#ffffff' })
+          );
+          link.rotation.z = Math.PI / 2;
+          link.position.set(-0.57 + i * 1.15, 1.85, -0.35);
+          propService.add(link);
+        }
+      }
+
+      // 4E. Promoção: caixa de presente / estrela 3D (22.9s - 26.8s)
+      const propPromo = new THREE.Group();
+      scene.add(propPromo);
+      const giftBox = new THREE.Mesh(
+        new THREE.BoxGeometry(0.72, 0.62, 0.72),
+        new THREE.MeshStandardMaterial({ color: '#ec4899', roughness: 0.3 })
+      );
+      giftBox.position.set(1.05, 0.35, 0.35);
+      const ribbon1 = new THREE.Mesh(
+        new THREE.BoxGeometry(0.75, 0.65, 0.14),
+        new THREE.MeshStandardMaterial({ color: '#facc15', roughness: 0.2 })
+      );
+      const ribbon2 = new THREE.Mesh(
+        new THREE.BoxGeometry(0.14, 0.65, 0.75),
+        new THREE.MeshStandardMaterial({ color: '#facc15', roughness: 0.2 })
+      );
+      giftBox.add(ribbon1, ribbon2);
+      const promoStar = new THREE.Mesh(
+        new THREE.OctahedronGeometry(0.32, 0),
+        new THREE.MeshStandardMaterial({ color: '#facc15', emissive: '#ca8a04', emissiveIntensity: 0.5 })
+      );
+      promoStar.position.set(1.05, 1.35, 0.35);
+      propPromo.add(giftBox, promoStar);
+
+      // 4F. Comparação: Produto vs Concorrência (26.8s - 30.0s)
+      const propCompare = new THREE.Group();
+      scene.add(propCompare);
+      const compBarBad = new THREE.Mesh(
+        new THREE.BoxGeometry(0.48, 0.65, 0.48),
+        new THREE.MeshStandardMaterial({ color: '#475569', roughness: 0.8 })
+      );
+      compBarBad.position.set(-0.85, 0.32, 0.15);
+      const compBarGood = new THREE.Mesh(
+        new THREE.BoxGeometry(0.55, 1.75, 0.55),
+        new THREE.MeshStandardMaterial({ color: '#22c55e', emissive: '#15803d', emissiveIntensity: 0.35, roughness: 0.25 })
+      );
+      compBarGood.position.set(0.85, 0.88, 0.15);
+      const crown = new THREE.Mesh(
+        new THREE.ConeGeometry(0.24, 0.34, 5),
+        new THREE.MeshStandardMaterial({ color: '#facc15', metalness: 0.6, roughness: 0.2 })
+      );
+      crown.position.set(0.85, 2.0, 0.15);
+      propCompare.add(compBarBad, compBarGood, crown);
+
+      // 4G. Ideia + Claquete + 1 Dia (30.0s - 44.2s)
+      const propIdea = new THREE.Group();
+      scene.add(propIdea);
+      const bulb = new THREE.Mesh(
+        new THREE.SphereGeometry(0.22, 16, 16),
+        new THREE.MeshStandardMaterial({ color: '#fef08a', emissive: '#facc15', emissiveIntensity: 1.4 })
+      );
+      bulb.position.set(-0.75, 2.05, 0);
+      propIdea.add(bulb);
+
+      const propClaquete = new THREE.Group();
+      propClaquete.position.set(0, 0.38, 0.65);
+      propClaquete.scale.setScalar(0.72);
+      propClaquete.rotation.y = 0.15;
+      const claqBody = new THREE.Mesh(
+        new THREE.BoxGeometry(0.75, 0.55, 0.08),
+        new THREE.MeshStandardMaterial({ color: '#18181b', roughness: 0.4 })
+      );
+      const claqTop = new THREE.Mesh(
+        new THREE.BoxGeometry(0.75, 0.13, 0.09),
+        new THREE.MeshStandardMaterial({ color: '#facc15', roughness: 0.3 })
+      );
+      claqTop.position.y = 0.34;
+      propClaquete.add(claqBody, claqTop);
+      scene.add(propClaquete);
+
+      function hideAllProps() {
+        propCharts.visible = false;
+        propCameraStress.visible = false;
+        propExplainer.visible = false;
+        propService.visible = false;
+        propPromo.visible = false;
+        propCompare.visible = false;
+        propIdea.visible = false;
+        propClaquete.visible = false;
+      }
+
+      // ==========================================
+      // 5. LEGENDAS SINCRONIZADAS (subtitles.json)
+      // ==========================================
+      const SUBTITLES = [
+        { s: 0.0, e: 2.32, words: [{ t: "Você", s: 0, e: 0.22 }, { t: "precisa", s: 0.22, e: 0.7 }, { t: "fazer", s: 0.7, e: 0.96 }, { t: "um", s: 0.96, e: 1.14 }, { t: "vídeo", s: 1.14, e: 1.5 }, { t: "explicativo", s: 1.5, e: 2.32 }] },
+        { s: 2.32, e: 4.42, words: [{ t: "com", s: 2.32, e: 2.66 }, { t: "imagens", s: 2.66, e: 3.24 }, { t: "e", s: 3.24, e: 3.48 }, { t: "gráficos.", s: 3.48, e: 4.42 }] },
+        { s: 4.42, e: 6.24, words: [{ t: "Mas", s: 4.42, e: 4.58 }, { t: "não", s: 4.58, e: 4.78 }, { t: "fala", s: 4.78, e: 5.08 }, { t: "bem", s: 5.08, e: 5.34 }, { t: "para", s: 5.34, e: 5.52 }, { t: "a", s: 5.52, e: 5.58 }, { t: "câmera,", s: 5.58, e: 6.24 }] },
+        { s: 6.24, e: 8.78, words: [{ t: "nem", s: 6.24, e: 6.34 }, { t: "domina", s: 6.34, e: 6.76 }, { t: "muito", s: 6.76, e: 7.2 }, { t: "ferramentas", s: 7.2, e: 7.78 }, { t: "de", s: 7.78, e: 7.92 }, { t: "edição.", s: 7.92, e: 8.78 }] },
+        { s: 8.84, e: 11.22, words: [{ t: "Essa", s: 8.84, e: 9.12 }, { t: "é", s: 9.12, e: 9.2 }, { t: "a", s: 9.2, e: 9.28 }, { t: "animação", s: 9.28, e: 9.86 }, { t: "explicativa.", s: 9.86, e: 11.22 }] },
+        { s: 11.4, e: 15.84, words: [{ t: "São", s: 11.4, e: 11.6 }, { t: "animações", s: 11.6, e: 11.92 }, { t: "simples,", s: 11.92, e: 12.78 }, { t: "feitas", s: 12.78, e: 13.1 }, { t: "sem", s: 13.1, e: 13.3 }, { t: "levar", s: 13.3, e: 13.6 }, { t: "muito", s: 13.6, e: 13.95 }, { t: "tempo", s: 13.95, e: 14.35 }, { t: "e", s: 14.35, e: 14.5 }, { t: "que", s: 14.5, e: 14.65 }, { t: "retêm", s: 14.65, e: 14.9 }, { t: "atenção.", s: 14.9, e: 15.84 }] },
+        { s: 16.0, e: 19.1, words: [{ t: "Elas", s: 16.0, e: 16.3 }, { t: "ajudam", s: 16.3, e: 16.7 }, { t: "a", s: 16.7, e: 16.8 }, { t: "entender", s: 16.8, e: 17.3 }, { t: "algo", s: 17.3, e: 17.56 }, { t: "detalhadamente.", s: 17.56, e: 19.1 }] },
+        { s: 19.3, e: 22.9, words: [{ t: "É", s: 19.3, e: 19.45 }, { t: "uma", s: 19.45, e: 19.65 }, { t: "ótima", s: 19.65, e: 20.0 }, { t: "ferramenta", s: 20.0, e: 20.6 }, { t: "para", s: 20.6, e: 20.85 }, { t: "explicar", s: 20.85, e: 21.35 }, { t: "como", s: 21.35, e: 21.6 }, { t: "funciona", s: 21.6, e: 21.82 }, { t: "um", s: 21.82, e: 22.1 }, { t: "serviço.", s: 22.1, e: 22.9 }] },
+        { s: 22.92, e: 26.8, words: [{ t: "Ou", s: 22.92, e: 23.2 }, { t: "ainda,", s: 23.2, e: 23.72 }, { t: "dar", s: 23.72, e: 24.0 }, { t: "detalhes", s: 24.0, e: 24.55 }, { t: "sobre", s: 24.55, e: 24.9 }, { t: "como", s: 24.9, e: 25.15 }, { t: "participar", s: 25.15, e: 25.6 }, { t: "de", s: 25.6, e: 25.7 }, { t: "uma", s: 25.7, e: 25.8 }, { t: "promoção.", s: 25.8, e: 26.8 }] },
+        { s: 26.9, e: 29.98, words: [{ t: "Ou", s: 26.9, e: 27.1 }, { t: "talvez", s: 27.1, e: 27.5 }, { t: "comparar", s: 27.5, e: 28.05 }, { t: "seu", s: 28.05, e: 28.3 }, { t: "produto", s: 28.3, e: 28.7 }, { t: "com", s: 28.7, e: 28.86 }, { t: "o", s: 28.86, e: 29.0 }, { t: "da", s: 29.0, e: 29.15 }, { t: "concorrência.", s: 29.15, e: 29.98 }] },
+        { s: 30.06, e: 32.16, words: [{ t: "A", s: 30.06, e: 30.2 }, { t: "ideia,", s: 30.2, e: 30.76 }, { t: "você", s: 30.76, e: 31.1 }, { t: "decide.", s: 31.1, e: 32.16 }] },
+        { s: 32.25, e: 33.76, words: [{ t: "A", s: 32.25, e: 32.4 }, { t: "execução", s: 32.4, e: 33.0 }, { t: "é", s: 33.0, e: 33.15 }, { t: "com", s: 33.15, e: 33.32 }, { t: "a", s: 33.32, e: 33.42 }, { t: "Labscript.", s: 33.42, e: 33.76 }] },
+        { s: 33.9, e: 37.58, words: [{ t: "Você", s: 33.9, e: 34.25 }, { t: "pede", s: 34.25, e: 34.65 }, { t: "e", s: 34.65, e: 34.8 }, { t: "a", s: 34.8, e: 34.95 }, { t: "Lab", s: 34.95, e: 35.3 }, { t: "cria", s: 35.3, e: 35.7 }, { t: "o", s: 35.7, e: 35.85 }, { t: "vídeo", s: 35.85, e: 36.25 }, { t: "pra", s: 36.25, e: 36.45 }, { t: "você", s: 36.45, e: 36.75 }, { t: "em", s: 36.75, e: 36.95 }, { t: "até", s: 36.95, e: 37.28 }, { t: "um", s: 37.28, e: 37.42 }, { t: "dia.", s: 37.42, e: 37.58 }] },
+        { s: 38.08, e: 40.66, words: [{ t: "Rápido,", s: 38.08, e: 38.74 }, { t: "fácil", s: 38.74, e: 39.3 }, { t: "e", s: 39.3, e: 39.5 }, { t: "sem", s: 39.5, e: 39.82 }, { t: "gastar", s: 39.82, e: 40.25 }, { t: "muito.", s: 40.25, e: 40.66 }] },
+        { s: 40.75, e: 44.2, words: [{ t: "Fale", s: 40.75, e: 41.0 }, { t: "com", s: 41.0, e: 41.18 }, { t: "a", s: 41.18, e: 41.3 }, { t: "Lab,", s: 41.3, e: 41.74 }, { t: "vamos", s: 41.74, e: 42.15 }, { t: "colocar", s: 42.15, e: 42.55 }, { t: "sua", s: 42.55, e: 42.8 }, { t: "ideia", s: 42.8, e: 43.04 }, { t: "em", s: 43.04, e: 43.2 }, { t: "prática.", s: 43.2, e: 44.2 }] }
+      ];
+
+      const subtitleBox = document.getElementById('subtitle-box');
+      const hudPill = document.getElementById('hud-pill');
+      const hudTitle = document.getElementById('hud-title');
+
+      function updateSubtitle(t) {
+        const line = SUBTITLES.find((l) => t >= l.s && t <= l.e) || SUBTITLES[SUBTITLES.length - 1];
+        subtitleBox.innerHTML = line.words
+          .map((w) => (t >= w.s && t <= w.e ? `<span class="w-active">${w.t}</span>` : w.t))
+          .join(' ');
+      }
+
+      // ==========================================
+      // 6. TIMELINE DETERMINÍSTICA (0s a 44.2s)
+      // ==========================================
       const tl = gsap.timeline({ paused: true });
+      const state = { t: 0 };
+      tl.fromTo(state, { t: 0 }, { t: 44.2, duration: 44.2, ease: "none" }, 0);
 
-      // Câmera inicial focada e aproximando no formato 9:16
-      tl.set(camera.position, { x: 0, y: 1.45, z: 4.8 }, 0);
-      tl.call(() => {
-        camera.lookAt(0, 1.1, 0);
-      }, null, 0);
+      // Flash nas transições principais
+      for (const ft of [8.75, 19.1, 30.0, 32.2]) {
+        tl.fromTo(".flash-fx", { opacity: 0.75 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, ft);
+      }
 
-      // Entrada do Card de Oferta do Serviço
-      tl.to(".card-studio", {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.85,
-        ease: "back.out(1.5)"
-      }, 0.5);
+      // CTA card final
+      tl.fromTo("#cta-card", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "back.out(1.4)", immediateRender: false }, 33.8);
+      tl.to(".hud-top", { opacity: 0, duration: 0.4, immediateRender: false }, 33.7);
 
-      // Rotação sutil da plataforma de estúdio
-      tl.to(grupoStudio.rotation, {
-        y: Math.PI * 0.4,
-        duration: 12,
-        ease: "power1.inOut"
-      }, 0);
-
-      // Animação do Animador: Acena com a mão convidando o cliente
-      tl.to(animador.joints.armR.rotation, {
-        x: 1.5,
-        z: -0.6,
-        duration: 0.6,
-        ease: "back.out(1.5)"
-      }, 1.0);
-
-      // Aceno de mão (wave)
-      tl.to(animador.joints.forearmR.rotation, {
-        z: -0.4,
-        duration: 0.25,
-        repeat: 7,
-        yoyo: true,
-        ease: "sine.inOut"
-      }, 1.4);
-
-      // Aos 3.5s ele aponta com orgulho para o trabalho e para a câmera
-      tl.to(animador.joints.armR.rotation, {
-        x: 1.1,
-        y: -0.3,
-        z: -0.2,
-        duration: 0.6,
-        ease: "power2.out"
-      }, 3.5);
-
-      // Piscar de olhos natural
-      tl.call(() => {
-        applyFaceState(animador, { eyeOpen: 0.1, smile: 0.8 });
-      }, null, 2.5);
-      tl.call(() => {
-        applyFaceState(animador, { eyeOpen: 1.1, smile: 0.8 });
-      }, null, 2.7);
-
-      tl.call(() => {
-        applyFaceState(animador, { eyeOpen: 0.1, smile: 0.8 });
-      }, null, 5.5);
-      tl.call(() => {
-        applyFaceState(animador, { eyeOpen: 1.1, smile: 0.8 });
-      }, null, 5.7);
-
-      // Câmera faz um zoom elegante valorizando a qualidade da iluminação e do personagem
-      tl.to(camera.position, {
-        y: 1.35,
-        z: 3.4,
-        duration: 5,
-        ease: "power2.out"
-      }, 2.0);
-
-      // Claquete bate no início (ação de corte de cinema)
-      tl.to(barraTopo.rotation, {
-        z: 0.35,
-        duration: 0.3,
-        repeat: 1,
-        yoyo: true,
-        ease: "power3.in"
-      }, 0.8);
-
-      // Registra a timeline no HyperFrames
+      window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
-      tl.seek(0);
+      const _urlT = parseFloat(new URLSearchParams(window.location.search).get('t'));
+      tl.seek(Number.isFinite(_urlT) ? _urlT : 0);
+      applyDeterministicScene(tl.time());
 
-      // Loop do Three.js
+      function applyDeterministicScene(t) {
+        hideAllProps();
+        sweatDrop.visible = false;
+        resetPose(cliente);
+        resetPose(animador);
+        updateSubtitle(t);
+
+        if (t < 4.42) {
+          // CENA 1: Personagem tenso com gota de suor na testa, nuvens de ideias (gráficos + exclamações), enquadrado da cintura pra cima
+          hudPill.textContent = "VÍDEO EXPLICATIVO";
+          hudTitle.textContent = "Imagens & Gráficos";
+          cliente.root.visible = true;
+          animador.root.visible = false;
+          cliente.root.position.set(0, 0, 0.1);
+          cliente.root.rotation.set(0, 0.06, 0);
+          applyFaceState(cliente, { eyeOpen: 1.15, browRaise: 0.7, browTilt: 0.75, smile: -0.65, mouthOpen: 0.2 });
+
+          // Gota grande de suor escorrendo na testa + tremor sutil de tensão
+          sweatDrop.visible = true;
+          const dropCycle = (t % 2.2) / 2.2;
+          sweatDrop.position.set(0.14, 0.16 - dropCycle * 0.08, 0.21);
+          sweatDrop.scale.setScalar(0.95 + Math.sin(t * 5) * 0.08);
+
+          cliente.joints.head.rotation.set(0.05, Math.sin(t * 6) * 0.04, Math.sin(t * 4.5) * 0.03);
+          cliente.joints.armR.rotation.set(1.25, 0, -0.45);
+          cliente.joints.forearmR.rotation.set(-1.15 + Math.sin(t * 7) * 0.06, 0, 0);
+          cliente.joints.armL.rotation.set(1.25, 0, 0.45);
+          cliente.joints.forearmL.rotation.set(-1.15 - Math.sin(t * 7) * 0.06, 0, 0);
+
+          propCharts.visible = true;
+          barMeshes.forEach((bm, idx) => {
+            const h = 0.55 + 0.55 * Math.abs(Math.sin(t * 2.5 + idx * 0.9));
+            bm.scale.y = h;
+          });
+          cloudLeft.position.y = 1.98 + Math.sin(t * 2.6) * 0.05;
+          cloudRight.position.y = 1.98 + Math.cos(t * 2.6) * 0.05;
+          cloudTop.position.y = 2.34 + Math.sin(t * 3.2) * 0.04;
+
+          // Enquadramento da cintura para cima (com espaço acima da cabeça para as nuvens)
+          camera.position.set(Math.sin(t * 0.45) * 0.14, 1.50, 2.85 - t * 0.04);
+          camTarget.set(0, 1.46, 0);
+        } else if (t < 8.8) {
+          // CENA 1B: Medo da câmera + ferramentas de edição complexas
+          const dt = t - 4.42;
+          hudPill.textContent = "O DESAFIO";
+          hudTitle.textContent = "Câmera & Edição Difícil";
+          cliente.root.visible = true;
+          animador.root.visible = false;
+          cliente.root.position.set(-0.15, 0, 0);
+          cliente.root.rotation.set(0, 0.2, 0);
+          applyFaceState(cliente, { eyeOpen: 0.85, browRaise: 0.6, browTilt: 0.5, smile: -0.5, mouthOpen: 0.25 });
+          cliente.joints.head.rotation.set(0.12, -0.2 + Math.sin(dt * 4) * 0.08, 0.08);
+          cliente.joints.armL.rotation.set(1.8, 0, 0.3);
+          cliente.joints.forearmL.rotation.set(-1.3, 0, 0);
+          cliente.joints.armR.rotation.set(0.6, 0, -0.3);
+
+          propCameraStress.visible = true;
+          bigCam.position.y = 1.35 + Math.sin(dt * 3) * 0.06;
+          recDot.visible = Math.floor(dt * 3) % 2 === 0;
+          timelineBars.forEach((tb, idx) => {
+            tb.position.x = -1.05 + Math.sin(dt * 2.2 + idx) * 0.22;
+          });
+
+          camera.position.set(0.35, 1.4, 4.3);
+          camTarget.set(0, 1.15, 0);
+        } else if (t < 19.1) {
+          // CENA 2: Animação explicativa simples que retém atenção
+          const dt = t - 8.8;
+          hudPill.textContent = "A SOLUÇÃO";
+          hudTitle.textContent = dt < 7.0 ? "Retém Atenção" : "Explica em Detalhes";
+          cliente.root.visible = false;
+          animador.root.visible = true;
+          animador.root.position.set(0, 0, 0);
+          animador.root.rotation.set(0, Math.sin(dt * 0.5) * 0.2, 0);
+          applyFaceState(animador, { eyeOpen: 1.1, browRaise: 0.25, smile: 0.85 });
+
+          // Gesticulação apresentando
+          animador.joints.armR.rotation.set(1.25 + Math.sin(dt * 3.5) * 0.25, 0, -0.45);
+          animador.joints.forearmR.rotation.set(-0.55, 0, 0);
+          animador.joints.armL.rotation.set(0.85, 0, 0.35 + Math.cos(dt * 3.0) * 0.15);
+          animador.joints.forearmL.rotation.set(-0.7, 0, 0);
+
+          propExplainer.visible = true;
+          playTri.rotation.x = dt * 1.8;
+          playTri.position.y = 1.55 + Math.sin(dt * 2.5) * 0.1;
+          gearGroup.rotation.z = -dt * 1.4;
+
+          camera.position.set(Math.sin(dt * 0.25) * 0.65, 1.45, 4.8 - Math.min(0.6, dt * 0.08));
+          camTarget.set(0, 1.1, 0);
+        } else if (t < 22.92) {
+          // CENA 3A: Explicar como funciona um serviço
+          const dt = t - 19.1;
+          hudPill.textContent = "CASO DE USO 01";
+          hudTitle.textContent = "Explique seu Serviço";
+          cliente.root.visible = false;
+          animador.root.visible = true;
+          animador.root.position.set(0, 0, 0.2);
+          applyFaceState(animador, { eyeOpen: 1.1, smile: 0.8 });
+          animador.joints.armL.rotation.set(1.6, 0, 0.5);
+          animador.joints.armR.rotation.set(1.0, 0, -0.4);
+
+          propService.visible = true;
+          propService.children.forEach((ch, idx) => {
+            ch.rotation.y = Math.sin(dt * 2 + idx) * 0.35;
+          });
+
+          camera.position.set(-0.25, 1.55, 5.1);
+          camTarget.set(0, 1.25, 0);
+        } else if (t < 26.85) {
+          // CENA 3B: Participar de uma promoção
+          const dt = t - 22.92;
+          hudPill.textContent = "CASO DE USO 02";
+          hudTitle.textContent = "Divulgue Promoções";
+          cliente.root.visible = false;
+          animador.root.visible = true;
+          animador.root.position.set(-0.55, 0, 0.1);
+          animador.root.rotation.set(0, 0.25, 0);
+          applyFaceState(animador, { eyeOpen: 1.15, browRaise: 0.35, smile: 0.9 });
+          animador.joints.armL.rotation.set(1.3, -0.3, 0.6);
+          animador.joints.armR.rotation.set(0.4, 0, -0.2);
+
+          propPromo.visible = true;
+          giftBox.rotation.y = dt * 1.4;
+          promoStar.rotation.y = -dt * 2.5;
+          promoStar.position.y = 1.35 + Math.sin(dt * 4) * 0.12;
+
+          camera.position.set(0.2, 1.4, 4.9);
+          camTarget.set(0.1, 1.05, 0);
+        } else if (t < 30.06) {
+          // CENA 3C: Comparar produto com a concorrência
+          const dt = t - 26.85;
+          hudPill.textContent = "CASO DE USO 03";
+          hudTitle.textContent = "Compare & Destaque";
+          cliente.root.visible = false;
+          animador.root.visible = true;
+          animador.root.position.set(0, 0, -0.1);
+          applyFaceState(animador, { eyeOpen: 1.1, smile: 0.85 });
+          animador.joints.armL.rotation.set(1.2, 0, 0.55);
+          animador.joints.armR.rotation.set(0.5, 0, -0.25);
+
+          propCompare.visible = true;
+          const grow = Math.min(1, dt / 0.8);
+          compBarGood.scale.y = 0.2 + 0.8 * grow;
+          compBarGood.position.y = compBarGood.scale.y * 0.92;
+          crown.position.y = compBarGood.scale.y * 1.85 + 0.24;
+          crown.rotation.y = dt * 2.0;
+
+          camera.position.set(0, 1.55, 5.8);
+          camTarget.set(0, 1.1, 0);
+        } else if (t < 32.25) {
+          // CENA 4A: A ideia, você decide
+          const dt = t - 30.06;
+          hudPill.textContent = "SUA IDEIA";
+          hudTitle.textContent = "Você Decide o Tema";
+          cliente.root.visible = true;
+          animador.root.visible = true;
+          cliente.root.position.set(-0.75, 0, 0);
+          cliente.root.rotation.set(0, 0.2, 0);
+          animador.root.position.set(0.75, 0, 0);
+          animador.root.rotation.set(0, -0.2, 0);
+          applyFaceState(cliente, { eyeOpen: 1.15, browRaise: 0.4, smile: 0.9 });
+          applyFaceState(animador, { eyeOpen: 1.05, smile: 0.8 });
+          cliente.joints.armR.rotation.set(2.1, 0, -0.3);
+
+          propIdea.visible = true;
+          bulb.scale.setScalar(1 + Math.sin(dt * 8) * 0.08);
+
+          camera.position.set(0, 1.45, 5.2);
+          camTarget.set(0, 1.15, 0);
+        } else {
+          // CENA 4B: Execução Labscript em até 1 dia + CTA final
+          const dt = t - 32.25;
+          cliente.root.visible = true;
+          animador.root.visible = true;
+          cliente.root.position.set(-0.72, 0, 0.1);
+          cliente.root.rotation.set(0, 0.15, 0);
+          animador.root.position.set(0.72, 0, 0.1);
+          animador.root.rotation.set(0, -0.15, 0);
+          applyFaceState(cliente, { eyeOpen: 1.1, smile: 0.9 });
+          applyFaceState(animador, { eyeOpen: 1.1, smile: 0.95 });
+
+          // Aceno alegre dos dois para a câmera
+          animador.joints.armR.rotation.set(1.75, 0, -0.55);
+          animador.joints.forearmR.rotation.set(0, 0, Math.sin(dt * 6) * 0.35);
+          cliente.joints.armL.rotation.set(1.65, 0, 0.5);
+          cliente.joints.forearmL.rotation.set(0, 0, -Math.sin(dt * 6) * 0.3);
+
+          propClaquete.visible = true;
+          claqTop.rotation.z = dt < 0.6 ? Math.abs(Math.sin(dt * 10)) * 0.35 : 0;
+
+          camera.position.set(Math.sin(dt * 0.3) * 0.35, 1.45, 5.2);
+          camTarget.set(0, 1.15, 0);
+        }
+      }
+
       function loop() {
-        camera.lookAt(0, 1.15, 0);
+        applyDeterministicScene(tl.time());
+        camera.lookAt(camTarget);
         renderer.render(scene, camera);
         requestAnimationFrame(loop);
       }

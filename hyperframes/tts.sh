@@ -11,8 +11,6 @@ fi
 echo "🎙️  Gerador de Áudio e Legenda (TTS)"
 echo "-------------------------------------"
 
-NOME_PASTA="$SCRIPT_DIR/src/audio"
-
 # Arquivo temporário para salvar as respostas coletadas pelo container Python
 CONFIG_TMP="$PWD/.tts_config_tmp.json"
 rm -f "$CONFIG_TMP"
@@ -56,7 +54,7 @@ rate = presets[tom]['rate']
 pitch = presets[tom]['pitch']
 
 nome_arquivo = questionary.text(
-    'Digite o nome do arquivo (sem extensão, ex: audio):',
+    'Digite o nome da pasta em src/assets/tts/ (ex: nome-do-audio):',
     default='audio'
 ).ask()
 
@@ -118,11 +116,16 @@ else
     GERAR_LEGENDA=0
 fi
 
+REL_PASTA="src/assets/tts/${NOME_ARQUIVO}"
+NOME_PASTA="$SCRIPT_DIR/${REL_PASTA}"
+
 # Cria a pasta recursivamente
 mkdir -p "$NOME_PASTA"
 
-ARQUIVO_SAIDA="${NOME_PASTA}/${NOME_ARQUIVO}.mp3"
-TEXTO_ARQUIVO="${NOME_PASTA}/${NOME_ARQUIVO}.txt"
+ARQUIVO_SAIDA_REL="${REL_PASTA}/audio.mp3"
+TEXTO_ARQUIVO_REL="${REL_PASTA}/text.txt"
+ARQUIVO_SAIDA="${NOME_PASTA}/audio.mp3"
+TEXTO_ARQUIVO="${NOME_PASTA}/text.txt"
 
 # Cria o arquivo de texto caso ainda não exista
 touch "$TEXTO_ARQUIVO"
@@ -153,8 +156,8 @@ fi
 
 # Roda o edge-tts
 echo -n "⏳ Gerando áudio..."
-if docker run --rm -v "$SCRIPT_DIR:/app" -w /app edge-tts-local edge-tts \
-  --voice "$VOZ" --rate="$RATE" --pitch="$PITCH" --file "$TEXTO_ARQUIVO" --write-media "$ARQUIVO_SAIDA"; then
+if docker run --rm -u "$(id -u):$(id -g)" -v "$SCRIPT_DIR:/app" -w /app edge-tts-local edge-tts \
+  --voice "$VOZ" --rate="$RATE" --pitch="$PITCH" --file "$TEXTO_ARQUIVO_REL" --write-media "$ARQUIVO_SAIDA_REL"; then
     echo -e "\r⏳ Gerando áudio... Concluído!     "
 else
     echo -e "\r❌ Falha ao gerar áudio com edge-tts."
@@ -175,28 +178,30 @@ if [ "$GERAR_LEGENDA" -eq 1 ]; then
         echo "Pulando geração de legenda..."
     else
         echo "📝 Transcrevendo áudio via API ($API_URL)..."
-        ARQUIVO_JSON="${NOME_PASTA}/${NOME_ARQUIVO}.json"
-        RAW_JSON="${NOME_PASTA}/${NOME_ARQUIVO}_raw.json"
+        ARQUIVO_JSON_REL="${REL_PASTA}/subtitles.json"
+        RAW_JSON_REL="${REL_PASTA}/subtitles_raw.json"
+        ARQUIVO_JSON="${NOME_PASTA}/subtitles.json"
         
         # Roda o curl e o jq num container alpine descartável
         docker run --rm -e API_KEY="${API_KEY}" -e API_URL="${API_URL}" -v "$SCRIPT_DIR:/app" -w /app alpine sh -c "
           apk add -q curl jq &&
           curl -# -X POST \"\$API_URL/audio/transcriptions\" \
             -H \"Authorization: Bearer \$API_KEY\" \
-            -F \"file=@$ARQUIVO_SAIDA\" \
+            -F \"file=@$ARQUIVO_SAIDA_REL\" \
             -F \"model=whisper-large-v3\" \
             -F \"response_format=verbose_json\" \
             -F \"timestamp_granularities[]=word\" \
-            -F \"language=pt\" > \"$RAW_JSON\" &&
-          if grep -q \"error\" \"$RAW_JSON\"; then
+            -F \"language=pt\" > \"$RAW_JSON_REL\" &&
+          if grep -q \"error\" \"$RAW_JSON_REL\"; then
               echo \"❌ Erro na API de transcrição:\"
-              cat \"$RAW_JSON\"
+              cat \"$RAW_JSON_REL\"
           else
-              cat \"$RAW_JSON\" | jq '[.words[]? | {word: (.word | ltrimstr(\" \") | rtrimstr(\" \")), start: (.start*1000|round)/1000, end: (.end*1000|round)/1000}]' > \"$ARQUIVO_JSON\"
+              cat \"$RAW_JSON_REL\" | jq '[.words[]? | {word: (.word | ltrimstr(\" \") | rtrimstr(\" \")), start: (.start*1000|round)/1000, end: (.end*1000|round)/1000}]' > \"$ARQUIVO_JSON_REL\"
               echo \"✅ Legenda JSON salva em $ARQUIVO_JSON\"
           fi
-          rm -f \"$RAW_JSON\"
+          rm -f \"$RAW_JSON_REL\"
         "
+        chown "$(id -u):$(id -g)" "$ARQUIVO_JSON" 2>/dev/null || true
     fi
 fi
 

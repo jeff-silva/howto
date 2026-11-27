@@ -264,13 +264,85 @@
         return tex;
       }
 
-      function createGlbWrapper(textureUrl) {
+      function createGlbWrapper(textureUrl, shoeColorHex) {
         const root = new THREE.Group();
         scene.add(root);
-        return { root, model: null, mixer: null, duration: 1.0, ready: false, textureUrl };
+        return { root, model: null, mixer: null, duration: 1.0, ready: false, textureUrl, shoeColorHex, shoesAttached: false, bones: {} };
       }
 
       let capoeiraClipForGlb = null;
+      let shoeTemplateMesh = null;
+
+      function attachShoesIfReady(wrapper) {
+        if (!wrapper.model || !shoeTemplateMesh || wrapper.shoesAttached) return;
+        const leftFoot = wrapper.bones['mixamorigLeftFoot'];
+        const rightFoot = wrapper.bones['mixamorigRightFoot'];
+        const leftToe = wrapper.bones['mixamorigLeftToeBase'];
+        const rightToe = wrapper.bones['mixamorigRightToeBase'];
+        if (!leftFoot || !rightFoot) return;
+
+        // Garante T-pose limpa antes de calcular o offset local de cada sapato no osso do pé
+        wrapper.root.updateMatrixWorld(true);
+        const savedRootPos = wrapper.root.position.clone();
+        const savedRootRot = wrapper.root.rotation.clone();
+        wrapper.root.position.set(0, 0, 0);
+        wrapper.root.rotation.set(0, 0, 0);
+        wrapper.root.updateMatrixWorld(true);
+
+        for (const [footBone, toeBone] of [[leftFoot, leftToe], [rightFoot, rightToe]]) {
+          const holder = new THREE.Group();
+          const shoe = shoeTemplateMesh.clone();
+          shoe.material = new THREE.MeshStandardMaterial({
+            color: wrapper.shoeColorHex,
+            roughness: 0.55,
+            metalness: 0.05
+          });
+          shoe.castShadow = true;
+          shoe.receiveShadow = false;
+
+          // shoe.glb tem altura em Z e bico em -X -> -90° em X (Z->Y) e +90° em Y (-X->+Z)
+          const upright = new THREE.Group();
+          shoe.rotation.set(-Math.PI / 2, 0, 0);
+          upright.add(shoe);
+          upright.rotation.y = Math.PI / 2;
+          upright.updateMatrixWorld(true);
+
+          const b = new THREE.Box3().setFromObject(upright);
+          const sz = b.getSize(new THREE.Vector3());
+          const ctr = b.getCenter(new THREE.Vector3());
+          upright.position.set(-ctr.x, -b.min.y, -ctr.z);
+
+          const inner = new THREE.Group();
+          inner.add(upright);
+          // Escala compacta para encaixar no pé sem sobrar (~23cm comp x ~10cm larg x ~10cm alt)
+          inner.scale.set(0.10 / sz.x, 0.10 / sz.y, 0.23 / sz.z);
+
+          // Posiciona entre tornozelo e ponta dos dedos, alinhando o eixo +Z ao vetor do pé
+          const footPos = footBone.getWorldPosition(new THREE.Vector3());
+          const toePos = toeBone ? toeBone.getWorldPosition(new THREE.Vector3()) : footPos.clone().add(new THREE.Vector3(0, -0.05, 0.14));
+          const footDir = new THREE.Vector3(toePos.x - footPos.x, 0, toePos.z - footPos.z);
+          const yaw = footDir.lengthSq() > 1e-5 ? Math.atan2(footDir.x, footDir.z) : 0;
+          const targetWorldPos = new THREE.Vector3(
+            (footPos.x + toePos.x) * 0.5,
+            Math.max(0.012, toePos.y - 0.018),
+            (footPos.z + toePos.z) * 0.5
+          );
+          const footWorldQuat = footBone.getWorldQuaternion(new THREE.Quaternion());
+          footBone.add(holder);
+          holder.add(inner);
+          holder.quaternion.copy(footWorldQuat).invert().multiply(
+            new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), yaw)
+          );
+          footBone.worldToLocal(targetWorldPos);
+          holder.position.copy(targetWorldPos);
+        }
+
+        wrapper.root.position.copy(savedRootPos);
+        wrapper.root.rotation.copy(savedRootRot);
+        wrapper.root.updateMatrixWorld(true);
+        wrapper.shoesAttached = true;
+      }
+
       function tryBindGlbClip(wrapper) {
         if (!wrapper.model || !capoeiraClipForGlb || wrapper.mixer) return;
         wrapper.mixer = new THREE.AnimationMixer(wrapper.model);
@@ -304,13 +376,25 @@
           }
           if (child.isBone || child.name.startsWith('mixamorig')) {
             child.name = child.name.replace(':', '');
+            wrapper.bones[child.name] = child;
           }
         });
+        attachShoesIfReady(wrapper);
         tryBindGlbClip(wrapper);
       }
 
-      const gordo1 = createGlbWrapper('./assets/characters/homem_gordo_casual.png');
-      const gordo2 = createGlbWrapper('./assets/characters/homem_gordo_terno.png');
+      const gordo1 = createGlbWrapper('./assets/characters/homem_gordo_casual.png', 0xf4f4f6);
+      const gordo2 = createGlbWrapper('./assets/characters/homem_gordo_terno.png', 0x16181e);
+
+      new GLTFLoader().load('./assets/characters/shoe.glb', (gltf) => {
+        gltf.scene.traverse((c) => {
+          if (c.isMesh && !shoeTemplateMesh) {
+            shoeTemplateMesh = c;
+          }
+        });
+        attachShoesIfReady(gordo1);
+        attachShoesIfReady(gordo2);
+      });
 
       new GLTFLoader().load('./assets/characters/homem_gordo.glb', (gltf) => {
         const gordo2Scene = SkeletonUtils.clone(gltf.scene);
