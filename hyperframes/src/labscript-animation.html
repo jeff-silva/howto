@@ -21,7 +21,8 @@ vai se afastando devagar.
 
 Cena 4:
 Texto: São animações simples, feitas sem levar muito tempo e que retém atenção.
-Imagem:
+Imagem: Continua da cena anterior com o smartphone no ar; a tela passa a exibir
+gráficos simples animados e dinâmicos simbolizando atenção retida.
 
 Cena 5:
 Texto: Elas ajudam a entender algo detalhadamente.
@@ -227,7 +228,7 @@ escrito "Fale com a Lab"
 
       .subtitle-wrap {
         position: absolute;
-        bottom: 165px;
+        bottom: 360px;
         left: 60px;
         right: 60px;
         z-index: 25;
@@ -297,6 +298,14 @@ escrito "Fale com a Lab"
       data-height="1920"
     >
       <audio id="narration" src="./assets/tts/labscript-animation/audio.mp3" data-start="0"></audio>
+      <audio
+        id="bgm"
+        src="./assets/labscript-animation/Logical_Progression.mp3"
+        data-start="0"
+        data-duration="44.2"
+        data-volume="0.16"
+        data-automation="{&quot;version&quot;:1,&quot;lanes&quot;:[{&quot;target&quot;:&quot;volume&quot;,&quot;points&quot;:[{&quot;t&quot;:0,&quot;v&quot;:1},{&quot;t&quot;:43.2,&quot;v&quot;:1},{&quot;t&quot;:44.2,&quot;v&quot;:0}]}]}"
+      ></audio>
       <canvas id="tela3d" data-start="0" data-track-index="0"></canvas>
       <div class="vinheta"></div>
       <div class="flash-fx" data-start="0" data-track-index="1"></div>
@@ -715,6 +724,49 @@ escrito "Fale com a Lab"
       progKnob.position.set(0, -0.68, 0.048);
       propPhone.add(progTrack, progFill, progKnob);
 
+      // Tela animada da Cena 4 + ícones de engajamento subindo do celular
+      const phoneAnimCanvas = document.createElement('canvas');
+      phoneAnimCanvas.width = 270;
+      phoneAnimCanvas.height = 480;
+      const pac = phoneAnimCanvas.getContext('2d');
+      const phoneAnimTex = new THREE.CanvasTexture(phoneAnimCanvas);
+      phoneAnimTex.colorSpace = THREE.SRGBColorSpace;
+      const phoneAnimScreen = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.86, 1.53),
+        new THREE.MeshBasicMaterial({ map: phoneAnimTex })
+      );
+      phoneAnimScreen.position.set(0, 0, 0.045);
+      phoneAnimScreen.visible = false;
+      propPhone.add(phoneAnimScreen);
+
+      const propEngagement = new THREE.Group();
+      scene.add(propEngagement);
+      const engEmojis = ['👀', '⭐', '❤️', '🔥', '✨', '👀', '❤️', '⭐', '✨'];
+      const engNodes = [];
+      for (let i = 0; i < engEmojis.length; i++) {
+        const ec = document.createElement('canvas');
+        ec.width = 128;
+        ec.height = 128;
+        const ectx = ec.getContext('2d');
+        ectx.font = '92px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+        ectx.textAlign = 'center';
+        ectx.textBaseline = 'middle';
+        ectx.fillText(engEmojis[i], 64, 68);
+        const etex = new THREE.CanvasTexture(ec);
+        etex.colorSpace = THREE.SRGBColorSpace;
+        const em = new THREE.Mesh(
+          new THREE.PlaneGeometry(0.28, 0.28),
+          new THREE.MeshBasicMaterial({ map: etex, transparent: true, depthWrite: false })
+        );
+        em.userData = {
+          phase: i / engEmojis.length,
+          laneX: ((i % 3) - 1) * 0.34 + (i % 2 === 0 ? 0.08 : -0.08),
+          laneZ: 0.25 + (i % 3) * 0.12
+        };
+        propEngagement.add(em);
+        engNodes.push(em);
+      }
+
       // 4C. Órbita simples + atenção (11.35s - 19.1s)
       const propExplainer = new THREE.Group();
       scene.add(propExplainer);
@@ -1102,21 +1154,31 @@ escrito "Fale com a Lab"
       propHandPhone10.visible = false;
       cliente.joints.handR.add(propHandPhone10);
 
-      // Lâmpada emoji 💡 que sai do celular e sobe
-      const bulbEmojiCanvas = document.createElement('canvas');
-      bulbEmojiCanvas.width = 256;
-      bulbEmojiCanvas.height = 256;
-      const bec = bulbEmojiCanvas.getContext('2d');
-      bec.font = '180px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
-      bec.textAlign = 'center';
-      bec.textBaseline = 'middle';
-      bec.fillText('💡', 128, 134);
-      const bulbEmojiTex = new THREE.CanvasTexture(bulbEmojiCanvas);
-      bulbEmojiTex.colorSpace = THREE.SRGBColorSpace;
-      const msgBubble = new THREE.Mesh(
-        new THREE.PlaneGeometry(0.38, 0.38),
-        new THREE.MeshBasicMaterial({ map: bulbEmojiTex, transparent: true, depthWrite: false })
+      // Lâmpada 3D que sai do celular e sobe (independente de fonte emoji)
+      const msgBubble = new THREE.Group();
+      const msgBulbMat = new THREE.MeshStandardMaterial({
+        color: '#fef08a',
+        emissive: '#facc15',
+        emissiveIntensity: 1.5,
+        roughness: 0.2
+      });
+      const msgBulbSphere = new THREE.Mesh(new THREE.SphereGeometry(0.12, 18, 16), msgBulbMat);
+      msgBulbSphere.position.y = 0.045;
+      const msgBulbNeck = new THREE.Mesh(new THREE.CylinderGeometry(0.082, 0.050, 0.075, 16), msgBulbMat);
+      msgBulbNeck.position.y = -0.055;
+      const msgBulbBase = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.050, 0.042, 0.07, 14),
+        new THREE.MeshStandardMaterial({ color: '#64748b', metalness: 0.75, roughness: 0.3 })
       );
+      msgBulbBase.position.y = -0.115;
+      msgBubble.add(msgBulbSphere, msgBulbNeck, msgBulbBase);
+      for (let i = 0; i < 6; i++) {
+        const ang = (i / 6) * Math.PI * 2;
+        const ray = new THREE.Mesh(new THREE.BoxGeometry(0.018, 0.06, 0.018), rayMat);
+        ray.position.set(Math.cos(ang) * 0.18, 0.045 + Math.sin(ang) * 0.18, 0);
+        ray.rotation.z = ang - Math.PI / 2;
+        msgBubble.add(ray);
+      }
       propFlow10.add(msgBubble);
 
       // Relógio 3D atrás da lâmpada (2 voltas = 24h), à frente do personagem
@@ -1226,6 +1288,8 @@ escrito "Fale com a Lab"
         propCharts.visible = false;
         propCameraStress.visible = false;
         propPhone.visible = false;
+        phoneAnimScreen.visible = false;
+        propEngagement.visible = false;
         propExplainer.visible = false;
         propHandPhone.visible = false;
         phoneLight.visible = false;
@@ -1287,7 +1351,7 @@ escrito "Fale com a Lab"
       tl.fromTo(state, { t: 0 }, { t: 44.2, duration: 44.2, ease: "none" }, 0);
 
       // Flash nas transições principais
-      for (const ft of [11.35, 19.1, 30.0, 33.85]) {
+      for (const ft of [19.1, 30.0, 33.85]) {
         tl.fromTo(".flash-fx", { opacity: 0.75 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, ft);
       }
 
@@ -1448,30 +1512,73 @@ escrito "Fale com a Lab"
           camera.position.set(0.42 * easeP, 1.5, 1.95 + (3.65 - 1.95) * easeP);
           camTarget.set(0, 1.5, 0);
         } else if (t < 15.95) {
-          hudTop.style.display = 'flex';
-          // CENA 4: Animação explicativa simples que retém atenção
+          // CENA 4: Continua do celular da Cena 3 com gráficos simples animados na tela + ícones de engajamento subindo (11.35s - 15.95s)
+          hudTop.style.display = 'none';
           const dt = t - 11.35;
-          hudPill.textContent = "A SOLUÇÃO";
-          hudTitle.textContent = "Retém Atenção";
+          const p = Math.max(0, Math.min(1, dt / 4.60));
+          const easeP = p * p * (3 - 2 * p);
+
           cliente.root.visible = false;
-          animador.root.visible = true;
-          animador.root.position.set(0, 0, 0);
-          animador.root.rotation.set(0, Math.sin(dt * 0.5) * 0.2, 0);
-          applyFaceState(animador, { eyeOpen: 1.1, browRaise: 0.25, smile: 0.85 });
+          animador.root.visible = false;
+          propPhone.visible = true;
+          phoneAnimScreen.visible = true;
+          propEngagement.visible = false;
 
-          // Gesticulação apresentando
-          animador.joints.armR.rotation.set(1.25 + Math.sin(dt * 3.5) * 0.25, 0, -0.45);
-          animador.joints.forearmR.rotation.set(-0.55, 0, 0);
-          animador.joints.armL.rotation.set(0.85, 0, 0.35 + Math.cos(dt * 3.0) * 0.15);
-          animador.joints.forearmL.rotation.set(-0.7, 0, 0);
+          // Desenha animação simples e dinâmica na tela do celular
+          pac.fillStyle = '#0f172a';
+          pac.fillRect(0, 0, 270, 480);
+          // Card superior: selo de retenção
+          pac.fillStyle = '#1e293b';
+          pac.fillRect(22, 46, 226, 78);
+          pac.fillStyle = '#facc15';
+          pac.font = '900 22px sans-serif';
+          pac.textAlign = 'center';
+          pac.fillText('SIMPLES & RÁPIDO', 135, 80);
+          pac.fillStyle = '#38bdf8';
+          pac.font = 'bold 17px sans-serif';
+          pac.fillText('ATENÇÃO: ' + Math.min(99, Math.floor(78 + p * 21)) + '%', 135, 108);
 
-          propExplainer.visible = true;
-          playTri.rotation.x = dt * 1.8;
-          playTri.position.y = 1.55 + Math.sin(dt * 2.5) * 0.1;
-          gearGroup.rotation.z = -dt * 1.4;
+          // Barras coloridas animadas
+          const bCols = ['#38bdf8', '#ec4899', '#facc15', '#22c55e'];
+          for (let i = 0; i < 4; i++) {
+            const bh = 48 + 85 * Math.abs(Math.sin(dt * 3.2 + i * 0.8));
+            pac.fillStyle = bCols[i];
+            pac.fillRect(36 + i * 54, 290 - bh, 38, bh);
+          }
+          // Linha de tendência
+          pac.strokeStyle = '#ffffff';
+          pac.lineWidth = 4;
+          pac.beginPath();
+          pac.moveTo(32, 330);
+          pac.lineTo(105, 305 + Math.sin(dt * 4) * 10);
+          pac.lineTo(175, 275);
+          pac.lineTo(238, 230 - Math.abs(Math.cos(dt * 3)) * 20);
+          pac.stroke();
+          phoneAnimTex.needsUpdate = true;
 
-          camera.position.set(Math.sin(dt * 0.25) * 0.65, 1.45, 4.8 - Math.min(0.6, dt * 0.08));
-          camTarget.set(0, 1.1, 0);
+          // Barra de progresso continua avançando
+          const playProg = 0.90 * (1 - p * 0.2) + 0.25 * p;
+          progFill.scale.x = Math.min(1, 0.25 + 0.72 * p);
+          progFill.position.x = -0.38 * (1 - progFill.scale.x);
+          progKnob.position.x = -0.38 + 0.76 * progFill.scale.x;
+
+          // Ícones de engajamento (👀, ⭐, ❤️) subindo flutuando da tela
+          engNodes.forEach((em, idx) => {
+            const cyc = (dt * 0.45 + em.userData.phase) % 1;
+            em.position.set(
+              em.userData.laneX + Math.sin(dt * 3 + idx) * 0.10,
+              1.15 + cyc * 1.45,
+              em.userData.laneZ + cyc * 0.25
+            );
+            const fade = Math.sin(cyc * Math.PI);
+            em.scale.setScalar(0.45 + 0.75 * fade);
+            em.material.opacity = Math.min(1, fade * 1.35);
+          });
+
+          // Movimento suave de câmera continuando exatamente do fim da Cena 3
+          propPhone.rotation.set(-0.04 + 0.01 * easeP, -0.22 + 0.40 * easeP, 0);
+          camera.position.set(0.42 - 0.78 * easeP, 1.50 + 0.06 * easeP, 3.65 + 0.20 * easeP);
+          camTarget.set(0, 1.50 + 0.04 * easeP, 0);
         } else if (t < 19.15) {
           // CENA 5: Espectadora olha para o celular preocupada, entende com sorriso leve + sobrancelha arqueada, e olha para a câmera
           hudTop.style.display = 'none';
