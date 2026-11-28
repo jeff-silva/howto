@@ -13,14 +13,14 @@ export const HELD_ITEMS = ['none', 'hammer', 'clipboard', 'shovel'];
 
 const H = DIMS.head;
 const HAT_TILT = -0.3; // chapéu e cabelo inclinados para trás: a borda da frente sobe e libera a testa
-const HAIR_TILT = -0.55;
+const HAIR_TILT = -0.92;
 
 // Casca de cabelo cobrindo a cabeça. Sem chapéu: coroa inteira; com chapéu: só a nuca (o chapéu cobre o topo).
 function hairShell(parent, color, covered) {
   const g = new THREE.Group();
   g.position.set(0, H.cy, 0);
   g.rotation.x = covered ? HAT_TILT : HAIR_TILT;
-  g.scale.set(H.rx * 1.07, H.ry * 1.07, H.rz * 1.07);
+  g.scale.set(H.rx * 1.11, H.ry * 1.11, H.rz * 1.11);
   parent.add(g);
   const geo = covered ? shell(1.25, 0.9, Math.PI, Math.PI) : shell(0, 1.75);
   mesh(geo, color, { parent: g });
