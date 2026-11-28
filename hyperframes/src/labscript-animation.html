@@ -6,47 +6,64 @@ mostrando respectivamente um gráfico, um quadro com uma imagem e interrogaçõe
 A camera desce e enquadra o personagem da cintura pra cima
 fazendo essa expressão com suor na testa: 😬
 
-Cena 1:
-Texto: Mas não fala bem para a câmera, nem domina muito ferramentas de edição.
-Imagem:
-
 Cena 2:
-Texto: Essa é a animação explicativa.
-Imagem:
+Texto: Mas não fala bem para a câmera, nem domina muito ferramentas de edição.
+Imagem: Continua da cena anterior, mostrando o personagem.
+Então a enquadramento se vira para uma câmera a frente do personagem, apontada para ele.
+O enquadramento exibe a câmera por 2 segundos e então volta para o rosto
+do personagem em plano fechado.
 
 Cena 3:
+Texto: Essa é a animação explicativa.
+Imagem: O print do ultimo frame da cena anterior aparece em um smartphone.
+Estamos vendo o video sendo reproduzido no celular enquanto o enquadramento
+vai se afastando devagar.
+
+Cena 4:
 Texto: São animações simples, feitas sem levar muito tempo e que retém atenção.
 Imagem:
 
-Cena 4:
-Texto: Elas ajudam a entender algo detalhadamente.
-Imagem:
-
 Cena 5:
-Texto: É uma ótima ferramenta para explicar como funciona um serviço.
-Imagem:
+Texto: Elas ajudam a entender algo detalhadamente.
+Imagem: Uma pessoa (outro personagem, pode ser uma mulher com outro tom de pele)
+está olhando pro celular com semblante preocupado (nao esta entendendo)
+então o semblante dela fica mais relaxado (sorriso leve com boca fechada, sombrancelha arqueada, esta entendendo)
+então ela olha para nós (camera que enquadra), é como se disesse "agora entendi"
 
 Cena 6:
-Texto: Ou ainda, dar detalhes sobre como participar de uma promoção.
-Imagem:
+Texto: É uma ótima ferramenta para explicar como funciona um serviço.
+Imagem: Personagem principal, do começo do video, em pé, em frente a um quadro
+com coisas incompreensíveis escritas. Ele está com uma varinha apontando para
+o quadro, como um professor ensinando.
 
 Cena 7:
-Texto: Ou talvez comparar seu produto com o da concorrência.
-Imagem:
+Texto: Ou ainda, dar detalhes sobre como participar de uma promoção.
+Imagem: Assim como na cena 6, personagem está explicando com uma varinha na mão,
+mas dessa vez do lado direito da tela, enquanto do lado esquerdo aparece uma tela
+de computador com um mockup de site aberto. O personagem esta explicando
+pela imagem do site como participar de uma promoção.
 
 Cena 8:
-Texto: A ideia, você decide. A execução é com a Labscript.
-Imagem:
+Texto: Ou talvez comparar seu produto com o da concorrência.
+Imagem: Personagem principal no centro entre duas barras (uma cinza baixa à esquerda
+e uma verde alta à direita com uma coroa dourada subindo no topo). O personagem
+olha acompanhando a coroa subir, enquanto a câmera fecha o plano bem lentamente
+no personagem e na barra verde, deixando a barra cinza um pouco para fora.
 
 Cena 9:
+Texto: A ideia, você decide. A execução é com a Labscript.
+Imagem: Temos apenas o personagem principal em cena. Uma lampada acende
+em cima de sua cabeça dele.
+
+Cena 10:
 Texto: Você pede e a Lab cria o video pra você em até um dia.
 Imagem:
 
-Cena 10:
+Cena 11:
 Texto: Rápido, fácil e sem gastar muito.
 Imagem:
 
-Cena 11:
+Cena 12:
 Texto: Fale com a Lab, vamos colocar sua ideia em prática.
 Imagem:
 
@@ -230,6 +247,23 @@ Imagem:
       .subtitle-box .w-active {
         color: #facc15;
       }
+
+      .lab-logo-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 23;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+      }
+
+      .lab-logo-overlay img {
+        width: 540px;
+        height: 540px;
+        border-radius: 50%;
+        box-shadow: 0 24px 80px rgba(168, 85, 247, 0.5);
+      }
     </style>
   </head>
   <body>
@@ -245,6 +279,10 @@ Imagem:
       <canvas id="tela3d" data-start="0" data-track-index="0"></canvas>
       <div class="vinheta"></div>
       <div class="flash-fx" data-start="0" data-track-index="1"></div>
+
+      <div id="lab-logo-overlay" class="lab-logo-overlay">
+        <img src="./assets/labscript.dev.png" alt="Labscript" />
+      </div>
 
       <div class="hud-top">
         <div id="hud-pill" class="pill-topic">VÍDEO EXPLICATIVO</div>
@@ -361,6 +399,20 @@ Imagem:
       });
       scene.add(animador.root);
 
+      const espectadora = makeCharacter({
+        name: 'espectadora',
+        skin: '#a9714b',
+        height: 0.96,
+        build: 0.88,
+        silhouette: 'female',
+        top: { color: '#14b8a6', sleeves: 'short' },
+        bottom: { color: '#14b8a6', type: 'skirt' },
+        shoes: '#14b8a6',
+        hair: { style: 'bun', color: '#1c1917' },
+        face: { glasses: false }
+      });
+      scene.add(espectadora.root);
+
       function resetPose(ch) {
         ch.joints.hips.position.set(0, 0.68, 0);
         for (const j of Object.values(ch.joints)) {
@@ -371,7 +423,7 @@ Imagem:
       // ==========================================
       // 4. PROPS 3D DAS CENAS EXPLICATIVAS
       // ==========================================
-      // 4A. Cena 1: Gota de suor na testa + Nuvens de ideias com gráficos e exclamações (0s - 4.42s)
+      // 4A. Cena 1: Gota de suor na testa + Expressão 😬 + 3 Balões de pensamento (gráfico, imagem, interrogações)
       const sweatDrop = new THREE.Group();
       const sweatMat = new THREE.MeshStandardMaterial({
         color: '#38bdf8',
@@ -384,9 +436,31 @@ Imagem:
       const sweatTip = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.075, 14), sweatMat);
       sweatTip.position.y = 0.042;
       sweatDrop.add(sweatBall, sweatTip);
-      sweatDrop.position.set(0.14, 0.15, 0.21);
+      sweatDrop.position.set(0.125, 0.215, 0.215);
       sweatDrop.visible = false;
       cliente.joints.head.add(sweatDrop);
+
+      // Expressão 😬 (dentes cerrados) acoplada à boca do cliente
+      const grimaceMouth = new THREE.Group();
+      const grimaceBorder = new THREE.Mesh(
+        new THREE.BoxGeometry(0.125, 0.046, 0.018),
+        new THREE.MeshStandardMaterial({ color: '#2b1414', roughness: 0.6 })
+      );
+      const grimaceTeeth = new THREE.Mesh(
+        new THREE.BoxGeometry(0.112, 0.034, 0.022),
+        new THREE.MeshStandardMaterial({ color: '#f8fafc', roughness: 0.25, emissive: '#e2e8f0', emissiveIntensity: 0.2 })
+      );
+      grimaceMouth.add(grimaceBorder, grimaceTeeth);
+      const lineMat = new THREE.MeshBasicMaterial({ color: '#334155' });
+      const midLine = new THREE.Mesh(new THREE.BoxGeometry(0.112, 0.004, 0.025), lineMat);
+      grimaceMouth.add(midLine);
+      for (const tx of [-0.036, -0.012, 0.012, 0.036]) {
+        const sep = new THREE.Mesh(new THREE.BoxGeometry(0.004, 0.034, 0.025), lineMat);
+        sep.position.x = tx;
+        grimaceMouth.add(sep);
+      }
+      grimaceMouth.visible = false;
+      cliente.faceRig.mouthLine.parent.add(grimaceMouth);
 
       const propCharts = new THREE.Group();
       scene.add(propCharts);
@@ -410,82 +484,94 @@ Imagem:
         return g;
       }
 
-      function makeExclamation(colorHex = '#ef4444', scale = 1) {
-        const g = new THREE.Group();
-        const mat = new THREE.MeshStandardMaterial({ color: colorHex, emissive: colorHex, emissiveIntensity: 0.35, roughness: 0.3 });
-        const stem = new THREE.Mesh(new THREE.BoxGeometry(0.045 * scale, 0.16 * scale, 0.045 * scale), mat);
-        stem.position.y = 0.06 * scale;
-        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.028 * scale, 10, 10), mat);
-        dot.position.y = -0.06 * scale;
-        g.add(stem, dot);
-        return g;
+      function makeQuestionTextPlane() {
+        const c = document.createElement('canvas');
+        c.width = 512;
+        c.height = 256;
+        const ctx = c.getContext('2d');
+        ctx.clearRect(0, 0, c.width, c.height);
+        ctx.font = '900 185px Inter, Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const items = [
+          { ch: '?', x: 120, y: 136, rot: -0.14, color: '#ec4899' },
+          { ch: '?', x: 256, y: 124, rot: 0, color: '#eab308' },
+          { ch: '?', x: 392, y: 136, rot: 0.14, color: '#0284c7' }
+        ];
+        for (const it of items) {
+          ctx.save();
+          ctx.translate(it.x, it.y);
+          ctx.rotate(it.rot);
+          ctx.lineWidth = 14;
+          ctx.strokeStyle = '#0f172a';
+          ctx.strokeText(it.ch, 0, 0);
+          ctx.fillStyle = it.color;
+          ctx.fillText(it.ch, 0, 0);
+          ctx.restore();
+        }
+        const tex = new THREE.CanvasTexture(c);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false });
+        return new THREE.Mesh(new THREE.PlaneGeometry(0.46, 0.23), mat);
       }
 
-      // Nuvem esquerda: mini gráfico de barras + exclamação
-      const cloudLeft = makeCloudCluster(1.05);
-      cloudLeft.position.set(-0.58, 1.98, 0.08);
+      // Nuvem esquerda: apenas gráfico de barras
+      const cloudLeft = makeCloudCluster(0.84);
+      cloudLeft.position.set(-0.36, 2.58, 0.08);
       const barColors = ['#38bdf8', '#f472b6', '#facc15'];
       const barMeshes = [];
       for (let i = 0; i < 3; i++) {
         const bm = new THREE.Mesh(
-          new THREE.BoxGeometry(0.065, 0.22, 0.05),
-          new THREE.MeshStandardMaterial({ color: barColors[i], emissive: barColors[i], emissiveIntensity: 0.2, roughness: 0.3 })
+          new THREE.BoxGeometry(0.072, 0.22, 0.055),
+          new THREE.MeshStandardMaterial({ color: barColors[i], emissive: barColors[i], emissiveIntensity: 0.28, roughness: 0.3 })
         );
-        bm.position.set(-0.11 + i * 0.085, -0.02, 0.14);
+        bm.position.set(-0.095 + i * 0.095, -0.01, 0.14);
         cloudLeft.add(bm);
         barMeshes.push(bm);
       }
-      const exclLeft = makeExclamation('#ef4444', 0.9);
-      exclLeft.position.set(0.17, 0.02, 0.15);
-      exclLeft.rotation.z = -0.15;
-      cloudLeft.add(exclLeft);
       const dotL1 = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 10), new THREE.MeshStandardMaterial({ color: '#f8fafc' }));
-      dotL1.position.set(0.24, -0.25, 0.02);
-      cloudLeft.add(dotL1);
+      dotL1.position.set(0.18, -0.24, 0.02);
+      const dotL2 = new THREE.Mesh(new THREE.SphereGeometry(0.028, 10, 10), new THREE.MeshStandardMaterial({ color: '#f8fafc' }));
+      dotL2.position.set(0.26, -0.34, 0.02);
+      cloudLeft.add(dotL1, dotL2);
       propCharts.add(cloudLeft);
 
-      // Nuvem direita: quadro de imagem + exclamações
-      const cloudRight = makeCloudCluster(1.05);
-      cloudRight.position.set(0.58, 1.98, 0.08);
+      // Nuvem direita: apenas quadro com imagem
+      const cloudRight = makeCloudCluster(0.84);
+      cloudRight.position.set(0.36, 2.58, 0.08);
       const imgFrame = new THREE.Mesh(
-        new THREE.BoxGeometry(0.26, 0.19, 0.04),
+        new THREE.BoxGeometry(0.28, 0.20, 0.045),
         new THREE.MeshStandardMaterial({ color: '#1e293b', roughness: 0.4 })
       );
-      imgFrame.position.set(-0.06, 0.0, 0.14);
-      const imgSky = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.15, 0.045), new THREE.MeshBasicMaterial({ color: '#38bdf8' }));
+      imgFrame.position.set(0.0, 0.0, 0.14);
+      const imgSky = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.16, 0.05), new THREE.MeshBasicMaterial({ color: '#38bdf8' }));
       const imgSun = new THREE.Mesh(new THREE.SphereGeometry(0.028, 10, 10), new THREE.MeshBasicMaterial({ color: '#facc15' }));
-      imgSun.position.set(0.05, 0.03, 0.025);
-      const imgHill = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.08, 3), new THREE.MeshBasicMaterial({ color: '#22c55e' }));
-      imgHill.position.set(-0.03, -0.025, 0.025);
+      imgSun.position.set(0.055, 0.032, 0.028);
+      const imgHill = new THREE.Mesh(new THREE.ConeGeometry(0.072, 0.088, 3), new THREE.MeshBasicMaterial({ color: '#22c55e' }));
+      imgHill.position.set(-0.035, -0.028, 0.028);
       imgFrame.add(imgSky, imgSun, imgHill);
       cloudRight.add(imgFrame);
-      const exclRight = makeExclamation('#f97316', 0.9);
-      exclRight.position.set(0.16, 0.02, 0.15);
-      exclRight.rotation.z = 0.15;
-      cloudRight.add(exclRight);
       const dotR1 = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 10), new THREE.MeshStandardMaterial({ color: '#f8fafc' }));
-      dotR1.position.set(-0.24, -0.25, 0.02);
-      cloudRight.add(dotR1);
+      dotR1.position.set(-0.18, -0.24, 0.02);
+      const dotR2 = new THREE.Mesh(new THREE.SphereGeometry(0.028, 10, 10), new THREE.MeshStandardMaterial({ color: '#f8fafc' }));
+      dotR2.position.set(-0.26, -0.34, 0.02);
+      cloudRight.add(dotR1, dotR2);
       propCharts.add(cloudRight);
 
-      // Nuvem topo: exclamações de pressão
-      const cloudTop = makeCloudCluster(0.85);
-      cloudTop.position.set(0.0, 2.34, -0.08);
-      const exclT1 = makeExclamation('#ef4444', 0.95);
-      exclT1.position.set(-0.06, 0.02, 0.13);
-      exclT1.rotation.z = 0.12;
-      const exclT2 = makeExclamation('#facc15', 0.95);
-      exclT2.position.set(0.06, 0.02, 0.13);
-      exclT2.rotation.z = -0.12;
-      cloudTop.add(exclT1, exclT2);
+      // Nuvem topo: interrogações em texto (? ? ?)
+      const cloudTop = makeCloudCluster(0.86);
+      cloudTop.position.set(0.0, 2.98, -0.02);
+      const qTopText = makeQuestionTextPlane();
+      qTopText.position.set(0.0, 0.02, 0.14);
+      cloudTop.add(qTopText);
       propCharts.add(cloudTop);
 
-      // 4B. Câmera intimidadora + blocos de timeline complexa (4.4s - 8.8s)
+      // 4B. Cena 2: Câmera em tripé à frente do personagem, apontada para ele (4.42s - 8.8s)
       const propCameraStress = new THREE.Group();
       scene.add(propCameraStress);
       const bigCam = new THREE.Group();
-      bigCam.position.set(1.1, 1.35, 0.55);
-      bigCam.rotation.y = -0.65;
+      bigCam.position.set(0, 1.48, 3.15);
+      bigCam.rotation.y = Math.PI; // Apontada em -Z (diretamente para o personagem)
       const camBody = new THREE.Mesh(
         new THREE.BoxGeometry(0.55, 0.4, 0.72),
         new THREE.MeshStandardMaterial({ color: '#334155', metalness: 0.7, roughness: 0.25 })
@@ -496,12 +582,34 @@ Imagem:
       );
       camLens.rotation.x = Math.PI / 2;
       camLens.position.z = 0.45;
+      const lensGlass = new THREE.Mesh(
+        new THREE.CircleGeometry(0.14, 20),
+        new THREE.MeshStandardMaterial({ color: '#0ea5e9', emissive: '#0369a1', emissiveIntensity: 0.45, metalness: 0.9, roughness: 0.1 })
+      );
+      lensGlass.position.z = 0.626;
       const recDot = new THREE.Mesh(
-        new THREE.SphereGeometry(0.06, 12, 12),
+        new THREE.SphereGeometry(0.055, 12, 12),
         new THREE.MeshBasicMaterial({ color: '#ef4444' })
       );
-      recDot.position.set(0.2, 0.16, 0.32);
-      bigCam.add(camBody, camLens, recDot);
+      recDot.position.set(0.2, 0.16, 0.34);
+      const camScreen = new THREE.Mesh(
+        new THREE.BoxGeometry(0.38, 0.24, 0.03),
+        new THREE.MeshBasicMaterial({ color: '#1e293b' })
+      );
+      camScreen.position.set(0, 0, -0.37);
+      bigCam.add(camBody, camLens, lensGlass, recDot, camScreen);
+
+      // Tripé sob a câmera
+      const tripodMat = new THREE.MeshStandardMaterial({ color: '#1e293b', metalness: 0.6, roughness: 0.35 });
+      const tripodPole = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.055, 1.35, 12), tripodMat);
+      tripodPole.position.set(0, -0.82, 0);
+      bigCam.add(tripodPole);
+      for (const [lx, lz, rx, rz] of [[-0.22, 0.18, 0.16, -0.2], [0.22, 0.18, 0.16, 0.2], [0, -0.25, -0.2, 0]]) {
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.02, 1.5, 8), tripodMat);
+        leg.position.set(lx, -0.95, lz);
+        leg.rotation.set(rx, 0, rz);
+        bigCam.add(leg);
+      }
       propCameraStress.add(bigCam);
 
       const timelineBars = [];
@@ -515,7 +623,56 @@ Imagem:
         timelineBars.push(tb);
       }
 
-      // 4C. Órbita simples + atenção (8.8s - 19.1s)
+      // 4B-2. Cena 3: Smartphone reproduzindo o frame da cena anterior (8.80s - 11.35s)
+      const propPhone = new THREE.Group();
+      propPhone.position.set(0, 1.5, 0);
+      scene.add(propPhone);
+
+      const phoneBody = new THREE.Mesh(
+        new THREE.BoxGeometry(0.98, 1.86, 0.08),
+        new THREE.MeshStandardMaterial({ color: '#0f172a', metalness: 0.85, roughness: 0.22 })
+      );
+      const phoneBezel = new THREE.Mesh(
+        new THREE.BoxGeometry(0.92, 1.78, 0.084),
+        new THREE.MeshStandardMaterial({ color: '#020617', roughness: 0.35 })
+      );
+      propPhone.add(phoneBody, phoneBezel);
+
+      const cena3Tex = new THREE.TextureLoader().load('./assets/labscript-animation/cena3-ref.jpg');
+      cena3Tex.colorSpace = THREE.SRGBColorSpace;
+      const phoneScreen = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.86, 1.53),
+        new THREE.MeshBasicMaterial({ map: cena3Tex })
+      );
+      phoneScreen.position.set(0, 0, 0.044);
+      propPhone.add(phoneScreen);
+
+      const phoneNotch = new THREE.Mesh(
+        new THREE.BoxGeometry(0.22, 0.042, 0.01),
+        new THREE.MeshBasicMaterial({ color: '#020617' })
+      );
+      phoneNotch.position.set(0, 0.82, 0.046);
+      propPhone.add(phoneNotch);
+
+      // Barra de progresso do player de vídeo na tela do celular
+      const progTrack = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.76, 0.022),
+        new THREE.MeshBasicMaterial({ color: '#334155', transparent: true, opacity: 0.85 })
+      );
+      progTrack.position.set(0, -0.68, 0.046);
+      const progFill = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.76, 0.024),
+        new THREE.MeshBasicMaterial({ color: '#facc15' })
+      );
+      progFill.position.set(0, -0.68, 0.047);
+      const progKnob = new THREE.Mesh(
+        new THREE.CircleGeometry(0.024, 14),
+        new THREE.MeshBasicMaterial({ color: '#ffffff' })
+      );
+      progKnob.position.set(0, -0.68, 0.048);
+      propPhone.add(progTrack, progFill, progKnob);
+
+      // 4C. Órbita simples + atenção (11.35s - 19.1s)
       const propExplainer = new THREE.Group();
       scene.add(propExplainer);
       const playTri = new THREE.Mesh(
@@ -542,7 +699,212 @@ Imagem:
       }
       propExplainer.add(playTri, gearGroup);
 
-      // 4D. Serviço: 3 etapas conectadas (19.1s - 22.9s)
+      // 4C-2. Cena 5: Celular em pé na mão da espectadora emitindo luz suave (15.95s - 19.15s)
+      const propHandPhone = new THREE.Group();
+      propHandPhone.position.set(0.075, 0.03, -0.01);
+      propHandPhone.rotation.set(1.18, 0.12, 0.0);
+      const hpBody = new THREE.Mesh(
+        new THREE.BoxGeometry(0.14, 0.27, 0.016),
+        new THREE.MeshStandardMaterial({ color: '#0f172a', metalness: 0.8, roughness: 0.25 })
+      );
+      const hpScreen = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.124, 0.242),
+        new THREE.MeshBasicMaterial({ color: '#bae6fd' })
+      );
+      hpScreen.position.z = -0.009;
+      hpScreen.rotation.y = Math.PI;
+      const hpGlow = new THREE.Mesh(
+        new THREE.ConeGeometry(0.14, 0.28, 18, 1, true),
+        new THREE.MeshBasicMaterial({
+          color: '#38bdf8',
+          transparent: true,
+          opacity: 0.09,
+          side: THREE.DoubleSide,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending
+        })
+      );
+      hpGlow.rotation.x = -Math.PI / 2;
+      hpGlow.position.z = -0.15;
+      const phoneLight = new THREE.PointLight('#7dd3fc', 0.85, 1.6, 2);
+      phoneLight.position.set(0, 0, -0.10);
+      propHandPhone.add(hpBody, hpScreen, hpGlow, phoneLight);
+      espectadora.joints.handR.add(propHandPhone);
+
+      // 4D. Cena 6: Quadro com coisas incompreensíveis + varinha de professor (19.15s - 22.92s)
+      const propChalkboard = new THREE.Group();
+      propChalkboard.position.set(0.28, 1.48, -0.32);
+      propChalkboard.rotation.y = -0.14;
+      scene.add(propChalkboard);
+
+      const boardFrameMat = new THREE.MeshStandardMaterial({ color: '#92400e', roughness: 0.65 });
+      const boardBack = new THREE.Mesh(new THREE.BoxGeometry(1.44, 1.12, 0.05), boardFrameMat);
+      propChalkboard.add(boardBack);
+
+      const boardCanvas = document.createElement('canvas');
+      boardCanvas.width = 640;
+      boardCanvas.height = 500;
+      const bctx = boardCanvas.getContext('2d');
+      bctx.fillStyle = '#133329';
+      bctx.fillRect(0, 0, 640, 500);
+      // Rabiscos e fórmulas incompreensíveis em giz
+      bctx.lineCap = 'round';
+      bctx.lineJoin = 'round';
+      bctx.strokeStyle = 'rgba(248, 250, 252, 0.85)';
+      bctx.lineWidth = 4;
+      for (const [yBase, amp, freq] of [[75, 12, 0.08], [155, 16, 0.11], [245, 10, 0.09], [340, 14, 0.12]]) {
+        bctx.beginPath();
+        for (let x = 40; x < 340; x += 6) {
+          const y = yBase + Math.sin(x * freq) * amp + Math.cos(x * 0.27) * 5;
+          if (x === 40) bctx.moveTo(x, y);
+          else bctx.lineTo(x, y);
+        }
+        bctx.stroke();
+      }
+      bctx.font = 'bold 34px monospace';
+      bctx.fillStyle = '#fde047';
+      bctx.fillText('∑(∆x ÷ ?) = ∞%', 330, 95);
+      bctx.fillStyle = '#f472b6';
+      bctx.fillText('f(ξ) ≈ √#@!?', 350, 185);
+      bctx.fillStyle = '#38bdf8';
+      bctx.fillText('A ⇄ ⧗ ⟶ ???', 340, 285);
+      bctx.strokeStyle = '#fde047';
+      bctx.lineWidth = 3.5;
+      bctx.strokeRect(55, 385, 150, 65);
+      bctx.beginPath();
+      bctx.arc(465, 400, 48, 0, Math.PI * 2);
+      bctx.stroke();
+      bctx.beginPath();
+      bctx.moveTo(220, 415);
+      bctx.lineTo(395, 405);
+      bctx.lineTo(380, 392);
+      bctx.moveTo(395, 405);
+      bctx.lineTo(382, 420);
+      bctx.stroke();
+
+      const boardTex = new THREE.CanvasTexture(boardCanvas);
+      boardTex.colorSpace = THREE.SRGBColorSpace;
+      const boardSurface = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.32, 1.00),
+        new THREE.MeshStandardMaterial({ map: boardTex, roughness: 0.9 })
+      );
+      boardSurface.position.z = 0.028;
+      propChalkboard.add(boardSurface);
+
+      // Varinha de professor na mão esquerda do cliente
+      const pointerStick = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.011, 0.018, 0.72, 10),
+        new THREE.MeshStandardMaterial({ color: '#fef08a', roughness: 0.4 })
+      );
+      pointerStick.position.set(0, -0.34, 0);
+      pointerStick.visible = false;
+      cliente.joints.handL.add(pointerStick);
+
+      // Varinha de professor na mão direita do cliente (Cena 7)
+      const pointerStickR = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.011, 0.018, 0.72, 10),
+        new THREE.MeshStandardMaterial({ color: '#fef08a', roughness: 0.4 })
+      );
+      pointerStickR.position.set(0, -0.34, 0);
+      pointerStickR.visible = false;
+      cliente.joints.handR.add(pointerStickR);
+
+      // 4E. Cena 7: Tela de computador com mockup de site de promoção (22.92s - 26.85s)
+      const propMonitor = new THREE.Group();
+      propMonitor.position.set(-0.28, 1.48, -0.25);
+      propMonitor.rotation.y = 0.16;
+      scene.add(propMonitor);
+
+      const monBody = new THREE.Mesh(
+        new THREE.BoxGeometry(1.42, 1.06, 0.055),
+        new THREE.MeshStandardMaterial({ color: '#1e293b', metalness: 0.75, roughness: 0.25 })
+      );
+      const monNeck = new THREE.Mesh(
+        new THREE.BoxGeometry(0.14, 0.34, 0.06),
+        new THREE.MeshStandardMaterial({ color: '#334155', metalness: 0.7, roughness: 0.3 })
+      );
+      monNeck.position.set(0, -0.68, -0.02);
+      const monBase = new THREE.Mesh(
+        new THREE.BoxGeometry(0.56, 0.04, 0.26),
+        new THREE.MeshStandardMaterial({ color: '#334155', metalness: 0.7, roughness: 0.3 })
+      );
+      monBase.position.set(0, -0.85, 0.02);
+      propMonitor.add(monBody, monNeck, monBase);
+
+      const siteCanvas = document.createElement('canvas');
+      siteCanvas.width = 640;
+      siteCanvas.height = 460;
+      const sctx = siteCanvas.getContext('2d');
+      // Fundo branco/claro do site
+      sctx.fillStyle = '#f8fafc';
+      sctx.fillRect(0, 0, 640, 460);
+      // Barra do navegador
+      sctx.fillStyle = '#0f172a';
+      sctx.fillRect(0, 0, 640, 48);
+      for (const [cx, cc] of [[24, '#ef4444'], [46, '#facc15'], [68, '#22c55e']]) {
+        sctx.fillStyle = cc;
+        sctx.beginPath();
+        sctx.arc(cx, 24, 7, 0, Math.PI * 2);
+        sctx.fill();
+      }
+      sctx.fillStyle = '#1e293b';
+      sctx.fillRect(96, 12, 460, 24);
+      sctx.fillStyle = '#94a3b8';
+      sctx.font = 'bold 14px monospace';
+      sctx.fillText('https://promocao.sualoja.com.br', 112, 29);
+      // Banner Hero da Promoção
+      sctx.fillStyle = '#4f46e5';
+      sctx.fillRect(28, 68, 584, 128);
+      sctx.fillStyle = '#facc15';
+      sctx.font = '900 38px sans-serif';
+      sctx.fillText('SUPER PROMOÇÃO!', 48, 122);
+      sctx.fillStyle = '#e0e7ff';
+      sctx.font = 'bold 20px sans-serif';
+      sctx.fillText('Veja como participar em 3 passos:', 48, 162);
+      // Selo 50% OFF
+      sctx.fillStyle = '#ec4899';
+      sctx.beginPath();
+      sctx.arc(536, 132, 44, 0, Math.PI * 2);
+      sctx.fill();
+      sctx.fillStyle = '#ffffff';
+      sctx.font = '900 22px sans-serif';
+      sctx.fillText('GANHE', 498, 139);
+      // 3 Cards de passos
+      const stepLabels = [
+        ['1. CADASTRE', 'Preencha seus', 'dados no site'],
+        ['2. COMPARTILHE', 'Marque 2 amigos', 'no post oficial'],
+        ['3. CONCORRA', 'Resultado ao vivo', 'nesta sexta!']
+      ];
+      for (let i = 0; i < 3; i++) {
+        const bx = 28 + i * 198;
+        sctx.fillStyle = '#e2e8f0';
+        sctx.fillRect(bx, 218, 186, 138);
+        sctx.fillStyle = '#0284c7';
+        sctx.fillRect(bx, 218, 186, 36);
+        sctx.fillStyle = '#ffffff';
+        sctx.font = 'bold 16px sans-serif';
+        sctx.fillText(stepLabels[i][0], bx + 14, 242);
+        sctx.fillStyle = '#1e293b';
+        sctx.font = 'bold 17px sans-serif';
+        sctx.fillText(stepLabels[i][1], bx + 14, 286);
+        sctx.fillText(stepLabels[i][2], bx + 14, 314);
+      }
+      // Botão CTA
+      sctx.fillStyle = '#22c55e';
+      sctx.fillRect(170, 380, 300, 52);
+      sctx.fillStyle = '#ffffff';
+      sctx.font = '900 24px sans-serif';
+      sctx.fillText('PARTICIPAR AGORA', 205, 414);
+
+      const siteTex = new THREE.CanvasTexture(siteCanvas);
+      siteTex.colorSpace = THREE.SRGBColorSpace;
+      const monScreen = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.30, 0.94),
+        new THREE.MeshBasicMaterial({ map: siteTex })
+      );
+      monScreen.position.z = 0.03;
+      propMonitor.add(monScreen);
+
       const propService = new THREE.Group();
       scene.add(propService);
       const stepColors = ['#38bdf8', '#a855f7', '#34d399'];
@@ -601,22 +963,79 @@ Imagem:
         new THREE.MeshStandardMaterial({ color: '#22c55e', emissive: '#15803d', emissiveIntensity: 0.35, roughness: 0.25 })
       );
       compBarGood.position.set(0.85, 0.88, 0.15);
-      const crown = new THREE.Mesh(
-        new THREE.ConeGeometry(0.24, 0.34, 5),
-        new THREE.MeshStandardMaterial({ color: '#facc15', metalness: 0.6, roughness: 0.2 })
-      );
+      const crown = new THREE.Group();
+      const goldMat = new THREE.MeshStandardMaterial({
+        color: '#facc15',
+        emissive: '#b45309',
+        emissiveIntensity: 0.28,
+        metalness: 0.85,
+        roughness: 0.15
+      });
+      const velvetMat = new THREE.MeshStandardMaterial({ color: '#7e22ce', roughness: 0.75 });
+      const rubyMat = new THREE.MeshStandardMaterial({ color: '#ec4899', emissive: '#db2777', emissiveIntensity: 0.55, roughness: 0.1 });
+      const diamondMat = new THREE.MeshStandardMaterial({ color: '#38bdf8', emissive: '#0284c7', emissiveIntensity: 0.55, roughness: 0.1 });
+
+      const crownBand = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.21, 0.12, 24), goldMat);
+      const baseRing = new THREE.Mesh(new THREE.TorusGeometry(0.215, 0.022, 12, 28), goldMat);
+      baseRing.rotation.x = Math.PI / 2;
+      baseRing.position.y = -0.055;
+      const topRing = new THREE.Mesh(new THREE.TorusGeometry(0.258, 0.018, 12, 28), goldMat);
+      topRing.rotation.x = Math.PI / 2;
+      topRing.position.y = 0.055;
+      const velvetCap = new THREE.Mesh(new THREE.SphereGeometry(0.21, 18, 12, 0, Math.PI * 2, 0, Math.PI * 0.5), velvetMat);
+      velvetCap.position.y = 0.02;
+      velvetCap.scale.y = 0.65;
+      crown.add(crownBand, baseRing, topRing, velvetCap);
+
+      for (let i = 0; i < 6; i++) {
+        const ang = (i / 6) * Math.PI * 2;
+        const px = Math.cos(ang) * 0.22;
+        const pz = Math.sin(ang) * 0.22;
+        const spike = new THREE.Mesh(new THREE.ConeGeometry(0.072, 0.22, 4), goldMat);
+        spike.position.set(px * 1.06, 0.16, pz * 1.06);
+        spike.lookAt(px * 2.2, 0.48, pz * 2.2);
+        spike.rotateX(Math.PI / 2);
+        const orb = new THREE.Mesh(new THREE.SphereGeometry(0.032, 10, 10), i % 2 === 0 ? rubyMat : diamondMat);
+        orb.position.set(px * 1.14, 0.275, pz * 1.14);
+        const bandGem = new THREE.Mesh(new THREE.OctahedronGeometry(0.030, 0), i % 2 === 0 ? diamondMat : rubyMat);
+        bandGem.position.set(Math.cos(ang) * 0.242, 0.0, Math.sin(ang) * 0.242);
+        crown.add(spike, orb, bandGem);
+      }
       crown.position.set(0.85, 2.0, 0.15);
       propCompare.add(compBarBad, compBarGood, crown);
 
-      // 4G. Ideia + Claquete + 1 Dia (30.0s - 44.2s)
+      // 4G. Cena 9: Lâmpada acendendo acima da cabeça do personagem (30.06s - 32.25s)
       const propIdea = new THREE.Group();
+      propIdea.position.set(0, 2.05, 0);
       scene.add(propIdea);
-      const bulb = new THREE.Mesh(
-        new THREE.SphereGeometry(0.22, 16, 16),
-        new THREE.MeshStandardMaterial({ color: '#fef08a', emissive: '#facc15', emissiveIntensity: 1.4 })
+      const bulbMat = new THREE.MeshStandardMaterial({
+        color: '#fef08a',
+        emissive: '#facc15',
+        emissiveIntensity: 0,
+        roughness: 0.2
+      });
+      const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.16, 18, 16), bulbMat);
+      bulb.position.y = 0.06;
+      const bulbNeck = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.065, 0.10, 16), bulbMat);
+      bulbNeck.position.y = -0.08;
+      const bulbBase = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.065, 0.055, 0.09, 14),
+        new THREE.MeshStandardMaterial({ color: '#64748b', metalness: 0.75, roughness: 0.3 })
       );
-      bulb.position.set(-0.75, 2.05, 0);
-      propIdea.add(bulb);
+      bulbBase.position.y = -0.16;
+      const bulbRays = new THREE.Group();
+      bulbRays.position.y = 0.06;
+      const rayMat = new THREE.MeshBasicMaterial({ color: '#fde047' });
+      for (let i = 0; i < 8; i++) {
+        const ang = (i / 8) * Math.PI * 2;
+        const ray = new THREE.Mesh(new THREE.BoxGeometry(0.025, 0.09, 0.025), rayMat);
+        ray.position.set(Math.cos(ang) * 0.25, Math.sin(ang) * 0.25, 0);
+        ray.rotation.z = ang - Math.PI / 2;
+        bulbRays.add(ray);
+      }
+      const bulbLight = new THREE.PointLight('#fde047', 1.4, 2.5, 2);
+      bulbLight.position.set(0, 0.05, 0.12);
+      propIdea.add(bulb, bulbNeck, bulbBase, bulbRays, bulbLight);
 
       const propClaquete = new THREE.Group();
       propClaquete.position.set(0, 0.38, 0.65);
@@ -637,11 +1056,19 @@ Imagem:
       function hideAllProps() {
         propCharts.visible = false;
         propCameraStress.visible = false;
+        propPhone.visible = false;
         propExplainer.visible = false;
+        propHandPhone.visible = false;
+        phoneLight.visible = false;
+        propChalkboard.visible = false;
+        pointerStick.visible = false;
+        pointerStickR.visible = false;
+        propMonitor.visible = false;
         propService.visible = false;
         propPromo.visible = false;
         propCompare.visible = false;
         propIdea.visible = false;
+        bulbLight.visible = false;
         propClaquete.visible = false;
       }
 
@@ -667,8 +1094,11 @@ Imagem:
       ];
 
       const subtitleBox = document.getElementById('subtitle-box');
+      const hudTop = document.querySelector('.hud-top');
       const hudPill = document.getElementById('hud-pill');
       const hudTitle = document.getElementById('hud-title');
+      const labLogoOverlay = document.getElementById('lab-logo-overlay');
+      const labLogoImg = labLogoOverlay.querySelector('img');
 
       function updateSubtitle(t) {
         const line = SUBTITLES.find((l) => t >= l.s && t <= l.e) || SUBTITLES[SUBTITLES.length - 1];
@@ -685,7 +1115,7 @@ Imagem:
       tl.fromTo(state, { t: 0 }, { t: 44.2, duration: 44.2, ease: "none" }, 0);
 
       // Flash nas transições principais
-      for (const ft of [8.75, 19.1, 30.0, 32.2]) {
+      for (const ft of [11.35, 19.1, 30.0, 33.85]) {
         tl.fromTo(".flash-fx", { opacity: 0.75 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, ft);
       }
 
@@ -701,74 +1131,155 @@ Imagem:
 
       function applyDeterministicScene(t) {
         hideAllProps();
+        labLogoOverlay.style.display = 'none';
         sweatDrop.visible = false;
+        grimaceMouth.visible = false;
+        espectadora.root.visible = false;
         resetPose(cliente);
         resetPose(animador);
+        resetPose(espectadora);
         updateSubtitle(t);
 
         if (t < 4.42) {
-          // CENA 1: Personagem tenso com gota de suor na testa, nuvens de ideias (gráficos + exclamações), enquadrado da cintura pra cima
-          hudPill.textContent = "VÍDEO EXPLICATIVO";
-          hudTitle.textContent = "Imagens & Gráficos";
+          // CENA 1: Começa só com as 3 nuvens (gráfico, imagem, interrogações), depois câmera desce para o personagem (cintura pra cima) com expressão 😬 e suor na testa
+          hudTop.style.display = 'none';
           cliente.root.visible = true;
           animador.root.visible = false;
           cliente.root.position.set(0, 0, 0.1);
-          cliente.root.rotation.set(0, 0.06, 0);
-          applyFaceState(cliente, { eyeOpen: 1.15, browRaise: 0.7, browTilt: 0.75, smile: -0.65, mouthOpen: 0.2 });
+          cliente.root.rotation.set(0, 0.04, 0);
+          applyFaceState(cliente, { eyeOpen: 1.05, browRaise: 0.95, browTilt: -0.85, smile: 0, mouthOpen: 0 });
+          cliente.faceRig.mouthLine.visible = false;
+          cliente.faceRig.mouthArc.visible = false;
+          cliente.faceRig.mouthOpen.visible = false;
+          grimaceMouth.visible = true;
 
-          // Gota grande de suor escorrendo na testa + tremor sutil de tensão
+          // Gota grande de suor na testa
           sweatDrop.visible = true;
           const dropCycle = (t % 2.2) / 2.2;
-          sweatDrop.position.set(0.14, 0.16 - dropCycle * 0.08, 0.21);
-          sweatDrop.scale.setScalar(0.95 + Math.sin(t * 5) * 0.08);
+          sweatDrop.position.set(0.17, 0.305 - dropCycle * 0.02, 0.215);
+          sweatDrop.scale.setScalar(1.0 + Math.sin(t * 5) * 0.06);
 
-          cliente.joints.head.rotation.set(0.05, Math.sin(t * 6) * 0.04, Math.sin(t * 4.5) * 0.03);
+          cliente.joints.head.rotation.set(0.04, Math.sin(t * 6) * 0.03, Math.sin(t * 4.5) * 0.02);
           cliente.joints.armR.rotation.set(1.25, 0, -0.45);
-          cliente.joints.forearmR.rotation.set(-1.15 + Math.sin(t * 7) * 0.06, 0, 0);
+          cliente.joints.forearmR.rotation.set(-1.15 + Math.sin(t * 7) * 0.05, 0, 0);
           cliente.joints.armL.rotation.set(1.25, 0, 0.45);
-          cliente.joints.forearmL.rotation.set(-1.15 - Math.sin(t * 7) * 0.06, 0, 0);
+          cliente.joints.forearmL.rotation.set(-1.15 - Math.sin(t * 7) * 0.05, 0, 0);
 
           propCharts.visible = true;
           barMeshes.forEach((bm, idx) => {
             const h = 0.55 + 0.55 * Math.abs(Math.sin(t * 2.5 + idx * 0.9));
             bm.scale.y = h;
           });
-          cloudLeft.position.y = 1.98 + Math.sin(t * 2.6) * 0.05;
-          cloudRight.position.y = 1.98 + Math.cos(t * 2.6) * 0.05;
-          cloudTop.position.y = 2.34 + Math.sin(t * 3.2) * 0.04;
+          cloudLeft.position.y = 2.58 + Math.sin(t * 2.6) * 0.03;
+          cloudRight.position.y = 2.58 + Math.cos(t * 2.6) * 0.03;
+          cloudTop.position.y = 2.98 + Math.sin(t * 3.2) * 0.03;
 
-          // Enquadramento da cintura para cima (com espaço acima da cabeça para as nuvens)
-          camera.position.set(Math.sin(t * 0.45) * 0.14, 1.50, 2.85 - t * 0.04);
-          camTarget.set(0, 1.46, 0);
+          // 0s..1.4s: Apenas as 3 nuvens enquadradas; 1.4s..3.0s: câmera desce suave; 3.0s..4.42s: enquadra da cintura pra cima
+          const rawP = Math.max(0, Math.min(1, (t - 1.4) / 1.6));
+          const easeP = rawP * rawP * (3 - 2 * rawP);
+          const camY = 2.86 + (1.32 - 2.86) * easeP;
+          const camZ = 2.95 + (2.65 - 2.95) * easeP;
+          const targetY = 2.84 + (1.24 - 2.84) * easeP;
+          camera.position.set(0, camY, camZ);
+          camTarget.set(0, targetY, 0);
         } else if (t < 8.8) {
-          // CENA 1B: Medo da câmera + ferramentas de edição complexas
+          // CENA 2: Continua do personagem, vira para câmera à frente dele (2s), e volta para plano fechado no rosto
+          hudTop.style.display = 'none';
           const dt = t - 4.42;
-          hudPill.textContent = "O DESAFIO";
-          hudTitle.textContent = "Câmera & Edição Difícil";
           cliente.root.visible = true;
           animador.root.visible = false;
-          cliente.root.position.set(-0.15, 0, 0);
-          cliente.root.rotation.set(0, 0.2, 0);
-          applyFaceState(cliente, { eyeOpen: 0.85, browRaise: 0.6, browTilt: 0.5, smile: -0.5, mouthOpen: 0.25 });
-          cliente.joints.head.rotation.set(0.12, -0.2 + Math.sin(dt * 4) * 0.08, 0.08);
-          cliente.joints.armL.rotation.set(1.8, 0, 0.3);
-          cliente.joints.forearmL.rotation.set(-1.3, 0, 0);
-          cliente.joints.armR.rotation.set(0.6, 0, -0.3);
+          cliente.root.position.set(0, 0, 0.1);
+          cliente.root.rotation.set(0, 0.04, 0);
+          applyFaceState(cliente, { eyeOpen: 1.05, browRaise: 0.95, browTilt: -0.85, smile: 0, mouthOpen: 0 });
+          cliente.faceRig.mouthLine.visible = false;
+          cliente.faceRig.mouthArc.visible = false;
+          cliente.faceRig.mouthOpen.visible = false;
+          grimaceMouth.visible = true;
+
+          sweatDrop.visible = true;
+          const dropCycle = (t % 2.2) / 2.2;
+          sweatDrop.position.set(0.17, 0.305 - dropCycle * 0.02, 0.215);
+          sweatDrop.scale.setScalar(1.0 + Math.sin(t * 5) * 0.06);
+
+          cliente.joints.head.rotation.set(0.04, Math.sin(t * 6) * 0.03, Math.sin(t * 4.5) * 0.02);
+          cliente.joints.armR.rotation.set(1.25, 0, -0.45);
+          cliente.joints.forearmR.rotation.set(-1.15 + Math.sin(t * 7) * 0.05, 0, 0);
+          cliente.joints.armL.rotation.set(1.25, 0, 0.45);
+          cliente.joints.forearmL.rotation.set(-1.15 - Math.sin(t * 7) * 0.05, 0, 0);
 
           propCameraStress.visible = true;
-          bigCam.position.y = 1.35 + Math.sin(dt * 3) * 0.06;
+          bigCam.position.y = 1.48 + Math.sin(dt * 2.5) * 0.015;
           recDot.visible = Math.floor(dt * 3) % 2 === 0;
-          timelineBars.forEach((tb, idx) => {
-            tb.position.x = -1.05 + Math.sin(dt * 2.2 + idx) * 0.22;
+          timelineBars.forEach((tb) => {
+            tb.visible = false;
           });
 
-          camera.position.set(0.35, 1.4, 4.3);
-          camTarget.set(0, 1.15, 0);
-        } else if (t < 19.1) {
-          // CENA 2: Animação explicativa simples que retém atenção
+          const smooth = (x) => {
+            const c = Math.max(0, Math.min(1, x));
+            return c * c * (3 - 2 * c);
+          };
+
+          if (dt < 0.45) {
+            // Continua da cena anterior (cintura pra cima)
+            camera.position.set(0, 1.32, 2.65);
+            camTarget.set(0, 1.24, 0);
+          } else if (dt < 1.15) {
+            // Vira o enquadramento para a câmera à frente do personagem (mais afastado para caber inteira no 9:16)
+            const p = smooth((dt - 0.45) / 0.70);
+            const arcX = Math.sin(p * Math.PI) * 1.15;
+            camera.position.set(
+              1.65 * p + arcX * 0.45,
+              1.32 + (1.62 - 1.32) * p,
+              2.65 + (0.95 - 2.65) * p
+            );
+            camTarget.set(0, 1.24 + (1.42 - 1.24) * p, 3.05 * p);
+          } else if (dt < 3.15) {
+            // Exibe a câmera apontada para o personagem por 2 segundos, enquadrada inteira com folga lateral
+            const holdP = (dt - 1.15) / 2.0;
+            camera.position.set(1.65 - holdP * 0.12, 1.62, 0.95 + holdP * 0.12);
+            camTarget.set(0, 1.42, 3.05);
+          } else if (dt < 3.75) {
+            // Volta para o rosto do personagem em plano fechado
+            const p = smooth((dt - 3.15) / 0.60);
+            const arcX = Math.sin(p * Math.PI) * 0.95;
+            camera.position.set(
+              1.53 * (1 - p) + arcX * 0.35,
+              1.62 + (1.48 - 1.62) * p,
+              1.07 + (1.12 - 1.07) * p
+            );
+            camTarget.set(0, 1.42 + (1.46 - 1.42) * p, 3.05 * (1 - p) + 0.1 * p);
+          } else {
+            // Plano fechado no rosto
+            camera.position.set(0, 1.48, 1.12);
+            camTarget.set(0, 1.46, 0.1);
+          }
+        } else if (t < 11.35) {
+          // CENA 3: Print do último frame da cena anterior em um smartphone reproduzindo enquanto a câmera se afasta devagar
+          hudTop.style.display = 'none';
           const dt = t - 8.8;
+          const p = Math.max(0, Math.min(1, dt / 2.55));
+          const easeP = p * p * (3 - 2 * p);
+
+          cliente.root.visible = false;
+          animador.root.visible = false;
+          propPhone.visible = true;
+
+          // Animação da barra de reprodução do vídeo no celular
+          const playProg = 0.25 + 0.65 * p;
+          progFill.scale.x = playProg;
+          progFill.position.x = -0.38 * (1 - playProg);
+          progKnob.position.x = -0.38 + 0.76 * playProg;
+
+          // Leve rotação 3D revelando o corpo do smartphone enquanto afasta devagar
+          propPhone.rotation.set(-0.04 * easeP, -0.22 * easeP, 0);
+          camera.position.set(0.42 * easeP, 1.5, 1.95 + (3.65 - 1.95) * easeP);
+          camTarget.set(0, 1.5, 0);
+        } else if (t < 15.95) {
+          hudTop.style.display = 'flex';
+          // CENA 4: Animação explicativa simples que retém atenção
+          const dt = t - 11.35;
           hudPill.textContent = "A SOLUÇÃO";
-          hudTitle.textContent = dt < 7.0 ? "Retém Atenção" : "Explica em Detalhes";
+          hudTitle.textContent = "Retém Atenção";
           cliente.root.visible = false;
           animador.root.visible = true;
           animador.root.position.set(0, 0, 0);
@@ -788,89 +1299,200 @@ Imagem:
 
           camera.position.set(Math.sin(dt * 0.25) * 0.65, 1.45, 4.8 - Math.min(0.6, dt * 0.08));
           camTarget.set(0, 1.1, 0);
-        } else if (t < 22.92) {
-          // CENA 3A: Explicar como funciona um serviço
-          const dt = t - 19.1;
-          hudPill.textContent = "CASO DE USO 01";
-          hudTitle.textContent = "Explique seu Serviço";
-          cliente.root.visible = false;
-          animador.root.visible = true;
-          animador.root.position.set(0, 0, 0.2);
-          applyFaceState(animador, { eyeOpen: 1.1, smile: 0.8 });
-          animador.joints.armL.rotation.set(1.6, 0, 0.5);
-          animador.joints.armR.rotation.set(1.0, 0, -0.4);
+        } else if (t < 19.15) {
+          // CENA 5: Espectadora olha para o celular preocupada, entende com sorriso leve + sobrancelha arqueada, e olha para a câmera
+          hudTop.style.display = 'none';
+          const dt = t - 15.95;
+          const smooth = (x) => {
+            const c = Math.max(0, Math.min(1, x));
+            return c * c * (3 - 2 * c);
+          };
 
-          propService.visible = true;
-          propService.children.forEach((ch, idx) => {
-            ch.rotation.y = Math.sin(dt * 2 + idx) * 0.35;
+          cliente.root.visible = false;
+          animador.root.visible = false;
+          espectadora.root.visible = true;
+          espectadora.root.position.set(0, 0, 0);
+          espectadora.root.rotation.set(0, -0.06, 0);
+
+          // Braços à frente segurando o celular na mão direita
+          espectadora.joints.armR.rotation.set(-0.58, 0, 0.22);
+          espectadora.joints.forearmR.rotation.set(-1.18, 0, 0);
+          espectadora.joints.handR.rotation.set(0.25, 0, 0);
+          espectadora.joints.armL.rotation.set(-0.42, 0, -0.18);
+          espectadora.joints.forearmL.rotation.set(-0.95, 0, 0);
+          propHandPhone.visible = true;
+          phoneLight.visible = true;
+
+          const pRelax = smooth((dt - 1.05) / 0.85);
+          const pLookCam = smooth((dt - 2.05) / 0.55);
+
+          const browRaise = 0.45 + 0.42 * pRelax;
+          const browTilt = -0.75 + 0.85 * pRelax;
+          const smile = -0.35 + 0.95 * pRelax;
+          const eyeOpen = 0.88 + 0.20 * pRelax;
+          const lookY = -0.45 * (1 - pLookCam);
+
+          applyFaceState(espectadora, {
+            eyeOpen,
+            browRaise,
+            browTilt,
+            smile,
+            mouthOpen: 0,
+            look: [0, lookY]
           });
 
-          camera.position.set(-0.25, 1.55, 5.1);
-          camTarget.set(0, 1.25, 0);
+          const headPitch = 0.28 * (1 - 0.35 * pRelax) * (1 - pLookCam) + (pLookCam > 0.8 ? Math.sin((dt - 2.55) * 6) * 0.03 : 0);
+          const headYaw = -0.05 * (1 - pLookCam) + 0.08 * pLookCam;
+          espectadora.joints.head.rotation.set(headPitch, headYaw, 0.03 * (1 - pRelax));
+
+          camera.position.set(0.32 * (1 - pLookCam * 0.4), 1.46, 2.55 - 0.25 * pLookCam);
+          camTarget.set(0, 1.32 + 0.08 * pLookCam, 0.15);
+        } else if (t < 22.92) {
+          // CENA 6: Personagem principal em pé na frente de um quadro com coisas incompreensíveis, apontando com varinha como professor
+          hudTop.style.display = 'none';
+          const dt = t - 19.15;
+          cliente.root.visible = true;
+          animador.root.visible = false;
+          cliente.root.position.set(-0.48, 0, 0.35);
+          cliente.root.rotation.set(0, 0.25, 0);
+
+          applyFaceState(cliente, {
+            eyeOpen: 1.08,
+            browRaise: 0.28,
+            browTilt: 0.05,
+            smile: 0.55,
+            mouthOpen: 0.14 * Math.abs(Math.sin(dt * 9))
+          });
+          cliente.joints.head.rotation.set(0.02, Math.sin(dt * 2.2) * 0.16, 0);
+
+          // Braço esquerdo estendido apontando a varinha para o quadro
+          cliente.joints.armL.rotation.set(-0.85, 0, 0.68 + Math.sin(dt * 3.5) * 0.10);
+          cliente.joints.forearmL.rotation.set(-0.35, 0, 0);
+          // Braço direito gesticulando enquanto explica
+          cliente.joints.armR.rotation.set(-0.42, 0, -0.25);
+          cliente.joints.forearmR.rotation.set(-0.85 + Math.sin(dt * 4.2) * 0.14, 0, 0);
+
+          propChalkboard.visible = true;
+          pointerStick.visible = true;
+
+          camera.position.set(0.0, 1.38, 3.65);
+          camTarget.set(-0.02, 1.28, 0);
         } else if (t < 26.85) {
-          // CENA 3B: Participar de uma promoção
+          // CENA 7: Personagem do lado direito com varinha apontando para tela de computador à esquerda com site de promoção
+          hudTop.style.display = 'none';
           const dt = t - 22.92;
-          hudPill.textContent = "CASO DE USO 02";
-          hudTitle.textContent = "Divulgue Promoções";
-          cliente.root.visible = false;
-          animador.root.visible = true;
-          animador.root.position.set(-0.55, 0, 0.1);
-          animador.root.rotation.set(0, 0.25, 0);
-          applyFaceState(animador, { eyeOpen: 1.15, browRaise: 0.35, smile: 0.9 });
-          animador.joints.armL.rotation.set(1.3, -0.3, 0.6);
-          animador.joints.armR.rotation.set(0.4, 0, -0.2);
+          cliente.root.visible = true;
+          animador.root.visible = false;
+          cliente.root.position.set(0.50, 0, 0.35);
+          cliente.root.rotation.set(0, -0.26, 0);
 
-          propPromo.visible = true;
-          giftBox.rotation.y = dt * 1.4;
-          promoStar.rotation.y = -dt * 2.5;
-          promoStar.position.y = 1.35 + Math.sin(dt * 4) * 0.12;
+          applyFaceState(cliente, {
+            eyeOpen: 1.08,
+            browRaise: 0.28,
+            browTilt: 0.05,
+            smile: 0.58,
+            mouthOpen: 0.14 * Math.abs(Math.sin(dt * 9))
+          });
+          cliente.joints.head.rotation.set(0.02, Math.sin(dt * 2.2) * 0.16, 0);
 
-          camera.position.set(0.2, 1.4, 4.9);
-          camTarget.set(0.1, 1.05, 0);
+          // Braço direito estendido apontando a varinha para o monitor à esquerda
+          cliente.joints.armR.rotation.set(-0.85, 0, -0.68 - Math.sin(dt * 3.5) * 0.10);
+          cliente.joints.forearmR.rotation.set(-0.35, 0, 0);
+          // Braço esquerdo gesticulando enquanto explica
+          cliente.joints.armL.rotation.set(-0.42, 0, 0.25);
+          cliente.joints.forearmL.rotation.set(-0.85 + Math.sin(dt * 4.2) * 0.14, 0, 0);
+
+          propMonitor.visible = true;
+          pointerStickR.visible = true;
+
+          camera.position.set(0.0, 1.38, 3.65);
+          camTarget.set(0.02, 1.28, 0);
         } else if (t < 30.06) {
-          // CENA 3C: Comparar produto com a concorrência
+          // CENA 8: Comparar produto com a concorrência (personagem principal olhando para a coroa subindo)
           const dt = t - 26.85;
           hudPill.textContent = "CASO DE USO 03";
           hudTitle.textContent = "Compare & Destaque";
-          cliente.root.visible = false;
-          animador.root.visible = true;
-          animador.root.position.set(0, 0, -0.1);
-          applyFaceState(animador, { eyeOpen: 1.1, smile: 0.85 });
-          animador.joints.armL.rotation.set(1.2, 0, 0.55);
-          animador.joints.armR.rotation.set(0.5, 0, -0.25);
+          cliente.root.visible = true;
+          animador.root.visible = false;
+          cliente.root.position.set(0, 0, -0.1);
+          cliente.root.rotation.set(0, 0.22, 0);
+
+          const grow = Math.min(1, dt / 0.85);
+          const easeGrow = grow * grow * (3 - 2 * grow);
+
+          applyFaceState(cliente, {
+            eyeOpen: 1.15,
+            browRaise: 0.25 + 0.45 * easeGrow,
+            smile: 0.65 + 0.25 * easeGrow,
+            look: [0.55, -0.15 + 0.55 * easeGrow]
+          });
+          // Cabeça acompanha a coroa subindo na barra verde à direita
+          cliente.joints.head.rotation.set(0.22 - 0.50 * easeGrow, 0.42, 0);
+          cliente.joints.armL.rotation.set(-0.95, 0, 0.55);
+          cliente.joints.forearmL.rotation.set(-0.35, 0, 0);
+          cliente.joints.armR.rotation.set(-0.35, 0, -0.25);
 
           propCompare.visible = true;
-          const grow = Math.min(1, dt / 0.8);
-          compBarGood.scale.y = 0.2 + 0.8 * grow;
+          compBarGood.scale.y = 0.2 + 0.8 * easeGrow;
           compBarGood.position.y = compBarGood.scale.y * 0.92;
-          crown.position.y = compBarGood.scale.y * 1.85 + 0.24;
+          crown.position.y = compBarGood.scale.y * 1.85 + 0.22;
           crown.rotation.y = dt * 2.0;
 
-          camera.position.set(0, 1.55, 5.8);
-          camTarget.set(0, 1.1, 0);
-        } else if (t < 32.25) {
-          // CENA 4A: A ideia, você decide
+          const zoomP = Math.min(1, dt / 3.21);
+          const easeZoom = zoomP * zoomP * (3 - 2 * zoomP);
+          camera.position.set(0.32 * easeZoom, 1.55 - 0.07 * easeZoom, 5.8 - 1.35 * easeZoom);
+          camTarget.set(0.32 * easeZoom, 1.1 + 0.14 * easeZoom, 0.05 * easeZoom);
+        } else if (t < 33.85) {
+          // CENA 9: Apenas o personagem principal em cena com uma lâmpada acendendo acima de sua cabeça (30.06s - 33.85s)
+          hudTop.style.display = 'none';
           const dt = t - 30.06;
-          hudPill.textContent = "SUA IDEIA";
-          hudTitle.textContent = "Você Decide o Tema";
+          const smooth = (x) => {
+            const c = Math.max(0, Math.min(1, x));
+            return c * c * (3 - 2 * c);
+          };
+          const pLit = smooth((dt - 0.45) / 0.35);
+          const pLogo = smooth((dt - 2.14) / 0.35);
+
           cliente.root.visible = true;
-          animador.root.visible = true;
-          cliente.root.position.set(-0.75, 0, 0);
-          cliente.root.rotation.set(0, 0.2, 0);
-          animador.root.position.set(0.75, 0, 0);
-          animador.root.rotation.set(0, -0.2, 0);
-          applyFaceState(cliente, { eyeOpen: 1.15, browRaise: 0.4, smile: 0.9 });
-          applyFaceState(animador, { eyeOpen: 1.05, smile: 0.8 });
-          cliente.joints.armR.rotation.set(2.1, 0, -0.3);
+          animador.root.visible = false;
+          cliente.root.position.set(0, 0, 0);
+          cliente.root.rotation.set(0, 0.04, 0);
+
+          applyFaceState(cliente, {
+            eyeOpen: 1.0 + 0.16 * pLit,
+            browRaise: 0.25 + 0.45 * pLit,
+            smile: 0.35 + 0.55 * pLit
+          });
+          cliente.joints.head.rotation.set(0.06 * (1 - pLit) - 0.04 * pLit, 0, 0);
+          cliente.joints.armR.rotation.set(-0.45 - 0.95 * pLit, 0, -0.25);
+          cliente.joints.forearmR.rotation.set(-0.65 - 0.35 * pLit, 0, 0);
+          cliente.joints.armL.rotation.set(-0.20 - 0.55 * pLogo, 0, 0.18 + 0.25 * pLogo);
+          cliente.joints.forearmL.rotation.set(-0.35 - 0.35 * pLogo, 0, 0);
 
           propIdea.visible = true;
-          bulb.scale.setScalar(1 + Math.sin(dt * 8) * 0.08);
+          propIdea.position.x = 0;
+          bulbLight.visible = pLit > 0.05;
+          bulbLight.intensity = 1.4 * pLit;
+          bulbMat.color.set(pLit > 0.2 ? '#fef08a' : '#94a3b8');
+          bulbMat.emissiveIntensity = 1.8 * pLit;
+          bulbRays.visible = pLit > 0.05;
+          bulbRays.scale.setScalar(0.5 + 0.5 * pLit + (pLit > 0.8 ? Math.sin(dt * 8) * 0.05 : 0));
+          bulbRays.rotation.z = dt * 0.8;
 
-          camera.position.set(0, 1.45, 5.2);
-          camTarget.set(0, 1.15, 0);
+          if (pLogo > 0.01) {
+            labLogoOverlay.style.display = 'flex';
+            labLogoOverlay.style.backdropFilter = `blur(${(18 * pLogo).toFixed(1)}px)`;
+            labLogoOverlay.style.webkitBackdropFilter = `blur(${(18 * pLogo).toFixed(1)}px)`;
+            labLogoOverlay.style.background = `rgba(7, 11, 22, ${(0.38 * pLogo).toFixed(2)})`;
+            labLogoImg.style.opacity = pLogo.toFixed(3);
+            labLogoImg.style.transform = `scale(${(0.75 + 0.25 * pLogo).toFixed(3)})`;
+          }
+
+          camera.position.set(0, 1.48 - 0.04 * pLogo, 3.25 + 0.70 * pLogo);
+          camTarget.set(0, 1.42, 0);
         } else {
-          // CENA 4B: Execução Labscript em até 1 dia + CTA final
-          const dt = t - 32.25;
+          // CENA 10+: Execução Labscript em até 1 dia + CTA final
+          const dt = t - 33.85;
           cliente.root.visible = true;
           animador.root.visible = true;
           cliente.root.position.set(-0.72, 0, 0.1);
