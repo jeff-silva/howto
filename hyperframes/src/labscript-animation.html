@@ -57,15 +57,21 @@ em cima de sua cabeça dele.
 
 Cena 10:
 Texto: Você pede e a Lab cria o video pra você em até um dia.
-Imagem:
+Imagem: Personagem principal segura o celular; uma lâmpada (💡) sai do celular e sobe.
+Ao ficar no alto, um relógio aparece atrás da lâmpada e o ponteiro dá duas voltas
+rápidas (24h). Tudo vira uma nuvem de fumaça, some e se transforma em um quadrado
+preto com ícone de Play (o vídeo pronto).
 
 Cena 11:
 Texto: Rápido, fácil e sem gastar muito.
-Imagem:
+Imagem: Continua à partir do plano anterior, plano fecha bem no rosto do personagem
+com uma expressão completamente feliz e satisfeita (😄)
 
 Cena 12:
 Texto: Fale com a Lab, vamos colocar sua ideia em prática.
-Imagem:
+Imagem: Continua do plano anterior, imagem fica embaçada para dar foco na
+logo da Labscript que vai aparecer na frente, com um botão abaixo
+escrito "Fale com a Lab"
 
 -->
 <!doctype html>
@@ -253,16 +259,31 @@ Imagem:
         inset: 0;
         z-index: 23;
         display: none;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
+        gap: 44px;
         pointer-events: none;
       }
 
       .lab-logo-overlay img {
-        width: 540px;
-        height: 540px;
+        width: 520px;
+        height: 520px;
         border-radius: 50%;
         box-shadow: 0 24px 80px rgba(168, 85, 247, 0.5);
+      }
+
+      .cta-btn {
+        display: none;
+        background: linear-gradient(135deg, #a855f7, #ec4899);
+        color: #ffffff;
+        font-size: 44px;
+        font-weight: 900;
+        padding: 26px 64px;
+        border-radius: 999px;
+        border: 3px solid rgba(255, 255, 255, 0.35);
+        box-shadow: 0 20px 55px rgba(236, 72, 153, 0.48);
+        letter-spacing: 0.5px;
       }
     </style>
   </head>
@@ -282,6 +303,7 @@ Imagem:
 
       <div id="lab-logo-overlay" class="lab-logo-overlay">
         <img src="./assets/labscript.dev.png" alt="Labscript" />
+        <div id="cta-btn" class="cta-btn">Fale com a Lab</div>
       </div>
 
       <div class="hud-top">
@@ -461,6 +483,27 @@ Imagem:
       }
       grimaceMouth.visible = false;
       cliente.faceRig.mouthLine.parent.add(grimaceMouth);
+
+      // Expressão 😄 (sorriso aberto feliz e satisfeito) acoplada à boca do cliente
+      const happyMouth = new THREE.Group();
+      const happyCavity = new THREE.Mesh(
+        new THREE.CircleGeometry(0.056, 20, Math.PI, Math.PI),
+        new THREE.MeshBasicMaterial({ color: '#4a1818', side: THREE.DoubleSide })
+      );
+      happyCavity.position.set(0, 0.015, 0.014);
+      const happyTeeth = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.10, 0.016),
+        new THREE.MeshBasicMaterial({ color: '#ffffff' })
+      );
+      happyTeeth.position.set(0, 0.007, 0.016);
+      const happyTongue = new THREE.Mesh(
+        new THREE.CircleGeometry(0.028, 14, 0, Math.PI),
+        new THREE.MeshBasicMaterial({ color: '#fb7185' })
+      );
+      happyTongue.position.set(0, -0.026, 0.016);
+      happyMouth.add(happyCavity, happyTeeth, happyTongue);
+      happyMouth.visible = false;
+      cliente.faceRig.mouthLine.parent.add(happyMouth);
 
       const propCharts = new THREE.Group();
       scene.add(propCharts);
@@ -1037,6 +1080,132 @@ Imagem:
       bulbLight.position.set(0, 0.05, 0.12);
       propIdea.add(bulb, bulbNeck, bulbBase, bulbRays, bulbLight);
 
+      // 4H. Cena 10: Lâmpada 💡 sobe -> Relógio 24h (2 voltas) -> Fumaça -> Quadrado preto com Play (33.85s - 37.90s)
+      const propFlow10 = new THREE.Group();
+      scene.add(propFlow10);
+
+      // Celular na mão do cliente (Cena 10)
+      const propHandPhone10 = new THREE.Group();
+      propHandPhone10.position.set(0.07, 0.03, -0.01);
+      propHandPhone10.rotation.set(1.18, 0.12, 0.0);
+      const hp10Body = new THREE.Mesh(
+        new THREE.BoxGeometry(0.14, 0.27, 0.016),
+        new THREE.MeshStandardMaterial({ color: '#0f172a', metalness: 0.8, roughness: 0.25 })
+      );
+      const hp10Screen = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.124, 0.242),
+        new THREE.MeshBasicMaterial({ color: '#38bdf8' })
+      );
+      hp10Screen.position.z = -0.009;
+      hp10Screen.rotation.y = Math.PI;
+      propHandPhone10.add(hp10Body, hp10Screen);
+      propHandPhone10.visible = false;
+      cliente.joints.handR.add(propHandPhone10);
+
+      // Lâmpada emoji 💡 que sai do celular e sobe
+      const bulbEmojiCanvas = document.createElement('canvas');
+      bulbEmojiCanvas.width = 256;
+      bulbEmojiCanvas.height = 256;
+      const bec = bulbEmojiCanvas.getContext('2d');
+      bec.font = '180px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+      bec.textAlign = 'center';
+      bec.textBaseline = 'middle';
+      bec.fillText('💡', 128, 134);
+      const bulbEmojiTex = new THREE.CanvasTexture(bulbEmojiCanvas);
+      bulbEmojiTex.colorSpace = THREE.SRGBColorSpace;
+      const msgBubble = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.38, 0.38),
+        new THREE.MeshBasicMaterial({ map: bulbEmojiTex, transparent: true, depthWrite: false })
+      );
+      propFlow10.add(msgBubble);
+
+      // Relógio 3D atrás da lâmpada (2 voltas = 24h), à frente do personagem
+      const clockGroup = new THREE.Group();
+      clockGroup.position.set(0.0, 2.02, 0.46);
+      const clockRim = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.38, 0.38, 0.06, 28),
+        new THREE.MeshStandardMaterial({ color: '#334155', metalness: 0.7, roughness: 0.25 })
+      );
+      clockRim.rotation.x = Math.PI / 2;
+      const clockFace = new THREE.Mesh(
+        new THREE.CircleGeometry(0.33, 28),
+        new THREE.MeshBasicMaterial({ color: '#f8fafc' })
+      );
+      clockFace.position.z = 0.032;
+      clockGroup.add(clockRim, clockFace);
+      for (let i = 0; i < 12; i++) {
+        const ang = (i / 12) * Math.PI * 2;
+        const tick = new THREE.Mesh(
+          new THREE.BoxGeometry(0.018, 0.055, 0.01),
+          new THREE.MeshBasicMaterial({ color: '#0f172a' })
+        );
+        tick.position.set(Math.cos(ang) * 0.27, Math.sin(ang) * 0.27, 0.036);
+        tick.rotation.z = ang - Math.PI / 2;
+        clockGroup.add(tick);
+      }
+      const clockHourHand = new THREE.Group();
+      clockHourHand.position.z = 0.042;
+      const hourMesh = new THREE.Mesh(new THREE.BoxGeometry(0.032, 0.18, 0.012), new THREE.MeshBasicMaterial({ color: '#0f172a' }));
+      hourMesh.position.y = 0.08;
+      clockHourHand.add(hourMesh);
+      const clockMinHand = new THREE.Group();
+      clockMinHand.position.z = 0.046;
+      const minMesh = new THREE.Mesh(new THREE.BoxGeometry(0.022, 0.25, 0.012), new THREE.MeshBasicMaterial({ color: '#ec4899' }));
+      minMesh.position.y = 0.115;
+      clockMinHand.add(minMesh);
+      const clockPin = new THREE.Mesh(new THREE.SphereGeometry(0.026, 10, 10), new THREE.MeshBasicMaterial({ color: '#0f172a' }));
+      clockPin.position.z = 0.05;
+      clockGroup.add(clockHourHand, clockMinHand, clockPin);
+      propFlow10.add(clockGroup);
+
+      // Nuvem de fumaça da transformação
+      const smokeGroup = new THREE.Group();
+      smokeGroup.position.set(0.0, 2.02, 0.58);
+      const smokePuffs = [];
+      const smokeMat = new THREE.MeshStandardMaterial({ color: '#e2e8f0', roughness: 0.9, transparent: true, opacity: 0.92 });
+      for (let i = 0; i < 10; i++) {
+        const ang = (i / 10) * Math.PI * 2;
+        const puff = new THREE.Mesh(new THREE.SphereGeometry(0.14 + (i % 3) * 0.04, 12, 12), smokeMat);
+        puff.userData.dir = [Math.cos(ang), Math.sin(ang), (i % 2 === 0 ? 0.3 : -0.2)];
+        smokeGroup.add(puff);
+        smokePuffs.push(puff);
+      }
+      propFlow10.add(smokeGroup);
+
+      // Quadrado preto com ícone de Play (vídeo pronto)
+      const readyVideoCard = new THREE.Group();
+      readyVideoCard.position.set(0.0, 2.02, 0.56);
+      const rvCanvas = document.createElement('canvas');
+      rvCanvas.width = 512;
+      rvCanvas.height = 512;
+      const rctx = rvCanvas.getContext('2d');
+      rctx.fillStyle = '#09090b';
+      rctx.fillRect(0, 0, 512, 512);
+      rctx.strokeStyle = '#334155';
+      rctx.lineWidth = 16;
+      rctx.strokeRect(8, 8, 496, 496);
+      // Ícone de Play centralizado
+      rctx.fillStyle = '#facc15';
+      rctx.beginPath();
+      rctx.moveTo(192, 146);
+      rctx.lineTo(192, 366);
+      rctx.lineTo(368, 256);
+      rctx.closePath();
+      rctx.fill();
+      const rvTex = new THREE.CanvasTexture(rvCanvas);
+      rvTex.colorSpace = THREE.SRGBColorSpace;
+      const rvPlane = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.68, 0.68),
+        new THREE.MeshBasicMaterial({ map: rvTex })
+      );
+      const rvBack = new THREE.Mesh(
+        new THREE.BoxGeometry(0.72, 0.72, 0.05),
+        new THREE.MeshStandardMaterial({ color: '#09090b', metalness: 0.5, roughness: 0.3 })
+      );
+      rvBack.position.z = -0.028;
+      readyVideoCard.add(rvBack, rvPlane);
+      propFlow10.add(readyVideoCard);
+
       const propClaquete = new THREE.Group();
       propClaquete.position.set(0, 0.38, 0.65);
       propClaquete.scale.setScalar(0.72);
@@ -1069,6 +1238,8 @@ Imagem:
         propCompare.visible = false;
         propIdea.visible = false;
         bulbLight.visible = false;
+        propFlow10.visible = false;
+        propHandPhone10.visible = false;
         propClaquete.visible = false;
       }
 
@@ -1099,6 +1270,7 @@ Imagem:
       const hudTitle = document.getElementById('hud-title');
       const labLogoOverlay = document.getElementById('lab-logo-overlay');
       const labLogoImg = labLogoOverlay.querySelector('img');
+      const ctaBtn = document.getElementById('cta-btn');
 
       function updateSubtitle(t) {
         const line = SUBTITLES.find((l) => t >= l.s && t <= l.e) || SUBTITLES[SUBTITLES.length - 1];
@@ -1119,9 +1291,8 @@ Imagem:
         tl.fromTo(".flash-fx", { opacity: 0.75 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, ft);
       }
 
-      // CTA card final
-      tl.fromTo("#cta-card", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "back.out(1.4)", immediateRender: false }, 33.8);
-      tl.to(".hud-top", { opacity: 0, duration: 0.4, immediateRender: false }, 33.7);
+      // Oculta HUD no fim (CTA final é controlado no #lab-logo-overlay da Cena 12)
+      tl.to(".hud-top", { opacity: 0, duration: 0.4, immediateRender: false }, 40.6);
 
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
@@ -1132,8 +1303,10 @@ Imagem:
       function applyDeterministicScene(t) {
         hideAllProps();
         labLogoOverlay.style.display = 'none';
+        ctaBtn.style.display = 'none';
         sweatDrop.visible = false;
         grimaceMouth.visible = false;
+        happyMouth.visible = false;
         espectadora.root.visible = false;
         resetPose(cliente);
         resetPose(animador);
@@ -1490,29 +1663,178 @@ Imagem:
 
           camera.position.set(0, 1.48 - 0.04 * pLogo, 3.25 + 0.70 * pLogo);
           camTarget.set(0, 1.42, 0);
-        } else {
-          // CENA 10+: Execução Labscript em até 1 dia + CTA final
+        } else if (t < 37.90) {
+          // CENA 10: Lâmpada 💡 sobe -> Relógio 24h (2 voltas) atrás -> Fumaça -> Quadrado preto com Play (33.85s - 37.90s)
+          hudTop.style.display = 'none';
           const dt = t - 33.85;
+          const smooth = (x) => {
+            const c = Math.max(0, Math.min(1, x));
+            return c * c * (3 - 2 * c);
+          };
+
           cliente.root.visible = true;
-          animador.root.visible = true;
-          cliente.root.position.set(-0.72, 0, 0.1);
-          cliente.root.rotation.set(0, 0.15, 0);
-          animador.root.position.set(0.72, 0, 0.1);
-          animador.root.rotation.set(0, -0.15, 0);
-          applyFaceState(cliente, { eyeOpen: 1.1, smile: 0.9 });
-          applyFaceState(animador, { eyeOpen: 1.1, smile: 0.95 });
+          animador.root.visible = false;
+          cliente.root.position.set(-0.22, 0, 0.1);
+          cliente.root.rotation.set(0, 0.12, 0);
 
-          // Aceno alegre dos dois para a câmera
-          animador.joints.armR.rotation.set(1.75, 0, -0.55);
-          animador.joints.forearmR.rotation.set(0, 0, Math.sin(dt * 6) * 0.35);
-          cliente.joints.armL.rotation.set(1.65, 0, 0.5);
-          cliente.joints.forearmL.rotation.set(0, 0, -Math.sin(dt * 6) * 0.3);
+          // Braço direito segurando o celular
+          cliente.joints.armR.rotation.set(-0.55, 0, 0.20);
+          cliente.joints.forearmR.rotation.set(-1.12, 0, 0);
+          cliente.joints.handR.rotation.set(0.22, 0, 0);
+          cliente.joints.armL.rotation.set(-0.25, 0, 0.18);
+          cliente.joints.forearmL.rotation.set(-0.45, 0, 0);
 
-          propClaquete.visible = true;
-          claqTop.rotation.z = dt < 0.6 ? Math.abs(Math.sin(dt * 10)) * 0.35 : 0;
+          propFlow10.visible = true;
+          propHandPhone10.visible = true;
 
-          camera.position.set(Math.sin(dt * 0.3) * 0.35, 1.45, 5.2);
-          camTarget.set(0, 1.15, 0);
+          // 1) 0..1.05s: Lâmpada 💡 sai do celular e sobe até o alto (sempre à frente do personagem)
+          const pRise = smooth((dt - 0.10) / 0.95);
+          const vanished = dt >= 2.72;
+          msgBubble.visible = !vanished;
+          msgBubble.position.set(-0.15 + 0.15 * pRise, 1.15 + 0.87 * pRise, 0.52 + 0.04 * pRise);
+          msgBubble.scale.setScalar(0.55 + 0.45 * pRise);
+
+          // 2) 1.00..2.45s: Relógio aparece atrás da lâmpada e dá 2 voltas rápidas (24h)
+          const pClockIn = smooth((dt - 1.00) / 0.25);
+          const pSpin = Math.max(0, Math.min(1, (dt - 1.15) / 1.30));
+          clockGroup.visible = dt >= 1.00 && !vanished;
+          clockGroup.scale.setScalar(0.25 + 0.75 * pClockIn);
+          clockHourHand.rotation.z = -pSpin * Math.PI * 4;
+          clockMinHand.rotation.z = -pSpin * Math.PI * 16;
+
+          // 3) 2.45..3.15s: Tudo vira fumaça e some
+          const pSmoke = Math.max(0, Math.min(1, (dt - 2.45) / 0.70));
+          smokeGroup.visible = dt >= 2.45 && dt < 3.20;
+          smokeMat.opacity = Math.sin(pSmoke * Math.PI) * 0.92;
+          smokePuffs.forEach((puff, idx) => {
+            const [dx, dy, dz] = puff.userData.dir;
+            const spread = 0.08 + pSmoke * 0.48;
+            puff.position.set(dx * spread, dy * spread, dz * spread);
+            puff.scale.setScalar(0.6 + Math.sin(pSmoke * Math.PI) * 0.85 + (idx % 2) * 0.15);
+          });
+
+          // 4) 2.72..4.05s: Surge o quadrado preto com ícone de Play (vídeo pronto)
+          const pPlay = smooth((dt - 2.72) / 0.40);
+          readyVideoCard.visible = dt >= 2.72;
+          readyVideoCard.scale.setScalar(0.15 + 0.85 * pPlay);
+          readyVideoCard.position.y = 2.02 + Math.sin(dt * 3.5) * 0.02;
+
+          applyFaceState(cliente, {
+            eyeOpen: 1.05 + 0.1 * pPlay,
+            browRaise: 0.25 + 0.45 * pPlay,
+            smile: 0.45 + 0.50 * pPlay,
+            look: [0.05, 0.35 * pRise]
+          });
+          cliente.joints.head.rotation.set(0.15 * (1 - pRise) - 0.12 * pRise, 0.08, 0);
+
+          const zoomP = Math.min(1, dt / 4.05);
+          const easeZoom = zoomP * zoomP * (3 - 2 * zoomP);
+          camera.position.set(0, 1.50 + 0.16 * easeZoom, 3.65 - 0.55 * easeZoom);
+          camTarget.set(0, 1.54 + 0.22 * easeZoom, 0.05);
+        } else if (t < 40.70) {
+          // CENA 11: Continua do plano anterior, fecha bem no rosto com expressão feliz e satisfeita 😄 (37.90s - 40.70s)
+          hudTop.style.display = 'none';
+          const dt = t - 37.90;
+          const smooth = (x) => {
+            const c = Math.max(0, Math.min(1, x));
+            return c * c * (3 - 2 * c);
+          };
+          const pZoom = smooth(dt / 1.10);
+
+          cliente.root.visible = true;
+          animador.root.visible = false;
+          cliente.root.position.set(-0.22, 0, 0.1);
+          cliente.root.rotation.set(0, 0.12 * (1 - pZoom), 0);
+
+          // Mantém o quadrado preto do vídeo no alto enquanto a câmera fecha no rosto
+          propFlow10.visible = pZoom < 0.7;
+          propHandPhone10.visible = true;
+          msgBubble.visible = false;
+          clockGroup.visible = false;
+          smokeGroup.visible = false;
+          readyVideoCard.visible = pZoom < 0.7;
+          readyVideoCard.scale.setScalar(1);
+          readyVideoCard.position.y = 2.02;
+
+          cliente.joints.armR.rotation.set(-0.55 + 0.25 * pZoom, 0, 0.20);
+          cliente.joints.forearmR.rotation.set(-1.12 + 0.35 * pZoom, 0, 0);
+          cliente.joints.armL.rotation.set(-0.25, 0, 0.18);
+          cliente.joints.forearmL.rotation.set(-0.45, 0, 0);
+
+          // Expressão 😄: olhos felizes arqueados + sobrancelhas erguidas + sorriso aberto
+          applyFaceState(cliente, {
+            eyeOpen: 0.72,
+            browRaise: 0.55,
+            browTilt: 0.15,
+            smile: 0,
+            mouthOpen: 0,
+            look: [0, 0.25 * (1 - pZoom)]
+          });
+          cliente.faceRig.mouthLine.visible = false;
+          cliente.faceRig.mouthArc.visible = false;
+          cliente.faceRig.mouthOpen.visible = false;
+          happyMouth.visible = true;
+
+          cliente.joints.head.rotation.set(
+            -0.12 * (1 - pZoom) + Math.sin(dt * 4) * 0.03,
+            0.08 * (1 - pZoom),
+            0
+          );
+
+          // Fecha bem no rosto continuando exatamente de (0, 1.66, 3.10) -> (-0.22, 1.48, 1.24)
+          camera.position.set(
+            -0.22 * pZoom,
+            1.66 + (1.48 - 1.66) * pZoom,
+            3.10 + (1.24 - 3.10) * pZoom
+          );
+          camTarget.set(
+            -0.22 * pZoom,
+            1.76 + (1.46 - 1.76) * pZoom,
+            0.05 + (0.10 - 0.05) * pZoom
+          );
+        } else {
+          // CENA 12: Continua do plano fechado anterior, desfoca o fundo e exibe logo da Labscript + botão "Fale com a Lab" (40.70s - 44.2s)
+          hudTop.style.display = 'none';
+          const dt = t - 40.70;
+          const smooth = (x) => {
+            const c = Math.max(0, Math.min(1, x));
+            return c * c * (3 - 2 * c);
+          };
+          const pIn = smooth(dt / 0.45);
+          const pBtn = smooth((dt - 0.25) / 0.40);
+
+          cliente.root.visible = true;
+          animador.root.visible = false;
+          cliente.root.position.set(-0.22, 0, 0.1);
+          cliente.root.rotation.set(0, 0, 0);
+
+          applyFaceState(cliente, {
+            eyeOpen: 0.72,
+            browRaise: 0.55,
+            browTilt: 0.15,
+            smile: 0,
+            mouthOpen: 0,
+            look: [0, 0]
+          });
+          cliente.faceRig.mouthLine.visible = false;
+          cliente.faceRig.mouthArc.visible = false;
+          cliente.faceRig.mouthOpen.visible = false;
+          happyMouth.visible = true;
+          cliente.joints.head.rotation.set(Math.sin(dt * 4) * 0.025, 0, 0);
+
+          camera.position.set(-0.22, 1.48, 1.24);
+          camTarget.set(-0.22, 1.46, 0.10);
+
+          labLogoOverlay.style.display = 'flex';
+          labLogoOverlay.style.backdropFilter = `blur(${(20 * pIn).toFixed(1)}px)`;
+          labLogoOverlay.style.webkitBackdropFilter = `blur(${(20 * pIn).toFixed(1)}px)`;
+          labLogoOverlay.style.background = `rgba(7, 11, 22, ${(0.45 * pIn).toFixed(2)})`;
+          labLogoImg.style.opacity = pIn.toFixed(3);
+          labLogoImg.style.transform = `scale(${(0.75 + 0.25 * pIn).toFixed(3)})`;
+
+          ctaBtn.style.display = 'block';
+          ctaBtn.style.opacity = pBtn.toFixed(3);
+          ctaBtn.style.transform = `translateY(${(24 * (1 - pBtn)).toFixed(1)}px) scale(${(0.88 + 0.12 * pBtn).toFixed(3)})`;
         }
       }
 
